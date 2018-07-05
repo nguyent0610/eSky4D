@@ -68,7 +68,7 @@
         })
 )
     @(
- X.Store()
+     X.Store()
     .ID("stoLotTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN11700_pgIN_LotTrans_Result), "mdlLotTrans", "", true))
@@ -87,6 +87,28 @@
         ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("whseLoc", "App.cboSiteTPLocation.getValue()", ParameterMode.Raw));
+    })
+    )
+    @(
+ X.Store()
+    .ID("stoLotTransDPBB")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pgIN_LotTransDPBB_Result), "mdlLotTransDPBB", "", true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTransDPBB", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p =>
+    {
+        p.Load.Fn = "stoDetail_Load";
+    })
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("whseLoc", "App.cboSiteLocation.getValue()", ParameterMode.Raw));
     })
     )
     @(
@@ -124,6 +146,18 @@
     )
     )
     @(
+    X.Store()
+    .ID("stoCalcLotDPBB")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetLotDPBB_Result), "mdlCalcLotDPBB", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotDPBB", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    )
+    @(
  X.Store()
     .ID("stoUnit")
     .Model(Util.GenerateModel(typeof(IN11700_pcUnit_Result), "mdlUnit", "FromUnit"))
@@ -134,6 +168,18 @@
         .Reader(X.JsonReader().Root("data"))
     )
     )
+@(
+ X.Store()
+    .ID("stoItemLotDPBB")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetItemLotDPBB_Result), "mdlItemLotDPBB", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLotDPBB", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
 @(
  X.Store()
     .ID("stoItemLot")
@@ -169,7 +215,21 @@
         .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
    )
 )
-
+@(
+ X.Store()
+    .ID("stoUnitConversion")
+    .AutoLoad(true)
+        .Model(Util.GenerateModel(typeof(IN11700_pcUnitConversion_Result), "mdlUnitConversion", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnitConversion", "IN11700"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+    })
+)
 
 
 

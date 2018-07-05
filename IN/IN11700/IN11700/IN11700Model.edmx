@@ -387,7 +387,20 @@
           <Parameter Name="parm1" Type="nvarchar" Mode="In" />
           <Parameter Name="parm2" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="IN11700_pcUnitConversion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN11700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN11700_pdGetItemLotDPBB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ShowWhseLoc" Type="bit" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
+          <Parameter Name="LotSerNbr" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -395,6 +408,16 @@
         <Function Name="IN11700_pdGetLot" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN11700_pdGetLotDPBB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Key" Type="int" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
+          <Parameter Name="LotSerNbr" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -410,6 +433,14 @@
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN11700_pgIN_LotTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN11700_pgIN_LotTransDPBB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
@@ -542,6 +573,37 @@
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN11700_pgIN_LotTransDPBB" ReturnType="Collection(IN11700Model.IN11700_pgIN_LotTransDPBB_Result)">
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN11700_pcUnitConversion" ReturnType="Collection(IN11700Model.IN11700_pcUnitConversion_Result)">
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN11700_pdGetLotDPBB" ReturnType="Collection(IN11700Model.IN11700_pdGetLotDPBB_Result)">
+            <Parameter Name="Key" Mode="In" Type="Int32" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="LotSerNbr" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN11700_pdGetItemLotDPBB" ReturnType="Collection(IN11700Model.IN11700_pdGetItemLotDPBB_Result)">
+            <Parameter Name="ShowWhseLoc" Mode="In" Type="Boolean" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="LotSerNbr" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -1089,6 +1151,85 @@
           <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
           <Property Type="Double" Name="PercentExpDate" Nullable="true" />
           <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN11700_pgIN_LotTransDPBB_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="INTranLineRef" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Int16" Name="InvtMult" Nullable="false" />
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="TranType" Nullable="false" MaxLength="2" />
+          <Property Type="Double" Name="UnitCost" Nullable="false" />
+          <Property Type="Double" Name="UnitPrice" Nullable="false" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="PercentExpDate" Nullable="true" />
+          <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN11700_pcUnitConversion_Result">
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="IN11700_pdGetLotDPBB_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Cost" Nullable="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="LIFODate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocOther" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
+          <Property Type="Double" Name="QtyAvail" Nullable="false" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="PackageID" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="QtyAllocPDASO" Nullable="false" />
+          <Property Type="Double" Name="PercentExpDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN11700_pdGetItemLotDPBB_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Cost" Nullable="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="LIFODate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocOther" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
+          <Property Type="Double" Name="QtyAvail" Nullable="false" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="PackageID" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="QtyAllocPDASO" Nullable="false" />
+          <Property Type="Double" Name="PercentExpDate" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1667,6 +1808,101 @@
                 <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
                 <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
                 <ScalarProperty Name="ComponentID" ColumnName="ComponentID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN11700_pgIN_LotTransDPBB" FunctionName="eBiz4DWebSysModel.Store.IN11700_pgIN_LotTransDPBB">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN11700Model.IN11700_pgIN_LotTransDPBB_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="INTranLineRef" ColumnName="INTranLineRef" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
+                <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
+                <ScalarProperty Name="ComponentID" ColumnName="ComponentID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN11700_pcUnitConversion" FunctionName="eBiz4DWebSysModel.Store.IN11700_pcUnitConversion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN11700Model.IN11700_pcUnitConversion_Result">
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ToUnit" ColumnName="ToUnit" />
+                <ScalarProperty Name="MultDiv" ColumnName="MultDiv" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN11700_pdGetLotDPBB" FunctionName="eBiz4DWebSysModel.Store.IN11700_pdGetLotDPBB">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN11700Model.IN11700_pdGetLotDPBB_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="LIFODate" ColumnName="LIFODate" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAllocOther" ColumnName="QtyAllocOther" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
+                <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN11700_pdGetItemLotDPBB" FunctionName="eBiz4DWebSysModel.Store.IN11700_pdGetItemLotDPBB">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN11700Model.IN11700_pdGetItemLotDPBB_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="LIFODate" ColumnName="LIFODate" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAllocOther" ColumnName="QtyAllocOther" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
+                <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
