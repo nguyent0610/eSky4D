@@ -54,10 +54,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HQFramework.Common">
-      <HintPath>..\..\..\..\..\..\DLL\DLL4DSERVER\HQFramework.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\Document\New folder (2)\DLL MVC moi\HQFramework.Common.DLL</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL">
-      <HintPath>..\..\..\..\..\..\DLL\DLL4DSERVER\HQFramework.DAL.dll</HintPath>
+      <HintPath>..\..\..\..\..\Document\New folder (2)\DLL MVC moi\HQFramework.DAL.DLL</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -121,7 +121,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
