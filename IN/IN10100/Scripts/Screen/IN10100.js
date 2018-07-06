@@ -571,7 +571,9 @@ var btnLotOK_Click = function () {
         if (lstData != undefined) {
             for (var i = 0; i < lstData.length; i++) {
                 if (lstData.items[i].data.LotSerNbr != "" && lstData.items[i].data.LotSerNbr != null && lstData.items[i].data.WarrantyDate != null && lstData.items[i].data.WarrantyDate != "" && lstData.items[i].data.ExpDate != null && lstData.items[i].data.ExpDate != "") {
-                    if (dateToString(lstData.items[i].data.WarrantyDate, 'dd-MM-yyyy') > dateToString(lstData.items[i].data.ExpDate, 'dd-MM-yyyy')) {
+                    if ((lstData.items[i].data.WarrantyDate.getFullYear() > lstData.items[i].data.ExpDate.getFullYear()) || (lstData.items[i].data.WarrantyDate.getFullYear() == lstData.items[i].data.ExpDate.getFullYear() && lstData.items[i].data.WarrantyDate.getMonth() > lstData.items[i].data.ExpDate.getMonth()) || (lstData.items[i].data.WarrantyDate.getFullYear() == lstData.items[i].data.ExpDate.getFullYear() && lstData.items[i].data.WarrantyDate.getMonth() == lstData.items[i].data.ExpDate.getMonth() && lstData.items[i].data.WarrantyDate.getDate() > lstData.items[i].data.ExpDate.getDate())) {
+
+                    //if (dateToString(lstData.items[i].data.WarrantyDate, 'dd-MM-yyyy') > dateToString(lstData.items[i].data.ExpDate, 'dd-MM-yyyy')) {
                         lsterro = lsterro + (i + 1).toString() + ",";
                     }
                 }
