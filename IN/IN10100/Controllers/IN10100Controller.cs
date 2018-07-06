@@ -832,6 +832,7 @@ namespace IN10100.Controllers
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(data["cboWhseLoc"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
                 List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
@@ -1045,10 +1046,12 @@ namespace IN10100.Controllers
                 {
                     try
                     {
+                        bool check = false;
                         var lstInvtID = new List<IN10100_pdInventory_Result>();
 
                         Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
                         int lineRef = data["lineRef"].ToInt();
+                        string whseLoc = data["cboWhseLoc"].PassNull();
                         if (workbook.Worksheets.Count > 0)
                         {                            
                             Worksheet workSheet = workbook.Worksheets[0];
@@ -1141,8 +1144,18 @@ namespace IN10100.Controllers
                                 {
                                     string[] strExpDate = workSheet.Cells[i, 7].StringValue.PassNull().Split('/');
                                     DateTime dExpDate = new DateTime(int.Parse(strExpDate[0]), int.Parse(strExpDate[1]), int.Parse(strExpDate[2]));
-                                    newLot.ExpDate = dExpDate;
-                                    newLot.LotSerNbr = workSheet.Cells[i, 6].StringValue;
+                                    newLot.LotSerNbr = workSheet.Cells[i, 6].StringValue.PassNull();
+                                    var item = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.LotSerNbr == newLot.LotSerNbr);
+                                    if (item != null)
+                                    {
+                                        newLot.ExpDate = item.ExpDate;
+                                        check = true;
+                                    }
+                                    else
+                                    {
+                                        newLot.ExpDate = dExpDate;
+                                    }                                    
+                                    
                                 }
                              
                                 newLot.InvtID = invtID;
@@ -1157,11 +1170,12 @@ namespace IN10100.Controllers
                                 }
                                 
                                 newLot.SiteID = data["SiteID"].PassNull();
+                                newLot.WhseLoc = whseLoc;
                                 newLot.TranDate = data["DateEnt"].ToDateShort();
                                 newLot.TranType = "RC";
                                 newLot.UnitDesc = workSheet.Cells[i, 2].StringValue;
                                 newLot.UnitMultDiv = "M";
-                                newLot.WarrantyDate = DateTime.Now.PassMin();
+                                newLot.WarrantyDate = ("1-1-1900").ToDateShort();
                                 //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
                                 //{
                                 //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
@@ -1202,7 +1216,7 @@ namespace IN10100.Controllers
                             newTrans.TranType = "RC";
                             newTrans.JrnlType = "IN";
                             newTrans.TranDesc = objInvt.Descr;
-
+                            newTrans.WhseLoc = whseLoc;
 
                             var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
                             foreach (var lot in tmp)
@@ -1230,8 +1244,15 @@ namespace IN10100.Controllers
                             lineRef++;
                             
                         }
-
-                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
+                        //if (check)
+                        //{
+                        //    Util.AppendLog(ref _logMessage, "123", "", data: new { message, lstTrans, lstLot });
+                        //}
+                        //else
+                        //{
+                            Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
+                        //}
+                        
                     }
                     catch (Exception ex)
                     {

@@ -448,6 +448,13 @@ var btnImport_Click = function (c, e) {
         App.btnImport.reset();
         return;
     }
+    if (HQ.showWhseLoc == 2) {
+        if (Ext.isEmpty(App.cboWhseLoc.getValue())) {
+            HQ.message.show('1000', [HQ.common.getLang('WhseLoc')], '', true);
+            App.btnImport.reset();
+            return;
+        }
+    }    
 
     var fileName = c.getValue();
     var ext = fileName.split(".").pop().toLowerCase();
@@ -1203,7 +1210,7 @@ var save = function () {
     var store1 = App.stoTrans;
     var allRecords1 = store1.snapshot || store1.allData || store1.data;
 
-    if (allRecords1.items.length <= 1) {
+    if (allRecords1.items.length < 1 && allRecords1.items.length == 1 && allRecords1.items[0].data.InvtID == '') {
         HQ.message.show(2015020804, [App.BatNbr.value], '', true);
         return;
     }
