@@ -94,7 +94,7 @@ namespace IN10100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -1158,7 +1158,7 @@ namespace IN10100.Controllers
                                     
                                 }
                              
-                                newLot.InvtID = invtID;
+                                newLot.InvtID = invtID.ToUpper();
                                 newLot.InvtMult = 1;
                                 if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
                                 {
@@ -1202,10 +1202,10 @@ namespace IN10100.Controllers
                         var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
                         foreach (var item in lstInvt)
                         {
-                            var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID == item.InvtID);// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                            var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
                             
                             var newTrans = new IN10100_pgReceiptLoad_Result();
-                            newTrans.InvtID = item.InvtID;
+                            newTrans.InvtID = item.InvtID.ToUpper();
                             newTrans.LineRef = LastLineRef(lineRef);
                             newTrans.ReasonCD = data["ReasonCD"].PassNull();
                             newTrans.TranDate = item.TranDate;
