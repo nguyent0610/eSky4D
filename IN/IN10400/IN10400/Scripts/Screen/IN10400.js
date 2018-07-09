@@ -1629,9 +1629,9 @@ var calculateInvtTotal = function (invtID, siteID, lineRef) {
             qtyOld += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
         }
     });
-    if (qty >= 0)
+    if (qty == qtyOld)
         return 0;
-    return qty - qtyOld;
+    return qty + qtyOld;
 };
 
 var askNew = function (item) {
