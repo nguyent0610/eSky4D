@@ -1065,7 +1065,6 @@ namespace IN10200.Controllers
             {
                 throw new MessageException(MessageType.Message, "2015020803");
             }
-
            
             if (_lstTrans.Count == 0)
             {

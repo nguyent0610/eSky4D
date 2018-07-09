@@ -347,6 +347,9 @@ var eventNew = function (sto, grd, keys) {
 };
 
 var cboBatNbr_Change = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.cboReasonCD.store.reload();
+    }
     var record = App.stoBatch.getById(newValue);
     if (record) {
         HQ.isNew = false;
