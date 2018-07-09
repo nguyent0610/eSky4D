@@ -693,6 +693,9 @@ var btnPopupOk_Click = function () {
 };
 
 var cboBatNbr_Change = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.ReasonCD.store.reload();
+    }
     var record = App.stoBatch.getById(newValue);
     if (record) {
         //showMask();
