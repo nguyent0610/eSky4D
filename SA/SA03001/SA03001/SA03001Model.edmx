@@ -79,9 +79,9 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CrtLmt" Type="float" Nullable="false" />
           <Property Name="CrtLmtInvoice" Type="float" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="2" />
-          <Property Name="StartWork" Type="datetime" />
-          <Property Name="EndWork" Type="datetime" />
+          <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="StartWork" Type="datetime" Nullable="false" />
+          <Property Name="EndWork" Type="datetime" Nullable="false" />
         </EntityType>
         <Function Name="SA03001_pdBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -177,7 +177,6 @@
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="Users" EntityType="SA03001Model.User" />
           <FunctionImport Name="SA03001_pdBranch" ReturnType="Collection(SA03001Model.SA03001_pdBranch_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -224,6 +223,7 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="UserNameNew" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Users" EntityType="SA03001Model.User" />
         </EntityContainer>
         <ComplexType Name="SA03001_pgLoadGrid_Result">
           <Property Type="String" Name="Manager" Nullable="false" MaxLength="30" />
@@ -251,7 +251,11 @@
           <Property Type="DateTime" Name="EndWork" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="BeginDay" Nullable="false" Precision="23" />
           <Property Type="Int32" Name="ExpireDay" Nullable="false" />
-          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="1" />
+          <Property Type="Boolean" Name="CheckFirstLogin" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="SA03001_pgBranchAllByUser_Result">
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
@@ -285,52 +289,6 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="UserID" Nullable="false" MaxLength="1" />
         </ComplexType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="UserName" />
-          </Key>
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CpnyID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="HomeScreenNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PasswordQuestion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="PasswordAnswer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UserTypes" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Tel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="ComputerID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Blocked" Type="Boolean" Nullable="false" />
-          <Property Name="BlockedTime" Type="DateTime" Precision="3" />
-          <Property Name="LoggedIn" Type="Boolean" Nullable="false" />
-          <Property Name="LastLoggedIn" Type="DateTime" Precision="3" />
-          <Property Name="JobTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Manager" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Department" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="AutoID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ExpireDay" Type="Int32" Nullable="false" />
-          <Property Name="FailedLoginCount" Type="Int32" Nullable="false" />
-          <Property Name="BeginDay" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CheckFirstLogin" Type="Boolean" Nullable="false" />
-          <Property Name="Images" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CpnyIDHand" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="MultiLogin" Type="Boolean" Nullable="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="CrtLmt" Type="Double" Nullable="false" />
-          <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="StartWork" Type="DateTime" Precision="3" />
-          <Property Name="EndWork" Type="DateTime" Precision="3" />
-        </EntityType>
         <ComplexType Name="SA03001_pdBranch_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
@@ -383,6 +341,11 @@
         <ComplexType Name="SA03001_pdConfigHideShow_Result">
           <Property Type="Boolean" Name="UserTypes" Nullable="true" />
           <Property Type="Boolean" Name="CpnyID" Nullable="true" />
+          <Property Type="Boolean" Name="CheckFirstLogin" Nullable="true" />
+          <Property Type="Boolean" Name="Address" Nullable="true" />
+          <Property Type="Boolean" Name="Tel" Nullable="true" />
+          <Property Type="Boolean" Name="Channel" Nullable="true" />
+          <Property Type="Boolean" Name="MultiLogin" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SA03001_ptTreeNode_Result">
           <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
@@ -408,6 +371,52 @@
           <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="Position" Nullable="false" MaxLength="1" />
         </ComplexType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="HomeScreenNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordQuestion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordAnswer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypes" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ComputerID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Blocked" Type="Boolean" Nullable="false" />
+          <Property Name="BlockedTime" Type="DateTime" Precision="3" />
+          <Property Name="LoggedIn" Type="Boolean" Nullable="false" />
+          <Property Name="LastLoggedIn" Type="DateTime" Precision="3" />
+          <Property Name="JobTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Manager" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AutoID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExpireDay" Type="Int32" Nullable="false" />
+          <Property Name="FailedLoginCount" Type="Int32" Nullable="false" />
+          <Property Name="BeginDay" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CheckFirstLogin" Type="Boolean" Nullable="false" />
+          <Property Name="Images" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CpnyIDHand" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MultiLogin" Type="Boolean" Nullable="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CrtLmt" Type="Double" Nullable="false" />
+          <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="StartWork" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndWork" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -443,6 +452,10 @@
                 <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
                 <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
                 <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
+                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -486,53 +499,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SA03001Model.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="EndWork" ColumnName="EndWork" />
-                <ScalarProperty Name="StartWork" ColumnName="StartWork" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CrtLmtInvoice" ColumnName="CrtLmtInvoice" />
-                <ScalarProperty Name="CrtLmt" ColumnName="CrtLmt" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="CpnyIDHand" ColumnName="CpnyIDHand" />
-                <ScalarProperty Name="Images" ColumnName="Images" />
-                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
-                <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
-                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
-                <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
-                <ScalarProperty Name="AutoID" ColumnName="AutoID" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="Department" ColumnName="Department" />
-                <ScalarProperty Name="Manager" ColumnName="Manager" />
-                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
-                <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
-                <ScalarProperty Name="LoggedIn" ColumnName="LoggedIn" />
-                <ScalarProperty Name="BlockedTime" ColumnName="BlockedTime" />
-                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
-                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
-                <ScalarProperty Name="PasswordAnswer" ColumnName="PasswordAnswer" />
-                <ScalarProperty Name="PasswordQuestion" ColumnName="PasswordQuestion" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="HomeScreenNbr" ColumnName="HomeScreenNbr" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SA03001_pdBranch" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdBranch">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdBranch_Result">
@@ -604,6 +570,11 @@
               <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdConfigHideShow_Result">
                 <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -640,6 +611,53 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SA03001Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="EndWork" ColumnName="EndWork" />
+                <ScalarProperty Name="StartWork" ColumnName="StartWork" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CrtLmtInvoice" ColumnName="CrtLmtInvoice" />
+                <ScalarProperty Name="CrtLmt" ColumnName="CrtLmt" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="CpnyIDHand" ColumnName="CpnyIDHand" />
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
+                <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
+                <ScalarProperty Name="AutoID" ColumnName="AutoID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Manager" ColumnName="Manager" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
+                <ScalarProperty Name="LoggedIn" ColumnName="LoggedIn" />
+                <ScalarProperty Name="BlockedTime" ColumnName="BlockedTime" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
+                <ScalarProperty Name="PasswordAnswer" ColumnName="PasswordAnswer" />
+                <ScalarProperty Name="PasswordQuestion" ColumnName="PasswordQuestion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="HomeScreenNbr" ColumnName="HomeScreenNbr" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -661,10 +679,10 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="102" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
         <EntityTypeShape EntityType="SA03001Model.SYS_UserGroup" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SA03001Model.User" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="SA03001Model.SYS_Configurations" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="SA03001Model.User" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

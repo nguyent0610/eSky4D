@@ -29,24 +29,52 @@ namespace SA03001.Controllers
         private bool isShowUserTypes = false;
         private bool isRequiredCpny = false;
         private bool result = true;
+        private bool isCheckFirstLogin = false;
+        private bool isAddress = false;
+        private bool isTell = false;
+        private bool isChannel = false;
+        private bool isMultiLogin = false;
+
         List<SA03001_ptTreeNode_Result> lstAllNode = new List<SA03001_ptTreeNode_Result>();
         List<SA03001_ptTreeNodeUserReplace_Result> lstAllNodetMP = new List<SA03001_ptTreeNodeUserReplace_Result>();
         bool isChecked = false;
         public ActionResult Index()
         {
-            Util.InitRight(_screenNbr);
+            
             var objUserTypes = _db.SA03001_pdConfigHideShow(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if(objUserTypes!= null)
             {
                 isShowUserTypes = objUserTypes.UserTypes.ToBool();
                 isRequiredCpny = objUserTypes.CpnyID.ToBool();
+                isCheckFirstLogin = objUserTypes.CheckFirstLogin.ToBool();
+                isAddress = objUserTypes.Address.ToBool();
+                isTell = objUserTypes.Tel.ToBool();
+                isChannel = objUserTypes.Channel.ToBool();
+                isMultiLogin = objUserTypes.MultiLogin.ToBool();
             }
             ViewBag.IsShowUserTypes = isShowUserTypes;
             ViewBag.IsRequiredCpny = isRequiredCpny;
+            ViewBag.IsCheckFirstLogin = isCheckFirstLogin;
+            ViewBag.IsAddress = isAddress;
+            ViewBag.IsTel = isTell;
+            ViewBag.IsChannel = isChannel;
+            ViewBag.IsMultiLogin = isMultiLogin;
+
+
+            var objSA02500Check = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check");
+            var objSA02500CheckAdmin = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500CheckAdmin");
+            var objUserGroup = _db.SYS_UserGroup.FirstOrDefault(p => p.UserID == Current.UserName && p.GroupID == "Admin");
+            ViewBag.TextVal = objSA02500Check == null ? "0" : objSA02500Check.TextVal;
+            ViewBag.TextValAdmin = objUserGroup == null ? "0" : (objSA02500CheckAdmin == null ? "0" : objSA02500CheckAdmin.TextVal);
+            ViewBag.GroupAdmin = objUserGroup == null ? "0" : "1";
+
+
+
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -96,6 +124,26 @@ namespace SA03001.Controllers
                 int ExpireDay = Convert.ToInt32(data["txtExpireDay"].PassNull() == "" ? "0" : data["txtExpireDay"].PassNull());
                 DateTime StartWork = data["dtpStartWork"].ToDateShort();
                 DateTime EndWork = data["dtpEndWork"].ToDateShort();
+                bool checkFirstLogin = data["valueCheckFirstLogin"].PassNull().ToBool();
+                bool auto = data["Auto"].PassNull().ToBool();
+                string address = data["txtAddress"].PassNull();
+                string tel = data["txtTel"].PassNull();
+                string channel = data["cboChannel"].PassNull();
+                bool multiLogin = data["valueMultiLogin"].PassNull().ToBool();
+                if (auto == true)
+                {
+                    bool b = true;
+                    string strID = "";
+                    while (b)
+                    {
+                        strID = (DateTime.Now.ToString("yyyyMMddhhmmssff") + data["FirstName"]).GetHashCode().ToString().ToHex() + "000000";
+                        strID = strID.Substring(1, 6);
+                        userName = strID;
+                        var obj = (from p in _db.Users select p).Where(p => p.UserName.ToUpper().Trim() == userName.ToUpper().Trim()).FirstOrDefault();
+                        if (obj == null) b = false;
+                    }
+                }
+
 
                 var lstdataErro = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
                 if (lstdataErro.Count>0)
@@ -152,13 +200,16 @@ namespace SA03001.Controllers
                     objUser.Crtd_Datetime = DateTime.Now;
                     objUser.Crtd_Prog = _screenNbr;
                     objUser.Crtd_User = _userName;
-                    objUser.Address = ".";
+                    objUser.Address = address;
                     objUser.LastName = ".";
                     objUser.Channel = "DMS";
                     objUser.CheckFirstLogin = false;
                     objUser.ExpireDay = 90;
                     objUser.BeginDay = DateTime.Now;
-                    objUser.LoggedIn = true;
+                    objUser.LoggedIn = false;
+                    objUser.Tel = tel;
+                    objUser.Channel = channel;
+
                 }
                 else
                 {
@@ -222,6 +273,19 @@ namespace SA03001.Controllers
                 objUser.EndWork = EndWork;
                 objUser.BeginDay = BeginDay;
                 objUser.ExpireDay = ExpireDay;
+                objUser.LUpd_Datetime = DateTime.Now;
+                objUser.LUpd_Prog = _screenNbr;
+                objUser.LUpd_User = _userName;
+                objUser.CheckFirstLogin = checkFirstLogin;
+                objUser.MultiLogin = multiLogin;
+                if(auto==false)
+                {
+                    objUser.AutoID ="0";
+                }
+                else
+                {
+                    objUser.AutoID="1";
+                }
                 //objUser.StartDate = StartDate;
                 //objUser.EndDate = EndDate;
                 if (string.IsNullOrEmpty(passWord))

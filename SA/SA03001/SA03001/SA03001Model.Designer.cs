@@ -84,22 +84,6 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<User> Users
-        {
-            get
-            {
-                if ((_Users == null))
-                {
-                    _Users = base.CreateObjectSet<User>("Users");
-                }
-                return _Users;
-            }
-        }
-        private ObjectSet<User> _Users;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_Configurations> SYS_Configurations
         {
             get
@@ -112,6 +96,22 @@ namespace SA03001
             }
         }
         private ObjectSet<SYS_Configurations> _SYS_Configurations;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<User> Users
+        {
+            get
+            {
+                if ((_Users == null))
+                {
+                    _Users = base.CreateObjectSet<User>("Users");
+                }
+                return _Users;
+            }
+        }
+        private ObjectSet<User> _Users;
 
         #endregion
 
@@ -126,19 +126,19 @@ namespace SA03001
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToUsers(User user)
-        {
-            base.AddObject("Users", user);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the SYS_Configurations EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSYS_Configurations(SYS_Configurations sYS_Configurations)
         {
             base.AddObject("SYS_Configurations", sYS_Configurations);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToUsers(User user)
+        {
+            base.AddObject("Users", user);
         }
 
         #endregion
@@ -1326,7 +1326,10 @@ namespace SA03001
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="crtLmt">Initial value of the CrtLmt property.</param>
         /// <param name="crtLmtInvoice">Initial value of the CrtLmtInvoice property.</param>
-        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Byte[] tstamp, global::System.Double crtLmt, global::System.Double crtLmtInvoice)
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="startWork">Initial value of the StartWork property.</param>
+        /// <param name="endWork">Initial value of the EndWork property.</param>
+        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Byte[] tstamp, global::System.Double crtLmt, global::System.Double crtLmtInvoice, global::System.String status, global::System.DateTime startWork, global::System.DateTime endWork)
         {
             User user = new User();
             user.UserName = userName;
@@ -1340,6 +1343,9 @@ namespace SA03001
             user.tstamp = tstamp;
             user.CrtLmt = crtLmt;
             user.CrtLmtInvoice = crtLmtInvoice;
+            user.Status = status;
+            user.StartWork = startWork;
+            user.EndWork = endWork;
             return user;
         }
 
@@ -2265,7 +2271,7 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Status
         {
@@ -2277,7 +2283,7 @@ namespace SA03001
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, true);
+                _Status = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -2289,9 +2295,9 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> StartWork
+        public global::System.DateTime StartWork
         {
             get
             {
@@ -2306,16 +2312,16 @@ namespace SA03001
                 OnStartWorkChanged();
             }
         }
-        private Nullable<global::System.DateTime> _StartWork;
-        partial void OnStartWorkChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _StartWork;
+        partial void OnStartWorkChanging(global::System.DateTime value);
         partial void OnStartWorkChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> EndWork
+        public global::System.DateTime EndWork
         {
             get
             {
@@ -2330,8 +2336,8 @@ namespace SA03001
                 OnEndWorkChanged();
             }
         }
-        private Nullable<global::System.DateTime> _EndWork;
-        partial void OnEndWorkChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _EndWork;
+        partial void OnEndWorkChanging(global::System.DateTime value);
         partial void OnEndWorkChanged();
 
         #endregion
@@ -2606,6 +2612,126 @@ namespace SA03001
         private Nullable<global::System.Boolean> _CpnyID;
         partial void OnCpnyIDChanging(Nullable<global::System.Boolean> value);
         partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckFirstLogin
+        {
+            get
+            {
+                return _CheckFirstLogin;
+            }
+            set
+            {
+                OnCheckFirstLoginChanging(value);
+                ReportPropertyChanging("CheckFirstLogin");
+                _CheckFirstLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckFirstLogin");
+                OnCheckFirstLoginChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckFirstLogin;
+        partial void OnCheckFirstLoginChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckFirstLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Address
+        {
+            get
+            {
+                return _Address;
+            }
+            set
+            {
+                OnAddressChanging(value);
+                ReportPropertyChanging("Address");
+                _Address = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Address");
+                OnAddressChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Address;
+        partial void OnAddressChanging(Nullable<global::System.Boolean> value);
+        partial void OnAddressChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Tel
+        {
+            get
+            {
+                return _Tel;
+            }
+            set
+            {
+                OnTelChanging(value);
+                ReportPropertyChanging("Tel");
+                _Tel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Tel");
+                OnTelChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Tel;
+        partial void OnTelChanging(Nullable<global::System.Boolean> value);
+        partial void OnTelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Channel
+        {
+            get
+            {
+                return _Channel;
+            }
+            set
+            {
+                OnChannelChanging(value);
+                ReportPropertyChanging("Channel");
+                _Channel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Channel");
+                OnChannelChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Channel;
+        partial void OnChannelChanging(Nullable<global::System.Boolean> value);
+        partial void OnChannelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> MultiLogin
+        {
+            get
+            {
+                return _MultiLogin;
+            }
+            set
+            {
+                OnMultiLoginChanging(value);
+                ReportPropertyChanging("MultiLogin");
+                _MultiLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MultiLogin");
+                OnMultiLoginChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _MultiLogin;
+        partial void OnMultiLoginChanging(Nullable<global::System.Boolean> value);
+        partial void OnMultiLoginChanged();
 
         #endregion
 
@@ -3478,7 +3604,8 @@ namespace SA03001
         /// <param name="beginDay">Initial value of the BeginDay property.</param>
         /// <param name="expireDay">Initial value of the ExpireDay property.</param>
         /// <param name="hideColumn">Initial value of the HideColumn property.</param>
-        public static SA03001_pgLoadGrid_Result CreateSA03001_pgLoadGrid_Result(global::System.String manager, global::System.String userName, global::System.Boolean blocked, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Int32 expireDay, global::System.String hideColumn)
+        /// <param name="checkFirstLogin">Initial value of the CheckFirstLogin property.</param>
+        public static SA03001_pgLoadGrid_Result CreateSA03001_pgLoadGrid_Result(global::System.String manager, global::System.String userName, global::System.Boolean blocked, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Int32 expireDay, global::System.String hideColumn, global::System.Boolean checkFirstLogin)
         {
             SA03001_pgLoadGrid_Result sA03001_pgLoadGrid_Result = new SA03001_pgLoadGrid_Result();
             sA03001_pgLoadGrid_Result.Manager = manager;
@@ -3488,6 +3615,7 @@ namespace SA03001
             sA03001_pgLoadGrid_Result.BeginDay = beginDay;
             sA03001_pgLoadGrid_Result.ExpireDay = expireDay;
             sA03001_pgLoadGrid_Result.HideColumn = hideColumn;
+            sA03001_pgLoadGrid_Result.CheckFirstLogin = checkFirstLogin;
             return sA03001_pgLoadGrid_Result;
         }
 
@@ -4118,6 +4246,102 @@ namespace SA03001
         private global::System.String _HideColumn;
         partial void OnHideColumnChanging(global::System.String value);
         partial void OnHideColumnChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean CheckFirstLogin
+        {
+            get
+            {
+                return _CheckFirstLogin;
+            }
+            set
+            {
+                OnCheckFirstLoginChanging(value);
+                ReportPropertyChanging("CheckFirstLogin");
+                _CheckFirstLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckFirstLogin");
+                OnCheckFirstLoginChanged();
+            }
+        }
+        private global::System.Boolean _CheckFirstLogin;
+        partial void OnCheckFirstLoginChanging(global::System.Boolean value);
+        partial void OnCheckFirstLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Address
+        {
+            get
+            {
+                return _Address;
+            }
+            set
+            {
+                OnAddressChanging(value);
+                ReportPropertyChanging("Address");
+                _Address = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Address");
+                OnAddressChanged();
+            }
+        }
+        private global::System.String _Address;
+        partial void OnAddressChanging(global::System.String value);
+        partial void OnAddressChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Tel
+        {
+            get
+            {
+                return _Tel;
+            }
+            set
+            {
+                OnTelChanging(value);
+                ReportPropertyChanging("Tel");
+                _Tel = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Tel");
+                OnTelChanged();
+            }
+        }
+        private global::System.String _Tel;
+        partial void OnTelChanging(global::System.String value);
+        partial void OnTelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Channel
+        {
+            get
+            {
+                return _Channel;
+            }
+            set
+            {
+                OnChannelChanging(value);
+                ReportPropertyChanging("Channel");
+                _Channel = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Channel");
+                OnChannelChanged();
+            }
+        }
+        private global::System.String _Channel;
+        partial void OnChannelChanging(global::System.String value);
+        partial void OnChannelChanged();
 
         #endregion
 

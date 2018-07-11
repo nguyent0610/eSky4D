@@ -6,6 +6,7 @@ var _tstamp = '';
 var _selBranch = [];
 var _userName = '';
 var dsr = [];
+var check = false;
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
@@ -29,12 +30,59 @@ var menuClick = function (command) {
         case "new":
             if (HQ.isInsert) {
                 if (HQ.IsShowUserTypes) {
+
                     App.cboUserTypes.hide();
-                    App.conHide.show();
+                    //App.conHide.show();
+                    if (check == false) {
+                        App.cboStatus.setMargin("5 0 0 0");
+                        App.dtpStartWork.setMargin("5 0 0 0");
+                        App.dtpEndWork.setMargin("5 0 0 0");
+                        check = true;
+                    }
+                    App.cboUserTypes.allowBlank = true;
+                    App.cboUserTypes.isValid();
                 }
                 else {
                     App.cboUserTypes.show();
-                    App.conHide.hide();
+                    //App.conHide.hide();
+                    App.cboUserTypes.allowBlank = false;
+                    App.cboUserTypes.isValid();
+                }
+                if (HQ.IsCheckFirstLogin) {
+                    App.ckbCheckFirstLogin.hide();
+                }
+                else {
+                    App.ckbCheckFirstLogin.show();
+                }
+                if (HQ.IsAddress) {
+                    App.txtAddress.hide();
+                }
+                else {
+                    App.txtAddress.show();
+                }
+                if (HQ.IsTel) {
+                    App.txtTel.hide();
+                }
+                else {
+                    App.txtTel.show();
+                }
+                if (HQ.IsChannel) {
+                    App.cboChannel.hide();
+                }
+                else {
+                    App.cboChannel.show();
+                }
+                if (HQ.IsMultiLogin) {
+                    App.ckbMultiLogin.hide();
+                }
+                else {
+                    App.ckbMultiLogin.show();
+                }
+                if (HQ.IsRequiredCpny) {
+                    App.txtCpnyID.allowBlank = false;
+                }
+                else {
+                    App.txtCpnyID.allowBlank = true;
                 }
                 App.winLocation.setTitle("New")
                 App.winLocation.show();
@@ -54,7 +102,19 @@ var menuClick = function (command) {
                 App.dtpStartWork.setValue(new Date());
                 App.dtpEndWork.setValue(new Date());
                 App.txtExpireDay.setValue(0);
-                App.cboStatus.setValue('IN');
+                App.cboStatus.setValue('AC');
+                App.ckbCheckFirstLogin.setValue(0);
+                App.txtAddress.setValue('');
+                App.ckbMultiLogin.setValue(0);
+                App.cboChannel.setValue('');
+                App.txtTel.setValue('');
+                App.txtUserName.isValid();
+                App.txtFirstName.isValid();
+                App.txtPassWord.isValid();
+                App.txtEmail.isValid();
+                App.txtCpnyID.isValid();
+                App.cboStatus.isValid();
+                App.chkAuto.setValue(0);
                 HQ.isNew = true;
 
             }
@@ -85,7 +145,46 @@ var menuClick = function (command) {
 
 var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-   
+    if (HQ.IsShowUserTypes) {
+        App.UserTypes.hide();
+    }
+    else
+    {
+        App.UserTypes.show();
+    }
+    if (HQ.IsCheckFirstLogin)
+    {
+        App.CheckFirstLogin.hide();
+    }
+    else
+    {
+        App.CheckFirstLogin.show();
+    }
+    if (HQ.IsAddress)
+    {
+        App.Address.hide();
+    }
+    else {
+        App.Address.show();
+    }
+    if (HQ.IsTel) {
+        App.Tel.hide();
+    }
+    else {
+        App.Tel.show();
+    }
+    if (HQ.IsChannel) {
+        App.Channel.hide();
+    }
+    else {
+        App.Channel.show();
+    }
+    if (HQ.IsMultiLogin) {
+        App.MultiLogin.hide();
+    }
+    else {
+        App.MultiLogin.show();
+    }
     App.stoUser.reload();
     HQ.util.checkAccessRight();
 };
@@ -157,12 +256,53 @@ var grdPO_CostPurchasePrice_Reject = function (record) {
 };
 var btnEdit_Click = function (record) {
     if (HQ.IsShowUserTypes) {
+        
         App.cboUserTypes.hide();
-        App.conHide.show();
+        //App.conHide.show();
+        if (check == false)
+        {
+            App.cboStatus.setMargin("5 0 0 0");
+            App.dtpStartWork.setMargin("5 0 0 0");
+            App.dtpEndWork.setMargin("5 0 0 0");
+            check = true;
+        }
+        
     }
     else {
         App.cboUserTypes.show();
-        App.conHide.hide();
+        //App.conHide.hide();
+    }
+    if (HQ.IsCheckFirstLogin)
+    {
+        App.ckbCheckFirstLogin.hide();
+    }
+    else {
+        App.ckbCheckFirstLogin.show();
+    }
+    if (HQ.IsAddress)
+    {
+        App.txtAddress.hide();
+    }
+    else {
+        App.txtAddress.show();
+    }
+    if (HQ.IsTel) {
+        App.txtTel.hide();
+    }
+    else {
+        App.txtTel.show();
+    }
+    if (HQ.IsChannel) {
+        App.cboChannel.hide();
+    }
+    else {
+        App.cboChannel.show();
+    }
+    if (HQ.IsMultiLogin) {
+        App.ckbMultiLogin.hide();
+    }
+    else {
+        App.ckbMultiLogin.show();
     }
     _tstamp = record.data.tstamp;
     App.frmDetail.loadRecord(record);
@@ -171,6 +311,7 @@ var btnEdit_Click = function (record) {
     App.txtUserName.setReadOnly(true);
     App.winLocation.setTitle("Edit");
     HQ.isNew = false;
+    //App.ckbCheckFirstLogin.setValue(0);
     //App.cboUserTypes.forceSelection = false;
     //App.cboUserGroup.forceSelection = false;
     App.winLocation.show();
@@ -300,7 +441,8 @@ var btnLocationOK_Click = function () {
         HQ.message.show(15, App.cboUserTypes.fieldLabel);
         return;
     }
-    save();
+    Check();
+    //save();
 };
 
 
@@ -309,11 +451,13 @@ var btnLocationOK_Click = function () {
 var save = function () {
 
     var user = App.txtUserName.getValue();
-    if (!HQ.util.checkSpecialChar(user.trim()))
+    if (App.chkAuto.getValue() == false)
     {
-        HQ.message.show(20140811, App.txtUserName.fieldLabe);
-        return;
+        if (!HQ.util.checkSpecialChar(user.trim())) {
+            HQ.message.show(20140811, App.txtUserName.fieldLabe);
+            return;
 
+        }
     }
     if (HQ.IsRequiredCpny) {
         if (Ext.isEmpty(App.txtCpnyID.getValue())) {
@@ -355,7 +499,10 @@ var save = function () {
             isNewUser: HQ.isNew,
             //valueStartDate: App.dtpStartDate.getValue().toDateString(),
             //valueEndDate: App.dtpEndDate.getValue().toDateString(),
-            valueTstamp: _tstamp
+            valueTstamp: _tstamp,
+            valueCheckFirstLogin: App.ckbCheckFirstLogin.getValue(),
+            Auto: App.chkAuto.getValue(),
+            valueMultiLogin: App.ckbMultiLogin.getValue()
         },
         success: function (msg, data) {
             HQ.message.show(201405071);
@@ -479,5 +626,63 @@ var btnUserReplaceExpand_click = function (btn, e, eOpts) {
 var btnUserReplaceCollapse_click = function (btn, e, eOpts) {
     App.treeAVCUserReplace.collapseAll();
 };
+function Check() {
+    
+    App.frmMain.isValid();
+    App.txtUserName.isValid();
+    if (HQ.form.checkRequirePass(App.frmDetail))
+    {
+        if (HQ.GroupAdmin == "1" && HQ.TextValAdmin != '0') {
+            var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextValAdmin + ",}$", "");
 
+            if (!App.txtPassWord.value.match(decimal)) {
+                HQ.message.show(20180111, [HQ.TextValAdmin], null, true);
+                App.txtPassWord.focus();
+                return;
+            }
+        }
+        else if (HQ.GroupAdmin == "0" && HQ.TextVal != '0') {
+            //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+            var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextVal + ",}$", "");
 
+            if (!App.txtPassWord.value.match(decimal)) {
+                HQ.message.show(998, [HQ.TextVal], null, true);
+                App.txtPassWord.focus();
+                return;
+            }
+        }
+        save();
+    }
+};
+var focusOnInvalidField = function (item) {
+    if (item == "ok") {
+        App.frmMain.getForm().getFields().each(function (field) {
+            if (!field.isValid()) {
+                field.focus();
+                return false;
+            }
+        });
+    }
+};
+var showFieldInvalid = function (form) {
+    var done = 1;
+    form.getForm().getFields().each(function (field) {
+        if (!field.isValid()) {
+            HQ.message.show(15, field.fieldLabel, 'focusOnInvalidField');
+            done = 0;
+            return false;
+        }
+    });
+    return done;
+};
+function chkAutoChange() {
+    if (App.chkAuto.checked) {
+        App.txtUserName.setValue('');
+        App.txtUserName.allowBlank = true
+        App.txtUserName.setDisabled(true);
+        App.txtUserName.isValid();
+    }
+    else {
+        App.txtUserName.setDisabled(false);
+    }
+};
