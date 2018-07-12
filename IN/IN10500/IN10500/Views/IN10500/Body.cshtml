@@ -217,6 +217,30 @@
                         lst.Change.Fn = "cboWhseLoc_Change";
                     })
                     .LoadData()
+
+                    , HQ.Combo().ID("cboInvtCheck").Name("cboInvtCheck").MarginSpec("5 0 0 0").Width(300).Hidden(true)
+                        .HQDBSys(false).HQProcedure("IN10500_pcInvt")
+                        .HQColumnShow("InvtID,SiteID,WhseLoc,QtyAvail").ForceSelection(true)
+                        .DisplayField("InvtID").ValueField("WhseLoc").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                    })
+                    .LoadData()
+                    
+                    , HQ.Combo().ID("cboInvtoryLot").Name("cboInvtoryLot").MarginSpec("5 0 0 0").Width(300).Hidden(true)
+                        .HQDBSys(false).HQProcedure("IN10500_pcInvtoryLot")
+                        .HQColumnShow("InvtID,SiteID,WhseLoc,QtyAvail").ForceSelection(true)
+                        .DisplayField("InvtID").ValueField("WhseLoc").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                    })
+                    .LoadData()
           
             )
            , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
@@ -282,34 +306,89 @@
                 
                 , X.Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
                 .Editor(
-                        HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQDBSys(false).HQProcedure("IN10500_pcInventory")
-                        .HQColumnShow("InvtID,InvtName").ForceSelection(true).AllowBlank(true).HQAutoLoad(false)
-                        .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 320)//.DataIndex("ReasonCD")
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            lst.Focus.Handler = "this.forceSelection=true;";
-                        })
-                        .HQParam(new StoreParameterCollection(){                      
-                        new StoreParameter() { Name = "@SiteID", Value = "App.cboSiteID.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@WhseLoc", Value = "App.cboWhseLoc.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@ShowWhseLoc", Value = "HQ.showWhseLoc", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.branchID", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
-                        })
-                        .LoadData()
+                    HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQDBSys(false).HQProcedure("IN10500_pcInventory")
+                    .HQColumnShow("InvtID,InvtName").ForceSelection(true).AllowBlank(true).HQAutoLoad(false)
+                    .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 320)//.DataIndex("ReasonCD")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        lst.Focus.Handler = "this.forceSelection=true;";
+                    })
+                    .HQParam(new StoreParameterCollection(){                      
+                    new StoreParameter() { Name = "@SiteID", Value = "App.cboSiteID.getValue()", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@WhseLoc", Value = "App.cboWhseLoc.getValue()", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@ShowWhseLoc", Value = "HQ.showWhseLoc", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.branchID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
                 )
                 , X.Column().Text(Util.GetLang("InvtName")).Width(200).DataIndex("InvtName")
-                , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(100)//.Hidden(true)
-                , X.Column().DataIndex("WhseLoc").Text(Util.GetLang("WhseLoc")).Width(100).ID("colWhseLoc")
+                //, X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(100)//.Hidden(true)
+
+                , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(130).ID("colSiteID")
+                .Editor(
+                    HQ.Combo().ID("cboSiteID1").Name("cboSiteID1")
+                    .HQDBSys(false).HQProcedure("IN10500_pcSiteCpny")
+                    .HQColumnShow("SiteID,Name").ForceSelection(true).AllowBlank(true)
+                    .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)//.DataIndex("ReasonCD")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        lst.Focus.Handler = "this.forceSelection=true;";
+                    })
+                    .HQParam(new StoreParameterCollection(){                      
+                    new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
+                })
+                    .LoadData()
+                )               
+                
+                
+                //, X.Column().DataIndex("WhseLoc").Text(Util.GetLang("WhseLoc")).Width(100).ID("colWhseLoc")
+                
+                , X.Column().DataIndex("WhseLoc").Text(Util.GetLang("WhseLoc")).Width(130).ID("colWhseLoc")
+                .Editor(
+                    HQ.Combo().ID("cboWhseLoc1").Name("cboWhseLoc1")
+                    .HQDBSys(false).HQProcedure("IN10500_pcWhseLoc")
+                    .HQColumnShow("WhseLoc,Descr").ForceSelection(true).AllowBlank(true)
+                    .DisplayField("WhseLoc").ValueField("WhseLoc").HQHeightWidth(400, 300)//.DataIndex("ReasonCD")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        lst.Focus.Handler = "this.forceSelection=true;";
+                        lst.Blur.Handler = "this.forceSelection=false; App.cboWhseLoc1.store.clearFilter();";
+                    })
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                    })
+                    .LoadData()
+                )
+                
                 , X.Column().DataIndex("EAUnit").Text(Util.GetLang("UOM")).Width(60)
 
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory")).DataIndex("BookEAQty").Width(110).Align(Alignment.Right).StyleSpec("text-align:left")
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500ActInventory")).DataIndex("ActualEAQty").Width(110).Align(Alignment.Right)
                     .Editor(X.NumberField().MinValue(0).DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
 
+                , X.ComponentColumn()
+                    //.Hidden(true)
+                    .Text("")
+                    .Width(26)
+                    .Component(X.Button()
+                        .MarginSpec("1 4 1 3").Height(18).Text("")
+                        .Listeners(p => p.Click.Fn = "btnLot_Click")
+                    )
+                            
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory1M")).DataIndex("StkQtyUnder1Month").Width(120).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500DiffAmt")).DataIndex("OffsetEAQty").Width(130).Align(Alignment.Right).StyleSpec("text-align:left")
@@ -355,7 +434,12 @@
                 {
                     l.Command.Handler = "grdIN_TagDetail_Reject(record);";
                 })
+                
         )
+        .Listeners(l =>
+        {
+            l.SelectionChange.Fn = "grdIN_TagDetail_SelectionChange";
+        })
         .SelectionModel(X.RowSelectionModel().ID("slmIN_TagDetail")
         .Mode(SelectionMode.Multi))
         .BottomBar(
@@ -437,3 +521,137 @@
                 .Listeners(p => p.Click.Handler = "App.winReport.close()")
         )
 )
+
+
+@(X.Window()
+    .ID("winLot")
+    .Hidden(true)
+    .Layout(LayoutType.Fit)
+    .Height(400)
+    .Width(750)
+    .Modal(true)
+    .Closable(false)
+    .Buttons(
+        X.Button().ID("btnLotDel").Text(Util.GetLang("DeleteRights"))
+       .Listeners(p => p.Click.Fn = "btnLotDel_Click")
+
+        , X.Button().ID("btnLotOK").Text(Util.GetLang("OK"))
+        .Listeners(p => p.Click.Fn = "btnLotOK_Click")
+    )
+        .BottomBar(
+            X.Toolbar()
+            .Border(false)
+            .Items(
+                X.Label().ID("lblLotQtyAvail").Width(200).MarginSpec("0 0 0 5")
+            )
+        )
+        .Items(
+            X.GridPanel().ID("grdLot")
+            .Border(true).BorderSpec("1 0 0 0")
+            .StoreID("stoLot")
+            .ColumnModel(
+                    X.RowNumbererColumn()//.Renderer("renderLotRowNumber")
+
+                    , X.Column().ID("colLotSerNbr").DataIndex("LotSerNbr").Text(Util.GetLang("LotSerNbr"))
+                    .Editor(
+                        X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
+                        .ValueField("LotSerNbr").DisplayField("LotSerNbr")
+                        .SubmitValue(false)
+                        .MinChars(1).TypeAhead(false).ForceSelection(true)
+                        .TriggerAction(TriggerAction.All)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(l =>
+                        {
+                            l.Focus.Handler = "HQ.focus='lot'";
+                            l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .QueryMode(DataLoadMode.Local)
+                        .MatchFieldWidth(false)
+                        .ListConfig(
+                            X.BoundList()
+                            .Height(500).ItemSelector(".x-boundlist-item").LoadingText(Util.GetLang("Loading"))
+                            .Tpl(
+                                X.XTemplate()
+                                .Html(@"<tpl for='.'>
+                                <tpl if='[xindex] == 1'>
+                                    <table style='width:500px !important'>
+                                        <tr>
+                                            <th>" + Util.GetLang("LotSerNbr") + @"</th>
+                                            <th>" + Util.GetLang("ExpDate") + @"</th>
+                                            <th>" + Util.GetLang("QtyAvail") + @"</th>
+                                        </tr>
+                                </tpl>
+                                <tr class='x-boundlist-item'>
+                                    <td style='width:100px;'>{LotSerNbr}</td>
+                                    <td>{ExpDate:date(""" + Current.FormatDateJS + @""")}</td>
+                                    <td>{QtyAvail}</td>
+                                </tr>
+                                <tpl if='[xcount-xindex] == 0'>
+                                    </table>
+                                </tpl>
+                            </tpl>"
+                                )
+                            )
+                        )
+                        .StoreID("stoCalcLot")
+                    )
+                    .Width(120)
+
+
+                    , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
+                    .Width(100)
+                    .Editor(
+                        X.ComboBox().ID("cboLotUnitDesc")
+                        .DisplayField("FromUnit").ValueField("FromUnit")
+                      //  .StoreID("stoUnit")
+                        .QueryMode(DataLoadMode.Local)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    )
+                    , X.Column().ID("colBookEAQty").DataIndex("BookEAQty").Text(Util.GetLang("BookEAQty"))
+                    .Width(100)
+                    .Align(Alignment.Right)
+                    .Renderer("renderQtyAmt")
+                    
+                    , X.Column().ID("colLotQty").DataIndex("ActualEAQty").Text(Util.GetLang("ActualEAQty"))
+                    .Width(100)
+                    .Align(Alignment.Right)
+                    .Renderer("renderQtyAmt")
+                    .Editor(Html.X().NumberField().MaxValue(100000).DecimalPrecision(0).MinValue(0))
+
+
+                    , X.Column().ID("colOffsetEAQty").DataIndex("OffsetEAQty").Text(Util.GetLang("OffsetEAQty"))
+                    .Width(100)
+                    .Align(Alignment.Right)
+                    .Renderer("renderQtyAmt")
+
+                    //, HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10400WarrantyDate"))//.Editor(HQ.DateField())
+
+                    , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField())
+
+                    //, X.NumberColumn().ID("PercentExpDate").DataIndex("PercentExpDate").Text(Util.GetLang("IN10400PrtExpDate"))
+                    //.Width(75)
+                    //.Align(Alignment.Right)
+                    //.Renderer("renderQtyAmt")
+            )
+            .Listeners(lst =>
+            {
+                lst.Select.Handler = "HQ.focus='lot';";
+                lst.Edit.Fn = "grdLot_Edit";
+                lst.BeforeEdit.Fn = "grdLot_BeforeEdit";
+                lst.SelectionChange.Fn = "grdLot_SelectionChange";
+            })
+            .SelectionModel(Html.X().RowSelectionModel().ID("smlLot").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
+)
+
+
+
+
+
+

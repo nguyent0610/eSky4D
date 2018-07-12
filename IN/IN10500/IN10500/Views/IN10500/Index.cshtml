@@ -65,6 +65,9 @@
     HQ.allowAddNewInvtID = HQ.util.toBool('@ViewBag.allowAddNewInvtID');
     HQ.showType = HQ.util.toBool('@ViewBag.showType');
     HQ.Project = '@ViewBag.project';
+    HQ.showColSiteID = HQ.util.toBool('@ViewBag.showColSiteID');
+    HQ.editSiteWhseLoc = HQ.util.toBool('@ViewBag.editSiteWhseLoc');
+    HQ.showColWhseLoc = @ViewBag.showColWhseLoc;
 
     @*HQ.right = '@ViewBag.Right';*@
 </script>  
@@ -99,6 +102,80 @@
                 }
             )
         )
+
+@(
+ X.Store()
+        .ID("stoLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10500_pgGetIN_TagLot_Result), "mdlLot", "", true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetIN_TagLot", "IN10500"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p =>
+    {
+        p.BeforeLoad.Fn = "stoBeforeLoad";
+        p.Load.Fn = "stoIN_TagHeader_Load";
+    })
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("tagID", "App.cboTagID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("siteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+    })
+)
+
+@(
+ X.Store()
+    .ID("stoCalcLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10500_pdGetLot_Result), "mdlCalcLot", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLot", "IN10500"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+@(
+ X.Store()
+    .ID("stoItemLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10500_pdGetLot_Result), "mdlItemLot", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLot", "IN10500"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+
+
+@(
+ X.Store()
+    .ID("stoItemSite")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN_ItemSite), "mdlItemSite", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemSite", "IN10500"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@HQ.Store().ID("stoIN10500_pdIN_Inventory").HQProcedure("IN10500_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+    new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+	new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+
+}).LoadData().AutoLoad(true)
+    @*.Listeners(lst => { lst.Load.Handler = "loadIN10500_pdIN_Inventory()"; })*@
+
+
         <!-- Gọi hàm Body trong IN10500Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
