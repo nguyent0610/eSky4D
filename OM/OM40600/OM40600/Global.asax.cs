@@ -39,13 +39,13 @@ namespace OM40600
             Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();DG_eSky4DSys
+            Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();DG_eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM40600"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";DG_eSky4DApp
+            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";// "eBiz4DWebApp";DG_eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
             Session["Language"] = Current.Language = "vi";

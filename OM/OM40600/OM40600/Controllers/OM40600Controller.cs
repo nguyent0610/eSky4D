@@ -25,7 +25,13 @@ namespace OM40600.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         public ActionResult Index()
         {
-
+            var minDate = false;
+            var objConfig = _db.OM40600_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                minDate=objConfig.MinDate.HasValue && objConfig.MinDate.Value;
+            }
+            ViewBag.MinDate = minDate;
             Util.InitRight(_screenNbr);
             return View();
         }

@@ -179,6 +179,47 @@ namespace OM40600
     
             return base.ExecuteFunction<OM40600_pgLoadBranchID_Result>("OM40600_pgLoadBranchID", userIDParameter, cpnyIDParameter, langIDParameter, territoryParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM40600_pdConfig_Result> OM40600_pdConfig(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM40600_pdConfig_Result>("OM40600_pdConfig", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -187,6 +228,44 @@ namespace OM40600
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM40600Model", Name="OM40600_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM40600_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> MinDate
+        {
+            get
+            {
+                return _MinDate;
+            }
+            set
+            {
+                OnMinDateChanging(value);
+                ReportPropertyChanging("MinDate");
+                _MinDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MinDate");
+                OnMinDateChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _MinDate;
+        partial void OnMinDateChanging(Nullable<global::System.Boolean> value);
+        partial void OnMinDateChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

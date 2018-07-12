@@ -187,7 +187,13 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.dtpFromDate.setValue(HQ.bussinessDate);
     App.dtpToDate.setValue(HQ.bussinessDate);
-    App.dtpFromDate.setMinValue(HQ.bussinessDate);
+    if (HQ.MinDate == true) {
+        App.dtpFromDate.setMinValue(HQ.bussinessDate);
+    }
+    else
+    {
+        App.dtpFromDate.setMinValue();
+    }
 
     App.dtpFromDateBranchID.setValue(HQ.bussinessDate);
     App.dtpToDateBranchID.setValue(HQ.bussinessDate);
