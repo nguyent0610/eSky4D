@@ -208,6 +208,7 @@ namespace PJPProcess
         public bool Fri { get; set; }
         public bool Sat { get; set; }
         public bool Sun { get; set; }
+        public bool ExtendRoute { get; set; }
     }
 
 }

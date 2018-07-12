@@ -74,6 +74,7 @@ namespace PJPProcess
                     objmaster.WeekofVisit = obj.WeekofVisit;
                     objmaster.Crtd_User = User;
                     objmaster.Crtd_Prog = Prog;
+                    objmaster.ExtendRoute = obj.ExtendRoute;
                     var lstobjdetail = CreateItemNotCommit(objmaster, Fromdate, Todate);
                     //_daapp.CommitTrans();
                     if (lstobjdetail.Count > 0)
@@ -100,6 +101,7 @@ namespace PJPProcess
                             dtRow["VisitDate"] = objdetail.VisitDate; ;
                             dtRow["DayofWeek"] = objdetail.DayofWeek;
                             dtRow["WeekNbr"] = objdetail.WeekNbr;
+                            dtRow["ExtendRoute"] = objdetail.ExtendRoute;
                             dtOm_SalesRouteDet.Rows.Add(dtRow);
 
                         }
