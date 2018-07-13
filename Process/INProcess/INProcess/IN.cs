@@ -3009,6 +3009,192 @@ namespace INProcess
                 throw ex;
             }
         }
+        public bool IN11700_Release(string branchID, string batNbr)
+        {
+            try
+            {
+                double qty = 0;
+                string lineRef = string.Empty;
+                string User = string.Empty;
+                string prog = string.Empty;
+                clsIN_Setup objSetup = new clsIN_Setup(Dal);
+                objSetup.GetByKey(branchID, "IN");
+                clsIN_Trans objTran = new clsIN_Trans(Dal);
+                DataTable lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
+                clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+                clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
+                clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
+                clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
+                clsSQL sql = new clsSQL(Dal);
+                if (lstTrans.Rows.Count > 0)
+                {
+                    User = lstTrans.Rows[0].String("LUpd_User");
+                    prog = lstTrans.Rows[0].String("LUpd_Prog");
+                }
+
+                foreach (DataRow tran in lstTrans.Rows)
+                {
+                    objInvt.GetByKey(tran.String("InvtID"));
+                    //// IN_ItemLoc
+                    if (tran.String("WhseLoc").PassNull() != "" && tran.String("ToWhseLoc").PassNull() != "")
+                    {
+                        if (tran.Short("InvtMult") == -1)
+                        {
+                            if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc")))
+                            {
+                                throw new MessageException(MessageType.Message, "2018052414");
+                            }
+                        }
+                        else
+                        {
+                            if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("ToWhseLoc")))
+                            {
+                                throw new MessageException(MessageType.Message, "2018052414");
+                            }
+                        }
+                           
+                        if (objInvt.StkItem == 1)
+                        {
+                            if (tran.String("UnitMultDiv") == "M" || tran.String("UnitMultDiv").PassNull() == string.Empty)
+                                qty = tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                            else
+                                qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
+
+                            //objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
+                            if (qty < 0) objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                            if (qty > 0)
+                            {
+                                objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                            }
+                        }
+                        if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0) < 0)
+                        {
+                            throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID, objItemLoc.WhseLoc });
+                        }
+                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0);
+                        objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                        objItemLoc.LUpd_DateTime = DateTime.Now;
+                        objItemLoc.LUpd_Prog = prog;
+                        objItemLoc.LUpd_User = User;
+                        objItemLoc.Update();
+
+                    }
+                    //////
+
+
+                    //objInvt.GetByKey(tran.String("InvtID"));
+                    if (!objItem.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
+                    {
+                        throw new MessageException(MessageType.Message, "606");
+                    }
+                    if (objInvt.StkItem == 1)
+                    {
+                        if (tran.String("UnitMultDiv") == "M" || tran.String("UnitMultDiv").PassNull() == string.Empty)
+                            qty = tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                        else
+                            qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
+
+                        //objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
+                        if (qty < 0) objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        if (qty > 0)
+                        {
+                            objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
+                        }
+                    }
+                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0) < 0)
+                    {
+                        throw new MessageException(MessageType.Message, "607", "", new[] { objItem.InvtID, objItem.SiteID });
+                    }
+                    objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0);
+                    objItem.AvgCost = Math.Round(objItem.QtyOnHand == 0 ? objItem.AvgCost : objItem.TotCost / objItem.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                    objItem.LUpd_DateTime = DateTime.Now;
+                    objItem.LUpd_Prog = prog;
+                    objItem.LUpd_User = User;
+                    objItem.Update();
+
+
+
+                    ///them lot 20160527
+                    if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
+                    {
+                        DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
+                        foreach (DataRow lotRow in dtLot.Rows)
+                        {
+                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
+                            if (tran.Short("InvtMult") == -1)
+                            {
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                                {
+                                    objItemLot.Reset();
+                                    objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
+                                    objItemLot.InvtID = lotRow.String("InvtID");
+                                    objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                    objItemLot.SiteID = lotRow.String("SiteID");
+                                    objItemLot.ExpDate = lotRow.Date("ExpDate");
+                                    objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
+                                    objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                    objItemLot.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+                                    objItemLot.Crtd_DateTime = DateTime.Now;
+                                    objItemLot.Crtd_Prog = Prog;
+                                    objItemLot.Crtd_User = User;
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Add();
+                                }
+                            }
+                            else
+                            {
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), tran.String("ToWhseLoc"), lotRow.String("LotSerNbr")))
+                                {
+                                    objItemLot.Reset();
+                                    objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
+                                    objItemLot.InvtID = lotRow.String("InvtID");
+                                    objItemLot.WhseLoc = tran.String("ToWhseLoc");
+                                    objItemLot.SiteID = lotRow.String("SiteID");
+                                    objItemLot.ExpDate = lotRow.Date("ExpDate");
+                                    objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
+                                    objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                    objItemLot.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+                                    objItemLot.Crtd_DateTime = DateTime.Now;
+                                    objItemLot.Crtd_Prog = Prog;
+                                    objItemLot.Crtd_User = User;
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Add();
+                                }
+                            }
+                            if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
+                            {
+                                throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr, objItemLot.WhseLoc });
+                            }
+
+                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+                            if (qty < 0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                            if (qty > 0)
+                            {
+                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+                            }
+                            objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
+                            objItemLot.LUpd_DateTime = DateTime.Now;
+                            objItemLot.LUpd_Prog = Prog;
+                            objItemLot.LUpd_User = User;
+                            objItemLot.Update();
+                        }
+                    }
+                }
+                sql.IN_ReleaseBatch(branchID, batNbr, Prog, User);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private int GetDecimalPlace(string lotSerTrack)
         {
             return (lotSerTrack != "Q" ? 0 : 2);
