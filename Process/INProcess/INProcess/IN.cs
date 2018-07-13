@@ -608,7 +608,7 @@ namespace INProcess
                 clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
                 clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
 
-                clsIN_ItemLoc objItemLoc;
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal); 
                 clsSQL sql = new clsSQL(Dal);
 
                 foreach (DataRow transfer in lstTransfer.Rows)
@@ -659,10 +659,7 @@ namespace INProcess
                             objToItem.LUpd_User = objToItem.Crtd_User = User;
                             objToItem.Add();
                         }
-                        if (tran.String("ToWhseLoc").PassNull() != string.Empty)
-                        {
-                            
-                        }
+                        
                         if (objInvt.StkItem == 1 && transfer.String("TransferType") == "2")
                         {
                             objToItem.QtyInTransit = Math.Round(objToItem.QtyInTransit + Math.Abs(qty), 0);
@@ -670,6 +667,7 @@ namespace INProcess
                         }
 
                         ////// IN_ItemLoc
+                        clsIN_ItemLoc objToItemLoc = new clsIN_ItemLoc(Dal);
                         if (!string.IsNullOrWhiteSpace(tran.String("WhseLoc").PassNull()))
                         {
                             objItemLoc = new clsIN_ItemLoc(Dal);
@@ -704,7 +702,7 @@ namespace INProcess
 
                         if (!string.IsNullOrWhiteSpace(tran.String("ToWhseLoc").PassNull()))
                         {
-                            clsIN_ItemLoc objToItemLoc = new clsIN_ItemLoc(Dal);
+                            
                             if (!objToItemLoc.GetByKey(tran.String("InvtID"), tran.String("ToSiteID"), tran.String("ToWhseLoc")))
                             {
                                 objToItemLoc.Reset();
@@ -780,13 +778,24 @@ namespace INProcess
 
                             objToItem.QtyOnHand = Math.Round(objToItem.QtyOnHand + Math.Abs(qty), 0);
                             objToItem.QtyAvail = Math.Round(objToItem.QtyAvail + Math.Abs(qty), 0);
-
                             objToItem.TotCost = Math.Round(objToItem.TotCost + tran.Double("ExtCost"), 0);
                             objToItem.AvgCost = Math.Round(objToItem.QtyOnHand != 0 ? objToItem.TotCost / objToItem.QtyOnHand : objToItem.AvgCost, 0);
                             objToItem.LUpd_DateTime = DateTime.Now;
                             objToItem.LUpd_Prog = prog;
                             objToItem.LUpd_User = User;
                             objToItem.Update();
+
+                            if (newTran.WhseLoc.PassNull()!="")
+                            {
+                                objToItemLoc.QtyOnHand = Math.Round(objToItemLoc.QtyOnHand + Math.Abs(qty), 0);
+                                objToItemLoc.QtyAvail = Math.Round(objToItemLoc.QtyAvail + Math.Abs(qty), 0);
+                                objToItemLoc.TotCost = Math.Round(objToItemLoc.TotCost + tran.Double("ExtCost"), 0);
+                                objToItemLoc.AvgCost = Math.Round(objToItemLoc.QtyOnHand != 0 ? objToItemLoc.TotCost / objToItemLoc.QtyOnHand : objToItemLoc.AvgCost, 0);
+                                objToItemLoc.LUpd_DateTime = DateTime.Now;
+                                objToItemLoc.LUpd_Prog = prog;
+                                objToItemLoc.LUpd_User = User;
+                                objToItemLoc.Update();
+                            }
                         }
 
                         if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
