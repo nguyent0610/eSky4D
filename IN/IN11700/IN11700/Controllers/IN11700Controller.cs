@@ -331,7 +331,7 @@ namespace IN11700.Controllers
             if (_lstLot == null)
             {
                 var lotHandler = new StoreDataHandler(data["lstLot"]);
-                _lstLot = lotHandler.ObjectData<IN11700_pgIN_LotTrans_Result>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
+                _lstLot = lotHandler.ObjectData<IN11700_pgIN_LotTrans_Result>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty && p.InvtMult != -1).ToList();
             }
             if (_lstLotDPBB == null)
             {
@@ -389,7 +389,7 @@ namespace IN11700.Controllers
                             throw new MessageException(MessageType.Message, "728");
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
 
-                        inventory.IN10400_Release(_objBatch.BranchID, _objBatch.BatNbr);
+                        inventory.IN11700_Release(_objBatch.BranchID, _objBatch.BatNbr);
 
                         dal.CommitTrans();
 
@@ -557,7 +557,7 @@ namespace IN11700.Controllers
         }
         private bool Save_LotDPBB(Batch batch, IN_Trans tran)
         {
-            var lots = _db.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr).ToList();
+            var lots = _db.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr && p.InvtMult == -1).ToList();
             foreach (var item in lots)
             {
                 if (item.EntityState == EntityState.Deleted || item.EntityState == EntityState.Detached) continue;
@@ -595,7 +595,7 @@ namespace IN11700.Controllers
         }
         private bool Save_Lot(Batch batch, IN_Trans tran)
         {
-            var lots = _db.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr).ToList();
+            var lots = _db.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr && p.InvtMult != -1).ToList();
             foreach (var item in lots)
             {
                 if (item.EntityState == EntityState.Deleted || item.EntityState == EntityState.Detached) continue;
@@ -684,24 +684,24 @@ namespace IN11700.Controllers
             {
                 if (!isNew)
                 {
-                    if (t.Qty < 0)
-                    {
+                    //if (t.Qty < 0)
+                    //{
                         oldQty = Math.Abs(t.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact);
-                    }
-                    else
-                    {
-                        oldQty = 0;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    oldQty = 0;
+                    //}
                 }
                 else
                 {
                     oldQty = 0;
                 }
 
-                if (s.Qty < 0)
-                {
+                //if (s.Qty < 0)
+                //{
                     newQty = Math.Abs(s.UnitMultDiv == "D" ? s.Qty / s.CnvFact.ToDouble() : s.Qty * s.CnvFact.ToDouble());
-                }
+                //}
                 UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
                 UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
                 if (_whseLoc.PassNull() != "")
@@ -835,7 +835,7 @@ namespace IN11700.Controllers
             double oldQty = 0;
             double newQty = 0;
 
-            if (tran.TranType == "II")
+            if (tran.TranType == "AJ")
             {
                 if (!isNew)
                     oldQty = s.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
@@ -910,7 +910,7 @@ namespace IN11700.Controllers
             double oldQty = 0;
             double newQty = 0;
 
-            if (tran.TranType == "II")
+            if (tran.TranType == "AJ")
             {
                 if (!isNew)
                     oldQty = s.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
@@ -1124,7 +1124,7 @@ namespace IN11700.Controllers
             {
                 var access = Session["IN11700"] as AccessRight;
                 _whseLoc = data["WhseLoc"].PassNull();
-                var status = data["cboStatus"].PassNull();
+                var _status = data["cboStatus"].PassNull();
                 List<IN_Trans> lstTrans = new List<IN_Trans>();
                 List<IN_LotTrans> lstLot = new List<IN_LotTrans>();
                 if (!access.Delete)
@@ -1133,7 +1133,7 @@ namespace IN11700.Controllers
                 }
                 _objBatch = data.ConvertToObject<IN11700_pcBatch_Result>();
 
-                if (status != "H")
+                if (_status != "H")
                 {
                     throw new MessageException(MessageType.Message, "2015020805", "", new string[] { _objBatch.BatNbr });
                 }
@@ -1156,7 +1156,7 @@ namespace IN11700.Controllers
                 foreach (var trans in lstTrans)
                 {
                     double oldQty = 0;
-                    if (trans.TranType == "II")
+                    if (trans.TranType == "AJ")
                     {
                         oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                         UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
@@ -1175,7 +1175,7 @@ namespace IN11700.Controllers
                 foreach (var lot in lstLot)
                 {
                     double oldQty = 0;
-                    if (lot.TranType == "II")
+                    if (lot.TranType == "AJ")
                     {
                         oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
                         if (lot.WhseLoc.PassNull() != "")
@@ -1214,9 +1214,10 @@ namespace IN11700.Controllers
             {
                 var access = Session["IN11700"] as AccessRight;
                 _whseLoc = data["WhseLoc"].PassNull();
+                var _status = data["cboStatus"].PassNull();
                 _objBatch = data.ConvertToObject<IN11700_pcBatch_Result>();
 
-                if (_objBatch.Status != "H")
+                if (_status != "H")
                 {
                     throw new MessageException(MessageType.Message, "2015020805", "", new string[] { _objBatch.BatNbr });
                 }
@@ -1237,7 +1238,7 @@ namespace IN11700.Controllers
                     if (trans != null)
                     {
                         double oldQty = 0;
-                        if (trans.TranType == "II")
+                        if (trans.TranType == "AJ")
                         {
                             oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                             UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
@@ -1252,7 +1253,7 @@ namespace IN11700.Controllers
                     foreach (var lot in lstLot)
                     {
                         double oldQty = 0;
-                        if (lot.TranType == "II")
+                        if (lot.TranType == "AJ")
                         {
                             oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
                             if (lot.WhseLoc.PassNull() != "")
@@ -1275,7 +1276,7 @@ namespace IN11700.Controllers
                     if (trans != null)
                     {
                         double oldQty = 0;
-                        if (trans.TranType == "II")
+                        if (trans.TranType == "AJ")
                         {
                             oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                             UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
@@ -1289,7 +1290,7 @@ namespace IN11700.Controllers
                     foreach (var lot in lstLot)
                     {
                         double oldQty = 0;
-                        if (lot.TranType == "II")
+                        if (lot.TranType == "AJ")
                         {
                             oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
                             UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);

@@ -57,12 +57,6 @@
                                 .LoadData()
                                 .Listeners(l =>
                                 {
-                                    //l.TriggerClick.Fn = "cboBudgetID_TriggerClick";//"if (index == 0) { this.clearValue();}";
-                                    //l.Change.Fn = "cboBudgetID_Change";
-                                    //l.Blur.Fn = "cboBudgetID_Blur";
-                                    //l.Expand.Fn = "cboBudgetID_Expand";
-                                    //l.Collapse.Fn = "cboBudgetID_Collapse";
-                                    //l.Select.Fn = "cboBudgetID_Select";
                                     l.Change.Fn = "cboBranchID_Change";
                                     l.TriggerClick.Handler = "if (index == 0) { this.clearValue();} App.cboBatNbr.setValue(''); defaultOnNew();";
                                     l.Focus.Handler = "HQ.focus='batch';";
@@ -82,10 +76,8 @@
                                 .Listeners(l =>
                                 {
                                     l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    //l.TriggerClick.Fn = "cboTypeTrade_TriggerClick";
-                                    //l.Change.Fn = "cboTypeTrade_Change";
                                 })
-                                ,HQ.Combo().ID("cboStatus")
+                                ,HQ.Combo().ID("cboStatus").ReadOnly(true).Tag("X")
                                 .HQLangCode("Status").HQProcedure("IN11700_pcStatus").LabelWidth(130)
                                 .HQColumnShow("Code,Descr").DataIndex("Status")
                                 .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")

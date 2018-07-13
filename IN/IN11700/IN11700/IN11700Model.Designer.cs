@@ -13613,8 +13613,7 @@ namespace IN11700
         /// <param name="unitPrice">Initial value of the UnitPrice property.</param>
         /// <param name="warrantyDate">Initial value of the WarrantyDate property.</param>
         /// <param name="cnvFact">Initial value of the CnvFact property.</param>
-        /// <param name="componentID">Initial value of the ComponentID property.</param>
-        public static IN11700_pgIN_LotTransDPBB_Result CreateIN11700_pgIN_LotTransDPBB_Result(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.Double cnvFact, global::System.String componentID)
+        public static IN11700_pgIN_LotTransDPBB_Result CreateIN11700_pgIN_LotTransDPBB_Result(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.Double cnvFact)
         {
             IN11700_pgIN_LotTransDPBB_Result iN11700_pgIN_LotTransDPBB_Result = new IN11700_pgIN_LotTransDPBB_Result();
             iN11700_pgIN_LotTransDPBB_Result.BranchID = branchID;
@@ -13636,7 +13635,6 @@ namespace IN11700
             iN11700_pgIN_LotTransDPBB_Result.UnitPrice = unitPrice;
             iN11700_pgIN_LotTransDPBB_Result.WarrantyDate = warrantyDate;
             iN11700_pgIN_LotTransDPBB_Result.CnvFact = cnvFact;
-            iN11700_pgIN_LotTransDPBB_Result.ComponentID = componentID;
             return iN11700_pgIN_LotTransDPBB_Result;
         }
 
@@ -14195,30 +14193,6 @@ namespace IN11700
         private Nullable<global::System.Double> _PercentExpDate;
         partial void OnPercentExpDateChanging(Nullable<global::System.Double> value);
         partial void OnPercentExpDateChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ComponentID
-        {
-            get
-            {
-                return _ComponentID;
-            }
-            set
-            {
-                OnComponentIDChanging(value);
-                ReportPropertyChanging("ComponentID");
-                _ComponentID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ComponentID");
-                OnComponentIDChanged();
-            }
-        }
-        private global::System.String _ComponentID;
-        partial void OnComponentIDChanging(global::System.String value);
-        partial void OnComponentIDChanged();
 
         #endregion
 

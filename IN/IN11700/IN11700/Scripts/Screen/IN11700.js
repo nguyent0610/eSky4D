@@ -191,10 +191,10 @@ var frmChange = function () {
     HQ.isChange = isChange(App.stoSite) || HQ.store.isChange(App.stoComponent);
     HQ.common.changeData(HQ.isChange, 'IN11700');//co thay doi du lieu gan * tren tab title header
 
-    App.cboSite.setReadOnly(HQ.isChange);
-    App.cboSiteTP.setReadOnly(HQ.isChange);
-    App.cboSiteLocation.setReadOnly(HQ.isChange);
-    App.cboSiteTPLocation.setReadOnly(HQ.isChange);
+    //App.cboSite.setReadOnly(HQ.isChange);
+    //App.cboSiteTP.setReadOnly(HQ.isChange);
+    //App.cboSiteLocation.setReadOnly(HQ.isChange);
+    //App.cboSiteTPLocation.setReadOnly(HQ.isChange);
 };
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
     if (field.key != undefined) {
@@ -386,7 +386,7 @@ var deleteData = function (item) {
                     App.grdSite.deleteSelected();
                     HQ.message.process(msg, data, true);
                     HQ.isChange = false;
-                    HQ.common.changeData(HQ.isChange, 'IN10200');
+                    HQ.common.changeData(HQ.isChange, 'IN11700');
                     App.stoBatch.reload();
                 },
                 failure: function (msg, data) {
@@ -535,6 +535,7 @@ var grdSite_Edit = function (item, e) {
                 var lstCompo4Save = HQ.store.findRecord(App.stoComponent4Save, ['InvtID'], [e.record.data.InvtID]);
                 if(lstCompo4Save!=undefined)
                 {
+                    lstCompo4Save.set("ComponentQty", e.record.data.Qty);
                     var lstLot4Save = HQ.store.findRecord(App.stoLotTrans4Save, ['INTranLineRef', 'ComponentID'], [lstCompo4Save.data.LineRef, lstCompo4Save.data.ComponentID]);
                     for(var i=0;i<lstLot.length;i++)
                     {
@@ -781,7 +782,7 @@ var btnLotOK_Click = function () {
             }
         });
 
-        var lineQty = (det.UnitMultDiv == "M" ? qty / det.CnvFact : det.Qty * det.CnvFact)
+        var lineQty = (det.UnitMultDiv == "M" ? qty / det.CnvFact : det.ComponentQty * det.CnvFact)
 
         App.winLot.record.data.Qty = Math.round(lineQty);
         App.winLot.record.data.TranAmt = App.winLot.record.data.Qty * App.winLot.record.data.UnitPrice;
@@ -789,7 +790,7 @@ var btnLotOK_Click = function () {
 
         App.grdComponent.view.refresh();
 
-        calculate();
+        //calculate();
 
         for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
             if (Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr)) {
@@ -989,7 +990,6 @@ var bindBatch = function (record) {
     App.frmMain.events['fieldchange'].suspend();
     App.cboStatus.forceSelection = false;
     App.frmMain.loadRecord(HQ.objBatch);
-    App.cboStatus.forceSelection = false;
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
     App.cboSite.events['change'].resume();
@@ -1005,7 +1005,18 @@ var bindBatch = function (record) {
     HQ.numDetail = 0;
     
     //App.stoLotTrans.reload();
-
+    if (HQ.isNew) {
+        App.cboSite.setReadOnly(false);
+        App.cboSiteLocation.setReadOnly(false);
+        App.cboSiteTP.setReadOnly(false);
+        App.cboSiteTPLocation.setReadOnly(false);
+    }
+    else {
+        App.cboSite.setReadOnly(true);
+        App.cboSiteLocation.setReadOnly(true);
+        App.cboSiteTP.setReadOnly(true);
+        App.cboSiteTPLocation.setReadOnly(true);
+    }
     App.cboHandle.setValue('N');
 };
 var cboBatNbr_Change = function (item, newValue, oldValue) {
@@ -1020,11 +1031,10 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
         else {
         }
     }
-    if (App.cboBatNbr.getValue != "")
+    if (App.cboBatNbr.getValue() != null)
     {
         App.cboReason.setReadOnly(true);
         App.txtDescr.setReadOnly(true);
-        App.cboReason.setReadOnly(true);
         App.cboSite.setReadOnly(true);
         App.cboSiteTP.setReadOnly(true);
         App.cboSiteLocation.setReadOnly(true);
@@ -1035,7 +1045,6 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
     {
         App.cboReason.setReadOnly(false);
         App.txtDescr.setReadOnly(false);
-        App.cboReason.setReadOnly(false);
         App.cboSite.setReadOnly(false);
         App.cboSiteTP.setReadOnly(false);
         App.cboSiteLocation.setReadOnly(false);
@@ -1056,9 +1065,6 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
-        //_detSource = 0;
-        //_lstDel = [];
-        //   App.stoBudgetID.reload();
         App.stoBatch.reload();
         App.stoLotTrans.reload();
         App.stoSite.reload();
@@ -1112,6 +1118,7 @@ var setChange = function (isChange) {
 var setStatusForm = function () {
     var lock = true;
     var flag = true;
+
     if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
         if (HQ.objBatch.data.Status == 'H') {
             lock = false;
@@ -1123,11 +1130,7 @@ var setStatusForm = function () {
     HQ.common.lockItem(App.frmMain, lock);
     App.grdSite.isLock = lock;
     App.cboBatNbr.setReadOnly(false);
-    App.cboStatus.setReadOnly(true);
-    App.cboSite.setReadOnly(true);
-    App.cboSiteLocation.setReadOnly(true);
-    App.cboSiteTP.setReadOnly(true);
-    App.cboSiteTPLocation.setReadOnly(true);
+   
     if (!HQ.isInsert && HQ.isNew) {
         lock = true;
         flag = false;
@@ -1475,16 +1478,17 @@ var deleteLot = function (item) {
 };
 var defaultOnNew = function () {
     HQ.isNew = true;
+    _kitID = '';
     var record = Ext.create('App.mdlBatch');
     record.data.Status = 'H';
-    App.cboStatus.setValue('H');
-    record.data.DateEnt = HQ.businessDate;
+    record.data.DateEnt = HQ.bussinessDate;
     App.cboSite.setValue('');
     App.cboSiteLocation.setValue('');
     App.cboSiteTP.setValue('');
-    App.cboSiteTPLocation.setValue();
+    App.cboSiteTPLocation.setValue('');
     App.txtDescr.setValue('');
-    App.cboReason.setValue('');
+    App.cboReason.setValue('');   
+   
     App.frmMain.validate();
 
     bindBatch(record);
@@ -1739,7 +1743,7 @@ var showLot = function (record, loadCombo) {
                 component: record.data.ComponentID,
                 branchID: App.cboBranchID.getValue(),
                 batNbr: App.cboBatNbr.getValue(),
-                whseLoc: App.cboSiteLocation.getValue(),
+                whseLoc: App.cboSiteTPLocation.getValue(),
                 showWhseLoc: HQ.showWhseLoc
             }
         });

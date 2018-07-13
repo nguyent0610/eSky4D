@@ -1176,7 +1176,6 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
           <Property Type="Double" Name="PercentExpDate" Nullable="true" />
-          <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="IN11700_pcUnitConversion_Result">
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
@@ -1837,7 +1836,6 @@
                 <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
                 <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
                 <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
-                <ScalarProperty Name="ComponentID" ColumnName="ComponentID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
