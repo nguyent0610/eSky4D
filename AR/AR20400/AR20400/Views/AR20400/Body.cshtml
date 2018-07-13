@@ -699,7 +699,7 @@
                             , HQ.Label().HQLangCode("STATE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("CITY").ID("lblCITY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("DISTRICT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
-                            , HQ.Label().HQLangCode("SI23900_MarketName").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            , HQ.Label().HQLangCode("SI23900_MarketName").ID("lblMarketName").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120).Hidden(true)
                             , HQ.Label().HQLangCode("Ward").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
 
                             , HQ.Label().HQLangCode("ZIP").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
@@ -816,7 +816,7 @@
                                     
                                 })
                            , HQ.Combo().ID("cboMarket").Name("cboMarket").HQLangCode("SI23900_MarketName").DataIndex("Market").HideLabel(true)
-                                               .HQProcedure("AR20400_pcMarket").HQColumnShow("Market,Descr")
+                            .HQProcedure("AR20400_pcMarket").HQColumnShow("Market,Descr").Hidden(true)
                            .DisplayField("Descr").ValueField("Market").ForceSelection(true).Width(250)
                            .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                            .HQParam(new StoreParameterCollection()
@@ -973,7 +973,7 @@
                                     lst.Expand.Fn="cboBillDistrict_Expand";
                                 })
                                     , HQ.Combo().ID("cboBillMarket").Name("cboBillMarket").HQLangCode("SI23900_MarketName").DataIndex("BillMarket").HideLabel(true)
-                                        .HQProcedure("AR20400_pcBillMarket").HQColumnShow("Market,Descr")
+                                    .HQProcedure("AR20400_pcBillMarket").HQColumnShow("Market,Descr").Hidden(true)
                                     .DisplayField("Descr").ValueField("Market").ForceSelection(true).Width(250)
                                     .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .HQParam(new StoreParameterCollection()

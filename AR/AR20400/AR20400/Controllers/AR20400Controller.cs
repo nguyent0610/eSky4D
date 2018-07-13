@@ -122,6 +122,7 @@ namespace AR20400.Controllers
             var reqSlsperson = false;
             var showCompetitor = false;
             var showVendorBuyer = false;
+            var showMarket = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -134,6 +135,7 @@ namespace AR20400.Controllers
                 reqOUnit = !hideOUnit && objConfig.RequiredOUnit.HasValue && objConfig.RequiredOUnit.Value;
                 showCompetitor = objConfig.ShowCompetitor.HasValue && objConfig.ShowCompetitor.Value;
                 showVendorBuyer = objConfig.ShowVendorBuyer ?? false;
+                showMarket = objConfig.ShowMarket.HasValue && objConfig.ShowMarket.Value;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
@@ -144,11 +146,12 @@ namespace AR20400.Controllers
             ViewBag.reqOUnit = reqOUnit;
             ViewBag.showCompetitor = showCompetitor;
             ViewBag.showVendorBuyer = showVendorBuyer;
+            ViewBag.showMarket = showMarket;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

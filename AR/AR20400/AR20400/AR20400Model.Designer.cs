@@ -10405,6 +10405,30 @@ namespace AR20400
         private Nullable<global::System.Boolean> _ShowVendorBuyer;
         partial void OnShowVendorBuyerChanging(Nullable<global::System.Boolean> value);
         partial void OnShowVendorBuyerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowMarket
+        {
+            get
+            {
+                return _ShowMarket;
+            }
+            set
+            {
+                OnShowMarketChanging(value);
+                ReportPropertyChanging("ShowMarket");
+                _ShowMarket = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowMarket");
+                OnShowMarketChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowMarket;
+        partial void OnShowMarketChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowMarketChanged();
 
         #endregion
 

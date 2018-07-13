@@ -160,6 +160,18 @@ var firstLoad = function () {
         App.txtVendorID.setVisible(true);
         App.txtBuyerID.setVisible(true);
     }
+    if(HQ.showMarket)
+    {
+        App.lblMarketName.show();
+        App.cboMarket.show();
+        App.cboBillMarket.show();
+    }
+    else
+    {
+        App.lblMarketName.hide();
+        App.cboMarket.hide();
+        App.cboBillMarket.hide();
+    }
 };
 
 var menuClick = function (command) {

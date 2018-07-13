@@ -1121,6 +1121,7 @@
           <Property Type="Boolean" Name="RequiredSlsperID" Nullable="true" />
           <Property Type="Boolean" Name="ShowCompetitor" Nullable="true" />
           <Property Type="Boolean" Name="ShowVendorBuyer" Nullable="true" />
+          <Property Type="Boolean" Name="ShowMarket" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1772,6 +1773,7 @@
                 <ScalarProperty Name="RequiredSlsperID" ColumnName="RequiredSlsperID" />
                 <ScalarProperty Name="ShowCompetitor" ColumnName="ShowCompetitor" />
                 <ScalarProperty Name="ShowVendorBuyer" ColumnName="ShowVendorBuyer" />
+                <ScalarProperty Name="ShowMarket" ColumnName="ShowMarket" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
