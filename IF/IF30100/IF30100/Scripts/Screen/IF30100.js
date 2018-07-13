@@ -260,6 +260,17 @@ var checkGrid = function (store, field) {
 
 
 var btnExport_Click = function () {
+    App.cboDate00.submitValue = false;
+    if (App.cboDate00.type == 'month') { //neu la p thi set gia tri tu dau thang toi cuoi thang cho date00 và date 01
+        App.cboDate00.value.setDate(1);
+        App.cboDate01.setValue(App.cboDate00.value);
+        App.cboDate01.value.addDays(31);
+        App.cboDate01.value.setDate(1);
+        App.cboDate01.value.addDays(-1);
+        App.cboDate01.setValue(App.cboDate01.value);
+        App.cboDate00.value.setDate(1);      
+        App.cboDate00P.setValue(App.cboDate00.value);
+    } //else App.cboDate00.submitValue = true;
     if(App.cboType.getValue() != 'E')
     {   
         if (HQ.form.checkRequirePass(App.frmMain)) {
@@ -270,6 +281,7 @@ var btnExport_Click = function () {
                 timeout: 2000000,
                 clientValidation: false,
                 params: {
+                    cboDate00:App.cboDate00.type == 'month'? App.cboDate00P.value: App.cboDate00.value,
                     lstDet: Ext.encode(App.stoDet.getRecordsValues()),                                       
                     view: App.cboReport.valueModels[0].data.ReportView,
                     name: App.cboReport.valueModels[0].data.ReportName,
@@ -422,6 +434,7 @@ function exportExcelProc() {
             timeout: 18000000,
             url: 'IF30100/ExportProcFileName',
             params: {
+                cboDate00: App.cboDate00.type == 'month' ? App.cboDate00P.value : App.cboDate00.value,
                 name: App.cboReport.valueModels[0].data.ReportName
             },
             success: function (msg, data) {
@@ -520,6 +533,7 @@ function exportExcelProcFile(idfile,name) {
             timeout: 18000000,
             url: 'IF30100/ExportProc',
             params: {
+                cboDate00: App.cboDate00.type == 'month' ? App.cboDate00P.value : App.cboDate00.value,
                 list0: List0,//App.List0.getSelectionSubmit().getSelectionModelField().getValue(),
                 list1: List1,//App.List1.getSelectionSubmit().getSelectionModelField().getValue(),
                 list2: List2,//App.List2.getSelectionSubmit().getSelectionModelField().getValue(),
@@ -560,6 +574,7 @@ function exportExcelView()
                 timeout: 2000000,
                 clientValidation: false,
                 params: {
+                    cboDate00: App.cboDate00.type == 'month' ? App.cboDate00P.value : App.cboDate00.value,
                     lstDet: Ext.encode(App.stoDet.getRecordsValues()),
                     view: App.cboReport.valueModels[0].data.ReportView,
                     name: App.cboReport.valueModels[0].data.ReportName,                   

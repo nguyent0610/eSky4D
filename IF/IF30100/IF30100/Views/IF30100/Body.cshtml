@@ -97,7 +97,7 @@
                 })}, "New,Save,Delete,Print", false, ""))
         .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
-        .Items(
+        .Items(        
             ////Thiet ke giao dien o day
             X.Panel().ID("pnlHeader").Region(Region.North).Layout(LayoutType.VBox).Border(false).AutoScroll(true)
             .Listeners(lst => {
@@ -172,6 +172,7 @@
                                 .MinHeight(150)
                                 .Width(250)
                                 .Items(
+                                    X.DateField().ID("cboDate00P").Hidden(true)
                                 ),
                            
                                 X.Panel().Margin(5)
