@@ -56,7 +56,7 @@ namespace IN11700.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -394,6 +394,16 @@ namespace IN11700.Controllers
                         dal.CommitTrans();
 
                         Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+                    }
+                    else if (_handle == "C" || _handle == "V")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                        inventory.IN10200_Cancel(_objBatch.BranchID, _objBatch.BatNbr);
+
+                        dal.CommitTrans();
+
+                        Util.AppendLog(ref _logMessage, "9999", "");
                     }
                 }
                 catch (Exception)
