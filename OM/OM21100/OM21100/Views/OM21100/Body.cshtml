@@ -422,7 +422,7 @@
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                         })
                                         , HQ.Combo().ID("cboBreakBoundType")
-                                        .MarginSpec("5 5 0 5")//.Hidden(true)
+                                        .MarginSpec("5 0 0 5")//.Hidden(true)
                                         .HQLangCode("BreakBoundType").HQProcedure("OM21100_pcBreakBoundType").HQColumnShow("Code,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBoundType")
                                         .ForceSelection(true)
@@ -485,6 +485,7 @@
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
+                                       
 
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
@@ -518,24 +519,7 @@
 
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-                                        , HQ.Combo().ID("cboProrateAmtType")
-                                        .MarginSpec("5 5 0 0")
-                                        .HQLangCode("ProrateAmtType").HQProcedure("OM21100_pcProrateAmtType").HQColumnShow("Code,Descr").HQAutoLoad(true)
-                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ProrateAmtType").LabelWidth(130)
-                                        //.ForceSelection(true)
-                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() {
-                                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                        })
-                                        .LoadData()
-                                        .Listeners(l =>
-                                        {
-                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
-                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
-                                            //l.Change.Fn = "cboRequiredType_Change";
-                                        })
+                                        
                                         , HQ.Checkbox().ID("chkDonateGroupProduct")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("DonateGroupProduct")).DataIndex("DonateGroupProduct")
@@ -552,11 +536,7 @@
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-
-                                    ) // Container
-                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-                                    .Items(
-                                        HQ.Checkbox().ID("chkConvertDiscAmtToFreeItem")//.Hidden(true)
+                                        , HQ.Checkbox().ID("chkConvertDiscAmtToFreeItem")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("CnvDiscAmtToFrItem")).DataIndex("ConvertDiscAmtToFreeItem")
                                         .Listeners(l =>
@@ -564,15 +544,12 @@
                                             //l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                             l.Change.Fn = "DiscDefintion.Event.chkConvertDiscAmtToFreeItem_Change";
                                         })
-                                       , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
-                                        .MarginSpec("5 5 0 10")
-                                        .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
-                                        .Listeners(l =>
-                                        {
-                                            l.Focus.Fn = "DiscDefintion.Event.chkStockPromotion_Focus";
-                                            l.Change.Fn = "DiscDefintion.Event.chkStockPromotion_Change";
-                                        })
-                                    )
+                                      
+                                    ) // Container
+                                    //, X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+                                    //.Items(
+                                       
+                                    //)
                                 )                                
                                , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                                 //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
@@ -588,8 +565,35 @@
                                     {
                                         l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                     })
-                                    , HQ.Button().ID("btnSubBreakItem").MarginSpec("0 5 0 120").Width(150).HQLangCode("SubBreakItem")
-                                    .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItem_Click")                           
+                                   , HQ.Combo().ID("cboProrateAmtType")
+                                        .MarginSpec("-5 0 0 3")
+                                        .HQLangCode("ProrateAmtType").HQProcedure("OM21100_pcProrateAmtType").HQColumnShow("Code,Descr").HQAutoLoad(true)
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ProrateAmtType")//.LabelWidth(130)
+                                        //.ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            //l.Change.Fn = "cboRequiredType_Change";
+                                        })
+                                             , HQ.Button().ID("btnSubBreakItem").MarginSpec("0 5 0 15").Width(120).HQLangCode("SubBreakItem")
+                                            .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItem_Click")      
+                                         , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
+                                        .MarginSpec("0 5 0 16")
+                                        .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.chkStockPromotion_Focus";
+                                            l.Change.Fn = "DiscDefintion.Event.chkStockPromotion_Change";
+                                        })
+                 
                                 //, HQ.Checkbox().ID("chkExactQty")
                                 //.MarginSpec("0 5 5 8")
                                 //.BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")

@@ -30,7 +30,7 @@ namespace OM21100
         {
             Current.FormatDate = "dd.MM.yyyy";
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();TRUONGSAD;HOANGSAD
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();TRUONGSAD;HOANGSAD
             Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;

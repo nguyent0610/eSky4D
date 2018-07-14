@@ -2312,6 +2312,7 @@ var DiscDefintion = {
                 App.chkConvertDiscAmtToFreeItem.setReadOnly(false);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
+                App.cboProrateAmtType.setReadOnly(false);
                 //App.btnSubBreakItem.enable();
             }
             else {
@@ -2334,6 +2335,7 @@ var DiscDefintion = {
                 App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
+                App.cboProrateAmtType.setReadOnly(true);
                 //App.btnSubBreakItem.disable();
             }
 
