@@ -65,6 +65,7 @@
                         lst.TriggerClick.Fn = "cboVendID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
                         lst.Change.Fn = "cboVendID_Change";//khi thay doi du lieu
                         lst.Select.Fn = "cboVendID_Select";
+                        lst.Focus.Handler="App.cboVendID.store.reload();";
                         //lst.Expand.Fn = "cboVendID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?          
                     })
                     

@@ -36,6 +36,10 @@ namespace AP20200.Controllers
         // Get collection of Vendor for binding data (Ajax)
         public ActionResult GetAPVendorHeader(string vendID, string branchID)
         {
+            if (branchID.PassNull() == "")
+            {
+                branchID="*";
+            }
             var vendor = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID && p.BranchID == branchID);
             return this.Store(vendor);
         }
@@ -45,7 +49,7 @@ namespace AP20200.Controllers
             try
             {
                 string vendID = data["cboVendID"].PassNull();
-
+                string branch = data["cboBranchID"].PassNull();
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstVendor"]);
                 var curHeader = dataHandler1.ObjectData<AP_Vendor>().FirstOrDefault();
 
@@ -71,6 +75,14 @@ namespace AP20200.Controllers
                 {
                     header = new AP_Vendor();
                     header.ResetET();
+                    if (branch == "")
+                    {
+                        header.BranchID = "*";
+                    }
+                    else
+                    {
+                        header.BranchID = branch;
+                    }
                     header.VendID = vendID;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
@@ -114,7 +126,10 @@ namespace AP20200.Controllers
         }
         private void UpdatingHeader(ref AP_Vendor t, AP_Vendor s)
         {
-            t.BranchID = s.BranchID;
+            if (t.BranchID.PassNull() != "*")
+            {
+                t.BranchID = s.BranchID;
+            }
             t.VendType = s.VendType;
             t.Addr1 = s.Addr1;
             t.Addr2 = s.Addr2;

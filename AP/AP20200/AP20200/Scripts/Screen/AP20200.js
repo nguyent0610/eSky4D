@@ -17,6 +17,8 @@ var checkLoad = function (sto) {
             App.cboBranchID.setVisible(false);
             App.cboBranchID.allowBlank = true;
             App.cboBranchID.setValue("MD");
+            App.cboVendID.setReadOnly(false);
+            App.cboVendID.store.reload();
         }
         else {
             App.cboBranchID.setVisible(true);
@@ -91,6 +93,7 @@ var firstLoad = function () {
     App.cboVendType.getStore().addListener('load', checkLoad);
     App.stoAP20200_pdConfigShowBranch.addListener('load', checkLoad);
     App.stoAP20200_pdConfigShowBranch.reload();
+    App.cboVendID.setReadOnly(true);
 };
 
 var menuClick = function (command) {
@@ -162,11 +165,19 @@ var frmChange = function () {
 
     HQ.isChange = HQ.store.isChange(App.stoVendor);
     HQ.common.changeData(HQ.isChange, 'AP20200');
-
-    if (App.cboVendID.valueModels == null || HQ.isNew == true) 
-        App.cboVendID.setReadOnly(false);
-    else 
-        App.cboVendID.setReadOnly(HQ.isChange);
+    if ((App.cboBranchID.getValue() == '' || App.cboBranchID.getValue() == null) && App.stoAP20200_pdConfigShowBranch.data.items[0].data.Result == true) {
+        App.cboVendID.setReadOnly(true);
+    }
+    //if(App.stoAP20200_pdConfigShowBranch.data.items[0].data.Result == false)
+    //{
+    //    App.cboVendID.setReadOnly(false);
+    //    App.cboVendID.store.reload();
+    //}
+    
+    //if (App.cboVendID.valueModels == null || HQ.isNew == true) 
+    //    App.cboVendID.setReadOnly(false);
+    //else 
+    //    App.cboVendID.setReadOnly(HQ.isChange);
 };
 
 var cboVendID_Change = function (sender, value) {
@@ -194,7 +205,8 @@ var cboVendID_Select = function (sender, value) {
 //};
 
 var cboBranchID_Change = function (sender, value) {
-    if (sender.valueModels != null ) {
+    if (sender.valueModels != null) {
+        App.cboVendID.setReadOnly(false);
         App.cboVendID.store.reload();
     }
 };
