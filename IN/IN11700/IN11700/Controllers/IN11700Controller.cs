@@ -399,7 +399,7 @@ namespace IN11700.Controllers
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
 
-                        inventory.IN10200_Cancel(_objBatch.BranchID, _objBatch.BatNbr);
+                        inventory.IN11700_Cancel(_objBatch.BranchID, _objBatch.BatNbr);
 
                         dal.CommitTrans();
 

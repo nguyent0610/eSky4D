@@ -137,11 +137,11 @@ var menuClick = function (command) {
                             for (var j = 0; j < lstLot.length; j++) {
                                 if (lstComponent.items[i].data.LineRef == lstLot.items[j].data.INTranLineRef && lstComponent.items[i].data.ComponentID && lstLot.items[j].data.ComponentID) {
                                     QtyLoc += lstLot.items[j].data.Qty;
-                                }
-                                if (QtyLoc != lstComponent.items[i].data.ComponentQty) {
-                                    HQ.message.show(2018060760, [HQ.common.getLang("IN11700Component")], '', true);
-                                    return;
-                                }
+                                }                              
+                            }
+                            if (QtyLoc != lstComponent.items[i].data.ComponentQty) {
+                                HQ.message.show(2018060760, [HQ.common.getLang("IN11700Component")], '', true);
+                                return;
                             }
                         }
                     }
@@ -629,6 +629,7 @@ var grdLotDPBB_BeforeEdit = function (item, e) {
     }
 
     record.commit();
+    HQ.common.showBusy(false);
 };
 var grdLotDPBB_Edit = function (item, e) {
     var key = e.field;
@@ -664,6 +665,7 @@ var grdLotDPBB_SelectionChange = function (item, selected) {
             App.lblLotDPBBQtyAvail.setText('');
         }
     }
+    HQ.common.showBusy(false);
 };
 var grdLot_Edit = function (item, e) {
     App.grdLot.view.refresh();
@@ -1004,7 +1006,7 @@ var bindBatch = function (record) {
     HQ.common.showBusy(true, HQ.waitMsg);
     HQ.numDetail = 0;
     
-   // App.cboHandle.setValue('N');
+   App.cboHandle.setValue('N');
 };
 var cboBatNbr_Change = function (item, newValue, oldValue) {
     var record = App.stoBatch.getById(newValue);
