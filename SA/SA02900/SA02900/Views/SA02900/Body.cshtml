@@ -103,7 +103,7 @@
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40),
-                X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(150)
+                X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(150).ID("colBranchID")
                 .Editor(
                         HQ.Combo().ID("cboBranchID")
                         .Name("cboBranchID").HQProcedure("SA02900_pcBranchID")

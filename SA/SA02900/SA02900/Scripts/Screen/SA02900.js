@@ -46,8 +46,15 @@ var checkLoad = function (sto) {
         App.stoTop.reload();
         App.cboLangStatus.store.reload();
         App.cboLangHandle.store.reload();
-        if (HQ.isFlagBranchID)
+        if (HQ.isFlagBranchID==true) {
             keysTop = ['BranchID', 'AppFolID', 'RoleID', 'Status'];
+            App.colBranchID.setVisible(true);
+        }
+        else
+        {
+            keysTop = ['AppFolID', 'RoleID', 'Status'];
+            App.colBranchID.setVisible(false);
+        }
         HQ.common.showBusy(false);
     }
 };
@@ -163,10 +170,13 @@ var menuClick = function (command) {
                     var lstBot = App.grdBot.store.snapshot || App.grdBot.store.allData || App.grdBot.store.data
                     var error = "";
                     if (lstTop != undefined) {
-                        for (var i = 0;i< lstTop.length; i++) {
-                            var objRecord = HQ.store.findInStore(App.stoBot, ['BranchID', 'AppFolID'], [lstTop.items[i].data.BranchID, lstTop.items[i].data.AppFolID]);
-                            if(objRecord==undefined){
-                                error += (i + 1) + ", ";
+                        for (var i = 0; i < lstTop.length; i++) {
+                            if (lstTop.items[i].data.AppFolID != '')
+                            {
+                                var objRecord = HQ.store.findInStore(App.stoBot, ['BranchID', 'AppFolID'], [lstTop.items[i].data.BranchID, lstTop.items[i].data.AppFolID]);
+                                if (objRecord == undefined) {
+                                    error += (i + 1) + ", ";
+                                }
                             }
                         }
                     }
