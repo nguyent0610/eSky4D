@@ -572,7 +572,9 @@
                                         .HQParam(new StoreParameterCollection() {
                                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@BatNbr", Value = "App.cboBatNbr.getValue()", Mode = ParameterMode.Raw }
                                         })
                                         .LoadData()
                                         .Listeners(lst =>
@@ -685,7 +687,7 @@
                                 .Layout(LayoutType.VBox)
                                 .Items(
                                     HQ.Combo().ID("cboAdvanceType")
-                                        .Name("cboAdvanceType").Tag("X")
+                                        .Name("AdvanceType").Tag("X")
                                         .HQLangCode("AdvanceType")
                                         .DataIndex("AdvanceType")
                                         .HQProcedure("IN10300_pcAdvanceType")
@@ -720,7 +722,7 @@
                                         
                             )
 
-                                , X.FieldContainer().MarginSpec("-5 0 0 0")
+                            , X.FieldContainer().MarginSpec("-5 0 0 0")
                             .Layout(LayoutType.HBox)
                             .Items(
 
@@ -737,7 +739,27 @@
 
                             )      
                         )                 
+                         ,X.FieldContainer()
+                        .Layout(LayoutType.VBox)
+                        .Items(
+                                HQ.Label().MarginSpec("0 0 10 0"),
+                                HQ.Combo().ID("cboPerPost").Name("PerPost").HQLangCode("PerPost").DataIndex("PerPost").HQProcedure("IN10300_pcPerPost")
+                                .HQColumnShow("CycleNbr,StartDate,EndDate").DisplayField("CycleNbr").ValueField("CycleNbr")
+                                .HQHeightWidth(400, 300)
+                                .HQDBSys(false).LabelWidth(110).InputWidth(120)
+                                .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                    ,new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                                    ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
 
+                                })
+                                .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })    
+                        )
 
                     )
 

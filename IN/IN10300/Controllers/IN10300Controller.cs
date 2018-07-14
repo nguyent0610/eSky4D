@@ -69,6 +69,8 @@ namespace IN10300.Controllers
                 , allowDescrBlank = false, allowNoteBlank=false, isSetDefaultShipViaID=false, isSetDefaultSiteID=false, dflReasonCD=false;
 
             bool showImprtExprt = false;
+            bool checkperPost = false;
+            string perPost = "";
             var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             var showWhseLoc = 0;
             if (objConfig != null)
@@ -84,6 +86,8 @@ namespace IN10300.Controllers
                 dflReasonCD = objConfig.DflReasonCD.HasValue ? objConfig.DflReasonCD.Value : false;
                 showImprtExprt = objConfig.ShowImprtExprt.HasValue ? objConfig.ShowImprtExprt.Value : false;
                 showWhseLoc = objConfig.showWhseLoc;
+                perPost = objConfig.PerPost;
+                checkperPost = objConfig.CheckPerPost.HasValue && objConfig.CheckPerPost.Value;
             }           
             ViewBag.hideRptExpDate = hideRptExpDate;
             ViewBag.hideWarehouss = hideWarehouss;
@@ -97,6 +101,8 @@ namespace IN10300.Controllers
             ViewBag.showImprtExprt = showImprtExprt;
             ViewBag.BranchID = branchID;
             ViewBag.showWhseLoc = showWhseLoc;
+            ViewBag.PerPost = perPost;
+            ViewBag.CheckperPost = checkperPost;
             return View();
         }
 
@@ -780,6 +786,7 @@ namespace IN10300.Controllers
             t.TotAmt = _objBatch.TotAmt;
             t.Rlsed = 0;
             t.Status = _objBatch.Status;
+            t.PerPost = _objBatch.PerPost;
         }
 
         private void Update_Transfer(IN_Transfer t, bool isNew)

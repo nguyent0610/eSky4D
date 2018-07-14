@@ -568,6 +568,7 @@ var btnLoad_Click = function () {
 
 var cboBatNbr_Change = function (item, newValue, oldValue) {
     var record = App.stoBatch.getById(newValue);
+    App.cboReasonCD.store.reload();
     if (record) {
         HQ.isNew = false;
         bindBatch(record);
@@ -1074,6 +1075,19 @@ var bindBatch = function (record) {
 }
 
 var save = function () {
+    var checkPerPost = true;
+    if (HQ.CheckperPost) {
+        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
+        if (objPerPost != undefined) {
+            var tam = App.txtTranDate.getValue();
+            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
+                checkPerPost = false;
+            }
+        }
+        else {
+            checkPerPost = false;
+        }
+    }
     if ((App.cboBatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.cboBatNbr.value) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
         return;
@@ -1181,6 +1195,12 @@ var save = function () {
                 if (this.result.data != undefined && this.result.data.batNbr != null) {
                     var batNbr = this.result.data.batNbr
                 }
+                if (HQ.CheckperPost && !checkPerPost) {
+                    HQ.message.show(2018071311, '', '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
                 if (!Ext.isEmpty(batNbr)) {
                     App.cboBatNbr.forceSelection = false
                     App.cboBatNbr.events['change'].suspend();
@@ -1193,7 +1213,7 @@ var save = function () {
                 }
 
                 setChange(false);
-                HQ.message.process(msg, data, true);
+                //HQ.message.process(msg, data, true);
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -1479,6 +1499,7 @@ var defaultOnNew = function () {
     record.data.TranDate = HQ.businessDate;
     record.data.ExpectedDate = HQ.businessDate;
     record.data.RcptDate = HQ.businessDate;
+    record.data.PerPost = HQ.PerPost;
     //record.data.SiteID = HQ.objUser.INSite;
     if (HQ.isSetDefaultSiteID) {
         record.data.SiteID = HQ.objUser.INSite;

@@ -148,22 +148,6 @@ namespace IN10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Batch> Batches
-        {
-            get
-            {
-                if ((_Batches == null))
-                {
-                    _Batches = base.CreateObjectSet<Batch>("Batches");
-                }
-                return _Batches;
-            }
-        }
-        private ObjectSet<Batch> _Batches;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemLoc> IN_ItemLoc
         {
             get
@@ -256,6 +240,22 @@ namespace IN10300
             }
         }
         private ObjectSet<IN_MaxTranfers> _IN_MaxTranfers;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Batch> Batches
+        {
+            get
+            {
+                if ((_Batches == null))
+                {
+                    _Batches = base.CreateObjectSet<Batch>("Batches");
+                }
+                return _Batches;
+            }
+        }
+        private ObjectSet<Batch> _Batches;
 
         #endregion
 
@@ -299,14 +299,6 @@ namespace IN10300
         public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
         {
             base.AddObject("IN_LotTrans", iN_LotTrans);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Batches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToBatches(Batch batch)
-        {
-            base.AddObject("Batches", batch);
         }
     
         /// <summary>
@@ -355,6 +347,14 @@ namespace IN10300
         public void AddToIN_MaxTranfers(IN_MaxTranfers iN_MaxTranfers)
         {
             base.AddObject("IN_MaxTranfers", iN_MaxTranfers);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Batches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToBatches(Batch batch)
+        {
+            base.AddObject("Batches", batch);
         }
 
         #endregion
@@ -1961,7 +1961,8 @@ namespace IN10300
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String perPost)
         {
             Batch batch = new Batch();
             batch.BranchID = branchID;
@@ -1979,6 +1980,7 @@ namespace IN10300
             batch.LUpd_Prog = lUpd_Prog;
             batch.LUpd_User = lUpd_User;
             batch.tstamp = tstamp;
+            batch.PerPost = perPost;
             return batch;
         }
 
@@ -2648,6 +2650,30 @@ namespace IN10300
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                OnDiscIDChanging(value);
+                ReportPropertyChanging("DiscID");
+                _DiscID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscID");
+                OnDiscIDChanged();
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String DiscSeq
         {
             get
@@ -2670,26 +2696,26 @@ namespace IN10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String DiscID
+        public global::System.String PerPost
         {
             get
             {
-                return _DiscID;
+                return _PerPost;
             }
             set
             {
-                OnDiscIDChanging(value);
-                ReportPropertyChanging("DiscID");
-                _DiscID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("DiscID");
-                OnDiscIDChanged();
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
             }
         }
-        private global::System.String _DiscID;
-        partial void OnDiscIDChanging(global::System.String value);
-        partial void OnDiscIDChanged();
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
 
         #endregion
 
@@ -10599,9 +10625,11 @@ namespace IN10300
         /// <param name="expectedDate">Initial value of the ExpectedDate property.</param>
         /// <param name="tranDate">Initial value of the TranDate property.</param>
         /// <param name="rcptDate">Initial value of the RcptDate property.</param>
+        /// <param name="advanceType">Initial value of the AdvanceType property.</param>
         /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="toWhseLoc">Initial value of the ToWhseLoc property.</param>
-        public static IN10300_pcBatch_Result CreateIN10300_pcBatch_Result(global::System.String batNbr, global::System.String branchID, global::System.DateTime dateEnt, global::System.Double totAmt, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.DateTime tranDate, global::System.DateTime rcptDate, global::System.String whseLoc, global::System.String toWhseLoc)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static IN10300_pcBatch_Result CreateIN10300_pcBatch_Result(global::System.String batNbr, global::System.String branchID, global::System.DateTime dateEnt, global::System.Double totAmt, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.DateTime tranDate, global::System.DateTime rcptDate, global::System.String advanceType, global::System.String whseLoc, global::System.String toWhseLoc, global::System.String perPost)
         {
             IN10300_pcBatch_Result iN10300_pcBatch_Result = new IN10300_pcBatch_Result();
             iN10300_pcBatch_Result.BatNbr = batNbr;
@@ -10612,8 +10640,10 @@ namespace IN10300
             iN10300_pcBatch_Result.ExpectedDate = expectedDate;
             iN10300_pcBatch_Result.TranDate = tranDate;
             iN10300_pcBatch_Result.RcptDate = rcptDate;
+            iN10300_pcBatch_Result.AdvanceType = advanceType;
             iN10300_pcBatch_Result.WhseLoc = whseLoc;
             iN10300_pcBatch_Result.ToWhseLoc = toWhseLoc;
+            iN10300_pcBatch_Result.PerPost = perPost;
             return iN10300_pcBatch_Result;
         }
 
@@ -11248,7 +11278,7 @@ namespace IN10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String AdvanceType
         {
@@ -11260,7 +11290,7 @@ namespace IN10300
             {
                 OnAdvanceTypeChanging(value);
                 ReportPropertyChanging("AdvanceType");
-                _AdvanceType = StructuralObject.SetValidValue(value, true);
+                _AdvanceType = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("AdvanceType");
                 OnAdvanceTypeChanged();
             }
@@ -11316,6 +11346,30 @@ namespace IN10300
         private global::System.String _ToWhseLoc;
         partial void OnToWhseLocChanging(global::System.String value);
         partial void OnToWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
 
         #endregion
 
@@ -12082,6 +12136,54 @@ namespace IN10300
         private global::System.Int32 _showWhseLoc;
         partial void OnshowWhseLocChanging(global::System.Int32 value);
         partial void OnshowWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckPerPost
+        {
+            get
+            {
+                return _CheckPerPost;
+            }
+            set
+            {
+                OnCheckPerPostChanging(value);
+                ReportPropertyChanging("CheckPerPost");
+                _CheckPerPost = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckPerPost");
+                OnCheckPerPostChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckPerPost;
+        partial void OnCheckPerPostChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
 
         #endregion
 
