@@ -3204,6 +3204,230 @@ namespace INProcess
                 throw ex;
             }
         }
+        public bool IN11700_Cancel(string branchID, string batNbr)
+        {
+            try
+            {
+                IN11700Issue_Cancel(branchID, batNbr, string.Empty, true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public bool IN11700Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release)
+        {
+            try
+            {
+                double qty = 0;
+                DataTable lstTrans = new DataTable();
+
+                clsIN_Setup objSetup = new clsIN_Setup(Dal);
+                objSetup.GetAll(branchID, "IN");
+
+                clsIN_Trans objTran = new clsIN_Trans(Dal);
+                if (string.IsNullOrEmpty(rcptNbr))
+                    lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
+                else
+                    lstTrans = objTran.GetAll(branchID, batNbr, rcptNbr, "%");
+
+                clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+                clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
+                DateTime? tranDate = DateTime.Now;
+                if (lstTrans.Rows.Count > 0)
+                {
+                    tranDate = lstTrans.Rows[0].Date("TranDate");
+                }
+
+                clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
+                clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
+                clsIN_ItemCost cost = new clsIN_ItemCost(Dal);
+                clsSQL sql = new clsSQL(Dal);
+                foreach (DataRow tran in lstTrans.Rows)
+                {
+                    //if (!release && (tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == 1)) continue;
+
+                    objInvt.GetByKey(tran.String("InvtID"));
+
+                    if (!objItem.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
+                    {
+                        throw new MessageException(MessageType.Message, "606");
+
+                    }
+                    if (objInvt.StkItem == 1)
+                    {
+                        if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
+                            qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                        else
+                            qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
+
+                        objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
+                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
+                        objItem.AvgCost = Math.Round(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
+                            objItem.AvgCost, 0);
+
+                    }
+                    objItem.TotCost = Math.Round(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objItem.LUpd_DateTime = DateTime.Now;
+                    objItem.LUpd_Prog = Prog;
+                    objItem.LUpd_User = User;
+                    objItem.Update();
+
+                    if (tran.String("WhseLoc").PassNull() != "" && tran.String("ToWhseLoc").PassNull() != "")
+                    {
+                        if (tran.Short("InvtMult") == -1)
+                        {
+                            if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
+                            {
+                                throw new MessageException(MessageType.Message, "606");
+
+                            }
+                        }
+                        else
+                        {
+                            if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("ToWhseLoc").PassNull()))
+                            {
+                                throw new MessageException(MessageType.Message, "606");
+
+                            }
+                        }
+                       
+                        if (objInvt.StkItem == 1)
+                        {
+                            if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
+                                qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                            else
+                                qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
+
+                            objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
+                            objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
+                                objItemLoc.AvgCost, 0);
+
+                        }
+                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objItemLoc.LUpd_DateTime = DateTime.Now;
+                        objItemLoc.LUpd_Prog = Prog;
+                        objItemLoc.LUpd_User = User;
+                        objItemLoc.Update();
+                    }
+
+
+                    if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
+                    {
+                        DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
+                        foreach (DataRow lotRow in dtLot.Rows)
+                        {
+                            qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
+                            if (tran.Short("InvtMult") == -1)
+                            {
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
+                                {
+                                    objItemLot.Reset();
+                                    objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
+                                    objItemLot.InvtID = lotRow.String("InvtID");
+                                    objItemLot.SiteID = lotRow.String("SiteID");
+                                    objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                    objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
+                                    objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                    objItemLot.ExpDate = lotRow.Date("ExpDate");
+                                    objItemLot.Crtd_DateTime = DateTime.Now;
+                                    objItemLot.Crtd_Prog = Prog;
+                                    objItemLot.Crtd_User = User;
+
+                                    objItemLot.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Add();
+                                }
+                            }
+                            else
+                            {
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), tran.String("ToWhseLoc").PassNull(), lotRow.String("LotSerNbr")))
+                                {
+                                    objItemLot.Reset();
+                                    objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
+                                    objItemLot.InvtID = lotRow.String("InvtID");
+                                    objItemLot.SiteID = lotRow.String("SiteID");
+                                    objItemLot.WhseLoc = tran.String("ToWhseLoc");
+                                    objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
+                                    objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                    objItemLot.ExpDate = lotRow.Date("ExpDate");
+                                    objItemLot.Crtd_DateTime = DateTime.Now;
+                                    objItemLot.Crtd_Prog = Prog;
+                                    objItemLot.Crtd_User = User;
+
+                                    objItemLot.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Add();
+                                }
+                            }
+                            objItemLot.Cost = objItem.TotCost;
+                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
+                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, GetDecimalPlace(objInvt.LotSerTrack));
+
+
+                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, GetDecimalPlace(objInvt.LotSerTrack)) < 0)
+                            {
+                                throw new MessageException("607", new[] { objInvt.InvtID, objItemLot.SiteID + " - " + objItemLot.LotSerNbr });
+                            }
+
+                            objItemLot.LUpd_DateTime = DateTime.Now;
+                            objItemLot.LUpd_Prog = Prog;
+                            objItemLot.LUpd_User = User;
+                            objItemLot.Update();
+                        }
+                    }
+
+
+                    sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
+                    if (cost.CostIdentity > 0)
+                    {
+                        cost.Qty = Math.Round(cost.Qty + qty, 0);
+                        cost.TotCost = Math.Round(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        cost.Update();
+                    }
+                    else
+                    {
+                        clsIN_ItemCost newItemCost = new clsIN_ItemCost(Dal)
+                        {
+                            CostID = tran.String("CostID"),
+                            InvtID = tran.String("InvtID"),
+                            Qty = tran.Double("Qty"),
+                            RcptDate = tran.Date("TranDate"),
+                            RcptNbr = tran.String("RefNbr"),
+                            TotCost = tran.Double("ExtCost"),
+                            UnitCost = tran.Double("UnitCost"),
+                            SiteID = tran.String("SiteID"),
+                            Crtd_DateTime = DateTime.Now,
+                            Crtd_Prog = Prog,
+                            Crtd_User = User,
+                            LUpd_DateTime = DateTime.Now,
+                            LUpd_Prog = Prog,
+                            LUpd_User = User
+                        };
+                        newItemCost.Add();
+                    }
+
+                }
+                if (release)
+                    sql.IN_CancelBatch(branchID, batNbr, Prog, User);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         private int GetDecimalPlace(string lotSerTrack)
         {
             return (lotSerTrack != "Q" ? 0 : 2);
