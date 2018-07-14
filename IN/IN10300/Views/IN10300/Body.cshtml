@@ -440,7 +440,10 @@
                                 .ForceSelection(true)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection(){
-                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw }
                                 })
                                 .HQControlFocus("cboToSiteID")
                                 .LoadData()
