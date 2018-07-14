@@ -103,7 +103,7 @@ namespace OM29900
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM29900_pcTypeOfVehicle_Result> OM29900_pcTypeOfVehicle(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        public ObjectResult<OM29900_pgTypeOfVehicle_Result> OM29900_pgTypeOfVehicle(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -135,7 +135,7 @@ namespace OM29900
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<OM29900_pcTypeOfVehicle_Result>("OM29900_pcTypeOfVehicle", cpnyIDParameter, userNameParameter, langIDParameter);
+            return base.ExecuteFunction<OM29900_pgTypeOfVehicle_Result>("OM29900_pgTypeOfVehicle", cpnyIDParameter, userNameParameter, langIDParameter);
         }
 
         #endregion
@@ -416,24 +416,26 @@ namespace OM29900
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="OM29900Model", Name="OM29900_pcTypeOfVehicle_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="OM29900Model", Name="OM29900_pgTypeOfVehicle_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class OM29900_pcTypeOfVehicle_Result : ComplexObject
+    public partial class OM29900_pgTypeOfVehicle_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new OM29900_pcTypeOfVehicle_Result object.
+        /// Create a new OM29900_pgTypeOfVehicle_Result object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
-        public static OM29900_pcTypeOfVehicle_Result CreateOM29900_pcTypeOfVehicle_Result(global::System.String code, global::System.String descr)
+        /// <param name="selected">Initial value of the Selected property.</param>
+        public static OM29900_pgTypeOfVehicle_Result CreateOM29900_pgTypeOfVehicle_Result(global::System.String code, global::System.String descr, global::System.Int32 selected)
         {
-            OM29900_pcTypeOfVehicle_Result oM29900_pcTypeOfVehicle_Result = new OM29900_pcTypeOfVehicle_Result();
-            oM29900_pcTypeOfVehicle_Result.Code = code;
-            oM29900_pcTypeOfVehicle_Result.Descr = descr;
-            return oM29900_pcTypeOfVehicle_Result;
+            OM29900_pgTypeOfVehicle_Result oM29900_pgTypeOfVehicle_Result = new OM29900_pgTypeOfVehicle_Result();
+            oM29900_pgTypeOfVehicle_Result.Code = code;
+            oM29900_pgTypeOfVehicle_Result.Descr = descr;
+            oM29900_pgTypeOfVehicle_Result.Selected = selected;
+            return oM29900_pgTypeOfVehicle_Result;
         }
 
         #endregion
@@ -511,6 +513,30 @@ namespace OM29900
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Selected
+        {
+            get
+            {
+                return _Selected;
+            }
+            set
+            {
+                OnSelectedChanging(value);
+                ReportPropertyChanging("Selected");
+                _Selected = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Selected");
+                OnSelectedChanged();
+            }
+        }
+        private global::System.Int32 _Selected;
+        partial void OnSelectedChanging(global::System.Int32 value);
+        partial void OnSelectedChanged();
 
         #endregion
 

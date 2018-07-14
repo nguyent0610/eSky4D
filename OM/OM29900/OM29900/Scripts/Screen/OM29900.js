@@ -3,8 +3,8 @@ var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
 var keys = ['Code'];
-var fieldsCheckRequire = ['Code','Descr'];
-var fieldsLangCheckRequire = ['Code','Descr'];
+var fieldsCheckRequire = ['Descr'];
+var fieldsLangCheckRequire = ['Descr'];
 var _status = '';
 //// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
@@ -58,12 +58,12 @@ var menuClick = function (command) {
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
-            else {
-                if (HQ.form.checkRequirePass(App.frmMain)) {
-                    HQ.isFirstLoad = true;
-                    App.stoTypeOfVehicle.reload();
-                }
-            }
+            //else {
+            //    if (HQ.form.checkRequirePass(App.frmMain)) {
+            //        HQ.isFirstLoad = true;
+            //        App.stoTypeOfVehicle.reload();
+            //    }
+            //}
             break;
         case "new":
             if (HQ.isInsert) {
@@ -73,8 +73,15 @@ var menuClick = function (command) {
         case "delete":
             if (HQ.isDelete) {
                 if (App.slmTypeOfVehicle.selected.items[0] != undefined) {
-                    if (App.slmTypeOfVehicle.selected.items[0].data.Market != "") {
-                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdTypeOfVehicle)], 'deleteData', true);
+                    if (App.slmTypeOfVehicle.selected.items[0].data.Selected == 0)
+                    {
+                        if (App.slmTypeOfVehicle.selected.items[0].data.Code != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdTypeOfVehicle)], 'deleteData', true);
+                        }
+                    }
+                    else
+                    {
+                        HQ.message.show(2018061460, [App.slmTypeOfVehicle.selected.items[0].data.Code], '', true);
                     }
                 }
             }
@@ -116,7 +123,8 @@ var grdTypeOfVehicle_Edit = function (item, e) {
     frmChange();
 };
 var grdTypeOfVehicle_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdTypeOfVehicle, e, keys, true);
+    //return HQ.grid.checkValidateEdit(App.grdTypeOfVehicle, e, keys, true);
+    return checkValidateEdit(App.grdTypeOfVehicle, e, keys, true);
 };
 var grdTypeOfVehicle_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdTypeOfVehicle);
@@ -154,5 +162,25 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoTypeOfVehicle.reload();
+    }
+};
+var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {
+    if (keys.indexOf(e.field) != -1) {
+        var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/
+        if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+        if (isCheckSpecialChar) {
+            if (e.value)
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+        }
+        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
+
     }
 };

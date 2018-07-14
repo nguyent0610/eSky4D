@@ -42,7 +42,7 @@ namespace OM29900.Controllers
         }
         public ActionResult GetTypeOfVehicle(string BranchID)
         {
-            var data = _db.OM29900_pcTypeOfVehicle(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+            var data = _db.OM29900_pgTypeOfVehicle(Current.CpnyID, Current.UserName, Current.LangID).ToList();
             return this.Store(data);
         }
 
@@ -52,12 +52,12 @@ namespace OM29900.Controllers
             try
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTypeOfVehicle"]);
-                ChangeRecords<OM29900_pcTypeOfVehicle_Result> lstOM_TypeOfVehicle = dataHandler.BatchObjectData<OM29900_pcTypeOfVehicle_Result>();
+                ChangeRecords<OM29900_pgTypeOfVehicle_Result> lstOM_TypeOfVehicle = dataHandler.BatchObjectData<OM29900_pgTypeOfVehicle_Result>();
 
 
                 lstOM_TypeOfVehicle.Created.AddRange(lstOM_TypeOfVehicle.Updated);
 
-                foreach (OM29900_pcTypeOfVehicle_Result del in lstOM_TypeOfVehicle.Deleted)
+                foreach (OM29900_pgTypeOfVehicle_Result del in lstOM_TypeOfVehicle.Deleted)
                 {
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     if (lstOM_TypeOfVehicle.Created.Where(p => p.Code == del.Code).Count() > 0)
@@ -74,7 +74,7 @@ namespace OM29900.Controllers
                     }
                 }
 
-                foreach (OM29900_pcTypeOfVehicle_Result curLang in lstOM_TypeOfVehicle.Created)
+                foreach (OM29900_pgTypeOfVehicle_Result curLang in lstOM_TypeOfVehicle.Created)
                 {
                     //if (curLang.CustId.PassNull() == "") continue;
 
@@ -112,7 +112,7 @@ namespace OM29900.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        private void Update_Language(OM_TypeOfVehicle t, OM29900_pcTypeOfVehicle_Result s, bool isNew)
+        private void Update_Language(OM_TypeOfVehicle t, OM29900_pgTypeOfVehicle_Result s, bool isNew)
         {
             if (isNew)
             {

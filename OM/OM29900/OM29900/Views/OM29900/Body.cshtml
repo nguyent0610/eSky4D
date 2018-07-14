@@ -37,7 +37,7 @@
                 X.Store()
                 .ID("stoTypeOfVehicle")
                 .PageSize(50).AutoLoad(false)
-                    .Model(Util.GenerateModel(typeof(OM29900_pcTypeOfVehicle_Result), "mdlOM29900_OM_TypeOfVehicle", ""))
+                    .Model(Util.GenerateModel(typeof(OM29900_pgTypeOfVehicle_Result), "mdlOM29900_OM_TypeOfVehicle", ""))
                 .Parameters(ps =>
                 {
                     //ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
@@ -54,11 +54,11 @@
                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
                 X.Column().Text(Util.GetLang("OM29900Code")).DataIndex("Code").Width(200)
                 .Editor(
-                        X.TextField().AllowBlank(false).MaxLength(30).EnforceMaxLength(true).SelectOnFocus(true)
+                        X.TextField().MaxLength(30).EnforceMaxLength(true).SelectOnFocus(true)
                 )
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                 .Editor(
-                        X.TextField().AllowBlank(false).MaxLength(200).EnforceMaxLength(true).SelectOnFocus(true)
+                        X.TextField().MaxLength(200).EnforceMaxLength(true).SelectOnFocus(true)
                 )
                 
                 , X.CommandColumn()

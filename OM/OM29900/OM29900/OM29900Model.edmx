@@ -19,7 +19,7 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="OM29900_pcTypeOfVehicle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="OM29900_pgTypeOfVehicle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -33,7 +33,7 @@
       <Schema Namespace="OM29900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM29900Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="OM_TypeOfVehicle" EntityType="OM29900Model.OM_TypeOfVehicle" />
-          <FunctionImport Name="OM29900_pcTypeOfVehicle" ReturnType="Collection(OM29900Model.OM29900_pcTypeOfVehicle_Result)">
+          <FunctionImport Name="OM29900_pgTypeOfVehicle" ReturnType="Collection(OM29900Model.OM29900_pgTypeOfVehicle_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -53,10 +53,11 @@
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="OM29900_pcTypeOfVehicle_Result">
+        <ComplexType Name="OM29900_pgTypeOfVehicle_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="Selected" Nullable="false" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -79,12 +80,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM29900_pcTypeOfVehicle" FunctionName="eBiz4DWebSysModel.Store.OM29900_pcTypeOfVehicle">
+          <FunctionImportMapping FunctionImportName="OM29900_pgTypeOfVehicle" FunctionName="eBiz4DWebSysModel.Store.OM29900_pgTypeOfVehicle">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="OM29900Model.OM29900_pcTypeOfVehicle_Result">
+              <ComplexTypeMapping TypeName="OM29900Model.OM29900_pgTypeOfVehicle_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
