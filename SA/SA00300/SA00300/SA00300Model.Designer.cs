@@ -2130,6 +2130,30 @@ namespace SA00300
         private Nullable<global::System.Double> _PromotionApprovalTo;
         partial void OnPromotionApprovalToChanging(Nullable<global::System.Double> value);
         partial void OnPromotionApprovalToChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Category
+        {
+            get
+            {
+                return _Category;
+            }
+            set
+            {
+                OnCategoryChanging(value);
+                ReportPropertyChanging("Category");
+                _Category = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Category");
+                OnCategoryChanged();
+            }
+        }
+        private global::System.String _Category;
+        partial void OnCategoryChanging(global::System.String value);
+        partial void OnCategoryChanged();
 
         #endregion
 
@@ -2173,6 +2197,30 @@ namespace SA00300
         private Nullable<global::System.Boolean> _HidePromotionApproval;
         partial void OnHidePromotionApprovalChanging(Nullable<global::System.Boolean> value);
         partial void OnHidePromotionApprovalChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Category
+        {
+            get
+            {
+                return _Category;
+            }
+            set
+            {
+                OnCategoryChanging(value);
+                ReportPropertyChanging("Category");
+                _Category = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Category");
+                OnCategoryChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Category;
+        partial void OnCategoryChanging(Nullable<global::System.Boolean> value);
+        partial void OnCategoryChanged();
 
         #endregion
 

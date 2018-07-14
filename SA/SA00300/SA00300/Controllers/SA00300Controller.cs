@@ -47,12 +47,15 @@ namespace SA00300.Controllers
             ViewBag.TextVal = objSA02500Check == null ? "0" : objSA02500Check.TextVal;
             ViewBag.TextValAdmin = objSA02500CheckAdmin == null ? "0" : objSA02500CheckAdmin.TextVal;
             bool hidePromotionApproval = false;
+            bool category = false;
             var objConfig = _db.SA00300_pdConfig(Current.CpnyID,Current.UserName,Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 hidePromotionApproval = objConfig.HidePromotionApproval.HasValue && objConfig.HidePromotionApproval.Value;
+                category = objConfig.Category.HasValue && objConfig.Category.Value;
             }
             ViewBag.hidePromotionApproval = hidePromotionApproval;
+            ViewBag.category = category;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -372,6 +375,7 @@ namespace SA00300.Controllers
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
+            t.Category = s.Category;
         }
 
         private void UpdatingSYS_UserGroup(SYS_UserGroup t, SA00300_pgLoadSYS_UserGroup_Result s, bool isNew)

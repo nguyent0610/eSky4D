@@ -54,6 +54,7 @@ var firstLoad = function () {
     else {
         App.PromotionApproval.show();
     }
+    App.cboCategory.setVisible(HQ.category);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -335,6 +336,7 @@ var stoLoad = function (sto) {
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     HQ.combo.expand(App.CpnyIDHand, ',')
+    HQ.combo.expand(App.cboCategory, ',')
     App.stoSYS_UserGroup.reload();
     App.fupImages.reset();
     if (record.data.Images) {

@@ -96,6 +96,7 @@
           <Property Name="CrtLmtInvoice" Type="float" Nullable="false" />
           <Property Name="PromotionApprovalFrom" Type="float" />
           <Property Name="PromotionApprovalTo" Type="float" />
+          <Property Name="Category" Type="varchar" MaxLength="150" />
         </EntityType>
         <Function Name="SA00300_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -128,12 +129,12 @@
           <FunctionImport Name="SA00300_pgLoadSYS_UserGroup" ReturnType="Collection(SA00300Model.SA00300_pgLoadSYS_UserGroup_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="Users" EntityType="SA00300Model.User" />
           <FunctionImport Name="SA00300_pdConfig" ReturnType="Collection(SA00300Model.SA00300_pdConfig_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="Users" EntityType="SA00300Model.User" />
         </EntityContainer>
         <EntityType Name="SYS_Configurations">
           <Key>
@@ -194,6 +195,10 @@
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="SA00300_pdConfig_Result">
+          <Property Type="Boolean" Name="HidePromotionApproval" Nullable="true" />
+          <Property Type="Boolean" Name="Category" Nullable="true" />
+        </ComplexType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserName" />
@@ -238,10 +243,8 @@
           <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
           <Property Name="PromotionApprovalFrom" Type="Double" />
           <Property Name="PromotionApprovalTo" Type="Double" />
+          <Property Name="Category" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="SA00300_pdConfig_Result">
-          <Property Type="Boolean" Name="HidePromotionApproval" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -316,9 +319,18 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA00300_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00300Model.SA00300_pdConfig_Result">
+                <ScalarProperty Name="HidePromotionApproval" ColumnName="HidePromotionApproval" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SA00300Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="PromotionApprovalTo" ColumnName="PromotionApprovalTo" />
                 <ScalarProperty Name="PromotionApprovalFrom" ColumnName="PromotionApprovalFrom" />
                 <ScalarProperty Name="CrtLmtInvoice" ColumnName="CrtLmtInvoice" />
@@ -362,13 +374,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA00300_pdConfig" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00300Model.SA00300_pdConfig_Result">
-                <ScalarProperty Name="HidePromotionApproval" ColumnName="HidePromotionApproval" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

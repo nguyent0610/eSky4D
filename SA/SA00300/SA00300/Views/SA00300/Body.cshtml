@@ -183,8 +183,24 @@
                                 //,HQ.TextBox().ID("AutoID").Name("AutoID").HQLangCode("AutoID").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})                                                                                                                                                
                                 //,HQ.TextBox().ID("Images").Name("Images").HQLangCode("Images").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
                                 //.HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
-                        )
+                        , HQ.Combo().ID("cboCategory").Name("cboCategory").MarginSpec("3 0 0 0").DataIndex("Category")
+                        .HQLangCode("Category").HQDBSys(false).HQProcedure("SA00300_pcCategory")
+                        .HQColumnShow("Code,Descr")
+                        .DisplayField("Descr")
+                        .ValueField("Code")
+                        .HQHeightWidth(400, 300).MultiSelect(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
+                        .HQParam(new StoreParameterCollection() 
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.LangID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.CpnyID", Mode = ParameterMode.Raw }
+                    })
+                        .LoadData().Width(500)
+                )
                         
+
                     , X.Container().Layout(LayoutType.VBox).MinWidth(210).Width(210)
                     .Items(
                         X.Hidden().ID("hdnImages").DataIndex("Images")
