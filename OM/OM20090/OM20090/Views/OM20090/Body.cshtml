@@ -79,7 +79,7 @@
                     HQ.Combo().ID("cboSurveyID").AllowBlank(false)
                     .HQLangCode("SurveyID").HQProcedure("OM20090_pcSurveyID")
                     .HQColumnShow("SurveyID,SurveyName,FromDate,ToDate,Status").ValueField("SurveyID").DisplayField("SurveyID").MaxLength(30).EnforceMaxLength(true)
-                    .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                    .HQHeightWidth(400, 300).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 

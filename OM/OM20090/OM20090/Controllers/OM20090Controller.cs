@@ -79,7 +79,6 @@ namespace OM20090.Controllers
                 List<OM20090_pgCompetitorSurveyInvt_Result> lstDel = dataHandlerDel.ObjectData<OM20090_pgCompetitorSurveyInvt_Result>();
                 curHeader.SurveyID = data["cboSurveyID"].PassNull().ToUpper().Trim();
                 curHeader.BranchID = data["cboDistributor"];
-                string invtID = data["invtID"];
                 if (Handle != "N")
                 {
                     curHeader.Status = Handle;

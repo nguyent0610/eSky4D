@@ -25,7 +25,8 @@ var keysInvt = ['InvtID'];
 var fieldsCheckInvt = ["InvtID"];
 var fieldsLangInvt = ["InvtID"];
 var _invtID = "";
-var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/
+var checknew = false;
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -51,6 +52,7 @@ var firstLoad = function () {
     App.cboCompID.getStore().addListener('load', checkLoad);
     App.cboCompInvtID.getStore().addListener('load', checkLoad);
     App.cboCriteriaID.getStore().addListener('load', checkLoad);
+    App.slmDet.select(0)
 };
 var frmChange = function () {
     if (App.stoHeaderSurvey.getCount() > 0)
@@ -59,13 +61,23 @@ var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoSurveyInvt) || HQ.store.isChange(App.stoSurveyCriteria) || HQ.store.isChange(App.stoHeaderSurvey) || HQ.store.isChange(App.stoSaleProduct);
     HQ.common.changeData(HQ.isChange, 'OM20090');
 
-    if (App.cboSurveyID.valueModels == null || HQ.isNew == true) {
+    //if (App.cboSurveyID.valueModels == null || HQ.isNew == true) {
+    //    App.cboSurveyID.setReadOnly(false);
+    //    App.cboDistributor.setReadOnly(false);
+    //}
+    //else {
+    //    App.cboSurveyID.setReadOnly(HQ.isChange);
+    //    App.cboDistributor.setReadOnly(HQ.isChange);
+    //}
+    if (HQ.store.isChange(App.stoSaleProduct) == true || HQ.store.isChange(App.stoSurveyInvt) == true || HQ.store.isChange(App.stoSurveyCriteria) == true)
+    {
+        App.cboSurveyID.setReadOnly(true);
+        App.cboDistributor.setReadOnly(true);
+    }
+    else
+    {
         App.cboSurveyID.setReadOnly(false);
         App.cboDistributor.setReadOnly(false);
-    }
-    else {
-        App.cboSurveyID.setReadOnly(HQ.isChange);
-        App.cboDistributor.setReadOnly(HQ.isChange);
     }
 };
 
@@ -158,6 +170,7 @@ var Event = {
                 App.stoHeaderSurvey.reload();
             }
             checkSpecialChar(App.cboSurveyID.getValue());
+            App.slmDet.select(0);
         },
 
         cboStatus_Change: function (cbo, newValue, oldValue, eOpts) {
@@ -168,15 +181,17 @@ var Event = {
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
-            if(App.dtpToDate.getValue()!=null)
-            {
-                if(App.dtpToDate.getValue()<App.dtpFromDate.getValue())
-                {
-                    HQ.message.show(2016070401, [App.dtpToDate.fieldLabel, App.dtpFromDate.fieldLabel], '', true);
-                    App.dtpToDate.setValue('');
-                    App.dtpToDate.isValid();
-                }
-            }
+            //if (checknew == false)
+            //{
+            //    if (App.dtpToDate.getValue() != null) {
+            //        if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
+            //            HQ.message.show(2016070401, [App.dtpToDate.fieldLabel, App.dtpFromDate.fieldLabel], '', true);
+            //            App.dtpToDate.setValue('');
+            //            App.dtpToDate.isValid();
+            //        }
+            //    }
+            //}
+            checknew = false;
         },
 
         menuClick : function (command) {
@@ -251,13 +266,17 @@ var Event = {
                     break;
                 case "new":
                     if (HQ.isInsert) {
+                        checknew = true;
                         if (HQ.focus == 'header') {
                             if (HQ.isChange) {
                                 HQ.message.show(150, '', 'refresh');
                             } else {
+                                
                                 App.cboSurveyID.setValue('');
-                                App.cboSurveyID.store.reload();
-                                App.stoHeaderSurvey.reload();
+
+
+                                //App.cboSurveyID.store.reload();
+                                //App.stoHeaderSurvey.reload();
                             }
                         }
                         else if (HQ.focus == 'Condition') {
@@ -342,14 +361,43 @@ var Event = {
                     //break;
                 case "save":
                     if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                        if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSurveyInvt, keysSurveyInvt, fieldsCheckSurveyInvt, fieldsLangSurveyInvt)
+                        if (HQ.store.checkRequirePass(App.stoSurveyInvt, keysSurveyInvt, fieldsCheckSurveyInvt, fieldsLangSurveyInvt)
                                 && HQ.store.checkRequirePass(App.stoSurveyCriteria, keysSurveyCriteria, fieldsCheckSurveyCriteria, fieldsLangSurveyCriteria)) {
+                            lstInvtID = App.grdInvt.store.snapshot || App.grdInvt.store.allData || App.grdInvt.store.data;
+                            lstSurveyInvt =App.grdSurveyInvt.store.snapshot || App.grdSurveyInvt.store.allData || App.grdSurveyInvt.store.data;
+                            var error = "";
+                            if (lstInvtID != undefined)
+                            {
+                                for(var i =0 ;i< lstInvtID.length;i++)
+                                {
+                                    var objRecord = HQ.store.findInStore(App.stoSurveyInvt, ['InvtID'], [lstInvtID.items[i].data.InvtID]);
+                                    if(objRecord==undefined)
+                                    {
+                                        error += (i + 1) + ", ";
+                                    }
+                                }
+                            }
                             if (App.stoSurveyCriteria.data.items.length > 1) {
-                                save();
+                                if (error != "")
+                                {
+                                    HQ.message.show(2018070561, [error], '', true);
+                                    return;
+                                }
+                                else
+                                {
+                                    if (!App.frmMain.isValid()) {
+                                        showFieldInvalid(App.frmMain);
+                                        return false;
+                                    }
+                                    else {
+                                        save();
+                                    }
+                                }
                             }
                             else {
                                 HQ.message.show(20180615);
                             }
+                            
                         }
                     }
                     break;
@@ -384,6 +432,7 @@ var Event = {
                     HQ.store.insertBlank(sto, keysInvt);
                 }
             }
+            App.slmDet.select(0);
         },
 
         stoSurveyInvt_load: function(sto){
@@ -424,7 +473,12 @@ var Event = {
         grdSurveyInvt_Edit: function (item, e) {
             HQ.grid.checkInsertKey(App.grdSurveyInvt, e, keysSurveyInvt);
             var objDetail = e.record.data;
-
+            if (App.slmDet.selected.items[0].data.InvtID == "")
+            {
+                e.record.set('CompID', '');
+                e.record.set('CompName', '');
+                HQ.message.show(2018070560, [HQ.common.getLang("SaleProduct")], '', true);
+            }
             var objCompID = HQ.store.findInStore(App.cboCompID.store, ["CompID"], [objDetail.CompID]);
             var objCompInvtID = HQ.store.findInStore(App.cboCompInvtID.store, ["CompInvtID"], [objDetail.CompInvtID]);
             e.record.set('InvtID', App.slmDet.selected.items[0].data.InvtID);
@@ -442,17 +496,21 @@ var Event = {
         },
 
         grdSurveyInvt_BeforeEdit: function (editor, e) {
-            if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
-                HQ.message.show(2018062001);
-                return false;
-            }
+            //if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
+            //    HQ.message.show(2018062001);
+            //    return false;
+            //}
+            //if (HQ.store.isChange(App.stoSaleProduct) == false)
+            //{
+            //    HQ.message.show(2018070560, [HQ.common.getLang("SaleProduct")], '', true);
+            //}
             if (HQ.form.checkRequirePass(App.frmMain) && App.cboStatus.getValue() == _beginStatus) {
                 return HQ.grid.checkBeforeEdit(e, keysSurveyInvt);
             }
             else {
                 return false;
             }
-
+            frmChange();
         },
 
         grdSurveyInvt_ValidateEdit: function (item, e) {
@@ -478,10 +536,10 @@ var Event = {
         },
 
         stoSurveyCriteria_BeforeEdit: function (editor, e) {
-            if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
-                HQ.message.show(2018062001);
-                return false;
-            }
+            //if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
+            //    HQ.message.show(2018062001);
+            //    return false;
+            //}
             if (HQ.form.checkRequirePass(App.frmMain) && App.cboStatus.getValue() == _beginStatus) {
                 return HQ.grid.checkBeforeEdit(e, keysSurveyCriteria);
             }
@@ -520,7 +578,7 @@ var Event = {
             frmChange();
         },
         grdInvt_ValidateEdit: function (item, e) {
-            //return HQ.grid.checkValidateEdit(App.grdInvt, e, keysInvt);
+            return HQ.grid.checkValidateEdit(App.grdInvt, e, ["InvtID"]);
         },
         grdInvt_Reject: function (record) {
             HQ.grid.checkReject(record, App.grdInvt);
@@ -560,8 +618,7 @@ var save = function () {
                 lstHeader: Ext.encode(App.stoHeaderSurvey.getRecordsValues()),
                 lstSurveyCriteria: HQ.store.getData(App.stoSurveyCriteria),
                 lstSurveyInvt: HQ.store.getData(App.stoSurveyInvt),
-                lstDel: Ext.encode(App.stoDel4Save.getRecordsValues()),
-                invtID: App.slmDet.selected.items[0].data.InvtID
+                lstDel: Ext.encode(App.stoDel4Save.getRecordsValues())
             },
 
             success: function (msg, data) {
@@ -600,40 +657,25 @@ var deleteData = function (item) {
     if (item == "yes") {
 
         if (HQ.focus == 'header') {
-
             if (App.frmMain.isValid()) {
-
                 App.frmMain.updateRecord();
-
                 App.frmMain.submit({
-
                     waitMsg: HQ.common.getLang("DeletingData"),
-
                     url: 'OM20090/DeleteAll',
-
-                    timeout: 7200,
-
+                    timeout: 1000000,
                     success: function (msg, data) {
-
-                        //HQ.BranchID = '';
+                        
+                        App.cboSurveyID.setValue('');
+                        //App.stoHeaderSurvey.reload();
                         App.cboSurveyID.store.reload();
-                        App.cboSurveyID.setValue("");
-                        App.stoHeaderSurvey.reload();
-
+                        App.cboSurveyID.forceSelection = true;
                     },
 
                     failure: function (msg, data) {
-
                         HQ.message.process(msg, data, true);
-
                     }
-
                 });
-
             }
-
-
-
         }
 
         else if (HQ.focus == 'Condition') {
@@ -728,4 +770,26 @@ var checkSpecialChar = function (value) {
             App.cboSurveyID.setValue('');
             return false;
         }
+};
+
+var focusOnInvalidField = function (item) {
+    if (item == "ok") {
+        App.frmMain.getForm().getFields().each(function (field) {
+            if (!field.isValid()) {
+                field.focus();
+                return false;
+            }
+        });
+    }
+};
+var showFieldInvalid = function (form) {
+    var done = 1;
+    form.getForm().getFields().each(function (field) {
+        if (!field.isValid()) {
+            HQ.message.show(15, field.fieldLabel, 'focusOnInvalidField');
+            done = 0;
+            return false;
+        }
+    });
+    return done;
 };
