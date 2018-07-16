@@ -811,8 +811,8 @@ namespace INProcess
                                     else
                                         lotQty = (lotRow.Double("Qty") * lotRow.Short("InvtMult")) / lotRow.Double("CnvFact");
 
-                                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
-                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+                                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + lotQty, 0);
+                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + lotQty, 0);
 
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
