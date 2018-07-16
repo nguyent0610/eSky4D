@@ -1828,6 +1828,7 @@ var checkExitEditLot = function (row) {
         if (!Ext.isEmpty(lot.LotSerNbr)) {
             var newRow = Ext.create('App.mdlLotTrans');
             newRow.data.INTranLineRef = lot.INTranLineRef;
+            newRow.data.ToWhseLoc = record.data.ToWhseLoc;
             HQ.store.insertRecord(App.stoLotTrans, key, newRow, true);
         }
     }
