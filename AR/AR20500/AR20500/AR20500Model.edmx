@@ -111,6 +111,8 @@
           <Property Name="BillMarket" Type="varchar" MaxLength="30" />
           <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="LocationCheckType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="VendorID" Type="nvarchar" MaxLength="30" />
+          <Property Name="BuyerID" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -214,6 +216,7 @@
           <Property Name="Market" Type="varchar" MaxLength="30" />
           <Property Name="Date1" Type="datetime" />
           <Property Name="Date2" Type="datetime" />
+          <Property Name="ClassCust" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -303,6 +306,7 @@
           <Property Name="IsDupliApprove" Type="bit" Nullable="false" />
           <Property Name="Date1" Type="datetime" />
           <Property Name="Date2" Type="datetime" />
+          <Property Name="ClassCust" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -368,6 +372,7 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ExtendRoute" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_SalesRouteMaster">
           <Key>
@@ -405,6 +410,7 @@
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
           <Property Name="DelRouteDet" Type="bit" Nullable="false" />
           <Property Name="VisitsPerDay" Type="int" Nullable="false" />
+          <Property Name="ExtendRoute" Type="bit" />
         </EntityType>
         <Function Name="AR20500_AfterApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NewcustID" Type="varchar" Mode="In" />
@@ -618,6 +624,7 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ExtendRoute" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -680,6 +687,8 @@
           <Property Type="Int32" Name="ShowOUnit" Nullable="false" />
           <Property Type="Int32" Name="ShowMobile" Nullable="false" />
           <Property Type="Boolean" Name="HideMarketRoute" Nullable="true" />
+          <Property Type="Boolean" Name="MCPBranchRoute" Nullable="true" />
+          <Property Type="Boolean" Name="ShowClassCust" Nullable="true" />
           </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -721,6 +730,7 @@
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DelRouteDet" Type="Boolean" Nullable="false" />
           <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
+          <Property Name="ExtendRoute" Type="Boolean" />
         </EntityType>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -810,6 +820,7 @@
           <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
           <Property Type="DateTime" Name="Date1" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="Date2" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ClassCust" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -917,6 +928,8 @@
           <Property Name="PhotoCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="PPCPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="LocationCheckType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="VendorID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BuyerID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="AR20500_pdSalesRouteID_Result">
           <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" />
@@ -1000,8 +1013,8 @@
           <Property Name="UpdateType" Type="Int32" Nullable="false" />
           <Property Name="Reason" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
+          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StandID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -1010,6 +1023,7 @@
           <Property Name="Market" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Date1" Type="DateTime" Precision="3" />
           <Property Name="Date2" Type="DateTime" Precision="3" />
+          <Property Name="ClassCust" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -1099,6 +1113,7 @@
           <Property Name="IsDupliApprove" Type="Boolean" Nullable="false" />
           <Property Name="Date1" Type="DateTime" Precision="3" />
           <Property Name="Date2" Type="DateTime" Precision="3" />
+          <Property Name="ClassCust" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1127,6 +1142,7 @@
           <EntitySetMapping Name="OM_SalesRouteDet">
             <EntityTypeMapping TypeName="AR20500Model.OM_SalesRouteDet">
               <MappingFragment StoreEntitySet="OM_SalesRouteDet">
+                <ScalarProperty Name="ExtendRoute" ColumnName="ExtendRoute" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -1215,6 +1231,8 @@
                 <ScalarProperty Name="ShowOUnit" ColumnName="ShowOUnit" />
                 <ScalarProperty Name="ShowMobile" ColumnName="ShowMobile" />
                 <ScalarProperty Name="HideMarketRoute" ColumnName="HideMarketRoute" />
+                <ScalarProperty Name="MCPBranchRoute" ColumnName="MCPBranchRoute" />
+                <ScalarProperty Name="ShowClassCust" ColumnName="ShowClassCust" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1229,6 +1247,7 @@
           <EntitySetMapping Name="OM_SalesRouteMaster">
             <EntityTypeMapping TypeName="AR20500Model.OM_SalesRouteMaster">
               <MappingFragment StoreEntitySet="OM_SalesRouteMaster">
+                <ScalarProperty Name="ExtendRoute" ColumnName="ExtendRoute" />
                 <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="DelRouteDet" ColumnName="DelRouteDet" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
@@ -1350,12 +1369,15 @@
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
+                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BuyerID" ColumnName="BuyerID" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
                 <ScalarProperty Name="LocationCheckType" ColumnName="LocationCheckType" />
                 <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
                 <ScalarProperty Name="PhotoCode" ColumnName="PhotoCode" />
@@ -1475,6 +1497,7 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="Market" ColumnName="Market" />
@@ -1483,8 +1506,8 @@
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="StandID" ColumnName="StandID" />
-                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
+                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
@@ -1561,6 +1584,7 @@
           <EntitySetMapping Name="AR_NewCustomerInforHis">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInforHis">
               <MappingFragment StoreEntitySet="AR_NewCustomerInforHis">
+                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="IsDupliApprove" ColumnName="IsDupliApprove" />
@@ -1673,8 +1697,8 @@
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.875" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="2" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="12.375" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="5.375" PointY="0.75" />
         </Diagram>
     </Diagrams>
   </Designer>

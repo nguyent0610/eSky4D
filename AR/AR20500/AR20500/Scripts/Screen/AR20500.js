@@ -33,7 +33,15 @@ var frmMain_BoxReady = function () {
     }
     if (HQ.showVisitsPerDay) {
         HQ.grid.show(App.grdCust, ['VisitsPerDay']);
-    }    
+    }
+
+    if (HQ.showClassCust) {
+        HQ.grid.show(App.grdCust, ['ClassCust']);
+    }
+    else {
+        HQ.grid.hide(App.grdCust, ['ClassCust']);
+    }
+
     showSubRoute(0);
     App.stoAR20500_pdSubRoute.reload();
     App.stoAR20500_pdWeekofVisitAll.load(function () {
@@ -893,6 +901,14 @@ var renderChannel = function (value) {
 };
 var renderLocation = function (value) {
     var obj = App.cboColLocation.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderClassCust = function (value) {
+    var obj = App.cboClassCust.store.findRecord("Code", value);
     if (obj) {
         return obj.data.Descr;
     }

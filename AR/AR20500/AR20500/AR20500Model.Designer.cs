@@ -3421,6 +3421,54 @@ namespace AR20500
         private global::System.String _LocationCheckType;
         partial void OnLocationCheckTypeChanging(global::System.String value);
         partial void OnLocationCheckTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String VendorID
+        {
+            get
+            {
+                return _VendorID;
+            }
+            set
+            {
+                OnVendorIDChanging(value);
+                ReportPropertyChanging("VendorID");
+                _VendorID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("VendorID");
+                OnVendorIDChanged();
+            }
+        }
+        private global::System.String _VendorID;
+        partial void OnVendorIDChanging(global::System.String value);
+        partial void OnVendorIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BuyerID
+        {
+            get
+            {
+                return _BuyerID;
+            }
+            set
+            {
+                OnBuyerIDChanging(value);
+                ReportPropertyChanging("BuyerID");
+                _BuyerID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BuyerID");
+                OnBuyerIDChanged();
+            }
+        }
+        private global::System.String _BuyerID;
+        partial void OnBuyerIDChanging(global::System.String value);
+        partial void OnBuyerIDChanged();
 
         #endregion
 
@@ -5473,30 +5521,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String TypeCabinets
-        {
-            get
-            {
-                return _TypeCabinets;
-            }
-            set
-            {
-                OnTypeCabinetsChanging(value);
-                ReportPropertyChanging("TypeCabinets");
-                _TypeCabinets = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("TypeCabinets");
-                OnTypeCabinetsChanged();
-            }
-        }
-        private global::System.String _TypeCabinets;
-        partial void OnTypeCabinetsChanging(global::System.String value);
-        partial void OnTypeCabinetsChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 VisitsPerDay
@@ -5517,6 +5541,30 @@ namespace AR20500
         private global::System.Int32 _VisitsPerDay;
         partial void OnVisitsPerDayChanging(global::System.Int32 value);
         partial void OnVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5709,6 +5757,30 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassCust
+        {
+            get
+            {
+                return _ClassCust;
+            }
+            set
+            {
+                OnClassCustChanging(value);
+                ReportPropertyChanging("ClassCust");
+                _ClassCust = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassCust");
+                OnClassCustChanged();
+            }
+        }
+        private global::System.String _ClassCust;
+        partial void OnClassCustChanging(global::System.String value);
+        partial void OnClassCustChanged();
 
         #endregion
 
@@ -7732,6 +7804,30 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassCust
+        {
+            get
+            {
+                return _ClassCust;
+            }
+            set
+            {
+                OnClassCustChanging(value);
+                ReportPropertyChanging("ClassCust");
+                _ClassCust = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassCust");
+                OnClassCustChanged();
+            }
+        }
+        private global::System.String _ClassCust;
+        partial void OnClassCustChanging(global::System.String value);
+        partial void OnClassCustChanged();
 
         #endregion
 
@@ -8547,7 +8643,8 @@ namespace AR20500
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static OM_SalesRouteDet CreateOM_SalesRouteDet(global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.DateTime visitDate, global::System.String dayofWeek, global::System.String pJPID, global::System.String slsFreq, global::System.String slsFreqType, global::System.String weekofVisit, global::System.Int32 weekNbr, global::System.Int32 visitSort, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
+        /// <param name="extendRoute">Initial value of the ExtendRoute property.</param>
+        public static OM_SalesRouteDet CreateOM_SalesRouteDet(global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.DateTime visitDate, global::System.String dayofWeek, global::System.String pJPID, global::System.String slsFreq, global::System.String slsFreqType, global::System.String weekofVisit, global::System.Int32 weekNbr, global::System.Int32 visitSort, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean extendRoute)
         {
             OM_SalesRouteDet oM_SalesRouteDet = new OM_SalesRouteDet();
             oM_SalesRouteDet.SalesRouteID = salesRouteID;
@@ -8569,6 +8666,7 @@ namespace AR20500
             oM_SalesRouteDet.LUpd_User = lUpd_User;
             oM_SalesRouteDet.tstamp = tstamp;
             oM_SalesRouteDet.BranchID = branchID;
+            oM_SalesRouteDet.ExtendRoute = extendRoute;
             return oM_SalesRouteDet;
         }
 
@@ -9046,6 +9144,30 @@ namespace AR20500
         private global::System.String _BranchID;
         partial void OnBranchIDChanging(global::System.String value);
         partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ExtendRoute
+        {
+            get
+            {
+                return _ExtendRoute;
+            }
+            set
+            {
+                OnExtendRouteChanging(value);
+                ReportPropertyChanging("ExtendRoute");
+                _ExtendRoute = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExtendRoute");
+                OnExtendRouteChanged();
+            }
+        }
+        private global::System.Boolean _ExtendRoute;
+        partial void OnExtendRouteChanging(global::System.Boolean value);
+        partial void OnExtendRouteChanged();
 
         #endregion
 
@@ -9811,6 +9933,30 @@ namespace AR20500
         private global::System.Int32 _VisitsPerDay;
         partial void OnVisitsPerDayChanging(global::System.Int32 value);
         partial void OnVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ExtendRoute
+        {
+            get
+            {
+                return _ExtendRoute;
+            }
+            set
+            {
+                OnExtendRouteChanging(value);
+                ReportPropertyChanging("ExtendRoute");
+                _ExtendRoute = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExtendRoute");
+                OnExtendRouteChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ExtendRoute;
+        partial void OnExtendRouteChanging(Nullable<global::System.Boolean> value);
+        partial void OnExtendRouteChanged();
 
         #endregion
 
@@ -10486,6 +10632,54 @@ namespace AR20500
         private Nullable<global::System.Boolean> _HideMarketRoute;
         partial void OnHideMarketRouteChanging(Nullable<global::System.Boolean> value);
         partial void OnHideMarketRouteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> MCPBranchRoute
+        {
+            get
+            {
+                return _MCPBranchRoute;
+            }
+            set
+            {
+                OnMCPBranchRouteChanging(value);
+                ReportPropertyChanging("MCPBranchRoute");
+                _MCPBranchRoute = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MCPBranchRoute");
+                OnMCPBranchRouteChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _MCPBranchRoute;
+        partial void OnMCPBranchRouteChanging(Nullable<global::System.Boolean> value);
+        partial void OnMCPBranchRouteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowClassCust
+        {
+            get
+            {
+                return _ShowClassCust;
+            }
+            set
+            {
+                OnShowClassCustChanging(value);
+                ReportPropertyChanging("ShowClassCust");
+                _ShowClassCust = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowClassCust");
+                OnShowClassCustChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowClassCust;
+        partial void OnShowClassCustChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowClassCustChanged();
 
         #endregion
 
@@ -12782,6 +12976,30 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassCust
+        {
+            get
+            {
+                return _ClassCust;
+            }
+            set
+            {
+                OnClassCustChanging(value);
+                ReportPropertyChanging("ClassCust");
+                _ClassCust = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassCust");
+                OnClassCustChanged();
+            }
+        }
+        private global::System.String _ClassCust;
+        partial void OnClassCustChanging(global::System.String value);
+        partial void OnClassCustChanged();
 
         #endregion
 

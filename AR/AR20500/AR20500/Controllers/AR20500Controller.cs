@@ -113,6 +113,7 @@ namespace AR20500.Controllers
             var showVisitsPerDay = false;
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
+            var showClassCust = false;
             var allowEditContactName = string.Empty;
             var showOUnit = 0;
             var showMobile = 0;
@@ -141,6 +142,7 @@ namespace AR20500.Controllers
                 editPhone = objConfig.EditPhone.HasValue && objConfig.EditPhone.Value;
                 showOUnit = objConfig.ShowOUnit;
                 showMobile = objConfig.ShowMobile;
+                showClassCust = objConfig.ShowClassCust.HasValue && objConfig.ShowClassCust.Value;
             }
             else
             {
@@ -169,6 +171,7 @@ namespace AR20500.Controllers
             ViewBag.config = objConfig;
             ViewBag.showOUnit = showOUnit;
             ViewBag.showMobile = showMobile;
+            ViewBag.showClassCust = showClassCust;
             #endregion
             var obj = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (obj != null)
@@ -446,6 +449,7 @@ namespace AR20500.Controllers
                                 objNew.Startday = fromDate;
                                 objNew.Endday = toDate;                                
                                 objNew.Status = handle;
+                                
                                 if (checkApproveEditCust)
                                 {
                                     objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
@@ -546,6 +550,7 @@ namespace AR20500.Controllers
             objNew.ContactName = item.ContactName;
             objNew.Reason = item.Reason;
             objNew.ClassId = item.ClassId;
+            objNew.ClassCust = item.ClassCust;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
             objNew.TypeCabinets = item.TypeCabinets;
@@ -553,6 +558,7 @@ namespace AR20500.Controllers
             objNew.TaxCode = item.TaxCode;
             objNew.OUnit = item.OUnit;
             objNew.Market = item.Market;
+            objNew.ClassCust = item.ClassCust;
             if (status == "H")
             {
                 if(handle=="O" || handle=="D")
@@ -669,7 +675,8 @@ namespace AR20500.Controllers
                 TypeCabinets = objNew.TypeCabinets,
                 OUnit = objNew.OUnit,
                 Date1=objNew.Date1,
-                Date2=objNew.Date2
+                Date2=objNew.Date2,
+                ClassCust=objNew.ClassCust
             };
             _db.AR_NewCustomerInforHis.AddObject(objHis);
         }

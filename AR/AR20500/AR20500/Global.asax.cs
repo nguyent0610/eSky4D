@@ -36,7 +36,7 @@ namespace AR20500
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-			Current.Server = "TRUONGSAD"; //"EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+			Current.Server = "HOANGSAD"; //"EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "KidoTraining_eSky4DSys";//"ND_eSky4DSys";//"ANVM_eSky4DSys";//"ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
