@@ -194,8 +194,9 @@
                         .HQParam(new StoreParameterCollection() 
                         {
                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.CpnyID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@LangID", Value = "HQ.LangID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.CpnyID", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@BranchID", Value = "App.CpnyIDHand.getValue().join()", Mode = ParameterMode.Raw }
                     })
                         .LoadData().Width(500)
                 )

@@ -228,6 +228,7 @@ var CpnyIDHand_Change = function (sender, value) {
     if (sender.hasFocus)
         GetAllCompany();
     //}
+    App.cboCategory.store.reload();
 };
 var cboUserID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
