@@ -67,8 +67,10 @@
                 }
             )
         )
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+        <input type="password" name="password" id="password" value="" style="width:1px; height:1px;">
         <!-- Gọi hàm Body trong SA00300Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
-        <input type="password" name="password" id="password" value="" style="width: 1px;height: 1px;">
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>
