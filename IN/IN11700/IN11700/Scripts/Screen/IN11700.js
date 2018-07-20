@@ -44,7 +44,7 @@ var checkStoreLoad = function () {
     frmChange();
     _detSource++;
     if (_detSource == 2 || _isLoadMaster) {
-        HQ.common.showBusy(false);
+        //HQ.common.showBusy(false);
         _isLoadMaster = true;
         if (App.grdSite.selModel.selected.length == 0) {
             App.slmHeader.select(0);
@@ -139,7 +139,7 @@ var menuClick = function (command) {
                                     QtyLoc += lstLot.items[j].data.Qty;
                                 }                              
                             }
-                            if (QtyLoc != lstComponent.items[i].data.ComponentQty) {
+                            if (QtyLoc != lstComponent.items[i].data.ComponentQty && lstComponent.items[i].data.LotSerTrack != 'N') {
                                 HQ.message.show(2018060760, [HQ.common.getLang("IN11700Component")], '', true);
                                 return;
                             }
@@ -212,7 +212,11 @@ var stoBatch_Load = function () {
     if (record) {
         bindBatch(record);
     }
-
+    else
+    {
+        App.cboSite.store.reload();
+        App.cboSiteTP.store.reload();
+    }
 };
 var stoSite_Load = function (sto, records, successful, eOpts) {
     if (App.cboStatus.getValue() != "C")
@@ -231,7 +235,8 @@ var stoSite_Load = function (sto, records, successful, eOpts) {
 
 var stoComponent_Load = function (sto, records, successful, eOpts) {
     for (var i = 0; i < sto.data.length; i++) {
-        var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['LineRef', 'ComponentID'], [records[i].data.LineRef, records[i].data.ComponentID]);
+        //var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['LineRef', 'ComponentID'], [records[i].data.LineRef, records[i].data.ComponentID]);
+        var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['InvtID', 'ComponentID'], [records[i].data.InvtID, records[i].data.ComponentID]);
         if (objComponent == undefined)
         {
             if (sto.data.items[i].data.LineRef == "")
@@ -1059,6 +1064,7 @@ function addnew() {
     HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
     App.stoLotTrans4Save.loadData([], false);
+    App.stoComponent4Save.loadData([], false);
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
     record.data.DateEnt = HQ.bussinessDate;
@@ -1484,7 +1490,7 @@ var btnLotDPBB_Click = function () {
         var rcInvt = HQ.store.findRecord(App.stoSite, ['InvtID'], [this.record.data.InvtID]);
         this.record.invt = rcInvt.data;
     }
-    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && !Ext.isEmpty(this.record.data.UnitDesc)) {
+    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
         showLotDPBB(this.record, true);
     }
 };
@@ -1493,11 +1499,7 @@ var btnLot_Click = function () {
         var rcInvt = HQ.store.findRecord(App.stoCompo, ['ComponentID'], [this.record.data.ComponentID]);
         this.record.invt = rcInvt.data;
     }
-
-    //if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
-    //    showLot(this.record, true);
-    //}
-    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && !Ext.isEmpty(this.record.data.Unit)) {
+    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.Unit)) {
         showLot(this.record, true);
     }
 };
@@ -1744,10 +1746,13 @@ var showLot = function (record, loadCombo) {
         }
     });
     if (HQ.isInsert) {
-        var newRecord = HQ.store.findRecord(App.stoLotTrans, ['LotSerNbr'], ['']);
-        if (!newRecord) {
-            HQ.store.insertBlank(App.stoLotTrans, ['LotSerNbr']);
-        }
+        //var newRecord = HQ.store.findRecord(App.stoLotTrans, ['LotSerNbr'], ['']);
+        var objComponentID = HQ.store.findInStore(App.stoComponent4Save, ['InvtID', 'ComponentID'], [record.data.InvtID, record.data.ComponentID]);
+        var newRecord = Ext.create('App.mdlLotTrans');
+        //if (!newRecord) {
+        newRecord.data.INTranLineRef = objComponentID.LineRef;
+            HQ.store.insertBlank(App.stoLotTrans, ['LotSerNbr'], newRecord, true);
+        //}
     }
     App.stoLotTrans.resumeEvents();
     App.grdLot.view.refresh();
@@ -1899,12 +1904,12 @@ var cboSiteTP_Focus = function () {
     App.cboSiteTP.store.filter("CpnyID", code);
 }
 var cboSiteLocation_Focus = function () {
-    //App.cboSiteLocation.store.clearFilter();
-    //var code = "@@@@@";
-    //if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
-    //    code = App.cboSite.getValue();
-    //}
-    //App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
+    App.cboSiteLocation.store.clearFilter();
+    var code = "@@@@@";
+    if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
+        code = App.cboSite.getValue();
+    }
+    App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
 }
 var cboSiteTPLocation_Focus = function () {
     App.cboSiteTPLocation.store.clearFilter();
