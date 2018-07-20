@@ -551,47 +551,6 @@ namespace AR20500
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pdConfig_Result> AR20500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<AR20500_pdConfig_Result>("AR20500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
         public ObjectResult<AR20500_pcReason_Result> AR20500_pcReason(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter userNameParameter;
@@ -913,6 +872,47 @@ namespace AR20500
             }
     
             return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, statusParameter, handleParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter, updateTypeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pdConfig_Result> AR20500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pdConfig_Result>("AR20500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -5521,30 +5521,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 VisitsPerDay
-        {
-            get
-            {
-                return _VisitsPerDay;
-            }
-            set
-            {
-                OnVisitsPerDayChanging(value);
-                ReportPropertyChanging("VisitsPerDay");
-                _VisitsPerDay = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("VisitsPerDay");
-                OnVisitsPerDayChanged();
-            }
-        }
-        private global::System.Int32 _VisitsPerDay;
-        partial void OnVisitsPerDayChanging(global::System.Int32 value);
-        partial void OnVisitsPerDayChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String TypeCabinets
@@ -5565,6 +5541,30 @@ namespace AR20500
         private global::System.String _TypeCabinets;
         partial void OnTypeCabinetsChanging(global::System.String value);
         partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitsPerDay
+        {
+            get
+            {
+                return _VisitsPerDay;
+            }
+            set
+            {
+                OnVisitsPerDayChanging(value);
+                ReportPropertyChanging("VisitsPerDay");
+                _VisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitsPerDay");
+                OnVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _VisitsPerDay;
+        partial void OnVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnVisitsPerDayChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5637,30 +5637,6 @@ namespace AR20500
         private global::System.String _SizeID;
         partial void OnSizeIDChanging(global::System.String value);
         partial void OnSizeIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String DisplayID
-        {
-            get
-            {
-                return _DisplayID;
-            }
-            set
-            {
-                OnDisplayIDChanging(value);
-                ReportPropertyChanging("DisplayID");
-                _DisplayID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("DisplayID");
-                OnDisplayIDChanged();
-            }
-        }
-        private global::System.String _DisplayID;
-        partial void OnDisplayIDChanging(global::System.String value);
-        partial void OnDisplayIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5763,24 +5739,24 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String ClassCust
+        public global::System.String DisplayID
         {
             get
             {
-                return _ClassCust;
+                return _DisplayID;
             }
             set
             {
-                OnClassCustChanging(value);
-                ReportPropertyChanging("ClassCust");
-                _ClassCust = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ClassCust");
-                OnClassCustChanged();
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
             }
         }
-        private global::System.String _ClassCust;
-        partial void OnClassCustChanging(global::System.String value);
-        partial void OnClassCustChanged();
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
 
         #endregion
 
@@ -7804,30 +7780,6 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ClassCust
-        {
-            get
-            {
-                return _ClassCust;
-            }
-            set
-            {
-                OnClassCustChanging(value);
-                ReportPropertyChanging("ClassCust");
-                _ClassCust = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ClassCust");
-                OnClassCustChanged();
-            }
-        }
-        private global::System.String _ClassCust;
-        partial void OnClassCustChanging(global::System.String value);
-        partial void OnClassCustChanged();
 
         #endregion
 
@@ -10064,7 +10016,8 @@ namespace AR20500
         /// <param name="allowEditContactName">Initial value of the AllowEditContactName property.</param>
         /// <param name="showOUnit">Initial value of the ShowOUnit property.</param>
         /// <param name="showMobile">Initial value of the ShowMobile property.</param>
-        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason, global::System.Int32 maxVisitsPerDay, global::System.String allowEditContactName, global::System.Int32 showOUnit, global::System.Int32 showMobile)
+        /// <param name="limitedYear">Initial value of the LimitedYear property.</param>
+        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason, global::System.Int32 maxVisitsPerDay, global::System.String allowEditContactName, global::System.Int32 showOUnit, global::System.Int32 showMobile, global::System.String limitedYear)
         {
             AR20500_pdConfig_Result aR20500_pdConfig_Result = new AR20500_pdConfig_Result();
             aR20500_pdConfig_Result.AllowSave = allowSave;
@@ -10074,12 +10027,37 @@ namespace AR20500
             aR20500_pdConfig_Result.AllowEditContactName = allowEditContactName;
             aR20500_pdConfig_Result.ShowOUnit = showOUnit;
             aR20500_pdConfig_Result.ShowMobile = showMobile;
+            aR20500_pdConfig_Result.LimitedYear = limitedYear;
             return aR20500_pdConfig_Result;
         }
 
         #endregion
 
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowERPCust
+        {
+            get
+            {
+                return _IsShowERPCust;
+            }
+            set
+            {
+                OnIsShowERPCustChanging(value);
+                ReportPropertyChanging("IsShowERPCust");
+                _IsShowERPCust = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowERPCust");
+                OnIsShowERPCustChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowERPCust;
+        partial void OnIsShowERPCustChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowERPCustChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -10128,30 +10106,6 @@ namespace AR20500
         private Nullable<global::System.Boolean> _IsShowReason;
         partial void OnIsShowReasonChanging(Nullable<global::System.Boolean> value);
         partial void OnIsShowReasonChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> IsShowERPCust
-        {
-            get
-            {
-                return _IsShowERPCust;
-            }
-            set
-            {
-                OnIsShowERPCustChanging(value);
-                ReportPropertyChanging("IsShowERPCust");
-                _IsShowERPCust = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsShowERPCust");
-                OnIsShowERPCustChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _IsShowERPCust;
-        partial void OnIsShowERPCustChanging(Nullable<global::System.Boolean> value);
-        partial void OnIsShowERPCustChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -10680,6 +10634,30 @@ namespace AR20500
         private Nullable<global::System.Boolean> _ShowClassCust;
         partial void OnShowClassCustChanging(Nullable<global::System.Boolean> value);
         partial void OnShowClassCustChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LimitedYear
+        {
+            get
+            {
+                return _LimitedYear;
+            }
+            set
+            {
+                OnLimitedYearChanging(value);
+                ReportPropertyChanging("LimitedYear");
+                _LimitedYear = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LimitedYear");
+                OnLimitedYearChanged();
+            }
+        }
+        private global::System.String _LimitedYear;
+        partial void OnLimitedYearChanging(global::System.String value);
+        partial void OnLimitedYearChanged();
 
         #endregion
 
@@ -12976,30 +12954,6 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ClassCust
-        {
-            get
-            {
-                return _ClassCust;
-            }
-            set
-            {
-                OnClassCustChanging(value);
-                ReportPropertyChanging("ClassCust");
-                _ClassCust = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ClassCust");
-                OnClassCustChanged();
-            }
-        }
-        private global::System.String _ClassCust;
-        partial void OnClassCustChanging(global::System.String value);
-        partial void OnClassCustChanged();
 
         #endregion
 

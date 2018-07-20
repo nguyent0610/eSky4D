@@ -89,6 +89,7 @@ namespace AR20500.Controllers
         public ActionResult Index()
         {
             bool hideMarketRoute = false;
+            int LimitedYear = 0;
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             #region -Check config-                        
@@ -117,6 +118,7 @@ namespace AR20500.Controllers
             var allowEditContactName = string.Empty;
             var showOUnit = 0;
             var showMobile = 0;
+            var MCPBranchRoute = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -142,7 +144,6 @@ namespace AR20500.Controllers
                 editPhone = objConfig.EditPhone.HasValue && objConfig.EditPhone.Value;
                 showOUnit = objConfig.ShowOUnit;
                 showMobile = objConfig.ShowMobile;
-                showClassCust = objConfig.ShowClassCust.HasValue && objConfig.ShowClassCust.Value;
             }
             else
             {
@@ -171,14 +172,15 @@ namespace AR20500.Controllers
             ViewBag.config = objConfig;
             ViewBag.showOUnit = showOUnit;
             ViewBag.showMobile = showMobile;
-            ViewBag.showClassCust = showClassCust;
             #endregion
             var obj = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (obj != null)
             {
                 hideMarketRoute = obj.HideMarketRoute.HasValue && obj.HideMarketRoute.Value;
+                LimitedYear = objConfig.LimitedYear.ToInt() + 1;
             }
             ViewBag.hideMarketRoute = hideMarketRoute;
+            ViewBag.limitedYear = LimitedYear;
             return View();
         }
 
@@ -550,7 +552,7 @@ namespace AR20500.Controllers
             objNew.ContactName = item.ContactName;
             objNew.Reason = item.Reason;
             objNew.ClassId = item.ClassId;
-            objNew.ClassCust = item.ClassCust;
+            //objNew.ClassId = item.ClassCust;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
             objNew.TypeCabinets = item.TypeCabinets;
@@ -558,7 +560,6 @@ namespace AR20500.Controllers
             objNew.TaxCode = item.TaxCode;
             objNew.OUnit = item.OUnit;
             objNew.Market = item.Market;
-            objNew.ClassCust = item.ClassCust;
             if (status == "H")
             {
                 if(handle=="O" || handle=="D")
@@ -675,8 +676,7 @@ namespace AR20500.Controllers
                 TypeCabinets = objNew.TypeCabinets,
                 OUnit = objNew.OUnit,
                 Date1=objNew.Date1,
-                Date2=objNew.Date2,
-                ClassCust=objNew.ClassCust
+                Date2=objNew.Date2
             };
             _db.AR_NewCustomerInforHis.AddObject(objHis);
         }
@@ -687,6 +687,13 @@ namespace AR20500.Controllers
             master.EndDate = toDate;
             master.VisitSort = item.VisitSort.Value;
             master.SlsFreqType = "R";
+            var MCP = false;
+            var config = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            MCP = config.MCPBranchRoute.ToBool();
+            if(MCP==true)
+            {
+                master.SlsPerID = "";
+            }
             master.Crtd_DateTime = DateTime.Now;
             master.Crtd_Prog = _screenNbr;
             master.Crtd_User = Current.UserName;
@@ -827,7 +834,13 @@ namespace AR20500.Controllers
             var dFri = default(System.DateTime);
             var dSat = default(System.DateTime);
             var dSun = default(System.DateTime);
+            var MCP = false;
+            var config = _db.AR20500_pdConfig(Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault();
+            MCP=config.MCPBranchRoute.ToBool();
             _db.AR20500_DeleteSalesRouteDetByDate(FromDate, ToDate, master.SalesRouteID, master.CustID, master.BranchID);
+            
+
+
             DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
             DateTime date1 = new DateTime(2011, 1, 1);
             Calendar cal = dfi.Calendar;
@@ -859,7 +872,14 @@ namespace AR20500.Controllers
                         det.BranchID = master.BranchID;
                         det.SalesRouteID = master.SalesRouteID;
                         det.CustID = master.CustID;
+                        if(MCP==true)
+                        {
+                            det.SlsPerID = "";
+                        }
+                        else
+                        {
                         det.SlsPerID = master.SlsPerID;
+                        }
                         det.PJPID = master.PJPID;
                         det.SlsFreq = master.SlsFreq;
                         det.SlsFreqType = master.SlsFreqType;

@@ -211,12 +211,11 @@
           <Property Name="StandID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
           <Property Name="SizeID" Type="varchar" MaxLength="10" />
-          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
           <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="Market" Type="varchar" MaxLength="30" />
           <Property Name="Date1" Type="datetime" />
           <Property Name="Date2" Type="datetime" />
-          <Property Name="ClassCust" Type="varchar" MaxLength="10" />
+          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -306,7 +305,6 @@
           <Property Name="IsDupliApprove" Type="bit" Nullable="false" />
           <Property Name="Date1" Type="datetime" />
           <Property Name="Date2" Type="datetime" />
-          <Property Name="ClassCust" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -535,11 +533,6 @@
             <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="CustName" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR20500_pdConfig" ReturnType="Collection(AR20500Model.AR20500_pdConfig_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="AR20500_pcReason" ReturnType="Collection(AR20500Model.AR20500_pcReason_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -576,6 +569,11 @@
             <Parameter Name="Phone" Mode="In" Type="String" />
             <Parameter Name="Addr1" Mode="In" Type="String" />
             <Parameter Name="UpdateType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_pdConfig" ReturnType="Collection(AR20500Model.AR20500_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
           <EntitySet Name="AR_NewCustomerInforHis" EntityType="AR20500Model.AR_NewCustomerInforHis" />
@@ -663,33 +661,6 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="AR20500_pdConfig_Result">
-          <Property Type="Boolean" Name="IsShowCustHT" Nullable="true" />
-          <Property Type="Boolean" Name="IsShowReason" Nullable="true" />
-          <Property Type="Boolean" Name="IsShowERPCust" Nullable="true" />
-          <Property Type="Boolean" Name="ShowExport" Nullable="true" />
-          <Property Type="Boolean" Name="ShowEditCust" Nullable="true" />
-          <Property Type="String" Name="AllowSave" Nullable="false" MaxLength="8" />
-          <Property Type="String" Name="AllowApproveEditCust" Nullable="false" MaxLength="11" />
-          <Property Type="String" Name="AllowEditReason" Nullable="false" MaxLength="14" />
-          <Property Type="Boolean" Name="ShowSubRouteID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowVisitsPerDay" Nullable="true" />
-          <Property Type="Int32" Name="MaxVisitsPerDay" Nullable="false" />
-          <Property Type="Boolean" Name="RequireRefCustID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowTypeCabinets" Nullable="true" />
-          <Property Type="String" Name="AllowEditContactName" Nullable="false" MaxLength="11" />
-          <Property Type="Boolean" Name="ShowStandID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowBrandID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowSizeID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowDisplayID" Nullable="true" />
-          <Property Type="Boolean" Name="ShowTaxCode" Nullable="true" />
-          <Property Type="Boolean" Name="EditPhone" Nullable="true" />
-          <Property Type="Int32" Name="ShowOUnit" Nullable="false" />
-          <Property Type="Int32" Name="ShowMobile" Nullable="false" />
-          <Property Type="Boolean" Name="HideMarketRoute" Nullable="true" />
-          <Property Type="Boolean" Name="MCPBranchRoute" Nullable="true" />
-          <Property Type="Boolean" Name="ShowClassCust" Nullable="true" />
-          </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
@@ -820,7 +791,6 @@
           <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
           <Property Type="DateTime" Name="Date1" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="Date2" Nullable="true" Precision="23" />
-          <Property Type="String" Name="ClassCust" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -938,6 +908,34 @@
           <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
         </ComplexType>
+        <ComplexType Name="AR20500_pdConfig_Result">
+          <Property Type="Boolean" Name="IsShowERPCust" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowCustHT" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowReason" Nullable="true" />
+          <Property Type="Boolean" Name="ShowExport" Nullable="true" />
+          <Property Type="Boolean" Name="ShowEditCust" Nullable="true" />
+          <Property Type="String" Name="AllowSave" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="AllowApproveEditCust" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="AllowEditReason" Nullable="false" MaxLength="14" />
+          <Property Type="Boolean" Name="ShowSubRouteID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowVisitsPerDay" Nullable="true" />
+          <Property Type="Int32" Name="MaxVisitsPerDay" Nullable="false" />
+          <Property Type="Boolean" Name="RequireRefCustID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowTypeCabinets" Nullable="true" />
+          <Property Type="String" Name="AllowEditContactName" Nullable="false" MaxLength="11" />
+          <Property Type="Boolean" Name="ShowStandID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowBrandID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowSizeID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowDisplayID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowTaxCode" Nullable="true" />
+          <Property Type="Boolean" Name="EditPhone" Nullable="true" />
+          <Property Type="Int32" Name="ShowOUnit" Nullable="false" />
+          <Property Type="Int32" Name="ShowMobile" Nullable="false" />
+          <Property Type="Boolean" Name="HideMarketRoute" Nullable="true" />
+          <Property Type="Boolean" Name="MCPBranchRoute" Nullable="true" />
+          <Property Type="Boolean" Name="ShowClassCust" Nullable="true" />
+          <Property Type="String" Name="LimitedYear" Nullable="false" MaxLength="4" />
+        </ComplexType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
             <PropertyRef Name="ID" />
@@ -1013,17 +1011,16 @@
           <Property Name="UpdateType" Type="Int32" Nullable="false" />
           <Property Name="Reason" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
           <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
           <Property Name="StandID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DisplayID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="OUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Market" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Date1" Type="DateTime" Precision="3" />
           <Property Name="Date2" Type="DateTime" Precision="3" />
-          <Property Name="ClassCust" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -1113,7 +1110,6 @@
           <Property Name="IsDupliApprove" Type="Boolean" Nullable="false" />
           <Property Name="Date1" Type="DateTime" Precision="3" />
           <Property Name="Date2" Type="DateTime" Precision="3" />
-          <Property Name="ClassCust" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1205,37 +1201,6 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20500_pdIsShowCustHT" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdIsShowCustHT" />
           <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
-          <FunctionImportMapping FunctionImportName="AR20500_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdConfig">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20500Model.AR20500_pdConfig_Result">
-                <ScalarProperty Name="IsShowCustHT" ColumnName="IsShowCustHT" />
-                <ScalarProperty Name="IsShowReason" ColumnName="IsShowReason" />
-                <ScalarProperty Name="IsShowERPCust" ColumnName="IsShowERPCust" />
-                <ScalarProperty Name="ShowExport" ColumnName="ShowExport" />
-                <ScalarProperty Name="ShowEditCust" ColumnName="ShowEditCust" />
-                <ScalarProperty Name="AllowSave" ColumnName="AllowSave" />
-                <ScalarProperty Name="AllowApproveEditCust" ColumnName="AllowApproveEditCust" />
-                <ScalarProperty Name="AllowEditReason" ColumnName="AllowEditReason" />
-                <ScalarProperty Name="ShowSubRouteID" ColumnName="ShowSubRouteID" />
-                <ScalarProperty Name="ShowVisitsPerDay" ColumnName="ShowVisitsPerDay" />
-                <ScalarProperty Name="MaxVisitsPerDay" ColumnName="MaxVisitsPerDay" />
-                <ScalarProperty Name="RequireRefCustID" ColumnName="RequireRefCustID" />
-                <ScalarProperty Name="ShowTypeCabinets" ColumnName="ShowTypeCabinets" />
-                <ScalarProperty Name="AllowEditContactName" ColumnName="AllowEditContactName" />
-                <ScalarProperty Name="ShowStandID" ColumnName="ShowStandID" />
-                <ScalarProperty Name="ShowBrandID" ColumnName="ShowBrandID" />
-                <ScalarProperty Name="ShowSizeID" ColumnName="ShowSizeID" />
-                <ScalarProperty Name="ShowDisplayID" ColumnName="ShowDisplayID" />
-                <ScalarProperty Name="ShowTaxCode" ColumnName="ShowTaxCode" />
-                <ScalarProperty Name="EditPhone" ColumnName="EditPhone" />
-                <ScalarProperty Name="ShowOUnit" ColumnName="ShowOUnit" />
-                <ScalarProperty Name="ShowMobile" ColumnName="ShowMobile" />
-                <ScalarProperty Name="HideMarketRoute" ColumnName="HideMarketRoute" />
-                <ScalarProperty Name="MCPBranchRoute" ColumnName="MCPBranchRoute" />
-                <ScalarProperty Name="ShowClassCust" ColumnName="ShowClassCust" />
-                </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20500_pcReason" FunctionName="eBiz4DWebSysModel.Store.AR20500_pcReason">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR20500Model.AR20500_pcReason_Result">
@@ -1369,7 +1334,6 @@
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
-                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1494,20 +1458,51 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
+          <FunctionImportMapping FunctionImportName="AR20500_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20500Model.AR20500_pdConfig_Result">
+                <ScalarProperty Name="IsShowERPCust" ColumnName="IsShowERPCust" />
+                <ScalarProperty Name="IsShowCustHT" ColumnName="IsShowCustHT" />
+                <ScalarProperty Name="IsShowReason" ColumnName="IsShowReason" />
+                <ScalarProperty Name="ShowExport" ColumnName="ShowExport" />
+                <ScalarProperty Name="ShowEditCust" ColumnName="ShowEditCust" />
+                <ScalarProperty Name="AllowSave" ColumnName="AllowSave" />
+                <ScalarProperty Name="AllowApproveEditCust" ColumnName="AllowApproveEditCust" />
+                <ScalarProperty Name="AllowEditReason" ColumnName="AllowEditReason" />
+                <ScalarProperty Name="ShowSubRouteID" ColumnName="ShowSubRouteID" />
+                <ScalarProperty Name="ShowVisitsPerDay" ColumnName="ShowVisitsPerDay" />
+                <ScalarProperty Name="MaxVisitsPerDay" ColumnName="MaxVisitsPerDay" />
+                <ScalarProperty Name="RequireRefCustID" ColumnName="RequireRefCustID" />
+                <ScalarProperty Name="ShowTypeCabinets" ColumnName="ShowTypeCabinets" />
+                <ScalarProperty Name="AllowEditContactName" ColumnName="AllowEditContactName" />
+                <ScalarProperty Name="ShowStandID" ColumnName="ShowStandID" />
+                <ScalarProperty Name="ShowBrandID" ColumnName="ShowBrandID" />
+                <ScalarProperty Name="ShowSizeID" ColumnName="ShowSizeID" />
+                <ScalarProperty Name="ShowDisplayID" ColumnName="ShowDisplayID" />
+                <ScalarProperty Name="ShowTaxCode" ColumnName="ShowTaxCode" />
+                <ScalarProperty Name="EditPhone" ColumnName="EditPhone" />
+                <ScalarProperty Name="ShowOUnit" ColumnName="ShowOUnit" />
+                <ScalarProperty Name="ShowMobile" ColumnName="ShowMobile" />
+                <ScalarProperty Name="HideMarketRoute" ColumnName="HideMarketRoute" />
+                <ScalarProperty Name="MCPBranchRoute" ColumnName="MCPBranchRoute" />
+                <ScalarProperty Name="ShowClassCust" ColumnName="ShowClassCust" />
+                <ScalarProperty Name="LimitedYear" ColumnName="LimitedYear" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
-                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
-                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="StandID" ColumnName="StandID" />
-                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
                 <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
@@ -1584,7 +1579,6 @@
           <EntitySetMapping Name="AR_NewCustomerInforHis">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInforHis">
               <MappingFragment StoreEntitySet="AR_NewCustomerInforHis">
-                <ScalarProperty Name="ClassCust" ColumnName="ClassCust" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="IsDupliApprove" ColumnName="IsDupliApprove" />
@@ -1691,14 +1685,14 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="74" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="85" >
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.875" PointX="2.75" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.875" PointX="0.5" PointY="6.875" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.875" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="2" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="12.375" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="3.375" PointY="11.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="7.375" PointY="0.75" />
         </Diagram>
     </Diagrams>
   </Designer>

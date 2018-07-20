@@ -13,6 +13,7 @@ var _fromDate;
 var _toDate;
 var _dis = "";
 var frmMain_BoxReady = function () {
+    var date = new Date(HQ.LimitedYear, 0, 0);
     App.cboBrandID.store.reload();
     App.cboColSlsFreq1.store.reload();
     App.cboSizeID.store.reload();
@@ -74,6 +75,10 @@ var frmMain_BoxReady = function () {
         HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
     App.clmOUnit.setVisible(HQ.showOUnit > 0);
     App.clmMobile.setVisible(HQ.showMobile > 0);
+    App.dteFromDate.setMaxValue(date);
+    App.dteToDate.setMaxValue(date);
+    App.FromDate.setMaxValue(date);
+    App.ToDate.setMaxValue(date);
 };
 
 var cboTerritory_Change = function (sender, e) {

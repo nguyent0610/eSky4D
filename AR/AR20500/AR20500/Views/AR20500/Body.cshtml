@@ -256,7 +256,7 @@
                         , X.Column().Text(Util.GetLang("TaxCode")).DataIndex("TaxCode").Width(100).Editor(X.TextField().MaxLength(15).EnforceMaxLength(true)).Hidden(true)
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
-                        , X.Column().Text(Util.GetLang("ClassCust")).DataIndex("ClassCust").Renderer("renderClassCust").Width(120).ID("colClassCust")
+                        , X.Column().Text(Util.GetLang("ClassCust")).DataIndex("ClassId").Renderer("renderClassCust").Width(120).ID("colClassCust")
                         .Editor(
                             HQ.Combo().ID("cboClassCust").HQProcedure("AR20500_pcClassCust")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
@@ -817,7 +817,8 @@
                         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
                         .Items(
                             HQ.DateField().HQLangCode("FromDate").ID("dteFromDate").Name("popFromDate").Listeners(lst=>lst.Change.Fn="dteFromDate_change")
-                            ,HQ.DateField().HQLangCode("ToDate").ID("dteToDate").Name("popToDate").Value(new DateTime(DateTime.Now.Year,12,31)).Listeners(lst=>lst.Change.Fn="dteToDate_change")
+                            ,HQ.DateField().HQLangCode("ToDate").ID("dteToDate").Name("popToDate").Value(new DateTime(DateTime.Now.Year,12,31))
+                            .Listeners(lst=>lst.Change.Fn="dteToDate_change")
 
                         )
                 )

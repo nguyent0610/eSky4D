@@ -78,7 +78,7 @@
     HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
     HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
     HQ.bussinessDate = new Date('@DateTime.Now.Date');
-    HQ.EndDateYear = new Date('@DateTime.Now.Year',11,31);
+    HQ.EndDateYear = new Date('@DateTime.Now.Year', 11, 31);
     HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
     HQ.IsShowERPCust = HQ.util.toBool('@ViewBag.IsShowERPCust');
     HQ.IshowEditCust = HQ.util.toBool('@ViewBag.ShowEditCust');
@@ -104,6 +104,8 @@
     HQ.showMobile = parseInt('@ViewBag.showMobile');
     HQ.hideMarketRoute = HQ.util.toBool('@ViewBag.hideMarketRoute');
     HQ.showClassCust = HQ.util.toBool('@ViewBag.showClassCust');
+    HQ.MCPBranchRoute = HQ.util.toBool('@ViewBag.MCPBranchRoute');
+    HQ.LimitedYear = parseInt('@ViewBag.limitedYear');
 </script>  
     <title>@ViewBag.Title</title>
 </head>
