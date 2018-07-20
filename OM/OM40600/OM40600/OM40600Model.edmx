@@ -73,6 +73,7 @@
         </ComplexType>
         <ComplexType Name="OM40600_pdConfig_Result">
           <Property Type="Boolean" Name="MinDate" Nullable="true" />
+          <Property Type="String" Name="LimitedYear" Nullable="false" MaxLength="4" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -110,6 +111,7 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM40600Model.OM40600_pdConfig_Result">
                 <ScalarProperty Name="MinDate" ColumnName="MinDate" />
+                <ScalarProperty Name="LimitedYear" ColumnName="LimitedYear" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

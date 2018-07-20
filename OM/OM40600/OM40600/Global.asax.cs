@@ -38,7 +38,7 @@ namespace OM40600
             //Session["LangID"] = 1;
             Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();DG_eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;

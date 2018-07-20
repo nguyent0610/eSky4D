@@ -26,12 +26,15 @@ namespace OM40600.Controllers
         public ActionResult Index()
         {
             var minDate = false;
+            int LimitedYear = 0;
             var objConfig = _db.OM40600_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 minDate=objConfig.MinDate.HasValue && objConfig.MinDate.Value;
+                LimitedYear = objConfig.LimitedYear.ToInt() + 1;
             }
             ViewBag.MinDate = minDate;
+            ViewBag.limitedYear = LimitedYear;
             Util.InitRight(_screenNbr);
             return View();
         }

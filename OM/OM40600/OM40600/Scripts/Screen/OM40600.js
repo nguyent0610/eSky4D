@@ -185,19 +185,25 @@ var btnLoadBranchID_click = function () {
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
+    var date = new Date(HQ.LimitedYear, 0, 0);
     App.dtpFromDate.setValue(HQ.bussinessDate);
     App.dtpToDate.setValue(HQ.bussinessDate);
     if (HQ.MinDate == true) {
         App.dtpFromDate.setMinValue(HQ.bussinessDate);
+        App.dtpFromDateBranchID.setMinValue(HQ.bussinessDate);
     }
     else
     {
         App.dtpFromDate.setMinValue();
+        App.dtpFromDateBranchID.setMinValue();
     }
 
     App.dtpFromDateBranchID.setValue(HQ.bussinessDate);
     App.dtpToDateBranchID.setValue(HQ.bussinessDate);
-        
+    App.dtpFromDate.setMaxValue(date);
+    App.dtpToDate.setMaxValue(date);
+    App.dtpFromDateBranchID.setMaxValue(date);
+    App.dtpToDateBranchID.setMaxValue(date);
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {

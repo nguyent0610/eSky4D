@@ -237,6 +237,21 @@ namespace OM40600
     [Serializable()]
     public partial class OM40600_pdConfig_Result : ComplexObject
     {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM40600_pdConfig_Result object.
+        /// </summary>
+        /// <param name="limitedYear">Initial value of the LimitedYear property.</param>
+        public static OM40600_pdConfig_Result CreateOM40600_pdConfig_Result(global::System.String limitedYear)
+        {
+            OM40600_pdConfig_Result oM40600_pdConfig_Result = new OM40600_pdConfig_Result();
+            oM40600_pdConfig_Result.LimitedYear = limitedYear;
+            return oM40600_pdConfig_Result;
+        }
+
+        #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -262,6 +277,30 @@ namespace OM40600
         private Nullable<global::System.Boolean> _MinDate;
         partial void OnMinDateChanging(Nullable<global::System.Boolean> value);
         partial void OnMinDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LimitedYear
+        {
+            get
+            {
+                return _LimitedYear;
+            }
+            set
+            {
+                OnLimitedYearChanging(value);
+                ReportPropertyChanging("LimitedYear");
+                _LimitedYear = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LimitedYear");
+                OnLimitedYearChanged();
+            }
+        }
+        private global::System.String _LimitedYear;
+        partial void OnLimitedYearChanging(global::System.String value);
+        partial void OnLimitedYearChanged();
 
         #endregion
 
