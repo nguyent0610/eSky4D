@@ -10641,7 +10641,8 @@ namespace OM21100
         /// <param name="subBreakQty">Initial value of the SubBreakQty property.</param>
         /// <param name="subBreakQtyUpper">Initial value of the SubBreakQtyUpper property.</param>
         /// <param name="subBreakAmtUpper">Initial value of the SubBreakAmtUpper property.</param>
-        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper)
+        /// <param name="discAmtBonus">Initial value of the DiscAmtBonus property.</param>
+        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper, global::System.Double discAmtBonus)
         {
             OM_DiscBreak oM_DiscBreak = new OM_DiscBreak();
             oM_DiscBreak.DiscID = discID;
@@ -10664,6 +10665,7 @@ namespace OM21100
             oM_DiscBreak.SubBreakQty = subBreakQty;
             oM_DiscBreak.SubBreakQtyUpper = subBreakQtyUpper;
             oM_DiscBreak.SubBreakAmtUpper = subBreakAmtUpper;
+            oM_DiscBreak.DiscAmtBonus = discAmtBonus;
             return oM_DiscBreak;
         }
 
@@ -11183,6 +11185,30 @@ namespace OM21100
         private global::System.Double _SubBreakAmtUpper;
         partial void OnSubBreakAmtUpperChanging(global::System.Double value);
         partial void OnSubBreakAmtUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double DiscAmtBonus
+        {
+            get
+            {
+                return _DiscAmtBonus;
+            }
+            set
+            {
+                OnDiscAmtBonusChanging(value);
+                ReportPropertyChanging("DiscAmtBonus");
+                _DiscAmtBonus = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscAmtBonus");
+                OnDiscAmtBonusChanged();
+            }
+        }
+        private global::System.Double _DiscAmtBonus;
+        partial void OnDiscAmtBonusChanging(global::System.Double value);
+        partial void OnDiscAmtBonusChanged();
 
         #endregion
 
@@ -18089,6 +18115,30 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideConvertDiscAmtToFreeItem;
         partial void OnHideConvertDiscAmtToFreeItemChanging(Nullable<global::System.Boolean> value);
         partial void OnHideConvertDiscAmtToFreeItemChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideDiscAmtBonus
+        {
+            get
+            {
+                return _HideDiscAmtBonus;
+            }
+            set
+            {
+                OnHideDiscAmtBonusChanging(value);
+                ReportPropertyChanging("HideDiscAmtBonus");
+                _HideDiscAmtBonus = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideDiscAmtBonus");
+                OnHideDiscAmtBonusChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideDiscAmtBonus;
+        partial void OnHideDiscAmtBonusChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideDiscAmtBonusChanged();
 
         #endregion
 
@@ -19554,7 +19604,8 @@ namespace OM21100
         /// <param name="subBreakQty">Initial value of the SubBreakQty property.</param>
         /// <param name="subBreakQtyUpper">Initial value of the SubBreakQtyUpper property.</param>
         /// <param name="subBreakAmtUpper">Initial value of the SubBreakAmtUpper property.</param>
-        public static OM21100_pgDiscBreak_Result CreateOM21100_pgDiscBreak_Result(global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper)
+        /// <param name="discAmtBonus">Initial value of the DiscAmtBonus property.</param>
+        public static OM21100_pgDiscBreak_Result CreateOM21100_pgDiscBreak_Result(global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper, global::System.Double discAmtBonus)
         {
             OM21100_pgDiscBreak_Result oM21100_pgDiscBreak_Result = new OM21100_pgDiscBreak_Result();
             oM21100_pgDiscBreak_Result.BreakAmt = breakAmt;
@@ -19571,6 +19622,7 @@ namespace OM21100
             oM21100_pgDiscBreak_Result.SubBreakQty = subBreakQty;
             oM21100_pgDiscBreak_Result.SubBreakQtyUpper = subBreakQtyUpper;
             oM21100_pgDiscBreak_Result.SubBreakAmtUpper = subBreakAmtUpper;
+            oM21100_pgDiscBreak_Result.DiscAmtBonus = discAmtBonus;
             return oM21100_pgDiscBreak_Result;
         }
 
@@ -19937,6 +19989,30 @@ namespace OM21100
         private global::System.Double _SubBreakAmtUpper;
         partial void OnSubBreakAmtUpperChanging(global::System.Double value);
         partial void OnSubBreakAmtUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double DiscAmtBonus
+        {
+            get
+            {
+                return _DiscAmtBonus;
+            }
+            set
+            {
+                OnDiscAmtBonusChanging(value);
+                ReportPropertyChanging("DiscAmtBonus");
+                _DiscAmtBonus = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscAmtBonus");
+                OnDiscAmtBonusChanged();
+            }
+        }
+        private global::System.Double _DiscAmtBonus;
+        partial void OnDiscAmtBonusChanging(global::System.Double value);
+        partial void OnDiscAmtBonusChanged();
 
         #endregion
 

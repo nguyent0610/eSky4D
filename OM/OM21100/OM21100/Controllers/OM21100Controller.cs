@@ -83,7 +83,8 @@ namespace OM21100.Controllers
                 , hideIsDeductQtyAmt = false
                 , hideSubBreakType = false
                 , hideBreakBoundType = false
-                , hideConvertDiscAmtToFreeItem = false;
+                , hideConvertDiscAmtToFreeItem = false
+                , hideDiscAmtBonus= false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -103,6 +104,7 @@ namespace OM21100.Controllers
                 hideSubBreakType = objConfig.HideSubBreakType.HasValue && objConfig.HideSubBreakType.Value;
                 hideBreakBoundType = objConfig.HideBreakBoundType.HasValue && objConfig.HideBreakBoundType.Value;
                 hideConvertDiscAmtToFreeItem = objConfig.HideConvertDiscAmtToFreeItem.HasValue && objConfig.HideConvertDiscAmtToFreeItem.Value;
+                hideDiscAmtBonus = objConfig.HideDiscAmtBonus.HasValue && objConfig.HideDiscAmtBonus.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -120,6 +122,7 @@ namespace OM21100.Controllers
             ViewBag.hideSubBreakType = hideSubBreakType;
             ViewBag.hideBreakBoundType = hideBreakBoundType;
             ViewBag.hideConvertDiscAmtToFreeItem = hideConvertDiscAmtToFreeItem;
+            ViewBag.hideDiscAmtBonus = hideDiscAmtBonus;
             return View();
         }
 
@@ -2175,7 +2178,7 @@ namespace OM21100.Controllers
                 t.SubBreakAmt = s.SubBreakAmt;
                 t.SubBreakQtyUpper = s.SubBreakQtyUpper;
                 t.SubBreakAmtUpper = s.SubBreakAmtUpper;
-
+                t.DiscAmtBonus = s.DiscAmtBonus;
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;
                 t.LUpd_User = Current.UserName;

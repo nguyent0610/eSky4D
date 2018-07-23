@@ -555,7 +555,7 @@ var Main = {
                     //var discId = App.cboDiscID.getValue();
                     //var discSeq = App.cboDiscSeq.getValue();
                     //var status = App.cboStatus.value;
-
+                    var line = '';
                     //if (status == _holdStatus) {
                     for (var i = 0; i < App.stoDiscBreak.data.length; i++) {
                         if (App.stoDiscBreak.data.items[i].data.BreakQty != 0 || App.stoDiscBreak.data.items[i].data.BreakAmt != 0) {
@@ -604,6 +604,19 @@ var Main = {
                                 }
                             }
                         }
+                        if(App.chkDiscAmtBonus.checked==true){
+                            if(App.stoDiscBreak.data.items[i].data.BreakAmt!=0 || App.stoDiscBreak.data.items[i].data.BreakQty!=0)
+                            {
+                                if(App.stoDiscBreak.data.items[i].data.DiscAmtBonus==0)
+                                {
+                                    line += (i + 1) + ", ";
+                                }
+                            }
+                        }
+                    }
+                    if (line != '') {
+                        HQ.message.show(2018072360, [line, HQ.common.getLang("Const"), HQ.common.getLang("DiscBreak")], '', true);
+                        return false;
                     }
                     if (App.chkConvertDiscAmtToFreeItem.getValue() == true)
                     {
@@ -833,6 +846,7 @@ var Main = {
             if (!HQ.hidechkStockPromotion) {
                 App.chkStockPromotion.hide();
             }
+            App.chkDiscAmtBonus.setVisible(HQ.hideDiscAmtBonus);
            
         },
 
@@ -2313,6 +2327,7 @@ var DiscDefintion = {
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
                 App.cboProrateAmtType.setReadOnly(false);
+                App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.enable();
             }
             else {
@@ -2336,6 +2351,7 @@ var DiscDefintion = {
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
                 App.cboProrateAmtType.setReadOnly(true);
+                App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.disable();
             }
 
@@ -2678,7 +2694,7 @@ var DiscDefintion = {
                 App.dteEndDate.setMinValue(enddate);
                 App.colQtyLimit.hide();
                 App.colPerStockAdvance.hide();
-                App.colQtyStockAdvance.hide()
+                App.colQtyStockAdvance.hide();
                 //App.chkDonateGroupProduct.enable();
             }
             App.stoSubBreakItem.reload();
@@ -3082,6 +3098,17 @@ var DiscDefintion = {
                 }
             }
         },
+        chkDiscAmtBonus_Focus: function (chk, newValue, oldValue, eOpts) {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                if (chk.hasFocus) {
+                    HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                }
+                chk.suspendEvents();
+                App.chkDiscAmtBonus.setValue(false);
+                chk.resumeEvents();
+                return false;
+            }
+        },
         chkConvertDiscAmtToFreeItem_Change: function (chk, newValue, oldValue, eOpts) {
             var storeDiscBreak = App.stoDiscBreak.snapshot || App.stoDiscBreak.data;
             var storeFreeItem = App.stoFreeItem.snapshot || App.stoFreeItem.data;
@@ -3112,6 +3139,9 @@ var DiscDefintion = {
                     }
                 }
             }            
+        },
+        chkDiscAmtBonus_Change: function (chk, newValue, oldValue, eOpts) {
+            App.colDiscAmtBonus.setVisible(App.chkDiscAmtBonus.getValue());
         },
         cboGCustID_Change: function (item, newValue, oldValue, eOpts) {
             _selBranchID = '';
@@ -4595,6 +4625,11 @@ var DiscDefintion = {
                 {
                     App.cboSubBreakType.setReadOnly(false);
                     App.cboBreakBoundType.setReadOnly(false);
+                }
+            }
+            if (App.chkDiscAmtBonus.checked == true && e.field == "DiscAmtBonus" && (e.record.data.BreakAmt != 0 || e.record.data.BreakQty)) {
+                if (e.record.data.DiscAmtBonus == 0) {
+                    HQ.message.show(15, [HQ.common.getLang("Const")], '', true);
                 }
             }
         },

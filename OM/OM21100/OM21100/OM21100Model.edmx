@@ -396,6 +396,7 @@
           <Property Name="SubBreakQty" Type="float" Nullable="false" />
           <Property Name="SubBreakQtyUpper" Type="float" Nullable="false" />
           <Property Name="SubBreakAmtUpper" Type="float" Nullable="false" />
+          <Property Name="DiscAmtBonus" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscChannel">
           <Key>
@@ -1318,6 +1319,7 @@
           <Property Type="Double" Name="SubBreakQty" Nullable="false" />
           <Property Type="Double" Name="SubBreakQtyUpper" Nullable="false" />
           <Property Type="Double" Name="SubBreakAmtUpper" Nullable="false" />
+          <Property Type="Double" Name="DiscAmtBonus" Nullable="false" />
         </ComplexType>
         <EntityType Name="OM_Discount">
           <Key>
@@ -1726,6 +1728,7 @@
           <Property Type="Boolean" Name="HideSubBreakType" Nullable="true" />
           <Property Type="Boolean" Name="HideBreakBoundType" Nullable="true" />
           <Property Type="Boolean" Name="HideConvertDiscAmtToFreeItem" Nullable="true" />
+          <Property Type="Boolean" Name="HideDiscAmtBonus" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -2179,6 +2182,7 @@
           <Property Name="SubBreakQty" Type="Double" Nullable="false" />
           <Property Name="SubBreakQtyUpper" Type="Double" Nullable="false" />
           <Property Name="SubBreakAmtUpper" Type="Double" Nullable="false" />
+          <Property Name="DiscAmtBonus" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscFreeItem">
           <Key>
@@ -2363,6 +2367,7 @@
                 <ScalarProperty Name="SubBreakQty" ColumnName="SubBreakQty" />
                 <ScalarProperty Name="SubBreakQtyUpper" ColumnName="SubBreakQtyUpper" />
                 <ScalarProperty Name="SubBreakAmtUpper" ColumnName="SubBreakAmtUpper" />
+                <ScalarProperty Name="DiscAmtBonus" ColumnName="DiscAmtBonus" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2830,6 +2835,7 @@
                 <ScalarProperty Name="HideSubBreakType" ColumnName="HideSubBreakType" />
                 <ScalarProperty Name="HideBreakBoundType" ColumnName="HideBreakBoundType" />
                 <ScalarProperty Name="HideConvertDiscAmtToFreeItem" ColumnName="HideConvertDiscAmtToFreeItem" />
+                <ScalarProperty Name="HideDiscAmtBonus" ColumnName="HideDiscAmtBonus" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3288,6 +3294,7 @@
           <EntitySetMapping Name="OM_DiscBreak">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscBreak">
               <MappingFragment StoreEntitySet="OM_DiscBreak">
+                <ScalarProperty Name="DiscAmtBonus" ColumnName="DiscAmtBonus" />
                 <ScalarProperty Name="SubBreakAmtUpper" ColumnName="SubBreakAmtUpper" />
                 <ScalarProperty Name="SubBreakQtyUpper" ColumnName="SubBreakQtyUpper" />
                 <ScalarProperty Name="SubBreakQty" ColumnName="SubBreakQty" />
