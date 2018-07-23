@@ -4627,7 +4627,7 @@ var DiscDefintion = {
                     App.cboBreakBoundType.setReadOnly(false);
                 }
             }
-            if (App.chkDiscAmtBonus.checked == true && e.field == "DiscAmtBonus" && (e.record.data.BreakAmt != 0 || e.record.data.BreakQty)) {
+            if (App.chkDiscAmtBonus.checked == true && e.field == "DiscAmtBonus" && (e.record.data.BreakAmt != 0 || e.record.data.BreakQty!=0)) {
                 if (e.record.data.DiscAmtBonus == 0) {
                     HQ.message.show(15, [HQ.common.getLang("Const")], '', true);
                 }

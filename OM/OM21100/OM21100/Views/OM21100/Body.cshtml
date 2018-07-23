@@ -550,7 +550,7 @@
                                     .Items(
                                          HQ.Checkbox().ID("chkDiscAmtBonus")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
-                                        .BoxLabel(Util.GetLang("Const")).DataIndex("DiscAmtBonus")
+                                        .BoxLabel(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus")
                                         .Listeners(l =>
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Focus";
@@ -694,10 +694,10 @@
                                     .Editor(
                                         HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
                                     )
-                                    , X.NumberColumn().Text(Util.GetLang("Const")).DataIndex("DiscAmtBonus").ID("colDiscAmtBonus").Hidden(true)
-                                        .Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus").ID("colDiscAmtBonus").Hidden(true)
+                                        .Align(Alignment.Right).Format("0,000.0")
                                         .Editor(
-                                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                            X.NumberField().SelectOnFocus(true).MinValue(0.0).DecimalPrecision(1)
                                         )
                                     , X.CommandColumn()
                                     .Commands(
