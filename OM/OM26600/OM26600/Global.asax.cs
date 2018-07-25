@@ -27,14 +27,14 @@ namespace OM26600
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "PhuThai_Test_eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "IHT_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = false;
             Session["OM26600"] = acc;
-            Session["DBApp"] = Current.DBApp = "PhuThai_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "IHT_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";

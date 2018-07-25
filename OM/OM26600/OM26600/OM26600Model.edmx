@@ -9,7 +9,6 @@
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="Code" />
-            <PropertyRef Name="TypeOfVehicle" />
           </Key>
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="10" Nullable="false" />
@@ -21,9 +20,10 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="TypeOfVehicle" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="WeightMax" Type="float" />
           <Property Name="ValueMax" Type="float" />
-          <Property Name="TypeOfVehicle" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SlsperID" Type="varchar" MaxLength="30" />
         </EntityType>
         <Function Name="OM26600_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -48,12 +48,12 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="OM_Truck" EntityType="OM26600Model.OM_Truck" />
           <FunctionImport Name="OM26600_pdConfig" ReturnType="Collection(OM26600Model.OM26600_pdConfig_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="OM_Truck" EntityType="OM26600Model.OM_Truck" />
         </EntityContainer>
         <ComplexType Name="OM26600_pgOM_Truck_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -65,12 +65,19 @@
           <Property Type="Double" Name="WeightMax" Nullable="true" />
           <Property Type="Double" Name="ValueMax" Nullable="true" />
           <Property Type="Int32" Name="Selected" Nullable="false" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM26600_pdConfig_Result">
+          <Property Type="Boolean" Name="Descr" Nullable="true" />
+          <Property Type="Boolean" Name="TypeOfVehicle" Nullable="true" />
+          <Property Type="Boolean" Name="WeightMax" Nullable="true" />
+          <Property Type="Boolean" Name="ValueMax" Nullable="true" />
+          <Property Type="Boolean" Name="SlsperID" Nullable="true" />
         </ComplexType>
         <EntityType Name="OM_Truck">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="Code" />
-            <PropertyRef Name="TypeOfVehicle" />
           </Key>
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -82,16 +89,11 @@
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TypeOfVehicle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="WeightMax" Type="Double" />
           <Property Name="ValueMax" Type="Double" />
-          <Property Name="TypeOfVehicle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SlsperID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="OM26600_pdConfig_Result">
-          <Property Type="Boolean" Name="Descr" Nullable="true" />
-          <Property Type="Boolean" Name="TypeOfVehicle" Nullable="true" />
-          <Property Type="Boolean" Name="WeightMax" Nullable="true" />
-          <Property Type="Boolean" Name="ValueMax" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -110,15 +112,28 @@
                 <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
                 <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
                 <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM26600_pdConfig" FunctionName="eBiz4DWebSysModel.Store.OM26600_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM26600Model.OM26600_pdConfig_Result">
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
+                <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
+                <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="OM_Truck">
             <EntityTypeMapping TypeName="OM26600Model.OM_Truck">
               <MappingFragment StoreEntitySet="OM_Truck">
-                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
                 <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
+                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -132,16 +147,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM26600_pdConfig" FunctionName="eBiz4DWebSysModel.Store.OM26600_pdConfig">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM26600Model.OM26600_pdConfig_Result">
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
-                <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
-                <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

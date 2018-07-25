@@ -82,6 +82,10 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.Descr) {
+                    fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle', 'Descr'];
+                    fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'TypeOfVehicle', 'Descr'];
+                }
                 if (HQ.store.checkRequirePass(App.stoOM_Truck, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
@@ -104,9 +108,10 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     HQ.util.checkAccessRight();
     App.grdOM_Truck.columns[2].setVisible(HQ.TypeOfVehicle);
-    App.grdOM_Truck.columns[4].setVisible(HQ.Descr);
-    App.grdOM_Truck.columns[5].setVisible(HQ.WeightMax);
-    App.grdOM_Truck.columns[6].setVisible(HQ.ValueMax);
+    App.grdOM_Truck.columns[4].setVisible(HQ.SlsperID);
+    App.grdOM_Truck.columns[5].setVisible(HQ.Descr);
+    App.grdOM_Truck.columns[6].setVisible(HQ.WeightMax);
+    App.grdOM_Truck.columns[7].setVisible(HQ.ValueMax);
 };
 var grdOM_Truck_BeforeEdit = function (editor, e) {
     if (e.record.data.Selected == 1)
@@ -173,6 +178,13 @@ var renderTypeVehicle = function (value, metaData, record, row, col, store, grid
     }
     return r.data.Descr;
 };
+var renderSlsperID = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboSlsperID.store, ['SlsperID'], [record.data.SlsperID])
+    if (Ext.isEmpty(r)) {
+        return value;
+    }
+    return r.data.Name;
+};
 var stringFilter = function (record) {
     if (this.dataIndex == 'BranchID') {
         App.cboBranchID.store.clearFilter();
@@ -182,6 +194,10 @@ var stringFilter = function (record) {
     {
         App.cboTypeVehicle.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboTypeVehicle.store, "Code", "Descr");
+    }
+    if (this.dataIndex == 'SlsperID') {
+        App.cboSlsperID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboSlsperID.store, "SlsperID", "Name");
     }
 };
 var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {

@@ -481,6 +481,30 @@ namespace OM26600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeOfVehicle
+        {
+            get
+            {
+                return _TypeOfVehicle;
+            }
+            set
+            {
+                OnTypeOfVehicleChanging(value);
+                ReportPropertyChanging("TypeOfVehicle");
+                _TypeOfVehicle = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TypeOfVehicle");
+                OnTypeOfVehicleChanged();
+            }
+        }
+        private global::System.String _TypeOfVehicle;
+        partial void OnTypeOfVehicleChanging(global::System.String value);
+        partial void OnTypeOfVehicleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Double> WeightMax
@@ -529,29 +553,26 @@ namespace OM26600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String TypeOfVehicle
+        public global::System.String SlsperID
         {
             get
             {
-                return _TypeOfVehicle;
+                return _SlsperID;
             }
             set
             {
-                if (_TypeOfVehicle != value)
-                {
-                    OnTypeOfVehicleChanging(value);
-                    ReportPropertyChanging("TypeOfVehicle");
-                    _TypeOfVehicle = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("TypeOfVehicle");
-                    OnTypeOfVehicleChanged();
-                }
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
             }
         }
-        private global::System.String _TypeOfVehicle;
-        partial void OnTypeOfVehicleChanging(global::System.String value);
-        partial void OnTypeOfVehicleChanged();
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
 
         #endregion
 
@@ -667,6 +688,30 @@ namespace OM26600
         private Nullable<global::System.Boolean> _ValueMax;
         partial void OnValueMaxChanging(Nullable<global::System.Boolean> value);
         partial void OnValueMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _SlsperID;
+        partial void OnSlsperIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnSlsperIDChanged();
 
         #endregion
 
@@ -922,6 +967,30 @@ namespace OM26600
         private global::System.Int32 _Selected;
         partial void OnSelectedChanging(global::System.Int32 value);
         partial void OnSelectedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
 
         #endregion
 

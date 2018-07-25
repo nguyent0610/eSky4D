@@ -27,6 +27,7 @@ namespace OM26600.Controllers
             bool TypeOfVehicle = false;
             bool WeightMax = false;
             bool ValueMax = false;
+            bool SlsperID = false;
 
             var objConfig = _db.OM26600_pdConfig(Current.CpnyID,Current.UserName,Current.LangID).FirstOrDefault();
             if(objConfig!=null)
@@ -35,16 +36,18 @@ namespace OM26600.Controllers
                 TypeOfVehicle = objConfig.TypeOfVehicle.HasValue ? objConfig.TypeOfVehicle.Value : false;
                 WeightMax = objConfig.WeightMax.HasValue ? objConfig.WeightMax.Value : false;
                 ValueMax = objConfig.ValueMax.HasValue ? objConfig.ValueMax.Value : false;
+                SlsperID = objConfig.SlsperID.HasValue ? objConfig.SlsperID.Value : false;
             }
             ViewBag.Descr = Descr;
             ViewBag.TypeOfVehicle = TypeOfVehicle;
             ViewBag.WeightMax = WeightMax;
             ViewBag.ValueMax = ValueMax;
+            ViewBag.SlsperID = SlsperID;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -131,6 +134,7 @@ namespace OM26600.Controllers
             t.Descr = s.Descr;
             t.ValueMax = s.ValueMax;
             t.WeightMax = s.WeightMax;
+            t.SlsperID = s.SlsperID;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
