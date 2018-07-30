@@ -132,8 +132,8 @@ var grdOM_Truck_BeforeEdit = function (editor, e) {
 var grdOM_Truck_Edit = function (item, e) {
     if (e.field == 'Code')
     {
-        var regex = /^(\w*(\d|[a-zA-Z\-.]))[\-]*$/
-        if (!e.value.match(regex))
+        var regex = /^(\w*(\d|[a-zA-Z\-.]))*$/
+        if (e.value.match(regex) ==  null)
             e.record.set('Code', '');
     }
     HQ.grid.checkInsertKey(App.grdOM_Truck, e, keys);
