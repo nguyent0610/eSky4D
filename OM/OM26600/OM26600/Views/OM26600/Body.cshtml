@@ -85,7 +85,7 @@
                         })
                     )
             , X.Column().ID("Code").Text(Util.GetLang("OM26600Code")).DataIndex("Code").Width(150)//.Hidden(true)
-                .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true))
+                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true).MaskRe(@"/(\w*(\d|[a-zA-Z\-.]))[\-]*$/"))
 
             , X.Column().ID("SlsperID").Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150).Renderer("renderSlsperID")
             .Editor(

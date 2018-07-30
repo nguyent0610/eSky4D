@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['BranchID', 'Code', 'TypeOfVehicle'];
-var fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle'];
-var fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'TypeOfVehicle'];
+var keys = ['BranchID', 'Code'];
+var fieldsCheckRequire = ["BranchID", "Code"];
+var fieldsLangCheckRequire = ["BranchID", "OM26600Code"];
 
 var _Source = 0;
 var _maxSource = 2;
@@ -33,6 +33,19 @@ var stoOM_Truck_load = function (sto) {
         }
     }
     HQ.isFirstLoad = false;
+
+    if (HQ.Descr && HQ.TypeOfVehicle) {
+        fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle', 'Descr'];
+        fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'OM26600TypeVehicle', 'Descr'];
+    }
+    if (!HQ.Descr && HQ.TypeOfVehicle) {
+        fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle'];
+        fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'OM26600TypeVehicle'];
+    }
+    if (HQ.Descr && !HQ.TypeOfVehicle) {
+        fieldsCheckRequire = ["BranchID", "Code", 'Descr'];
+        fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'Descr'];
+    }
 };
 //trước khi load trang busy la dang load data
 var stoOM_Truck_beforeLoad = function (sto) {
@@ -82,10 +95,6 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.Descr) {
-                    fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle', 'Descr'];
-                    fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'TypeOfVehicle', 'Descr'];
-                }
                 if (HQ.store.checkRequirePass(App.stoOM_Truck, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
@@ -121,6 +130,12 @@ var grdOM_Truck_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdOM_Truck_Edit = function (item, e) {
+    if (e.field == 'Code')
+    {
+        var regex = /^(\w*(\d|[a-zA-Z\-.]))[\-]*$/
+        if (!e.value.match(regex))
+            e.record.set('Code', '');
+    }
     HQ.grid.checkInsertKey(App.grdOM_Truck, e, keys);
 };
 var grdOM_Truck_ValidateEdit = function (item, e) {
@@ -201,22 +216,13 @@ var stringFilter = function (record) {
     }
 };
 var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {
-    //if (keys.indexOf(e.field) != -1) {
-    //    var regex = /^(\w*(\d|[a-zA-Z]|[\_. -] ))*$/
-    //    if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
-    //    if (isCheckSpecialChar) {
-    //        if (e.value)
-    //            if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
-    //                HQ.message.show(20140811, e.column.text);
-    //                return false;
-    //            }
-    //    }
-    //    if (HQ.grid.checkDuplicate(grd, e, keys)) {
-    //        if (e.column.xtype == "datecolumn")
-    //            HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
-    //        else HQ.message.show(1112, e.value);
-    //        return false;
-    //    }
+    if (keys.indexOf(e.field) != -1) {     
+        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
 
-    //}
+    }
 };
