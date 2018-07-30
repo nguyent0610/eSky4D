@@ -546,17 +546,17 @@
                                         })
                                       
                                     ) // Container
-                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-                                    .Items(
-                                         HQ.Checkbox().ID("chkDiscAmtBonus")//.Hidden(true)
-                                        .MarginSpec("5 5 0 10")
-                                        .BoxLabel(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus")
-                                        .Listeners(l =>
-                                        {
-                                            l.Focus.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Focus";
-                                            l.Change.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Change";
-                                        })
-                                    )
+                                    //, X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+                                    //.Items(
+                                    //     HQ.Checkbox().ID("chkDiscAmtBonus")//.Hidden(true)
+                                    //    .MarginSpec("5 5 0 10")
+                                    //    .BoxLabel(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus")
+                                    //    .Listeners(l =>
+                                    //    {
+                                    //        l.Focus.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Focus";
+                                    //        l.Change.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Change";
+                                    //    })
+                                    //)
                                 )                                
                                , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                                 //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
@@ -695,9 +695,9 @@
                                         HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
                                     )
                                     , X.NumberColumn().Text(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus").ID("colDiscAmtBonus").Hidden(true)
-                                        .Align(Alignment.Right).Format("0,000.0")
+                                        .Align(Alignment.Right).Format("0,000.00")
                                         .Editor(
-                                            X.NumberField().SelectOnFocus(true).MinValue(0.0).DecimalPrecision(1)
+                                            X.NumberField().SelectOnFocus(true).MinValue(0.0).DecimalPrecision(2)
                                         )
                                     , X.CommandColumn()
                                     .Commands(
