@@ -254,6 +254,7 @@ namespace IN20800.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+            t.DiscCode = s.DiscCode.PassNull();
             t.ComponentQty = s.ComponentQty;
             t.Unit = s.Unit;
             t.Price = s.Price;

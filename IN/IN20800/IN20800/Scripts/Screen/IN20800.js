@@ -1,8 +1,8 @@
 //// Declare ///////////////////////////////////////////////////////////
 var keys = ['ComponentID'];//khoa của lưới
 var values = [''];
-var fieldsCheckRequire = ["ComponentID", "ComponentQty", "Unit", "Price"];
-var fieldsLangCheckRequire = ["ComponentID", "ComponentQty", "StkUnit", "Price"];
+var fieldsCheckRequire = ["ComponentID", "ComponentQty", "Unit"];
+var fieldsLangCheckRequire = ["ComponentID", "ComponentQty", "StkUnit"];
 var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
@@ -327,6 +327,7 @@ var cboKitID_select = function (sender, value) {
 };
 var cboInvtID_change = function (sender, value) {
     App.cboUnit.store.reload();
+    App.cboDiscCode.store.reload();
 };
 var grdIN_Component_BeforeEdit = function (editor, e) {
     if (Ext.isEmpty(App.cboKitID.getValue())) {
@@ -344,6 +345,7 @@ var grdIN_Component_BeforeEdit = function (editor, e) {
     }
     _InvtID = e.record.data.ComponentID;
     App.cboUnit.store.reload();
+    App.cboDiscCode.store.reload();
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdIN_Component_Edit = function (item, e) {
@@ -390,7 +392,7 @@ var grdIN_Component_Reject = function (record) {
 };
 var save = function () {
     if (HQ.isInsert) {
-        var lstData = App.grdIN_Component.store.snapshot;
+        var lstData = App.grdIN_Component.store.snapshot || App.grdIN_Component.store.allData || App.grdIN_Component.store.data;
         if (lstData == undefined) {
             HQ.message.show(2018051460, '', '');
             App.grdIN_Component.focus();
@@ -409,6 +411,16 @@ var save = function () {
                 App.grdIN_Component.focus();
                 return;
             }
+            var lstErro = "";
+            for (var i = 0; i < lstData.length; i++) {
+                if (lstData.items[i].data.ComponentID != "" && (lstData.items[i].data.DiscCode == null || lstData.items[i].data.DiscCode == "") && lstData.items[i].data.Price == 0) {
+                    lstErro = lstErro + (i + 1) + ',';
+                }
+            }
+            if (lstErro != "") {
+                HQ.message.show(2018073111, [lstErro], '', true);
+                return false;
+            }
         }
         
     }
@@ -416,7 +428,7 @@ var save = function () {
     var lstData = App.grdIN_Component.store.snapshot || App.grdIN_Component.store.allData || App.grdIN_Component.store.data;
     var lineEror = "";
     for (var i = 0; i < lstData.length; i++) {
-        if (lstData.items[i].data.ComponentID != "" && lstData.items[i].data.Price == 0) {
+        if (lstData.items[i].data.ComponentID != "" && lstData.items[i].data.Price == 0 && (lstData.items[i].data.DiscCode == null || lstData.items[i].data.DiscCode=="")) {
             lineEror = lineEror+ (i + 1) + ",";
         }
     }

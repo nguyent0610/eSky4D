@@ -68,22 +68,6 @@ namespace IN20800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Component> IN_Component
-        {
-            get
-            {
-                if ((_IN_Component == null))
-                {
-                    _IN_Component = base.CreateObjectSet<IN_Component>("IN_Component");
-                }
-                return _IN_Component;
-            }
-        }
-        private ObjectSet<IN_Component> _IN_Component;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Kit> IN_Kit
         {
             get
@@ -96,18 +80,26 @@ namespace IN20800
             }
         }
         private ObjectSet<IN_Kit> _IN_Kit;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Component> IN_Component
+        {
+            get
+            {
+                if ((_IN_Component == null))
+                {
+                    _IN_Component = base.CreateObjectSet<IN_Component>("IN_Component");
+                }
+                return _IN_Component;
+            }
+        }
+        private ObjectSet<IN_Component> _IN_Component;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Component EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Component(IN_Component iN_Component)
-        {
-            base.AddObject("IN_Component", iN_Component);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the IN_Kit EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -115,6 +107,14 @@ namespace IN20800
         public void AddToIN_Kit(IN_Kit iN_Kit)
         {
             base.AddObject("IN_Kit", iN_Kit);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Component EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Component(IN_Component iN_Component)
+        {
+            base.AddObject("IN_Component", iN_Component);
         }
 
         #endregion
@@ -390,7 +390,8 @@ namespace IN20800
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_Component CreateIN_Component(global::System.String kitID, global::System.String componentID, global::System.Double componentQty, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        /// <param name="discCode">Initial value of the DiscCode property.</param>
+        public static IN_Component CreateIN_Component(global::System.String kitID, global::System.String componentID, global::System.Double componentQty, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String discCode)
         {
             IN_Component iN_Component = new IN_Component();
             iN_Component.KitID = kitID;
@@ -403,6 +404,7 @@ namespace IN20800
             iN_Component.Crtd_Prog = crtd_Prog;
             iN_Component.Crtd_User = crtd_User;
             iN_Component.tstamp = tstamp;
+            iN_Component.DiscCode = discCode;
             return iN_Component;
         }
 
@@ -703,6 +705,30 @@ namespace IN20800
         private Nullable<global::System.Double> _Price;
         partial void OnPriceChanging(Nullable<global::System.Double> value);
         partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscCode
+        {
+            get
+            {
+                return _DiscCode;
+            }
+            set
+            {
+                OnDiscCodeChanging(value);
+                ReportPropertyChanging("DiscCode");
+                _DiscCode = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscCode");
+                OnDiscCodeChanged();
+            }
+        }
+        private global::System.String _DiscCode;
+        partial void OnDiscCodeChanging(global::System.String value);
+        partial void OnDiscCodeChanged();
 
         #endregion
 
@@ -1291,13 +1317,15 @@ namespace IN20800
         /// <param name="componentID">Initial value of the ComponentID property.</param>
         /// <param name="componentQty">Initial value of the ComponentQty property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN20800_pgLoadIN_Kit_Result CreateIN20800_pgLoadIN_Kit_Result(global::System.String kitID, global::System.String componentID, global::System.Double componentQty, global::System.Byte[] tstamp)
+        /// <param name="discCode">Initial value of the DiscCode property.</param>
+        public static IN20800_pgLoadIN_Kit_Result CreateIN20800_pgLoadIN_Kit_Result(global::System.String kitID, global::System.String componentID, global::System.Double componentQty, global::System.Byte[] tstamp, global::System.String discCode)
         {
             IN20800_pgLoadIN_Kit_Result iN20800_pgLoadIN_Kit_Result = new IN20800_pgLoadIN_Kit_Result();
             iN20800_pgLoadIN_Kit_Result.KitID = kitID;
             iN20800_pgLoadIN_Kit_Result.ComponentID = componentID;
             iN20800_pgLoadIN_Kit_Result.ComponentQty = componentQty;
             iN20800_pgLoadIN_Kit_Result.tstamp = tstamp;
+            iN20800_pgLoadIN_Kit_Result.DiscCode = discCode;
             return iN20800_pgLoadIN_Kit_Result;
         }
 
@@ -1472,6 +1500,30 @@ namespace IN20800
         private Nullable<global::System.Double> _Price;
         partial void OnPriceChanging(Nullable<global::System.Double> value);
         partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscCode
+        {
+            get
+            {
+                return _DiscCode;
+            }
+            set
+            {
+                OnDiscCodeChanging(value);
+                ReportPropertyChanging("DiscCode");
+                _DiscCode = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscCode");
+                OnDiscCodeChanged();
+            }
+        }
+        private global::System.String _DiscCode;
+        partial void OnDiscCodeChanging(global::System.String value);
+        partial void OnDiscCodeChanged();
 
         #endregion
 
