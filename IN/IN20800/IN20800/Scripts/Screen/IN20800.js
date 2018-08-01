@@ -343,6 +343,9 @@ var grdIN_Component_BeforeEdit = function (editor, e) {
                 return false;
         }
     }
+    if (e.field == "Price" && e.record.data.DiscCode != null && e.record.data.DiscCode != "") {
+        return false;
+    }
     _InvtID = e.record.data.ComponentID;
     App.cboUnit.store.reload();
     App.cboDiscCode.store.reload();
@@ -362,6 +365,11 @@ var grdIN_Component_Edit = function (item, e) {
         e.record.set("Descr", '');
         e.record.set("ComponentQty", 0);
         e.record.set("Unit", '');
+    }
+    if (e.field == "DiscCode") {
+        if (e.value != null && e.value != "") {
+            e.record.set("Price", 0);
+        }
     }
     checkInsertKey(App.grdIN_Component, e, keys);
     frmChange();
@@ -421,8 +429,7 @@ var save = function () {
                 HQ.message.show(2018073111, [lstErro], '', true);
                 return false;
             }
-        }
-        
+        }        
     }
 
     var lstData = App.grdIN_Component.store.snapshot || App.grdIN_Component.store.allData || App.grdIN_Component.store.data;
