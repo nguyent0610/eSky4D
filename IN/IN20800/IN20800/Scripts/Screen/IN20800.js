@@ -456,13 +456,21 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                App.direct.ReloadTreeIN20800({
-                    success: function (result) {
-                        App.treeKitID.getRootNode().expand();
-                        HQ.common.showBusy(false, HQ.waitMsg);
-                    }
-                });
-                App.stoKitID.reload();
+                var nodeID = App.cboKitID.getValue();
+                setTimeout(function () {
+                    App.stoKitID.reload();
+                    HQ.isChange = false;
+                    App.direct.ReloadTreeIN20800({
+                        success: function (result) {
+                            HQ.isChange = false;
+                            App.treeKitID.getRootNode().expand();
+                            HQ.common.showBusy(false, HQ.waitMsg);
+                        }
+                    });
+                }, 100);
+                setTimeout(function () {
+                    searchNode(nodeID);
+                },1000);
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);

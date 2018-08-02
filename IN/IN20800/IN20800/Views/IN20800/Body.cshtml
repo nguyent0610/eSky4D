@@ -147,12 +147,12 @@
                 
                 ,X.Container().Layout(LayoutType.HBox)
                 .Items(
-                    HQ.DateField().HQLangCode("IN20800FromDate").Name("FromDate").DataIndex("FromDate").ID("txtFromDate").AllowBlank(false).MarginSpec("0 0 5 0").Hidden(true)
+                    HQ.DateField().HQLangCode("IN20800FromDate").Name("FromDate").DataIndex("FromDate").ID("txtFromDate").MarginSpec("0 0 5 0").Hidden(true)
                     .Listeners(ls =>
                     {
                         ls.Change.Fn = "txtFromDate_Change";
                     })
-                    , HQ.DateField().HQLangCode("IN20800ToDate").Name("ToDate").DataIndex("ToDate").ID("txtToDate").AllowBlank(false).MarginSpec("0 0 5 0").Hidden(true)
+                    , HQ.DateField().HQLangCode("IN20800ToDate").Name("ToDate").DataIndex("ToDate").ID("txtToDate").MarginSpec("0 0 5 0").Hidden(true)
                     .Listeners(ls =>
                     {
                         ls.Focus.Fn = "txtToDate_Focus";
@@ -164,7 +164,7 @@
         .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
 
         , X.Panel().ID("pnlgrdIN_Component")/////////Grid Tree//////////////////
-        .Region(Region.West).Flex(6)
+        .Region(Region.Center)//.Flex(15)
         .Layout(LayoutType.Fit)
         .Items(
         
