@@ -372,22 +372,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscSeq> OM_DiscSeq
-        {
-            get
-            {
-                if ((_OM_DiscSeq == null))
-                {
-                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
-                }
-                return _OM_DiscSeq;
-            }
-        }
-        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscBreak> OM_DiscBreak
         {
             get
@@ -432,6 +416,22 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscSubBreakItem> _OM_DiscSubBreakItem;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscSeq> OM_DiscSeq
+        {
+            get
+            {
+                if ((_OM_DiscSeq == null))
+                {
+                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
+                }
+                return _OM_DiscSeq;
+            }
+        }
+        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
 
         #endregion
 
@@ -590,14 +590,6 @@ namespace OM21100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
-        {
-            base.AddObject("OM_DiscSeq", oM_DiscSeq);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_DiscBreak EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_DiscBreak(OM_DiscBreak oM_DiscBreak)
@@ -619,6 +611,14 @@ namespace OM21100
         public void AddToOM_DiscSubBreakItem(OM_DiscSubBreakItem oM_DiscSubBreakItem)
         {
             base.AddObject("OM_DiscSubBreakItem", oM_DiscSubBreakItem);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
+        {
+            base.AddObject("OM_DiscSeq", oM_DiscSeq);
         }
 
         #endregion
@@ -14447,7 +14447,10 @@ namespace OM21100
         /// <param name="subBreakType">Initial value of the SubBreakType property.</param>
         /// <param name="breakBoundType">Initial value of the BreakBoundType property.</param>
         /// <param name="convertDiscAmtToFreeItem">Initial value of the ConvertDiscAmtToFreeItem property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.Boolean isRequiredQty, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.Boolean isDeductQtyAmt, global::System.String subBreakType, global::System.String breakBoundType, global::System.Boolean convertDiscAmtToFreeItem)
+        /// <param name="discSeqSolomon">Initial value of the DiscSeqSolomon property.</param>
+        /// <param name="invtIDSolomon">Initial value of the InvtIDSolomon property.</param>
+        /// <param name="discPrice">Initial value of the DiscPrice property.</param>
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.Boolean isRequiredQty, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.Boolean isDeductQtyAmt, global::System.String subBreakType, global::System.String breakBoundType, global::System.Boolean convertDiscAmtToFreeItem, global::System.String discSeqSolomon, global::System.String invtIDSolomon, global::System.Boolean discPrice)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -14482,6 +14485,9 @@ namespace OM21100
             oM_DiscSeq.SubBreakType = subBreakType;
             oM_DiscSeq.BreakBoundType = breakBoundType;
             oM_DiscSeq.ConvertDiscAmtToFreeItem = convertDiscAmtToFreeItem;
+            oM_DiscSeq.DiscSeqSolomon = discSeqSolomon;
+            oM_DiscSeq.InvtIDSolomon = invtIDSolomon;
+            oM_DiscSeq.DiscPrice = discPrice;
             return oM_DiscSeq;
         }
 
@@ -15502,6 +15508,78 @@ namespace OM21100
         private global::System.Boolean _ConvertDiscAmtToFreeItem;
         partial void OnConvertDiscAmtToFreeItemChanging(global::System.Boolean value);
         partial void OnConvertDiscAmtToFreeItemChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeqSolomon
+        {
+            get
+            {
+                return _DiscSeqSolomon;
+            }
+            set
+            {
+                OnDiscSeqSolomonChanging(value);
+                ReportPropertyChanging("DiscSeqSolomon");
+                _DiscSeqSolomon = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscSeqSolomon");
+                OnDiscSeqSolomonChanged();
+            }
+        }
+        private global::System.String _DiscSeqSolomon;
+        partial void OnDiscSeqSolomonChanging(global::System.String value);
+        partial void OnDiscSeqSolomonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtIDSolomon
+        {
+            get
+            {
+                return _InvtIDSolomon;
+            }
+            set
+            {
+                OnInvtIDSolomonChanging(value);
+                ReportPropertyChanging("InvtIDSolomon");
+                _InvtIDSolomon = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtIDSolomon");
+                OnInvtIDSolomonChanged();
+            }
+        }
+        private global::System.String _InvtIDSolomon;
+        partial void OnInvtIDSolomonChanging(global::System.String value);
+        partial void OnInvtIDSolomonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean DiscPrice
+        {
+            get
+            {
+                return _DiscPrice;
+            }
+            set
+            {
+                OnDiscPriceChanging(value);
+                ReportPropertyChanging("DiscPrice");
+                _DiscPrice = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscPrice");
+                OnDiscPriceChanged();
+            }
+        }
+        private global::System.Boolean _DiscPrice;
+        partial void OnDiscPriceChanging(global::System.Boolean value);
+        partial void OnDiscPriceChanged();
 
         #endregion
 
@@ -18139,6 +18217,78 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideDiscAmtBonus;
         partial void OnHideDiscAmtBonusChanging(Nullable<global::System.Boolean> value);
         partial void OnHideDiscAmtBonusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideDiscSeqSolomon
+        {
+            get
+            {
+                return _HideDiscSeqSolomon;
+            }
+            set
+            {
+                OnHideDiscSeqSolomonChanging(value);
+                ReportPropertyChanging("HideDiscSeqSolomon");
+                _HideDiscSeqSolomon = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideDiscSeqSolomon");
+                OnHideDiscSeqSolomonChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideDiscSeqSolomon;
+        partial void OnHideDiscSeqSolomonChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideDiscSeqSolomonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideInvtIDSolomon
+        {
+            get
+            {
+                return _HideInvtIDSolomon;
+            }
+            set
+            {
+                OnHideInvtIDSolomonChanging(value);
+                ReportPropertyChanging("HideInvtIDSolomon");
+                _HideInvtIDSolomon = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideInvtIDSolomon");
+                OnHideInvtIDSolomonChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideInvtIDSolomon;
+        partial void OnHideInvtIDSolomonChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideInvtIDSolomonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideDiscPrice
+        {
+            get
+            {
+                return _HideDiscPrice;
+            }
+            set
+            {
+                OnHideDiscPriceChanging(value);
+                ReportPropertyChanging("HideDiscPrice");
+                _HideDiscPrice = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideDiscPrice");
+                OnHideDiscPriceChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideDiscPrice;
+        partial void OnHideDiscPriceChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideDiscPriceChanged();
 
         #endregion
 

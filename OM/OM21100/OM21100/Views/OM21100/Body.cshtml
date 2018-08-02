@@ -557,6 +557,55 @@
                                     //        l.Change.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Change";
                                     //    })
                                     //)
+                                    
+                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+                                    .Items(
+                                        HQ.Combo().ID("cboDiscSeqSolomon")
+                                        .MarginSpec("5 0 0 5")//.Hidden(true)
+                                        .HQLangCode("OM2110DiscSeqSolomon").HQProcedure("OM21100_pcDiscSeqSolomon").HQColumnShow("Code,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("DiscSeqSolomon")
+                                        .ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";                                            
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        })
+                                        
+                                        ,HQ.Combo().ID("cboInvtIDSolomon")
+                                        .MarginSpec("5 0 0 5")//.Hidden(true)
+                                        .HQLangCode("OM21100InvtIDSolomon").HQProcedure("OM21100_pcInvtIDSolomon").HQColumnShow("Code,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("InvtIDSolomon")
+                                        .ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";                                            
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        })
+                                        
+                                        , HQ.Checkbox().ID("chkDiscPrice")//.Hidden(true)
+                                        .MarginSpec("5 5 0 120")
+                                        .BoxLabel(Util.GetLang("OM21100DiscPrice")).DataIndex("DiscPrice")
+                                        .Listeners(l =>
+                                        {
+                                            l.Change.Fn = "chkDiscPrice_Change";
+                                        })
+                                    )
+                                    
+                                    
                                 )                                
                                , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                                 //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })

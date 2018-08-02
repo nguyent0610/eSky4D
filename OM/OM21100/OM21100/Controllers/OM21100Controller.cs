@@ -84,7 +84,10 @@ namespace OM21100.Controllers
                 , hideSubBreakType = false
                 , hideBreakBoundType = false
                 , hideConvertDiscAmtToFreeItem = false
-                , hideDiscAmtBonus= false;
+                , hideDiscAmtBonus= false
+                , hideDiscSeqSolomon = false
+                , hideInvtIDSolomon = false
+                , hideDiscPrice= false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -105,6 +108,9 @@ namespace OM21100.Controllers
                 hideBreakBoundType = objConfig.HideBreakBoundType.HasValue && objConfig.HideBreakBoundType.Value;
                 hideConvertDiscAmtToFreeItem = objConfig.HideConvertDiscAmtToFreeItem.HasValue && objConfig.HideConvertDiscAmtToFreeItem.Value;
                 hideDiscAmtBonus = objConfig.HideDiscAmtBonus.HasValue && objConfig.HideDiscAmtBonus.Value;
+                hideDiscSeqSolomon = objConfig.HideDiscSeqSolomon.HasValue && objConfig.HideDiscSeqSolomon.Value;
+                hideInvtIDSolomon = objConfig.HideInvtIDSolomon.HasValue && objConfig.HideInvtIDSolomon.Value;
+                hideDiscPrice = objConfig.HideDiscPrice.HasValue && objConfig.HideDiscPrice.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -123,6 +129,9 @@ namespace OM21100.Controllers
             ViewBag.hideBreakBoundType = hideBreakBoundType;
             ViewBag.hideConvertDiscAmtToFreeItem = hideConvertDiscAmtToFreeItem;
             ViewBag.hideDiscAmtBonus = hideDiscAmtBonus;
+            ViewBag.hideDiscSeqSolomon = hideDiscSeqSolomon;
+            ViewBag.hideInvtIDSolomon = hideInvtIDSolomon;
+            ViewBag.hideDiscPrice = hideDiscPrice;
             return View();
         }
 
@@ -3258,6 +3267,9 @@ namespace OM21100.Controllers
             updatedDiscSeq.BreakBoundType = inputDiscSeq.BreakBoundType;
             updatedDiscSeq.SubBreakType = inputDiscSeq.SubBreakType;
             updatedDiscSeq.ConvertDiscAmtToFreeItem = inputDiscSeq.ConvertDiscAmtToFreeItem;
+            updatedDiscSeq.DiscSeqSolomon = inputDiscSeq.DiscSeqSolomon.PassNull();
+            updatedDiscSeq.InvtIDSolomon = inputDiscSeq.InvtIDSolomon.PassNull();
+            updatedDiscSeq.DiscPrice = inputDiscSeq.DiscPrice;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;

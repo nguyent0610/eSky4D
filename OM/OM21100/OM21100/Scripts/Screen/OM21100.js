@@ -845,7 +845,10 @@ var Main = {
                 App.chkStockPromotion.hide();
             }
             App.colDiscAmtBonus.setVisible(HQ.hideDiscAmtBonus);
-           
+            App.cboInvtIDSolomon.setVisible(HQ.hideInvtIDSolomon);
+            App.chkDiscPrice.setVisible(HQ.hideDiscPrice);
+            App.cboDiscSeqSolomon.setVisible(HQ.hideDiscSeqSolomon);
+            
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -5069,6 +5072,18 @@ var chkDonateGroupProduct_Change = function (chk, newValue, oldValue, eOpts) {
         }        
     }
 }
+
+var chkDiscPrice_Change = function (chk, newValue, oldValue, eOpts) {
+    if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+        if (chk.hasFocus) {
+            HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+            chk.suspendEvents();
+            App.chkDiscPrice.setValue(false);
+            chk.resumeEvents();
+            return false;
+        }
+    }
+};
 
 
 
