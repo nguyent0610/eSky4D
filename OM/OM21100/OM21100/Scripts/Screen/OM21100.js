@@ -3124,11 +3124,11 @@ var DiscDefintion = {
                         App.chkAutoFreeItem.disable();
                     }
                     HQ.grid.show(App.grdFreeItem, ['Price']);
-                    HQ.grid.show(App.grdFreeItem, ['Priority']);
+                   // HQ.grid.show(App.grdFreeItem, ['Priority']);
                 }
                 else {
                     HQ.grid.hide(App.grdFreeItem, ['Price']);
-                    HQ.grid.hide(App.grdFreeItem, ['Priority']);
+                    //HQ.grid.hide(App.grdFreeItem, ['Priority']);
                     if (App.cboProAplForItem.getValue() != 'M') {
                         App.chkAutoFreeItem.enable();
                     }
