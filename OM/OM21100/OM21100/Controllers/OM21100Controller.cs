@@ -3236,11 +3236,18 @@ namespace OM21100.Controllers
             updatedDiscSeq.StartDate = inputDiscSeq.StartDate.ToDateShort();
             updatedDiscSeq.Active = inputDiscSeq.Active;
             updatedDiscSeq.AllowEditDisc = inputDiscSeq.AllowEditDisc;
-            updatedDiscSeq.AutoFreeItem = inputDiscSeq.AutoFreeItem;
+            if (inputDiscSeq.ProAplForItem == "M")
+            {
+                updatedDiscSeq.AutoFreeItem = true;
+            }
+            else
+            {
+                updatedDiscSeq.AutoFreeItem = inputDiscSeq.AutoFreeItem;
+            }
+            updatedDiscSeq.ProAplForItem = inputDiscSeq.ProAplForItem;
             updatedDiscSeq.BreakBy = inputDiscSeq.BreakBy;
             updatedDiscSeq.BudgetID = inputDiscSeq.BudgetID;
-            updatedDiscSeq.Descr = inputDiscSeq.Descr;
-            updatedDiscSeq.ProAplForItem = inputDiscSeq.ProAplForItem;
+            updatedDiscSeq.Descr = inputDiscSeq.Descr;            
             updatedDiscSeq.Promo = inputDiscSeq.Promo;
             updatedDiscSeq.POUse = inputDiscSeq.POUse;
             updatedDiscSeq.POEndDate = inputDiscSeq.POEndDate.ToDateShort();
