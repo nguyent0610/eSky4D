@@ -3,6 +3,7 @@ HQ.focus = 'batch';
 HQ.objBatch = null;
 HQ.isTransfer = false;
 HQ.objUser = null;
+var _siteID = '';
 //// Store ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
@@ -102,6 +103,7 @@ var checkSelectLot = function (records, options, success) {
 //////////////////////////////////////////////////////////////////
 
 var frmMain_BoxReady = function () {
+    App.cboSlsperID.allowBlank = !HQ.allowSlsper;
     HQ.util.checkAccessRight();
     if (showFromSite) {
         App.cboFromToSiteID.show();
@@ -112,6 +114,7 @@ var frmMain_BoxReady = function () {
         App.hideLabel.show();
     }
 
+    
     HQ.numDetail = 0;
     HQ.maxDetail = 2;
     HQ.numSource = 0;
@@ -138,6 +141,9 @@ var frmMain_BoxReady = function () {
     App.stoUnitConversion.load();
     App.cboTransInvtID.store.reload();
     App.stoInvt = App.cboTransInvtID.getStore();
+
+    App.cboPerPost.store.addListener('load', cboPerPost_Load);
+    App.cboPerPost.store.reload();
 
     App.smlTrans.tab = false;
     if (HQ.showWhseLoc == 0) {
@@ -171,6 +177,12 @@ var frmMain_BoxReady = function () {
         if (App.colLotQtyOnHand) {
             App.colLotQtyOnHand.show();
         }
+    }
+}
+
+function cboPerPost_Load() {
+    if (HQ.perpost) {
+        App.cboPerPost.setValue(HQ.perpost);
     }
 }
 
@@ -357,9 +369,14 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
     } else {
         if (HQ.recentRecord != record) {
             App.cboBatNbr.store.reload();
+            if (HQ.perpost) {
+                App.cboPerPost.setValue(HQ.perpost);
+            } else {
+                
+                App.cboPerPost.setValue('');
+            }
         }
-        else {
-        }
+
     }
     HQ.recentRecord = record;
 };
@@ -492,16 +509,20 @@ var btnLotDel_Click = function () {
 };
 
 var btnExport_Click = function () {
-    if (Ext.isEmpty(App.cboBatNbr.getValue())) {
-        HQ.message.show('1000', [HQ.common.getLang('batnbr')], '', true);
-        return;
-    }
+    //if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+    //    HQ.message.show('1000', [HQ.common.getLang('batnbr')], '', true);
+    //    return;
+    //}
     
     App.frmMain.submit({
         url: 'IN10200/Export',
         timeout: 1000000,
         type: 'POST',
         clientValidation: false,
+        params: {
+            branchID: App.txtBranchID.getValue()
+
+        },
         success: function (msg, data) {
         },
         failure: function (msg, data) {
@@ -694,7 +715,9 @@ var btnImport_Click = function (c, e) {
                 type: 'POST',
                 clientValidation: false,
                 params: {
-                    lineRef: lastLineRef()
+                    lineRef: lastLineRef(),
+                    branchID: App.txtBranchID.getValue(),
+                    cboWhseLoc: App.cboWhseLoc.getValue()
                 },
                 success: function (msg, data) {
                     if (this.result.data.lstTrans != undefined) {
@@ -715,6 +738,7 @@ var btnImport_Click = function (c, e) {
                                 newTrans.data.Qty = item.Qty;
                                 newTrans.data.QtyOnHand = item.QtyOnHand;
                                 newTrans.data.SiteID = item.SiteID;
+                                newTrans.data.WhseLoc = item.WhseLoc;
                                 newTrans.data.TranDate = App.txtDateEnt.getValue();
                                 newTrans.data.TranDesc = item.TranDesc;
                                 newTrans.data.TranType = 'II';
@@ -766,6 +790,7 @@ var btnImport_Click = function (c, e) {
                                 newLot.data.Qty = item.Qty;
                                 newLot.data.QtyOnHand = item.QtyOnHand;
                                 newLot.data.SiteID = item.SiteID;
+                                newLot.data.WhseLoc = item.WhseLoc;
                                 newLot.data.SlsperID = '';
                                 newLot.data.TranDate = App.txtDateEnt.getValue();
                                 newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
@@ -840,7 +865,10 @@ var grdTrans_BeforeEdit = function (item, e) {
     //if (App.grdTrans.isLock) {
     //    return false;
     //}
-
+    if (e.field === 'WhseLoc') {
+        _siteID = e.record.data.SiteID;
+        App.cboWhseLocTrans.store.reload();
+    }
     if (Ext.isEmpty(App.cboSiteID.getValue())) {
         HQ.message.show(1000, [HQ.common.getLang('SiteID')], '', true);
         return false;
@@ -912,6 +940,9 @@ var grdTrans_Edit = function (item, e) {
         if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
+        if (e.field === 'SiteID') {
+            e.record.set('WhseLoc', '');
+        }
         var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
 
@@ -982,13 +1013,26 @@ var grdTrans_Edit = function (item, e) {
 };
 
 var grdTrans_ValidateEdit = function (item, e) {
+    if (e.field === "SiteID" && e.value === e.record.data.SiteID) {
+        return false;
+    }
 };
 
 var grdLot_BeforeEdit = function (item, e) {
     if (App.grdLot.isLock) {
         return false;
     }
+    if ((e.field === 'WhseLoc' || e.field === 'SiteID') && !HQ.IsChangeSite) {
+        return false;
+    }
 
+    if (e.field === 'WhseLoc' && !HQ.showWhseLocColumn) {
+        return false;
+    }
+
+    if (e.field === 'SiteID' && !HQ.showSiteColumn) {
+        return false;
+    }
     var key = e.field;
     var record = e.record;
     if (key != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
@@ -1057,10 +1101,15 @@ var grdLot_Edit = function (item, e) {
 
 var bindTran = function () {
     if (App.stoTrans.data.items.length > 0) {
+
+        App.cboSiteID.store.reload();
+        App.cboWhseLocTrans.store.reload();
+        App.cboReasonTrans.store.reload();
+
         var objFirst = App.stoTrans.data.items[0].data;
-        App.cboSiteID.setValue(objFirst.SiteID);
+       // App.cboSiteID.setValue(objFirst.SiteID);
         App.cboSlsperID.setValue(objFirst.SlsperID);
-        App.cboWhseLoc.setValue(objFirst.WhseLoc);
+        //App.cboWhseLoc.setValue(objFirst.WhseLoc);
     }
     App.lblQtyAvail.setText('');
 
@@ -1084,6 +1133,9 @@ var bindBatch = function (record) {
     App.cboStatus.forceSelection = false;
     App.frmMain.loadRecord(HQ.objBatch);
     App.cboStatus.forceSelection = false;
+    if (HQ.perpost && !HQ.objBatch.data.PerPost) {
+        HQ.objBatch.data.PerPost = HQ.perpost;
+    }
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
     App.cboSiteID.events['change'].resume();
@@ -1116,6 +1168,21 @@ var save = function () {
         return;
     }
 
+
+    var checkPerPost = false;
+    if (HQ.checkperPost) {
+        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
+        if (objPerPost != undefined) {
+            var tam = App.DateEnt.getValue();
+            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
+                checkPerPost = true;
+            }
+        }
+        else {
+            checkPerPost = true;
+        }
+    }
+
     if ((App.cboBatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.cboBatNbr.value) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
         return;
@@ -1140,6 +1207,20 @@ var save = function () {
                 App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
                 flat = true;
                 return false;
+            }
+
+            if (HQ.showSiteColumn) {
+                if (!item.data.SiteID) {
+                    HQ.message.show(1000, 'SiteID');
+                    return false;
+                }
+            }
+
+            if (HQ.showWhseLocColumn) {
+                if (!item.data.WhseLoc) {
+                    HQ.message.show(1000, 'WhseLoc');
+                    return false;
+                }
             }
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
@@ -1207,14 +1288,16 @@ var save = function () {
             timeout: 180000,
             params: {
                 lstTrans: Ext.encode(App.stoTrans.getRecordsValues()),
-                lstLot: Ext.encode(App.stoLotTrans.getRecordsValues())
+                lstLot: Ext.encode(App.stoLotTrans.getRecordsValues()),
+                PerPost: App.cboPerPost.getValue(),
+                checkPerPost: checkPerPost
             },
             success: function (msg, data) {
 
                 var batNbr = '';
 
                 if (this.result.data != undefined && this.result.data.batNbr != null) {
-                    var batNbr = this.result.data.batNbr
+                    var batNbr = this.result.data.batNbr;
                 }
                 if (!Ext.isEmpty(batNbr)) {
                     App.cboBatNbr.forceSelection = false
@@ -1228,8 +1311,11 @@ var save = function () {
                 }
 
                 setChange(false);
+                if (HQ.checkperPost && this.result.data.checkPerPost) {
+                    HQ.message.show(2018071311, '', '', true);
+                } else {
                 HQ.message.process(msg, data, true);
-
+                }
               
             },
             failure: function (msg, data) {
@@ -1536,9 +1622,21 @@ var defaultOnNew = function () {
     }
     else {
         App.cboWhseLoc.setValue(HQ.WhseLoc);
-    }    
+    }
+    if (HQ.perpost) {
+        App.cboPerPost.setValue(HQ.perpost);
+    }
     App.cboSlsperID.setValue('');
     App.frmMain.validate();
+
+
+    if (HQ.showSiteColumn) {
+        App.colSiteID.show();
+    }
+    if (HQ.showWhseLocColumn) {
+        App.colWhseLoc.show();
+    }
+
     bindBatch(record);
 };
 
@@ -1661,7 +1759,7 @@ var checkExitEdit = function (row) {
 
         trans.ReasonCD = App.cboReasonCD.getValue();
         trans.SiteID = App.cboSiteID.getValue();
-
+        trans.WhseLoc = App.cboWhseLoc.getValue();
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
 
@@ -2058,6 +2156,16 @@ var renderRowNumber = function (value, meta, record) {
 var renderQtyAmt = function (value) {
     return Ext.util.Format.number(value, '0,000');
 };
+var rendererReason = function (val) {
+    var record = HQ.store.findRecord(App.ReasonCD.store, ["ReasonCD"], [val]);
+    return (record) ? record.data.Descr : val;
+}
+
+var rendererWhseLoc = function (val) {
+    var record = HQ.store.findRecord(App.cboWhseLoc.store, ["WhseLoc"], [val]);
+    return (record) ? record.data.Descr : val;
+}
+
 var rendererWarrantyDate = function (value, meta, record) {
     var date = new Date(1900, 0, 1);
     if (record.data.WarrantyDate != null) {
