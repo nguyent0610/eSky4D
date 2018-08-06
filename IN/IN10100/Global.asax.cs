@@ -39,15 +39,15 @@ namespace IN10100
 
             Current.Authorize = false;
             //Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.Server = "TRUONGSAD";//HOANGSAD
-            Current.DBSys = "PhuThai_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "TRUONGSAD";// TRUONGSAD   HOANGSAD
+            Current.DBSys = "PhuThai_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); PhuThai_Test_eSky4DSys PhuThai_eSky4DSys
             Current.FormatDate = "dd-MM-yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10100"] = acc;
-            Session["DBApp"] = Current.DBApp = "PhuThai_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "PhuThai_eSky4DApp";// "eBiz4DWebApp"; PhuThai_Test_eSky4DApp  PhuThai_eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "040100001";
             Session["Language"] = Current.Language = "vi";
