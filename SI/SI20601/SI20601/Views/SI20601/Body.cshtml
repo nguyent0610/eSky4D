@@ -47,7 +47,9 @@
             X.RowNumbererColumn().Width(40),
             X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(200).EnforceMaxLength(true)),
-            X.CommandColumn()
+            X.Column().Text(Util.GetLang("Distance")).DataIndex("Distance").Width(150).ID("txtDistance")
+            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2)).Renderer("renderDistance")
+            ,X.CommandColumn()
             .Width(150)
             .Commands(
                 X.GridCommand()

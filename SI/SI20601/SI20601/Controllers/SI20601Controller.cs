@@ -23,6 +23,15 @@ namespace SI20601.Controllers
         public ActionResult Index()
         {            
             Util.InitRight(_screenNbr);
+            var Distance = false;
+            var config = _db.SI20601_pdConfig(Current.CpnyID,Current.UserName,Current.LangID).FirstOrDefault();
+            if (config != null)
+            {
+                Distance = config.Distance.HasValue && config.Distance.Value;
+            }
+            ViewBag.Distance = Distance;
+
+
             return View();
         }
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -98,7 +107,7 @@ namespace SI20601.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
-
+            t.Distance = s.Distance;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

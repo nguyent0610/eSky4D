@@ -1,28 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="SI_Zone" EntityType="eBiz4DWebSysModel.Store.SI_Zone" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SI_Zone">
           <Key>
             <PropertyRef Name="Code" />
           </Key>
-          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="PrefixCustID" Type="varchar" MaxLength="10" />
+          <Property Name="Distance" Type="float" />
         </EntityType>
+        <Function Name="SI20601_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SI20601_ppZone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SI_Zone" EntityType="Self.SI_Zone" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -30,6 +37,11 @@
         <EntityContainer Name="SI20601Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_Zone" EntityType="SI20601Model.SI_Zone" />
           <FunctionImport Name="SI20601_ppZone" ReturnType="Collection(SI20601Model.SI20601_ppZone_Result)" />
+          <FunctionImport Name="SI20601_pdConfig" ReturnType="Collection(SI20601Model.SI20601_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_Zone">
           <Key>
@@ -44,11 +56,17 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="PrefixCustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Distance" Type="Double" />
         </EntityType>
         <ComplexType Name="SI20601_ppZone_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SI20601_pdConfig_Result">
+          <Property Type="Boolean" Name="Distance" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -59,6 +77,8 @@
           <EntitySetMapping Name="SI_Zone">
             <EntityTypeMapping TypeName="SI20601Model.SI_Zone">
               <MappingFragment StoreEntitySet="SI_Zone">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="PrefixCustID" ColumnName="PrefixCustID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -77,6 +97,14 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI20601_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SI20601_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI20601Model.SI20601_pdConfig_Result">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -96,6 +124,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
