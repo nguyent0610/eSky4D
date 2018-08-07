@@ -90,6 +90,7 @@ namespace AR20500.Controllers
         {
             bool hideMarketRoute = false;
             int LimitedYear = 0;
+            bool hideTime = false;
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             #region -Check config-                        
@@ -178,9 +179,11 @@ namespace AR20500.Controllers
             {
                 hideMarketRoute = obj.HideMarketRoute.HasValue && obj.HideMarketRoute.Value;
                 LimitedYear = objConfig.LimitedYear.ToInt() + 1;
+                hideTime = objConfig.HideTime.HasValue && objConfig.HideTime.Value;
             }
             ViewBag.hideMarketRoute = hideMarketRoute;
             ViewBag.limitedYear = LimitedYear;
+            ViewBag.hideTime = hideTime;
             return View();
         }
 
@@ -712,6 +715,7 @@ namespace AR20500.Controllers
             master.SubRouteID = item.SubRouteID;
             master.DelRouteDet = false;
             master.VisitsPerDay = item.VisitsPerDay;
+            master.ExtendRoute = false;
         }
         private void Update_AR_Customer(ref AR_Customer objCust, AR20500_pgDetail_Result  item, AR_NewCustomerInfor objNew)
         {
@@ -891,6 +895,7 @@ namespace AR20500.Controllers
                         det.LUpd_Datetime = DateTime.Now;
                         det.LUpd_Prog = _screenNbr;
                         det.LUpd_User = _userName;
+                        det.ExtendRoute = false;
                         dMon = GetDateFromDayofWeek(FromDate.Year, i, "Monday");
                         dTue = GetDateFromDayofWeek(FromDate.Year, i, "Tuesday");
                         dWed = GetDateFromDayofWeek(FromDate.Year, i, "Wednesday");
@@ -925,6 +930,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dMon;
                                     det1.DayofWeek = "Mon";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     _db.OM_SalesRouteDet.AddObject(det1);
 
                                 }
@@ -951,6 +957,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dTue;
                                     det1.DayofWeek = "Tue";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
                                 if (master.Wed && dWed <= ToDate && dWed >= FromDate)
@@ -976,6 +983,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dWed;
                                     det1.DayofWeek = "Wed";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1002,6 +1010,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dThu;
                                     det1.DayofWeek = "Thu";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1028,6 +1037,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dFri;
                                     det1.DayofWeek = "Fri";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1054,6 +1064,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dSat;
                                     det1.DayofWeek = "Sat";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1080,6 +1091,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dSun;
                                     det1.DayofWeek = "Sun";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1112,6 +1124,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dMon;
                                     det1.DayofWeek = "Mon";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1138,6 +1151,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dTue;
                                     det1.DayofWeek = "Tue";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1164,6 +1178,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dWed;
                                     det1.DayofWeek = "Wed";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1189,6 +1204,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dThu;
                                     det1.DayofWeek = "Thu";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1215,6 +1231,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dFri;
                                     det1.DayofWeek = "Fri";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1241,6 +1258,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dSat;
                                     det1.DayofWeek = "Sat";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1267,6 +1285,7 @@ namespace AR20500.Controllers
                                     det1.VisitDate = dSun;
                                     det1.DayofWeek = "Sun";
                                     det1.WeekNbr = i;
+                                    det1.ExtendRoute = false;
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
@@ -1297,6 +1316,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dMon;
                                 det1.DayofWeek = "Mon";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
@@ -1324,6 +1344,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dTue;
                                 det1.DayofWeek = "Tue";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
@@ -1351,6 +1372,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dWed;
                                 det1.DayofWeek = "Wed";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
@@ -1377,6 +1399,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dThu;
                                 det1.DayofWeek = "Thu";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
@@ -1403,6 +1426,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dFri;
                                 det1.DayofWeek = "Fri";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
@@ -1434,6 +1458,7 @@ namespace AR20500.Controllers
                                         det1.VisitDate = dSat;
                                         det1.DayofWeek = "Sat";
                                         det1.WeekNbr = i;
+                                        det1.ExtendRoute = false;
                                         //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                         _db.OM_SalesRouteDet.AddObject(det1);
                                     }
@@ -1462,6 +1487,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dSat;
                                 det1.DayofWeek = "Sat";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
@@ -1488,6 +1514,7 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dSun;
                                 det1.DayofWeek = "Sun";
                                 det1.WeekNbr = i;
+                                det1.ExtendRoute = false;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
@@ -1515,6 +1542,7 @@ namespace AR20500.Controllers
                         det.LUpd_Datetime = DateTime.Now;
                         det.LUpd_Prog = _userName;
                         det.LUpd_User = _userName;
+                        det.ExtendRoute = false;
                         dMon = GetDateFromDayofWeek(FromDate.Year, i, "Monday");
                         dTue = GetDateFromDayofWeek(FromDate.Year, i, "Tuesday");
                         dWed = GetDateFromDayofWeek(FromDate.Year, i, "Wednesday");
@@ -1545,6 +1573,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dMon;
                             det1.DayofWeek = "Mon";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
 
                             _db.OM_SalesRouteDet.AddObject(det1);
@@ -1572,6 +1601,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dTue;
                             det1.DayofWeek = "Tue";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
 
                             _db.OM_SalesRouteDet.AddObject(det1);
@@ -1599,6 +1629,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dWed;
                             det1.DayofWeek = "Wed";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
@@ -1625,6 +1656,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dThu;
                             det1.DayofWeek = "Thu";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
@@ -1651,6 +1683,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dFri;
                             det1.DayofWeek = "Fri";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
@@ -1677,6 +1710,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dSat;
                             det1.DayofWeek = "Sat";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
@@ -1703,6 +1737,7 @@ namespace AR20500.Controllers
                             det1.VisitDate = dSun;
                             det1.DayofWeek = "Sun";
                             det1.WeekNbr = i;
+                            det1.ExtendRoute = false;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }

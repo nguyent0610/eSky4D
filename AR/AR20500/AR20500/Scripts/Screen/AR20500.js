@@ -79,6 +79,8 @@ var frmMain_BoxReady = function () {
     App.dteToDate.setMaxValue(date);
     App.FromDate.setMaxValue(date);
     App.ToDate.setMaxValue(date);
+    App.dtpDate1.setVisible(HQ.HideTime);
+    App.dtpDate2.setVisible(HQ.HideTime);
 };
 
 var cboTerritory_Change = function (sender, e) {

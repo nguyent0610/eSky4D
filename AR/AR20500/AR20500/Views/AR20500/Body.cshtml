@@ -692,8 +692,8 @@
                         )
                         //Them thoi gian
 
-                        , X.DateColumn().Text(Util.GetLang("AR20500Date1")).DataIndex("Date1").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
-                        , X.DateColumn().Text(Util.GetLang("AR20500Date2")).DataIndex("Date2").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
+                        , X.DateColumn().Text(Util.GetLang("AR20500Date1")).DataIndex("Date1").ID("dtpDate1").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
+                        , X.DateColumn().Text(Util.GetLang("AR20500Date2")).DataIndex("Date2").ID("dtpDate2").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
                         //end them thoi gian
                         , X.CommandColumn().Width(130)
                         .Commands(

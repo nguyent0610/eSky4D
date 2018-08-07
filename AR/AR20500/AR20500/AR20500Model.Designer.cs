@@ -10658,6 +10658,30 @@ namespace AR20500
         private global::System.String _LimitedYear;
         partial void OnLimitedYearChanging(global::System.String value);
         partial void OnLimitedYearChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideTime
+        {
+            get
+            {
+                return _HideTime;
+            }
+            set
+            {
+                OnHideTimeChanging(value);
+                ReportPropertyChanging("HideTime");
+                _HideTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideTime");
+                OnHideTimeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideTime;
+        partial void OnHideTimeChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideTimeChanged();
 
         #endregion
 
