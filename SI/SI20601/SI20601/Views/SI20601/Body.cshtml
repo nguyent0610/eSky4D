@@ -95,7 +95,8 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("Code"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                    X.NumericFilter().DataIndex("Distance")
                 )
         )
     )
