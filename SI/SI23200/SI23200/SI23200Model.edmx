@@ -19,7 +19,13 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Distance" Type="float" />
         </EntityType>
+        <Function Name="SI23200_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SI23200_pgLoadArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -39,6 +45,11 @@
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="SI23200_pdConfig" ReturnType="Collection(SI23200Model.SI23200_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_SubTerritory">
           <Key>
@@ -54,12 +65,17 @@
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Distance" Type="Double" />
         </EntityType>
         <ComplexType Name="SI23200_pgLoadArea_Result">
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SI23200_pdConfig_Result">
+          <Property Type="Boolean" Name="Distance" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -70,6 +86,7 @@
           <EntitySetMapping Name="SI_SubTerritory">
             <EntityTypeMapping TypeName="SI23200Model.SI_SubTerritory">
               <MappingFragment StoreEntitySet="SI_SubTerritory">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
@@ -90,6 +107,14 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI23200_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SI23200_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI23200Model.SI23200_pdConfig_Result">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

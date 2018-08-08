@@ -90,6 +90,7 @@ var firstLoad = function () {
         App.menuClickbtnSave.disable();
     }
     App.cboTerritory.getStore().addListener('load', checkLoad);
+    App.txtDistance.setVisible(HQ.Distance);
     //App.stoArea.reload();
 };
 
@@ -220,5 +221,7 @@ var checkRequire = function (items) {
         return true;
     }
 };
-
-///////////////////////////////////
+var renderDistance = function (value) {
+    return Ext.util.Format.number(value, '0,000.00');
+};
+//////////////////////////////////

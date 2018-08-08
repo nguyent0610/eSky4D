@@ -87,7 +87,9 @@
                                                 })
                                                 ),
                                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(180)
-                                              .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),                
+                                              .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),   
+                                               X.Column().Text(Util.GetLang("Distance")).DataIndex("Distance").Width(150).ID("txtDistance")
+                                            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2)).Renderer("renderDistance"),             
                                     X.CommandColumn().Width(150)
                                                     .Commands(
                                                                 X.GridCommand()
@@ -140,7 +142,10 @@
                                     .Local(true)
                                     .Filters(
                                             X.StringFilter().DataIndex("Area"),
-                                            X.StringFilter().DataIndex("Descr")                                                        
+                                            X.StringFilter().DataIndex("Descr"),
+                                            X.StringFilter().DataIndex("Code"),
+                                            X.StringFilter().DataIndex("Territory"),
+                                            X.NumericFilter().DataIndex("Distance")                                                        
                                             )
                                 )
             )

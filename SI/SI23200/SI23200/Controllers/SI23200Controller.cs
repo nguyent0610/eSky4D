@@ -25,6 +25,13 @@ namespace SI23200.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var Distance = false;
+            var config = _db.SI23200_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (config != null)
+            {
+                Distance = config.Distance.HasValue && config.Distance.Value;
+            }
+            ViewBag.Distance = Distance;
             return View();
         }
 
@@ -110,7 +117,8 @@ namespace SI23200.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
-            t.Territory = s.Territory;            
+            t.Territory = s.Territory;
+            t.Distance = s.Distance;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
