@@ -82,6 +82,7 @@ var firstLoad = function () {
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();
+    App.txtDistance.setVisible(HQ.Distance);
 };
 
 var frmChange = function () {
@@ -184,4 +185,7 @@ function refresh(item) {
         HQ.isFirstLoad = true;
         App.stoTerritory.reload();
     }
+};
+var renderDistance = function (value) {
+    return Ext.util.Format.number(value, '0,000.00');
 };

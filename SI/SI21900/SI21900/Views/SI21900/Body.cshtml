@@ -73,7 +73,9 @@
                         ),
                         
              X.Column().Text(Util.GetLang("ZoneDescr")).DataIndex("ZoneDescr").Width(150),
-                  //  .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),            
+                  //  .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),    
+                   X.Column().Text(Util.GetLang("Distance")).DataIndex("Distance").Width(150).ID("txtDistance")
+            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2)).Renderer("renderDistance"),        
                             
             X.CommandColumn()
             .Width(150)
@@ -123,7 +125,8 @@
                     X.StringFilter().DataIndex("Territory"),
                     X.StringFilter().DataIndex("Descr"),
                      X.StringFilter().DataIndex("Zone"),
-                      X.StringFilter().DataIndex("ZoneDescr")
+                      X.StringFilter().DataIndex("ZoneDescr"),
+                      X.NumericFilter().DataIndex("Distance")
                 )
         )
     )
