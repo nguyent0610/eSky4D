@@ -879,6 +879,12 @@
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
           <Parameter Name="LineRef" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM21100_pgPromotionsCopy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="DiscID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM21100_ppCheckdDuplicatePriorityPromo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DiscID" Type="varchar" Mode="In" />
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
@@ -906,6 +912,15 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21100_ppPromotionsCopy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="DiscIDOld" Type="varchar" Mode="In" />
+          <Parameter Name="DiscSeqOld" Type="varchar" Mode="In" />
+          <Parameter Name="DiscIDNew" Type="varchar" Mode="In" />
+          <Parameter Name="DiscSeqNew" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM21100_ptChannel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -1227,6 +1242,21 @@
             <Parameter Name="LstItemClass" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_DiscSeq" EntityType="OM21100Model.OM_DiscSeq" />
+          <FunctionImport Name="OM21100_pgPromotionsCopy" ReturnType="Collection(OM21100Model.OM21100_pgPromotionsCopy_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="DiscID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21100_ppPromotionsCopy">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="DiscIDOld" Mode="In" Type="String" />
+            <Parameter Name="DiscSeqOld" Mode="In" Type="String" />
+            <Parameter Name="DiscIDNew" Mode="In" Type="String" />
+            <Parameter Name="DiscSeqNew" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
           <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
@@ -1735,6 +1765,7 @@
           <Property Type="Boolean" Name="HideDiscSeqSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideInvtIDSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideDiscPrice" Nullable="true" />
+          <Property Type="Boolean" Name="HideCopy" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -2250,6 +2281,16 @@
           <Property Name="InvtIDSolomon" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DiscPrice" Type="Boolean" Nullable="false" />
         </EntityType>
+        <ComplexType Name="OM21100_pgPromotionsCopy_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="DiscSeq" Nullable="false" MaxLength="10" />
+          <Property Type="Int16" Name="Active" Nullable="false" />
+          <Property Type="String" Name="Descr" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="16" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2848,6 +2889,7 @@
                 <ScalarProperty Name="HideDiscSeqSolomon" ColumnName="HideDiscSeqSolomon" />
                 <ScalarProperty Name="HideInvtIDSolomon" ColumnName="HideInvtIDSolomon" />
                 <ScalarProperty Name="HideDiscPrice" ColumnName="HideDiscPrice" />
+                <ScalarProperty Name="HideCopy" ColumnName="HideCopy" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3396,6 +3438,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_pgPromotionsCopy" FunctionName="eBiz4DWebAppModel.Store.OM21100_pgPromotionsCopy">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_pgPromotionsCopy_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ppPromotionsCopy" FunctionName="eBiz4DWebAppModel.Store.OM21100_ppPromotionsCopy" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

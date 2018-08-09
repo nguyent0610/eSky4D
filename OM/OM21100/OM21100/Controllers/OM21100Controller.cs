@@ -87,7 +87,8 @@ namespace OM21100.Controllers
                 , hideDiscAmtBonus= false
                 , hideDiscSeqSolomon = false
                 , hideInvtIDSolomon = false
-                , hideDiscPrice= false;
+                , hideDiscPrice= false
+                , hideCopy=false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -111,6 +112,7 @@ namespace OM21100.Controllers
                 hideDiscSeqSolomon = objConfig.HideDiscSeqSolomon.HasValue && objConfig.HideDiscSeqSolomon.Value;
                 hideInvtIDSolomon = objConfig.HideInvtIDSolomon.HasValue && objConfig.HideInvtIDSolomon.Value;
                 hideDiscPrice = objConfig.HideDiscPrice.HasValue && objConfig.HideDiscPrice.Value;
+                hideCopy = objConfig.HideCopy.HasValue && objConfig.HideCopy.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -132,6 +134,7 @@ namespace OM21100.Controllers
             ViewBag.hideDiscSeqSolomon = hideDiscSeqSolomon;
             ViewBag.hideInvtIDSolomon = hideInvtIDSolomon;
             ViewBag.hideDiscPrice = hideDiscPrice;
+            ViewBag.hideCopy = hideCopy;
             return View();
         }
 
@@ -174,6 +177,12 @@ namespace OM21100.Controllers
             var subBreakItem = _db.OM21100_pgDiscSubBreakItem(Current.UserName, Current.CpnyID, Current.LangID, discID, discSeq).ToList();
             return this.Store(subBreakItem);
         }
+        public ActionResult GetPromotionsCopy(string discID)
+        {
+            var promotionsCopy = _db.OM21100_pgPromotionsCopy(Current.UserName, Current.CpnyID, Current.LangID, discID).ToList();
+            return this.Store(promotionsCopy);
+        }
+        
         [DirectMethod]
         public ActionResult OM21100GetTreeBranch(string panelID)
         {
@@ -937,6 +946,45 @@ namespace OM21100.Controllers
             catch (Exception ex)
             {
                 _db.OM21100_pdUpdataErro(_oldStatus, _discID, _discSeq, Current.UserName, Current.CpnyID, Current.LangID);
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        public ActionResult SaveDataCopy(FormCollection data, string DiscIDNew, string DiscSeqNew)
+        { 
+            try
+            {
+                string DiscIDOld = string.Empty;
+                string DiscSeqOld = string.Empty;
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstPromotionsCopy"]);
+                var curHeader = dataHandler1.ObjectData<OM21100_pgPromotionsCopy_Result>().ToList();
+                foreach(var lst in curHeader){
+                    if (lst.Selected == false) continue;
+                    else
+                    {
+                        DiscIDOld = lst.DiscID;
+                        DiscSeqOld = lst.DiscSeq;
+                    }
+                }
+                var obj = _db.OM_DiscSeq.FirstOrDefault(p=>p.DiscID==DiscIDNew && p.DiscSeq==DiscSeqNew);
+                if (obj == null)
+                {
+                    _db.OM21100_ppPromotionsCopy(Current.CpnyID, Current.UserName, Current.LangID, DiscIDOld, DiscSeqOld, DiscIDNew, DiscSeqNew);
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "2018080961");
+                }
+                return Json(new { success = true, msgCode = 201405071 });
+            }
+            catch (Exception ex)
+            {
                 if (ex is MessageException)
                 {
                     return (ex as MessageException).ToMessage();

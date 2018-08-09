@@ -10,23 +10,30 @@
 }
 
 @(
-     Html.X().Viewport().Layout(LayoutType.Fit)
+ Html.X().Viewport().Layout(LayoutType.Fit)
         .Items(
             X.FormPanel()
             .Layout(LayoutType.Fit)
             .ID("frmMain")
             .TrackResetOnLoad(true)
-            //.DefaultAnchor("100%")
+        //.DefaultAnchor("100%")
             .BodyPadding(10)
             .AutoScroll(true)
             .BodyBorder(0).AutoScroll(true)
-            //.TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
-            //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ 
-            //    // X.FileUploadField()
-            //    // .ID("btnUpload1").Hidden(true)
-            //}, buttonHidden: "", isShowNavigationButtons: true, handlerName: "Main.Event.menuClick"))
+        //.TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
+        //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+        //    // X.FileUploadField()
+        //    // .ID("btnUpload1").Hidden(true)
+        //}, buttonHidden: "", isShowNavigationButtons: true, handlerName: "Main.Event.menuClick"))
             .TopBar(Util.SetupToolbar(new AbstractComponent[]{
-            X.FileUploadField()
+            X.Button()
+            .ID("btnCopy")
+            .Text(Util.GetLang("Copy"))
+            .Icon(Icon.DatabaseCopy)
+            .Listeners(p=>{
+                p.Click.Fn = "btnCopy_Click";
+            })
+            ,X.FileUploadField()
             .ID("btnImport")
             .ButtonText("Import")
             .ButtonOnly(true)
@@ -41,6 +48,7 @@
             .Listeners(p=>{
                 p.Click.Fn = "btnExport1_Click";
             })
+
             }, "Print", true, "Main.Event.menuClick"))
             .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
             .Items(
@@ -60,7 +68,7 @@
                         .Layout(LayoutType.HBox).Region(Region.North)
                         .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
                         .Items(
-                            // First Column
+        // First Column
                             X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1)
                             .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                             .MinWidth(200).MaxWidth(400)
@@ -155,16 +163,16 @@
                                 X.FormPanel().ID("frmDiscSeqInfo")
                                 .Layout(LayoutType.VBox)
                                 .Region(Region.North)
-                                .AutoScroll(true)                                
+                                .AutoScroll(true)
                                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(false)
                                 .Items(
-                                    //X.Panel().AutoScroll(true).Layout(LayoutType.VBox).Items(
+        //X.Panel().AutoScroll(true).Layout(LayoutType.VBox).Items(
                                     X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")//.Flex(1)
-                                                                                               // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+        // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                                     .Items(
-                                        // First Column
+        // First Column
                                         X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
-                                                                                                   // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                         .MinWidth(200)//.MaxWidth(300)
                                         .Items(
 
@@ -240,12 +248,12 @@
                                             {
                                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
-                                            })                                         
+                                            })
                                         ) // Container
 
                                         // Second Column
                                         , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
-                                                                                                     // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                         .MinWidth(200)//.MaxWidth(300)
                                         .Items(
 
@@ -281,7 +289,8 @@
                                             , HQ.DateField().ID("dteStartDate")
                                             .MarginSpec("5 5 0 5")
                                             .HQLangCode("StartDate").DataIndex("StartDate")
-                                            .Listeners(l => {
+                                            .Listeners(l =>
+                                            {
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                                 l.Change.Fn = "dteStartDate_Change";
                                             })
@@ -303,12 +312,12 @@
                                                  .Name("btnUpload")
                                                 .ButtonOnly(true)
                                                 .MarginSpec("5 0 0 55")
-                                                //.ButtonText(Util.GetLang("Upload"))
+        //.ButtonText(Util.GetLang("Upload"))
 
                                                 .RemoveClearTrigger(false)
-                                                //.ClearOnSubmit(false)
-                                                //.AutoPostBack(false)
-                                                //.SubmitValue(false)
+        //.ClearOnSubmit(false)
+        //.AutoPostBack(false)
+        //.SubmitValue(false)
                                                 .Listeners(lst => lst.Change.Fn = "DiscDefintion.Event.btnUpload_change")
                                                 , X.TextField()
                                                 .ID("txtProfile")
@@ -327,7 +336,7 @@
                                         // Third Column
                                         , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
                                         .MinWidth(200)
-                                        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                         .Items(
                                             HQ.Combo().ID("cboStatus")
                                             .MarginSpec("5 5 0 5")
@@ -339,7 +348,7 @@
                                             , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             })
                                             .LoadData()
-                                            .Listeners( 
+                                            .Listeners(
                                                 l =>
                                                     l.Change.Fn = "Status_Change"
                                             )
@@ -378,7 +387,7 @@
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             l.Change.Fn = "cboRequiredType_Change";
                                         })
-                                        
+
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
                                     .MinWidth(200)
@@ -387,7 +396,7 @@
                                         .MarginSpec("5 5 0 5").Hidden(true)
                                         .HQLangCode("ExcludePromo").HQProcedure("OM21100_pcExcludePromo").HQColumnShow("DiscID,DiscSeq,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ExcludePromo")
-                                        .ForceSelection(false).MultiSelect(true)                              
+                                        .ForceSelection(false).MultiSelect(true)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -407,7 +416,7 @@
                                         .MarginSpec("5 5 0 5")//.Hidden(true)
                                         .HQLangCode("SubBreakType").HQProcedure("OM21100_pcSubBreakType").HQColumnShow("Code,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("SubBreakType")
-                                        .ForceSelection(true)
+                                        //.ForceSelection(true)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -420,12 +429,13 @@
                                             l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                             l.Change.Fn = "DiscDefintion.Event.cboSubBreakType_change";
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            l.Blur.Handler = "App.cboSubBreakType.forceSelection=false";
                                         })
                                         , HQ.Combo().ID("cboBreakBoundType")
                                         .MarginSpec("5 0 0 5")//.Hidden(true)
                                         .HQLangCode("BreakBoundType").HQProcedure("OM21100_pcBreakBoundType").HQColumnShow("Code,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBoundType")
-                                        .ForceSelection(true)
+                                        
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -438,12 +448,13 @@
                                             l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                             l.Change.Fn = "DiscDefintion.Event.cboBreakBoundType_change";
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            l.Blur.Handler = "App.cboBreakBoundType.forceSelection = false;";
                                         })
                                     )
-                                 
+
                                     // Forth Column
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-                                                                                                 // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                     .Items(
                                         HQ.Checkbox().ID("chkActive")
                                         .MarginSpec("5 5 0 10")
@@ -485,25 +496,25 @@
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-                                       
+
 
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
                                     .Items(
-                                        //HQ.Checkbox().ID("chkRequiredType")
-                                        //.MarginSpec("5 5 0 10")
-                                        //.BoxLabel(Util.GetLang("RequiredType"))
-                                        //.Listeners(l =>
-                                        //{
-                                        //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                        //    l.Change.Fn = "chkRequiredType_Change";
-                                        //})
-                                        //, X.Hidden().ID("txtRequiredType").DataIndex("RequiredType")
-                                        //.Listeners(l =>
-                                        //{
+        //HQ.Checkbox().ID("chkRequiredType")
+        //.MarginSpec("5 5 0 10")
+        //.BoxLabel(Util.GetLang("RequiredType"))
+        //.Listeners(l =>
+        //{
+        //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+        //    l.Change.Fn = "chkRequiredType_Change";
+        //})
+        //, X.Hidden().ID("txtRequiredType").DataIndex("RequiredType")
+        //.Listeners(l =>
+        //{
 
                                         //    l.Change.Fn = "txtRequiredType_Change";
-                                        //})
+        //})
                                         HQ.Checkbox().ID("chkExactQty")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
@@ -519,7 +530,7 @@
 
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-                                        
+
                                         , HQ.Checkbox().ID("chkDonateGroupProduct")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("DonateGroupProduct")).DataIndex("DonateGroupProduct")
@@ -544,20 +555,20 @@
                                             //l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                             l.Change.Fn = "DiscDefintion.Event.chkConvertDiscAmtToFreeItem_Change";
                                         })
-                                      
+
                                     ) // Container
-                                    //, X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-                                    //.Items(
-                                    //     HQ.Checkbox().ID("chkDiscAmtBonus")//.Hidden(true)
-                                    //    .MarginSpec("5 5 0 10")
-                                    //    .BoxLabel(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus")
-                                    //    .Listeners(l =>
-                                    //    {
-                                    //        l.Focus.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Focus";
-                                    //        l.Change.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Change";
-                                    //    })
-                                    //)
-                                    
+        //, X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+        //.Items(
+        //     HQ.Checkbox().ID("chkDiscAmtBonus")//.Hidden(true)
+        //    .MarginSpec("5 5 0 10")
+        //    .BoxLabel(Util.GetLang("OM21100DiscAmtBonus")).DataIndex("DiscAmtBonus")
+        //    .Listeners(l =>
+        //    {
+        //        l.Focus.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Focus";
+        //        l.Change.Fn = "DiscDefintion.Event.chkDiscAmtBonus_Change";
+        //    })
+        //)
+
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
                                     .Items(
                                         HQ.Combo().ID("cboDiscSeqSolomon")
@@ -574,11 +585,11 @@
                                         .LoadData()
                                         .Listeners(l =>
                                         {
-                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";                                            
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                         })
-                                        
-                                        ,HQ.Combo().ID("cboInvtIDSolomon")
+
+                                        , HQ.Combo().ID("cboInvtIDSolomon")
                                         .MarginSpec("5 0 0 5")//.Hidden(true)
                                         .HQLangCode("OM21100InvtIDSolomon").HQProcedure("OM21100_pcInvtIDSolomon").HQColumnShow("Code,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("InvtIDSolomon")
@@ -592,10 +603,10 @@
                                         .LoadData()
                                         .Listeners(l =>
                                         {
-                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";                                            
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                         })
-                                        
+
                                         , HQ.Checkbox().ID("chkDiscPrice")//.Hidden(true)
                                         .MarginSpec("5 5 0 120")
                                         .BoxLabel(Util.GetLang("OM21100DiscPrice")).DataIndex("DiscPrice")
@@ -604,18 +615,18 @@
                                             l.Change.Fn = "chkDiscPrice_Change";
                                         })
                                     )
-                                    
-                                    
-                                )                                
+
+
+                                )
                                , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
-                                //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
+        //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
                                 .Items(
                                      HQ.TextBox().ID("txtSeqDescr")
                                     .MarginSpec("0 5 0 5")
                                     .HQLangCode("DescrDiscSeq").DataIndex("Descr")
 
                                     .StyleSpec("text-align:left").Width(820)
-                                    //.MaxLength(50).EnforceMaxLength(true)
+        //.MaxLength(50).EnforceMaxLength(true)
                                     .AllowBlank(false)
                                     .Listeners(l =>
                                     {
@@ -625,7 +636,7 @@
                                         .MarginSpec("-5 0 0 3")
                                         .HQLangCode("ProrateAmtType").HQProcedure("OM21100_pcProrateAmtType").HQColumnShow("Code,Descr").HQAutoLoad(true)
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ProrateAmtType")//.LabelWidth(130)
-                                        //.ForceSelection(true)
+        //.ForceSelection(true)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -640,7 +651,7 @@
                                             //l.Change.Fn = "cboRequiredType_Change";
                                         })
                                              , HQ.Button().ID("btnSubBreakItem").MarginSpec("0 5 0 15").Width(120).HQLangCode("SubBreakItem")
-                                            .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItem_Click")      
+                                            .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItem_Click")
                                          , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
                                         .MarginSpec("0 5 0 16")
                                         .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
@@ -649,16 +660,16 @@
                                             l.Focus.Fn = "DiscDefintion.Event.chkStockPromotion_Focus";
                                             l.Change.Fn = "DiscDefintion.Event.chkStockPromotion_Change";
                                         })
-                 
+
                                 //, HQ.Checkbox().ID("chkExactQty")
-                                //.MarginSpec("0 5 5 8")
-                                //.BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
-                                //.Listeners(l =>
-                                //{
-                                //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                //})
+        //.MarginSpec("0 5 5 8")
+        //.BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
+        //.Listeners(l =>
+        //{
+        //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+        //})
                                 )
-                                //)
+        //)
                             )
                             .Listeners(ls =>
                             {
@@ -668,7 +679,7 @@
                             , X.Panel()
                             .Region(Region.Center)
                             .Layout(LayoutType.Border)
-                            //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top})
+        //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top})
                             .Items(
                                 X.GridPanel().ID("grdDiscBreak")
                                 .Title(Util.GetLang("DiscBreak")).TitleAlign(TitleAlign.Center)
@@ -726,7 +737,7 @@
                                     .Editor(
                                         X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
-                                    
+
                                     , X.NumberColumn().Text(Util.GetLang("Discount")).DataIndex("DiscAmt")
                                     .Align(Alignment.Right).Format("0,000.00")
                                     .Editor(
@@ -858,36 +869,36 @@
                                     ) // Container
 
                                     , X.GridPanel().ID("grdFreeItem")
-                                    //.Title(Util.GetLang("FreeItemList"))
-                                    // .Scroll(ScrollMode.Both)
-                                    //.Layout(LayoutType.Fit)
+        //.Title(Util.GetLang("FreeItemList"))
+        // .Scroll(ScrollMode.Both)
+        //.Layout(LayoutType.Fit)
                                     .Region(Region.East).Flex(60)
                                     .View(X.GridView().TrackOver(false))
                                     .SortableColumns(false)
                                     .StoreID("stoFreeItem")
 
                                     //.Store(
-                                    //    X.Store().ID("stoFreeItem").AutoLoad(false)
-                                    //    .PageSize(50)
-                                    //        .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
-                                    //    .Listeners(l =>
-                                    //        {
-                                    //            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
-                                    //            l.Load.Fn = "Main.Event.sto_load";
-                                    //            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                    //            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                                    //        })
-                                    //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetFreeItem", "OM21100")))
-                                    //    .Parameters(ps =>
-                                    //        {
-                                    //            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                    //            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                                    //        })
-                                    //)
+        //    X.Store().ID("stoFreeItem").AutoLoad(false)
+        //    .PageSize(50)
+        //        .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
+        //    .Listeners(l =>
+        //        {
+        //            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
+        //            l.Load.Fn = "Main.Event.sto_load";
+        //            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+        //            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+        //        })
+        //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetFreeItem", "OM21100")))
+        //    .Parameters(ps =>
+        //        {
+        //            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+        //            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+        //        })
+        //)
 
 
                                     .ColumnModel(
-                                        //X.RowNumbererColumn().Width(40)
+        //X.RowNumbererColumn().Width(40)
                                         X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
                                         .Editor(
                                             HQ.Combo().ID("cboFreeItemID").PageSize(20).HQisPaging(true)
@@ -918,13 +929,13 @@
                                             .ValueField("FromUnit").DisplayField("FromUnit")
                                             .ForceSelection(true).SelectOnFocus(true)
                                             .HQParam(new StoreParameterCollection() {
-                                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai                                                
+                                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
                                                 ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
                                                 ,new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
                                                 , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             })
                                             .LoadData()
-                                        //.Listeners(x => x.Expand.Handler = "this.store.reload()")
+        //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
 
@@ -939,7 +950,7 @@
                                         .Editor(
                                             HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(2)
                                         )
-                                        
+
                                         , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
                                         .Editor(
                                             HQ.Combo().ID("cboGFreeItemBudgetID")
@@ -956,7 +967,7 @@
                                         )
 
                                         , X.Column().Text(Util.GetLang("OM21100GroupItem")).ID("GroupItem").DataIndex("GroupItem").Hidden(true)
-                                            //.Width(250)
+        //.Width(250)
                                             .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
 
                                         , X.NumberColumn().Text(Util.GetLang("OM21100Prioritize")).ID("Priority").DataIndex("Priority").Hidden(true)
@@ -985,22 +996,22 @@
                                         .Listeners(l => l.Command.Handler = "Main.Event.grdFreeItem_reject(this, record);")
                                     )
                                     .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
-                                    // .BottomBar(
-                                    //    X.PagingToolbar()
-                                    //    .HideRefresh(true)
-                                    //    .Items(
-                                    //        X.Label("Page size:"),
-                                    //        X.ToolbarSpacer(10),
-                                    //        X.ComboBox()
-                                    //        .Width(80)
-                                    //        .Items("1", "2", "10", "20", "30", "50")
-                                    //        .SelectedItems("50")
-                                    //        .Listeners(l =>
-                                    //            {
-                                    //                l.Select.Fn = "HQ.grid.onPageSelect";
-                                    //            })
-                                    //    )
-                                    //)
+        // .BottomBar(
+        //    X.PagingToolbar()
+        //    .HideRefresh(true)
+        //    .Items(
+        //        X.Label("Page size:"),
+        //        X.ToolbarSpacer(10),
+        //        X.ComboBox()
+        //        .Width(80)
+        //        .Items("1", "2", "10", "20", "30", "50")
+        //        .SelectedItems("50")
+        //        .Listeners(l =>
+        //            {
+        //                l.Select.Fn = "HQ.grid.onPageSelect";
+        //            })
+        //    )
+        //)
                                     .Plugins(
                                         X.CellEditing()
                                         .ClicksToEdit(1)
@@ -1024,7 +1035,7 @@
                         .Region(Region.Center)
                         .Layout(LayoutType.Border)
                         .Items(
-                            // First Column
+        // First Column
                             X.Panel().ID("treeBranch")
                             .Region(Region.West).Flex(6)
                             .MinWidth(150).Split(true).AutoScroll(true)
@@ -1035,19 +1046,19 @@
                             )
 
                             //.DirectEvents(de =>
-                            //{
-                            //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
-                            //    de.AfterRender.Url = Url.Action("OM21100GetTreeBranch");
-                            //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                            //    de.AfterRender.CleanRequest = true;
-                            //    de.AfterRender.Method = HttpMethod.POST;
-                            //    de.AfterRender.Success = "App.treePanelBranch.getRootNode().expand()";
-                            //    de.AfterRender.Timeout = 60000;
-                            //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                            //    de.AfterRender.EventMask.ShowMask = true;
-                            //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                            //    de.AfterRender.EventMask.MinDelay = 500;
-                            //})
+        //{
+        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+        //    de.AfterRender.Url = Url.Action("OM21100GetTreeBranch");
+        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+        //    de.AfterRender.CleanRequest = true;
+        //    de.AfterRender.Method = HttpMethod.POST;
+        //    de.AfterRender.Success = "App.treePanelBranch.getRootNode().expand()";
+        //    de.AfterRender.Timeout = 60000;
+        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+        //    de.AfterRender.EventMask.ShowMask = true;
+        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+        //    de.AfterRender.EventMask.MinDelay = 500;
+        //})
                             .BottomBar(
                                 X.Toolbar()
                                 .Items(
@@ -1170,19 +1181,19 @@
                             )
 
                             //.DirectEvents(de =>
-                            //{
-                            //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
-                            //    de.AfterRender.Url = Url.Action("OM21100LoadTreeInventory");
-                            //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                            //    de.AfterRender.CleanRequest = true;
-                            //    de.AfterRender.Method = HttpMethod.POST;
-                            //    de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand()";
-                            //    de.AfterRender.Timeout = 60000;
-                            //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                            //    de.AfterRender.EventMask.ShowMask = true;
-                            //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                            //    de.AfterRender.EventMask.MinDelay = 500;
-                            //})
+        //{
+        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
+        //    de.AfterRender.Url = Url.Action("OM21100LoadTreeInventory");
+        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+        //    de.AfterRender.CleanRequest = true;
+        //    de.AfterRender.Method = HttpMethod.POST;
+        //    de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand()";
+        //    de.AfterRender.Timeout = 60000;
+        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+        //    de.AfterRender.EventMask.ShowMask = true;
+        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+        //    de.AfterRender.EventMask.MinDelay = 500;
+        //})
                             .BottomBar(
                                 X.Toolbar()
                                 .Items(
@@ -1242,7 +1253,7 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    // .StoreID("stoDiscItem")                   
+        // .StoreID("stoDiscItem")
                     .Store(
                         X.Store().ID("stoDiscItem").AutoLoad(false)
                         .PageSize(50)
@@ -1294,7 +1305,7 @@
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                        //.Listeners(x => x.Expand.Handler = "this.store.reload();")
+        //.Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
                         , X.NumberColumn().Text(Util.GetLang("CoefficientCnv")).DataIndex("CoefficientCnv").ID("colCoefficientCnv").Hidden(true)
                         .Align(Alignment.Right).Format("0,000")
@@ -1306,11 +1317,11 @@
                         .Editor(
                             X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                         )
-                        //, X.NumberColumn().Text(Util.GetLang("RequiredValueAmount")).DataIndex("RequiredValueAmount").Hidden(true)
-                        //.Align(Alignment.Right).Format("0,000")
-                        //.Editor(
-                        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
-                        //)
+        //, X.NumberColumn().Text(Util.GetLang("RequiredValueAmount")).DataIndex("RequiredValueAmount").Hidden(true)
+        //.Align(Alignment.Right).Format("0,000")
+        //.Editor(
+        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+        //)
                         , X.NumberColumn().Text(Util.GetLang("OM21100QtyLimit")).DataIndex("QtyLimit").ID("colQtyLimit").Hidden(true)
                         .Align(Alignment.Right).Format("0,000")
                         .Editor(
@@ -1325,9 +1336,9 @@
 
                         , X.NumberColumn().Text(Util.GetLang("QtyStockAdvance")).DataIndex("QtyStockAdvance").ID("colQtyStockAdvance").Hidden(true)
                         .Align(Alignment.Right).Format("0,000")
-                        //.Editor(
-                        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
-                        //)
+        //.Editor(
+        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+        //)
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
@@ -1410,20 +1421,20 @@
                                         l.AfterRender.Handler = "DiscDefintion.Event.treeBundleItem_AfterRender('treeBundleItem');";
                                     }
                                 )
-                                //.DirectEvents(de =>
-                                //{
-                                //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
-                                //    de.AfterRender.Url = Url.Action("OM21100LoadTreeBundleItem");
-                                //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                                //    de.AfterRender.CleanRequest = true;
-                                //    de.AfterRender.Method = HttpMethod.POST;
-                                //    de.AfterRender.Success = "App.treePanelBundle.getRootNode().expand()";
-                                //    de.AfterRender.Timeout = 60000;
-                                //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                                //    de.AfterRender.EventMask.ShowMask = true;
-                                //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                                //    de.AfterRender.EventMask.MinDelay = 500;
-                                //})
+        //.DirectEvents(de =>
+        //{
+        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
+        //    de.AfterRender.Url = Url.Action("OM21100LoadTreeBundleItem");
+        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+        //    de.AfterRender.CleanRequest = true;
+        //    de.AfterRender.Method = HttpMethod.POST;
+        //    de.AfterRender.Success = "App.treePanelBundle.getRootNode().expand()";
+        //    de.AfterRender.Timeout = 60000;
+        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+        //    de.AfterRender.EventMask.ShowMask = true;
+        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+        //    de.AfterRender.EventMask.MinDelay = 500;
+        //})
                                 .BottomBar(
                                     X.Toolbar()
                                     .Items(
@@ -1483,7 +1494,7 @@
                     .Scroll(ScrollMode.Both).Flex(60)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    //.StoreID("stoBundle")                    
+        //.StoreID("stoBundle")
                     .Store(
                         X.Store().ID("stoBundle").AutoLoad(false)
                         .PageSize(50)
@@ -1535,7 +1546,7 @@
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdBundle,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                        // .Listeners(x => x.Expand.Handler = "this.store.reload();")
+        // .Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
@@ -1592,16 +1603,16 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-                //.Features(
-                //    X.GridFilters()
-                //    .Local(true)
-                //    .Filters(
-                //            X.StringFilter().DataIndex("InvtID"),
-                //        X.StringFilter().DataIndex("CustName"),
-                //        X.StringFilter().DataIndex("BranchID"),
-                //        X.StringFilter().DataIndex("TerritoryName")
-                //    )
-                //) // grdBundle
+        //.Features(
+        //    X.GridFilters()
+        //    .Local(true)
+        //    .Filters(
+        //            X.StringFilter().DataIndex("InvtID"),
+        //        X.StringFilter().DataIndex("CustName"),
+        //        X.StringFilter().DataIndex("BranchID"),
+        //        X.StringFilter().DataIndex("TerritoryName")
+        //    )
+        //) // grdBundle
                 )
                 .Listeners(ls =>
                 {
@@ -1657,7 +1668,7 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-                // grdDiscCustClass
+        // grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1674,23 +1685,23 @@
                         .MinWidth(150).Split(true).AutoScroll(true)
                         .Listeners(l =>
                         {
-                           //l .AfterRender.Handler = "DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');";
+                            //l .AfterRender.Handler = "DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');";
                         }
                     )
-                    //.DirectEvents(de =>
-                    //{
-                    //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
-                    //    de.AfterRender.Url = Url.Action("OM21100GetTreeCustomer");
-                    //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                    //    de.AfterRender.CleanRequest = true;
-                    //    de.AfterRender.Method = HttpMethod.POST;
-                    //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand()";
-                    //    de.AfterRender.Timeout = 60000;
-                    //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                    //    de.AfterRender.EventMask.ShowMask = true;
-                    //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                    //    de.AfterRender.EventMask.MinDelay = 500;
-                    //})
+        //.DirectEvents(de =>
+        //{
+        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
+        //    de.AfterRender.Url = Url.Action("OM21100GetTreeCustomer");
+        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+        //    de.AfterRender.CleanRequest = true;
+        //    de.AfterRender.Method = HttpMethod.POST;
+        //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand()";
+        //    de.AfterRender.Timeout = 60000;
+        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+        //    de.AfterRender.EventMask.ShowMask = true;
+        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+        //    de.AfterRender.EventMask.MinDelay = 500;
+        //})
                     .BottomBar(
                         X.Toolbar()
                         .Items(
@@ -1747,7 +1758,7 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    //                    .StoreID("stoDiscCust")
+        //                    .StoreID("stoDiscCust")
                     .Store(
                         X.Store().ID("stoDiscCust").AutoLoad(false)
                         .PageSize(50)
@@ -1818,7 +1829,7 @@
                                     l.Select.Fn = "HQ.grid.onPageSelect";
                                 })
                             )
-                        //.Plugins(X.ProgressBarPager().ID("paggrdPrice"))
+        //.Plugins(X.ProgressBarPager().ID("paggrdPrice"))
                         )
                     .Plugins(
                         X.CellEditing()
@@ -1830,16 +1841,16 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-                //.Features(
-                //X.GridFilters()
-                //    .Local(true)
-                //    .Filters(
-                //        X.StringFilter().DataIndex("CustID"),
-                //        X.StringFilter().DataIndex("CustName"),
-                //        X.StringFilter().DataIndex("BranchID"),
-                //        X.StringFilter().DataIndex("TerritoryName")
-                //    )
-                //)// grdDiscCustClass
+        //.Features(
+        //X.GridFilters()
+        //    .Local(true)
+        //    .Filters(
+        //        X.StringFilter().DataIndex("CustID"),
+        //        X.StringFilter().DataIndex("CustName"),
+        //        X.StringFilter().DataIndex("BranchID"),
+        //        X.StringFilter().DataIndex("TerritoryName")
+        //    )
+        //)// grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1907,14 +1918,14 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                         )
-                //.Features(
-                //    X.GridFilters()
-                //        .Local(true)
-                //        .Filters(
-                //            X.StringFilter().DataIndex("ClassID"),
-                //            X.StringFilter().DataIndex("UnitDesc")
-                //        )
-                //) // grdDiscItemClass
+        //.Features(
+        //    X.GridFilters()
+        //        .Local(true)
+        //        .Filters(
+        //            X.StringFilter().DataIndex("ClassID"),
+        //            X.StringFilter().DataIndex("UnitDesc")
+        //        )
+        //) // grdDiscItemClass
                 )
                 .Listeners(ls =>
                 {
@@ -2111,8 +2122,8 @@
     .Closable(true)
     .AutoScroll(true)
     .Buttons(
-           //X.Button().ID("btnExportTemplate").Text(Util.GetLang("Export"))
-           // .Listeners(p => p.Click.Fn = "btnExportTemplate_Click") 
+        //X.Button().ID("btnExportTemplate").Text(Util.GetLang("Export"))
+        // .Listeners(p => p.Click.Fn = "btnExportTemplate_Click")
             X.Button()
             .ID("btnExport")
             .Text(Util.GetLang("Export"))
@@ -2144,7 +2155,7 @@
                            HQ.Combo().ID("cboExport").Name("cboExport").MarginSpec("5 0 5 0").Width(300)
                             .HQLangCode("Template_Export").HQDBSys(false).HQProcedure("OM21100_pcExport")
                             .HQColumnShow("Code,Descr").ForceSelection(true)//.AllowBlank(false)
-                                                                            //.MultiSelect(true)
+        //.MultiSelect(true)
                             .DisplayField("Descr").ValueField("Code").HQHeightWidth(300, 200)
                             .HQAutoLoad(true)
                             .HQParam(new StoreParameterCollection()
@@ -2157,7 +2168,7 @@
                             {
                                 ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                 //ls.Change.Fn = "cboExport_Select";
-                             //ls.Select.Fn = "cboBranchID_Select";
+                                //ls.Select.Fn = "cboBranchID_Select";
                             })
 
                             .LoadData()
@@ -2170,7 +2181,7 @@
 
 )
 @(
-    X.Window()
+ X.Window()
     .ID("winSubBreakItem")
     .Hidden(true)
     .Layout(LayoutType.Fit)
@@ -2184,7 +2195,7 @@
         .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemDelete_Click")
         , X.Button().ID("btnSubBreakItemOK").Text(Util.GetLang("Closed"))
         .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemOK_Click")
-    )   
+    )
     .Items(
             X.GridPanel().ID("grdSubBreakItem")
             .SortableColumns(false)
@@ -2253,7 +2264,7 @@
                     .Icon(Icon.ArrowUndo)
                 )
                 .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                .Listeners(l => l.Command.Handler = "Main.Event.grdSubBreakItem_reject(this, record);")   
+                .Listeners(l => l.Command.Handler = "Main.Event.grdSubBreakItem_reject(this, record);")
             )
             .BottomBar(
                 X.PagingToolbar()
@@ -2296,4 +2307,146 @@
                 )
             )
     )
+)
+@(
+ X.Window().ID("winCopy")
+    .Title(Util.GetLang(""))
+    //.Icon(Icon.BookOpen)
+    .Layout(LayoutType.Border)
+    .Hidden(true).Maximizable(true)
+    .Height(400)
+    .Width(800)
+    .Modal(true)
+    .Items(
+        X.FormPanel().ID("frmCopy").Layout(LayoutType.Fit).Region(Region.North).Height(50)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+        .Items(
+            X.Container().Layout(LayoutType.HBox).MarginSpec("10 0 0 0")
+            .Items(
+                 HQ.Combo().ID("cboDiscIDCopy")
+                .HQLangCode("DiscID").HQProcedure("OM21100_pcDiscountAll").HQColumnShow("DiscID,Descr")
+                .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                .AllowBlank(false).AllowOnlyWhitespace(false).MaxLength(10).EnforceMaxLength(true)
+                        .TriggerAction(TriggerAction.All).AllowBlank(false)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .HQParam(new StoreParameterCollection() {
+                new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
+                , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                })
+                .LoadData()
+                .Listeners(l =>
+                {
+                    l.Change.Fn = "cboDiscIDCopy_Change";
+                })
+                , HQ.TextBox().ID("txtDiscSeq").HQLangCode("DiscSeq").AllowBlank(false)
+            )
+        )
+        , X.Panel().Layout(LayoutType.Fit).Region(Region.Center).Title("Chọn CTKM cần sao chép").MarginSpec("10 0 0 0")
+        .Items(
+                X.GridPanel().ID("grdPromotionsCopy")
+                .SortableColumns(false)
+                .Store(
+                    X.Store()
+                        .ID("storPromotionsCopy")
+                        .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM21100_pgPromotionsCopy_Result), "mdlPromotionsCopy", ""))
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPromotionsCopy"))).AutoLoad(false)
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("DiscID", "App.cboDiscIDCopy.getValue()", ParameterMode.Raw));
+                            })
+                        .Listeners(l =>
+                        {
+                          //  l.Load.Fn = "Main.Event.stoPromotionsCopy_Load";
+                        })
+                    )
+                .ColumnModel(
+                    X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
+                    ,X.CheckColumn()
+                    .HideTitleEl(true).DataIndex("Selected")
+                    .Align(Alignment.Center).ToolTip(Util.GetLang("Selected"))
+                    .Width(30)
+                    .Editable(true)
+                    , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
+                    , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                    , X.CheckColumn()
+                    .DataIndex("Active")
+                    .Align(Alignment.Center).Text(Util.GetLang("Active"))
+                    ,X.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("StartDate")
+                    ,X.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("EndDate")
+                    , X.CommandColumn().Width(130)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "Main.Event.grdSubBreakItem_reject(this, record);")
+                )
+                .BottomBar(
+                    X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                            )
+                        .Plugins(X.ProgressBarPager())
+                )
+                .SelectionModel(
+                    X.RowSelectionModel().ID("slmPromotionsCopy")
+                    .Mode(SelectionMode.Multi)
+                    )
+                .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdPromotionsCopy_beforeEdit";
+                            //ls.Edit.Fn = "Main.Event.grdSubBreakItem_edit";
+                            //ls.ValidateEdit.Fn = "Main.Event.grdSubBreakItem_validateEdit";
+                        })
+                )
+                .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                            X.StringFilter().DataIndex("DiscID"),
+                            X.StringFilter().DataIndex("DiscSeq"),
+                            X.StringFilter().DataIndex("Descr"),
+                            X.BooleanFilter().DataIndex("Active"),
+                            X.DateFilter().DataIndex("StartDate"),
+                            X.DateFilter().DataIndex("EndDate")
+
+                    )
+                )
+        )
+            , X.Panel().Layout(LayoutType.Fit).Region(Region.South).Height(40)
+        .Items(
+                 X.Container()
+                .Region(Region.South)
+                .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.End })
+                .Items(
+                    HQ.Button().ID("btnSaveCopy")
+                    .HQLangCode("Update").Icon(Icon.Disk)
+                    .Handler("btnSaveCopy_click")
+
+                    , HQ.Button().ID("btnCancelCopy")
+                        .HQLangCode("Close").Icon(Icon.Decline)
+                    .MarginSpec("0 0 0 5")
+                    .Handler("App.winCopy.close();")
+                ) // buttons
+            )
+        )   
+    
 )

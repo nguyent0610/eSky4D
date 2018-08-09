@@ -9,6 +9,8 @@ var _selTerritory = '';
 var keys1 = ['CpnyID'];
 var invtIDRender = '';
 var lstCpnyID = [];
+var _copy = 0;
+var _discSeqNew = '';
 var Main = {
 
     Process: {
@@ -848,6 +850,7 @@ var Main = {
             App.cboInvtIDSolomon.setVisible(HQ.hideInvtIDSolomon);
             App.chkDiscPrice.setVisible(HQ.hideDiscPrice);
             App.cboDiscSeqSolomon.setVisible(HQ.hideDiscSeqSolomon);
+            App.btnCopy.setVisible(HQ.hideCopy);
             
         },
 
@@ -2396,6 +2399,9 @@ var DiscDefintion = {
                 App.cboDiscSeq.store.load(function () {
                     if (App.cboDiscSeq.store.getCount()) {
                         var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
+                        if (_copy == 1) {
+                            discSeqValue = _discSeqNew;
+                        }
                         if (discSeqValue == App.cboDiscSeq.getValue()) {
                             App.cboDiscSeq.setValue(discSeqValue);
                             App.stoDiscSeqInfo.reload();
@@ -2409,6 +2415,7 @@ var DiscDefintion = {
                     }
                 });
             }
+            _copy = 0;
             
             //}
         },
@@ -2988,6 +2995,8 @@ var DiscDefintion = {
                 HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
                 return false;
             }
+            App.cboBreakBoundType.forceSelection = true;
+            App.cboSubBreakType.forceSelection = true;
         },
         checkExpandComboExcludePromo: function () {
             if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
@@ -5149,4 +5158,74 @@ function tabMain_Change(obj, tab, c, func){
         else
             App.cboRequiredType.setReadOnly(true);
     }
+}
+var btnCopy_Click = function () {
+    App.winCopy.show();
+    App.cboDiscIDCopy.isValid();
+    App.txtDiscSeq.isValid();
+}
+var cboDiscIDCopy_Change = function () {
+    App.storPromotionsCopy.reload();
+}
+var grdPromotionsCopy_beforeEdit = function (editor, e) {
+    if (e.record.data.Selected == false) {
+        var count = 0;
+        for (var j = 0; j < App.storPromotionsCopy.data.length; j++) {
+            if (App.grdPromotionsCopy.store.data.items[j].data.Selected == true) {
+                count++;
+            }
+        }
+        if (count > 0) {
+            return false;
+        }
+    }
+}
+var btnSaveCopy_click = function () {
+    if (App.cboDiscIDCopy.getValue() == '' || App.cboDiscIDCopy.getValue() == null) {
+        HQ.message.show(15, [App.cboDiscIDCopy.fieldLabel], '', true);
+        return false;
+    }
+    else if (App.txtDiscSeq.getValue() == '' || App.txtDiscSeq.getValue() == null) {
+        HQ.message.show(15, [App.txtDiscSeq.fieldLabel], '', true);
+        return false;
+    }
+    else if (HQ.store.findInStore(App.storPromotionsCopy, ["Selected"], ["true"]) == undefined) {
+        HQ.message.show(2018080960);
+        return false;
+    }
+    App.frmCopy.submit({
+        waitMsg: HQ.common.getLang("SavingData"),
+        url: 'OM21100/SaveDataCopy',
+        timeout: 10000000,
+        params: {
+            lstPromotionsCopy: Ext.encode(App.storPromotionsCopy.getRecordsValues()),
+            DiscIDNew : App.cboDiscIDCopy.getValue() ,
+            DiscSeqNew: App.txtDiscSeq.getValue()
+        },
+        success: function (msg, data) {
+            if (data.result.msgCode) {
+                HQ.message.show(data.result.msgCode);
+            }
+            else {
+                HQ.message.show(201405071);
+            }
+            App.cboDiscID.setValue(App.cboDiscIDCopy.getValue());
+            App.cboDiscSeq.setValue(App.txtDiscSeq.getValue());
+            _discSeqNew = App.txtDiscSeq.getValue();
+            //Main.Process.reloadAllData();
+            App.cboDiscIDCopy.clearValue();
+            App.storPromotionsCopy.reload();
+            App.txtDiscSeq.setValue('');
+            _copy = 1;
+            App.winCopy.close();
+        },
+        failure: function (msg, data) {
+            //if (data.result.msgCode) {
+            //    HQ.message.show(data.result.msgCode);
+            //}
+            //else {
+                HQ.message.process(msg, data, true);
+            //}
+        }
+    });
 }
