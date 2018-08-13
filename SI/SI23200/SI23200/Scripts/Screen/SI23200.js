@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['Code'];
-var fieldsCheckRequire = ["Territory", "Code"]
-var fieldsLangCheckRequire = ["Territory", "Code"];
+var fieldsCheckRequire = ["Territory", "Code","Descr"]
+var fieldsLangCheckRequire = ["Territory", "Code","Descr"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
