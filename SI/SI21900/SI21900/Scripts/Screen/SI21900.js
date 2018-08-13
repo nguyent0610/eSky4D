@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['Territory'];
-var fieldsCheckRequire = ["Territory", "Descr"];
-var fieldsLangCheckRequire = ["Territory", "Descr"];
+var fieldsCheckRequire = ["Territory", "Descr","Zone"];
+var fieldsLangCheckRequire = ["Territory", "Descr","Zone"];
 
 var _Source = 0;
 var _maxSource = 1;

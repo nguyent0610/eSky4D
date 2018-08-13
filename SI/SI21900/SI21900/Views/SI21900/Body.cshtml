@@ -75,7 +75,7 @@
              X.Column().Text(Util.GetLang("ZoneDescr")).DataIndex("ZoneDescr").Width(150),
                   //  .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),    
                    X.Column().Text(Util.GetLang("Distance")).DataIndex("Distance").Width(150).ID("txtDistance")
-            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2)).Renderer("renderDistance"),        
+            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2).MaxValue(99999999.99).AllowExponential(false)).Renderer("renderDistance"),        
                             
             X.CommandColumn()
             .Width(150)
