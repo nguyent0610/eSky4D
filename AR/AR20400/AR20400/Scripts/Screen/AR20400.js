@@ -540,7 +540,14 @@ var stoLoad = function (sto) {
             HQ.combo.expand(App.cboOunit, ',');
         }
     }
-
+    if (HQ.RequirePhone){
+        App.txtPhone.allowBlank = false;
+        App.txtBillPhone.allowBlank = false;
+    }
+    else {
+        App.txtPhone.allowBlank = true;
+        App.txtBillPhone.allowBlank = true;
+    }
 };
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////

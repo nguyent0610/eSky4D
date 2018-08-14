@@ -849,8 +849,8 @@
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
-                            , HQ.TextBox().ID("txtPhone").Name("txtPhone").DataIndex("Phone")
-                                .EnforceMaxLength(true).MaxLength(30)
+                            , HQ.TextBox().ID("txtPhone").Name("txtPhone").DataIndex("Phone").HQLangCode("PHONE")
+                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtFax").Name("txtFax").DataIndex("Fax")
@@ -1005,8 +1005,8 @@
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
-                            , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("BillPhone")
-                                .EnforceMaxLength(true).MaxLength(30)
+                            , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("BillPhone").HQLangCode("PHONE")
+                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtBillFax").Name("txtBillFax").DataIndex("BillFax")

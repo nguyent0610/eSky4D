@@ -10429,6 +10429,30 @@ namespace AR20400
         private Nullable<global::System.Boolean> _ShowMarket;
         partial void OnShowMarketChanging(Nullable<global::System.Boolean> value);
         partial void OnShowMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequirePhone
+        {
+            get
+            {
+                return _RequirePhone;
+            }
+            set
+            {
+                OnRequirePhoneChanging(value);
+                ReportPropertyChanging("RequirePhone");
+                _RequirePhone = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequirePhone");
+                OnRequirePhoneChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequirePhone;
+        partial void OnRequirePhoneChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequirePhoneChanged();
 
         #endregion
 
