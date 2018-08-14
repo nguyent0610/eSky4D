@@ -259,6 +259,7 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "ClassID");
         record = sto.getAt(0);
+        record.set('DfltValMthd', 'A');
         HQ.isNew = true;   
         App.cboClassID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);        
@@ -287,6 +288,10 @@ var stoLoad = function (sto) {
         }
     }
     App.stoCpny.reload();
+    if (HQ.DfltValMthd)
+        App.cboDfltValMthd.show();
+    else
+        App.cboDfltValMthd.hide();
 };
 
 var stoCpny_Load = function (sto) {

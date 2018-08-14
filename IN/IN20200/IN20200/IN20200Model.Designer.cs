@@ -182,6 +182,47 @@ namespace IN20200
     
             return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN20200_ppCheckClassID", classIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> IN20200_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN20200_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -1252,6 +1293,30 @@ namespace IN20200
         private Nullable<global::System.Boolean> _Public;
         partial void OnPublicChanging(Nullable<global::System.Boolean> value);
         partial void OnPublicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Sort
+        {
+            get
+            {
+                return _Sort;
+            }
+            set
+            {
+                OnSortChanging(value);
+                ReportPropertyChanging("Sort");
+                _Sort = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Sort");
+                OnSortChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Sort;
+        partial void OnSortChanging(Nullable<global::System.Double> value);
+        partial void OnSortChanged();
 
         #endregion
 

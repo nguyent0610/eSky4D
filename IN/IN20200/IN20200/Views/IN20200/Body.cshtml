@@ -106,7 +106,7 @@
                     , HQ.Combo().ID("cboDfltValMthd").Name("cboDfltValMthd").HQLangCode("ValMthd").HQProcedure("IN20200_pcDfltValMthd")
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltValMthd")
                         .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                        .HQDBSys(false).ForceSelection(true).HQAutoLoad(true).AllowBlank(false)
+                        .HQDBSys(false).ForceSelection(true).HQAutoLoad(true).AllowBlank(false).Hidden(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection() 
                         { 

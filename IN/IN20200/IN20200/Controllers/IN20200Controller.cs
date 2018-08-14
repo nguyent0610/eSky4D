@@ -25,11 +25,18 @@ namespace IN20200.Controllers
 
         public ActionResult Index()
         {
+            bool DfltValMthd = false;
+            var objConfig = _db.IN20200_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                DfltValMthd = objConfig.Value;
+            }
+            ViewBag.DfltValMthd = DfltValMthd;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
