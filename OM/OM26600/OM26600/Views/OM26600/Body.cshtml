@@ -63,7 +63,10 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                       
                     })
-                )    
+                )   
+             , X.Column().ID("Code").Text(Util.GetLang("OM26600Code")).DataIndex("Code").Width(150)//.Hidden(true)
+                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true).MaskRe(@"/(\w*(\d|[a-zA-Z\-.]))[\-]*$/"))
+ 
             ,
                 X.Column().ID("TypeVehicle").Text(Util.GetLang("OM26600TypeVehicle")).DataIndex("TypeOfVehicle").Width(150).Renderer("renderTypeVehicle")//.Hidden(true)
                 .Editor(
@@ -84,9 +87,7 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     )
-            , X.Column().ID("Code").Text(Util.GetLang("OM26600Code")).DataIndex("Code").Width(150)//.Hidden(true)
-                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true).MaskRe(@"/(\w*(\d|[a-zA-Z\-.]))[\-]*$/"))
-
+           
             , X.Column().ID("SlsperID").Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150).Renderer("renderSlsperID")
             .Editor(
                 HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("OM26600_pcSlsperID").HQAutoLoad(true).HQDBSys(false)
