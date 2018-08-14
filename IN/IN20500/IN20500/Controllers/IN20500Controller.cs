@@ -72,12 +72,19 @@ namespace IN20500.Controllers
         {
             Util.InitRight(_screenNbr);
             var isHideChkPublic = false;
+            var DfltValMthd = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
+            var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
             {
                 isHideChkPublic = true;
             }
+            if (objConfigHideShow!= null)
+            {
+                DfltValMthd = objConfigHideShow.DfltValMthd.HasValue ? objConfigHideShow.DfltValMthd.Value : false;
+            }
             ViewBag.isHideChkPublic = isHideChkPublic;
+            ViewBag.DfltValMthd = DfltValMthd;
             return View();
         }
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]

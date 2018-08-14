@@ -197,10 +197,10 @@ namespace IN20500
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="invtID">No Metadata Documentation available.</param>
-        /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN20500_pdHeader_Result> IN20500_pdHeader(global::System.String invtID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<IN20500_pdHeader_Result> IN20500_pdHeader(global::System.String invtID, global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter invtIDParameter;
             if (invtID != null)
@@ -210,16 +210,6 @@ namespace IN20500
             else
             {
                 invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
             }
     
             ObjectParameter cpnyIDParameter;
@@ -232,6 +222,16 @@ namespace IN20500
                 cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
             ObjectParameter langIDParameter;
             if (langID.HasValue)
             {
@@ -242,7 +242,7 @@ namespace IN20500
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<IN20500_pdHeader_Result>("IN20500_pdHeader", invtIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<IN20500_pdHeader_Result>("IN20500_pdHeader", invtIDParameter, cpnyIDParameter, userNameParameter, langIDParameter);
         }
     
         /// <summary>
@@ -262,6 +262,47 @@ namespace IN20500
             }
     
             return base.ExecuteFunction<IN20500_pgIN_InvtCpny_Result>("IN20500_pgIN_InvtCpny", invtIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20500_pdConfig_Result> IN20500_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN20500_pdConfig_Result>("IN20500_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
         }
 
         #endregion
@@ -784,7 +825,8 @@ namespace IN20500
         /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
         /// <param name="cnvFact">Initial value of the CnvFact property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact)
+        /// <param name="kitType">Initial value of the KitType property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact, global::System.Boolean kitType)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -821,6 +863,7 @@ namespace IN20500
             iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
             iN_Inventory.CnvFact = cnvFact;
+            iN_Inventory.KitType = kitType;
             return iN_Inventory;
         }
 
@@ -2582,6 +2625,30 @@ namespace IN20500
         private global::System.Double _CnvFact;
         partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean KitType
+        {
+            get
+            {
+                return _KitType;
+            }
+            set
+            {
+                OnKitTypeChanging(value);
+                ReportPropertyChanging("KitType");
+                _KitType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("KitType");
+                OnKitTypeChanged();
+            }
+        }
+        private global::System.Boolean _KitType;
+        partial void OnKitTypeChanging(global::System.Boolean value);
+        partial void OnKitTypeChanged();
 
         #endregion
 
@@ -2668,6 +2735,30 @@ namespace IN20500
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PriceClassID
+        {
+            get
+            {
+                return _PriceClassID;
+            }
+            set
+            {
+                OnPriceClassIDChanging(value);
+                ReportPropertyChanging("PriceClassID");
+                _PriceClassID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PriceClassID");
+                OnPriceClassIDChanged();
+            }
+        }
+        private global::System.String _PriceClassID;
+        partial void OnPriceClassIDChanging(global::System.String value);
+        partial void OnPriceClassIDChanged();
 
         #endregion
 
@@ -2698,7 +2789,8 @@ namespace IN20500
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowHandle sI_ApprovalFlowHandle = new SI_ApprovalFlowHandle();
             sI_ApprovalFlowHandle.AppFolID = appFolID;
@@ -2712,6 +2804,7 @@ namespace IN20500
             sI_ApprovalFlowHandle.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowHandle.LUpd_User = lUpd_User;
             sI_ApprovalFlowHandle.tstamp = tstamp;
+            sI_ApprovalFlowHandle.BranchID = branchID;
             return sI_ApprovalFlowHandle;
         }
 
@@ -3354,6 +3447,33 @@ namespace IN20500
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -3380,10 +3500,12 @@ namespace IN20500
         /// <param name="recordID">Initial value of the RecordID property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp)
+        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             SI_Hierarchy sI_Hierarchy = new SI_Hierarchy();
             sI_Hierarchy.NodeID = nodeID;
@@ -3393,8 +3515,10 @@ namespace IN20500
             sI_Hierarchy.RecordID = recordID;
             sI_Hierarchy.Crtd_Datetime = crtd_Datetime;
             sI_Hierarchy.Crtd_Prog = crtd_Prog;
+            sI_Hierarchy.Crtd_User = crtd_User;
             sI_Hierarchy.LUpd_Datetime = lUpd_Datetime;
             sI_Hierarchy.LUpd_Prog = lUpd_Prog;
+            sI_Hierarchy.LUpd_User = lUpd_User;
             sI_Hierarchy.tstamp = tstamp;
             return sI_Hierarchy;
         }
@@ -3610,7 +3734,7 @@ namespace IN20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -3622,7 +3746,7 @@ namespace IN20500
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -3682,7 +3806,7 @@ namespace IN20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -3694,7 +3818,7 @@ namespace IN20500
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -3750,6 +3874,30 @@ namespace IN20500
         private global::System.String _Descr1;
         partial void OnDescr1Changing(global::System.String value);
         partial void OnDescr1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Sort
+        {
+            get
+            {
+                return _Sort;
+            }
+            set
+            {
+                OnSortChanging(value);
+                ReportPropertyChanging("Sort");
+                _Sort = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Sort");
+                OnSortChanged();
+            }
+        }
+        private global::System.String _Sort;
+        partial void OnSortChanging(global::System.String value);
+        partial void OnSortChanged();
 
         #endregion
 
@@ -3759,6 +3907,68 @@ namespace IN20500
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20500Model", Name="IN20500_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20500_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> KitType
+        {
+            get
+            {
+                return _KitType;
+            }
+            set
+            {
+                OnKitTypeChanging(value);
+                ReportPropertyChanging("KitType");
+                _KitType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("KitType");
+                OnKitTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _KitType;
+        partial void OnKitTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnKitTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> DfltValMthd
+        {
+            get
+            {
+                return _DfltValMthd;
+            }
+            set
+            {
+                OnDfltValMthdChanging(value);
+                ReportPropertyChanging("DfltValMthd");
+                _DfltValMthd = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DfltValMthd");
+                OnDfltValMthdChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _DfltValMthd;
+        partial void OnDfltValMthdChanging(Nullable<global::System.Boolean> value);
+        partial void OnDfltValMthdChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

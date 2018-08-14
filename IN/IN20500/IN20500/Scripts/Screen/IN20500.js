@@ -235,6 +235,7 @@ var stoLoad = function (sto) {
         record.set('ApproveStatus', 'H');
         record.set('Status', 'AC');
         record.set('Public', HQ.isHideChkPublic);
+        record.set('ValMthd', 'A');
         HQ.isNew = true;
         App.cboInvtID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);
@@ -283,6 +284,10 @@ var stoLoad = function (sto) {
   //  isnewclick = false;
     if (!HQ.isNew && !Ext.isEmpty(App.cboInvtID.getValue()))
         searchNode();
+    if (HQ.DfltValMthd)
+        App.cboValMthd.show();
+    else
+        App.cboValMthd.hide();
 };
 
 
