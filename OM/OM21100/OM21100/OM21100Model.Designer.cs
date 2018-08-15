@@ -388,22 +388,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscFreeItem> OM_DiscFreeItem
-        {
-            get
-            {
-                if ((_OM_DiscFreeItem == null))
-                {
-                    _OM_DiscFreeItem = base.CreateObjectSet<OM_DiscFreeItem>("OM_DiscFreeItem");
-                }
-                return _OM_DiscFreeItem;
-            }
-        }
-        private ObjectSet<OM_DiscFreeItem> _OM_DiscFreeItem;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscSubBreakItem> OM_DiscSubBreakItem
         {
             get
@@ -432,6 +416,22 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscFreeItem> OM_DiscFreeItem
+        {
+            get
+            {
+                if ((_OM_DiscFreeItem == null))
+                {
+                    _OM_DiscFreeItem = base.CreateObjectSet<OM_DiscFreeItem>("OM_DiscFreeItem");
+                }
+                return _OM_DiscFreeItem;
+            }
+        }
+        private ObjectSet<OM_DiscFreeItem> _OM_DiscFreeItem;
 
         #endregion
 
@@ -598,14 +598,6 @@ namespace OM21100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscFreeItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscFreeItem(OM_DiscFreeItem oM_DiscFreeItem)
-        {
-            base.AddObject("OM_DiscFreeItem", oM_DiscFreeItem);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_DiscSubBreakItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_DiscSubBreakItem(OM_DiscSubBreakItem oM_DiscSubBreakItem)
@@ -619,6 +611,14 @@ namespace OM21100
         public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
         {
             base.AddObject("OM_DiscSeq", oM_DiscSeq);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscFreeItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscFreeItem(OM_DiscFreeItem oM_DiscFreeItem)
+        {
+            base.AddObject("OM_DiscFreeItem", oM_DiscFreeItem);
         }
 
         #endregion
@@ -13202,6 +13202,30 @@ namespace OM21100
         private global::System.Double _Price;
         partial void OnPriceChanging(global::System.Double value);
         partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FreeITemSiteWhseLoc
+        {
+            get
+            {
+                return _FreeITemSiteWhseLoc;
+            }
+            set
+            {
+                OnFreeITemSiteWhseLocChanging(value);
+                ReportPropertyChanging("FreeITemSiteWhseLoc");
+                _FreeITemSiteWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("FreeITemSiteWhseLoc");
+                OnFreeITemSiteWhseLocChanged();
+            }
+        }
+        private global::System.String _FreeITemSiteWhseLoc;
+        partial void OnFreeITemSiteWhseLocChanging(global::System.String value);
+        partial void OnFreeITemSiteWhseLocChanged();
 
         #endregion
 
@@ -18450,6 +18474,30 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideCopy;
         partial void OnHideCopyChanging(Nullable<global::System.Boolean> value);
         partial void OnHideCopyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideSite
+        {
+            get
+            {
+                return _HideSite;
+            }
+            set
+            {
+                OnHideSiteChanging(value);
+                ReportPropertyChanging("HideSite");
+                _HideSite = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideSite");
+                OnHideSiteChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideSite;
+        partial void OnHideSiteChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideSiteChanged();
 
         #endregion
 
@@ -23079,6 +23127,30 @@ namespace OM21100
         private global::System.Double _Price;
         partial void OnPriceChanging(global::System.Double value);
         partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FreeITemSiteWhseLoc
+        {
+            get
+            {
+                return _FreeITemSiteWhseLoc;
+            }
+            set
+            {
+                OnFreeITemSiteWhseLocChanging(value);
+                ReportPropertyChanging("FreeITemSiteWhseLoc");
+                _FreeITemSiteWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("FreeITemSiteWhseLoc");
+                OnFreeITemSiteWhseLocChanged();
+            }
+        }
+        private global::System.String _FreeITemSiteWhseLoc;
+        partial void OnFreeITemSiteWhseLocChanging(global::System.String value);
+        partial void OnFreeITemSiteWhseLocChanged();
 
         #endregion
 

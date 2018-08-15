@@ -984,6 +984,43 @@
                                             HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(0)
                                         )
 
+                                          , X.Column().Text(Util.GetLang("SiteID")).ID("FreeITemSiteID").DataIndex("FreeITemSiteID")//.Renderer("DiscDefintion.Process.renderFreeITemSiteID")
+                                         .Editor(
+                                            HQ.Combo().ID("cboFreeITemSiteID")
+                                            .HQProcedure("OM21100_pcFreeITemSiteID").HQColumnShow("SiteId,Name")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("SiteId").DisplayField("SiteId")
+                                            .ForceSelection(true).SelectOnFocus(true)
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .HQParam(new StoreParameterCollection() {
+                                                new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
+                                                new StoreParameter("@UserName","HQ.userName", ParameterMode.Raw),
+                                                new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                                            })
+                                            .LoadData()
+                                            .Listeners(l =>{
+                                                l.TriggerClick.Handler = "this.clearValue();";
+                                                l.Change.Fn = "cboFreeITemSiteID_change";
+                                            })
+                                        )
+                                        
+                                        , X.Column().Text(Util.GetLang("WhseLoc")).ID("FreeITemSiteWhseLoc").DataIndex("FreeITemSiteWhseLoc").Renderer("DiscDefintion.Process.renderFreeITemSiteWhseLoc")
+                                         .Editor(
+                                            HQ.Combo().ID("cboFreeITemSiteWhseLoc")
+                                            .HQProcedure("OM21100_pcFreeITemSiteWhseLoc").HQColumnShow("WhseLoc,Descr")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("WhseLoc").DisplayField("Descr")
+                                            .ForceSelection(true).SelectOnFocus(true)
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .HQParam(new StoreParameterCollection() {
+                                                new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
+                                                new StoreParameter("@UserName","HQ.userName", ParameterMode.Raw),
+                                                new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
+                                                new StoreParameter("@SiteID", "_siteID", ParameterMode.Raw) 
+                                            })
+                                            .LoadData()
+                                            .Listeners(l => l.TriggerClick.Handler = "this.clearValue();")
+                                        )
                                         , X.CommandColumn()
                                         .Commands(
                                             X.GridCommand()
@@ -995,7 +1032,7 @@
                                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                                         .Listeners(l => l.Command.Handler = "Main.Event.grdFreeItem_reject(this, record);")
                                     )
-                                    .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
+                                    .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi)).Listeners(l => l.Select.Fn = "slmFreeItem_select")
         // .BottomBar(
         //    X.PagingToolbar()
         //    .HideRefresh(true)
@@ -1620,7 +1657,7 @@
                 })// pnlDPBB
 
                 , X.Panel().ID("pnlDPTT")
-                .Title(Util.GetLang("DPTT"))
+                .Title(Util.GetLang("OM21100ClassCust"))
                 .Layout(LayoutType.Border)
                 .Items(
                     X.GridPanel().ID("grdDiscCustClass")

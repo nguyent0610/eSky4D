@@ -88,7 +88,8 @@ namespace OM21100.Controllers
                 , hideDiscSeqSolomon = false
                 , hideInvtIDSolomon = false
                 , hideDiscPrice= false
-                , hideCopy=false;
+                , hideCopy=false
+                , hideSite = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -113,6 +114,7 @@ namespace OM21100.Controllers
                 hideInvtIDSolomon = objConfig.HideInvtIDSolomon.HasValue && objConfig.HideInvtIDSolomon.Value;
                 hideDiscPrice = objConfig.HideDiscPrice.HasValue && objConfig.HideDiscPrice.Value;
                 hideCopy = objConfig.HideCopy.HasValue && objConfig.HideCopy.Value;
+                hideSite = objConfig.HideSite.HasValue && objConfig.HideSite.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -135,6 +137,7 @@ namespace OM21100.Controllers
             ViewBag.hideInvtIDSolomon = hideInvtIDSolomon;
             ViewBag.hideDiscPrice = hideDiscPrice;
             ViewBag.hideCopy = hideCopy;
+            ViewBag.hideSite = hideSite;
             return View();
         }
 
@@ -3216,6 +3219,7 @@ namespace OM21100.Controllers
                 t.FreeItemQty = s.FreeItemQty;
                 t.UnitDescr = s.UnitDescr;
                 t.Price = s.Price;
+                t.FreeITemSiteWhseLoc = s.FreeITemSiteWhseLoc;
 
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;

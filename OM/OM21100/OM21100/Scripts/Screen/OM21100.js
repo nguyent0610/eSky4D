@@ -10,6 +10,8 @@ var keys1 = ['CpnyID'];
 var invtIDRender = '';
 var lstCpnyID = [];
 var _copy = 0;
+var _siteID = '';
+var _siteEdit = '';
 var _discSeqNew = '';
 var Main = {
 
@@ -851,6 +853,8 @@ var Main = {
             App.chkDiscPrice.setVisible(HQ.hideDiscPrice);
             App.cboDiscSeqSolomon.setVisible(HQ.hideDiscSeqSolomon);
             App.btnCopy.setVisible(HQ.hideCopy);
+            App.FreeITemSiteWhseLoc.setVisible(HQ.hideSite);
+            App.FreeITemSiteID.setVisible(HQ.hideSite);
             
         },
 
@@ -1988,6 +1992,22 @@ var DiscDefintion = {
                 return value;
             }
             return r.data.Descr;
+        },
+
+        renderFreeITemSiteWhseLoc: function (value, metaData, record, row, col, store, gridView) {
+            var r = HQ.store.findRecord(App.cboFreeITemSiteWhseLoc.store, ['WhseLoc'], [record.data.FreeITemSiteWhseLoc]);
+            if (Ext.isEmpty(r)) {
+                return value;
+            }
+            return r.data.Descr;
+        },
+        
+        renderFreeITemSiteID: function (value, metaData, record, row, col, store, gridView) {
+            var r = HQ.store.findRecord(App.cboFreeITemSiteID.store, ['SiteId'], [record.data.FreeITemSiteID]);
+            if (Ext.isEmpty(r)) {
+                return value;
+            }
+            return r.data.Name;
         },
 
         indexSelect: function (grd) {
@@ -4534,6 +4554,7 @@ var DiscDefintion = {
         },
 
         grdFreeItem_beforeEdit: function (editor, e) {
+            _siteEdit = e.record.data.FreeITemSiteID;
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     var status = App.cboStatus.value;
@@ -4748,7 +4769,19 @@ var DiscDefintion = {
                         }
                     }
                 }
-            }                
+            }
+            if(e.field=="FreeITemSiteID")
+            {
+                var tam = "@@@@@@@@@@";
+                App.cboFreeITemSiteWhseLoc.store.clearFilter();
+                if (e.record.data.FreeITemSiteID != "" && e.record.data.FreeITemSiteID != null) {
+                    tam = e.record.data.FreeITemSiteID;
+                }
+                App.cboFreeITemSiteWhseLoc.store.filter('SiteID', tam);
+                if (e.record.data.FreeITemSiteID != _siteEdit) {
+                    e.record.set("FreeITemSiteWhseLoc", "");
+                }
+            }
             
         },
     }
@@ -5228,4 +5261,14 @@ var btnSaveCopy_click = function () {
             //}
         }
     });
+}
+var slmFreeItem_select = function (slm, selRec, idx, eOpts) {
+    _siteID = selRec.data.FreeITemSiteID;
+    App.cboFreeITemSiteWhseLoc.store.reload();
+}
+var cboFreeITemSiteID_change = function(chk, newValue, oldValue, eOpts)
+{
+    _siteID = newValue;
+    App.cboFreeITemSiteWhseLoc.store.reload();
+    App.cboFreeITemSiteWhseLoc.clearValue();
 }
