@@ -191,12 +191,11 @@ namespace IN10200.Controllers
             {
                 _form = data;
                 SaveData(data);
-                bool checkPerPost = data["checkPerPost"].ToBool();
                 if (_logMessage != null)
                 {
                     return _logMessage;
                 }
-                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr, checkPerPost });
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr });
             }
             catch (Exception ex)
             {

@@ -135,6 +135,7 @@ var frmMain_BoxReady = function () {
     App.stoUserDefault.addListener('load', stoUserDefault_Load);
     App.stoSetup.addListener('load', stoSetup_Load);
     App.stoUnitConversion.addListener('load', store_Load);
+    App.cboPerPost.store.addListener('load', store_Load);
 
     App.stoSetup.load();
     App.stoUserDefault.load();
@@ -142,8 +143,8 @@ var frmMain_BoxReady = function () {
     App.cboTransInvtID.store.reload();
     App.stoInvt = App.cboTransInvtID.getStore();
 
-    App.cboPerPost.store.addListener('load', cboPerPost_Load);
-    App.cboPerPost.store.reload();
+    
+    //App.cboPerPost.store.reload();
 
     App.smlTrans.tab = false;
     if (HQ.showWhseLoc == 0) {
@@ -181,11 +182,6 @@ var frmMain_BoxReady = function () {
     }
 }
 
-function cboPerPost_Load() {
-    if (HQ.perpost) {
-        App.cboPerPost.setValue(HQ.perpost);
-    }
-}
 
 var origEditorTab = function(instance, self){
     var evt = this;
@@ -262,7 +258,25 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isBusy == false) {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
-                    save();
+                    var checkPerPost = true;
+                    if (HQ.checkPerPost) {
+                        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
+                        if (objPerPost != undefined) {
+                            var tam = App.txtDateEnt.getValue();
+                            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
+                                checkPerPost = false;
+                            }
+                        }
+                        else {
+                            checkPerPost = false;
+                        }
+                    }
+                    if (HQ.checkPerPost && !checkPerPost) {
+                        HQ.message.show(2018081511, '', 'checkSave');
+                    }
+                    else {
+                        save();
+                    }                    
                 }
             }
             break;
@@ -369,15 +383,9 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
         bindBatch(record);
     } else {
         if (HQ.recentRecord != record) {
-            App.cboBatNbr.store.reload();
-            if (HQ.perpost) {
-                App.cboPerPost.setValue(HQ.perpost);
-            } else {
-                
-                App.cboPerPost.setValue('');
-            }
+            App.cboBatNbr.store.reload();            
+            //App.cboPerPost.setValue(HQ.perpost);
         }
-
     }
     HQ.recentRecord = record;
 };
@@ -1130,16 +1138,18 @@ var bindBatch = function (record) {
     App.cboBatNbr.events['change'].suspend();
     App.cboSiteID.events['change'].suspend();
     App.cboFromToSiteID.events['change'].suspend();
+    App.cboPerPost.events['change'].suspend();
     App.frmMain.events['fieldchange'].suspend();
     App.cboStatus.forceSelection = false;
     App.frmMain.loadRecord(HQ.objBatch);
     App.cboStatus.forceSelection = false;
-    if (HQ.perpost && !HQ.objBatch.data.PerPost) {
-        HQ.objBatch.data.PerPost = HQ.perpost;
-    }
+    //if (HQ.perpost && !HQ.objBatch.data.PerPost) {
+    //    HQ.objBatch.data.PerPost = HQ.perpost;
+    //}
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
     App.cboSiteID.events['change'].resume();
+    App.cboPerPost.events['change'].resume();
     App.cboFromToSiteID.events['change'].resume();
     setStatusForm();
 
@@ -1167,22 +1177,7 @@ var save = function () {
     if (errorMessage) {
         HQ.message.show(2016033001, [errorMessage], '', true);
         return;
-    }
-
-
-    var checkPerPost = false;
-    if (HQ.checkPerPost) {
-        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
-        if (objPerPost != undefined) {
-            var tam = App.txtDateEnt.getValue();
-            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
-                checkPerPost = true;
-            }
-        }
-        else {
-            checkPerPost = true;
-        }
-    }
+    }    
 
     if ((App.cboBatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.cboBatNbr.value) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
@@ -1290,8 +1285,7 @@ var save = function () {
             params: {
                 lstTrans: Ext.encode(App.stoTrans.getRecordsValues()),
                 lstLot: Ext.encode(App.stoLotTrans.getRecordsValues()),
-                PerPost: App.cboPerPost.getValue(),
-                checkPerPost: checkPerPost
+                PerPost: App.cboPerPost.getValue()                
             },
             success: function (msg, data) {
 
@@ -1308,15 +1302,12 @@ var save = function () {
                     if (Ext.isEmpty(HQ.recentRecord)) {
                         HQ.recentRecord = batNbr;
                     }
-                    App.stoBatch.reload();
+                   
                 }
-
-                setChange(false);
-                if (HQ.checkPerPost && this.result.data.checkPerPost) {
-                    HQ.message.show(2018071311, '', '', true);
-                } else {
+                App.stoBatch.reload();
+                setChange(false);                
                 HQ.message.process(msg, data, true);
-                }
+                
               
             },
             failure: function (msg, data) {
@@ -1616,6 +1607,7 @@ var defaultOnNew = function () {
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
+    record.data.PerPost = HQ.perpost;
     record.data.DateEnt = HQ.businessDate;
     App.cboSiteID.setValue(HQ.inSite);
     if (HQ.showWhseLoc == 0) {
@@ -1624,9 +1616,9 @@ var defaultOnNew = function () {
     else {
         App.cboWhseLoc.setValue(HQ.WhseLoc);
     }
-    if (HQ.perpost) {
-        App.cboPerPost.setValue(HQ.perpost);
-    }
+    //if (HQ.perpost) {
+    //    App.cboPerPost.setValue(HQ.perpost);
+    //}
     App.cboSlsperID.setValue('');
     App.frmMain.validate();
 
@@ -1637,8 +1629,8 @@ var defaultOnNew = function () {
     if (HQ.showWhseLocColumn) {
         App.colWhseLoc.show();
     }
-
     bindBatch(record);
+
 };
 
 var lastLineRef = function () {
@@ -2140,6 +2132,7 @@ var askRefresh = function (item) {
 };
 
 var setChange = function (isChange) {
+    
     HQ.isChange = isChange;
     if (isChange) {
         App.cboBatNbr.setReadOnly(true);
@@ -2166,6 +2159,12 @@ var rendererWhseLoc = function (val) {
     var record = HQ.store.findRecord(App.cboWhseLoc.store, ["WhseLoc"], [val]);
     return (record) ? record.data.Descr : val;
 }
+
+function checkSave(item) {
+    if (item == 'yes') {
+        save();
+    }
+};
 
 var rendererWarrantyDate = function (value, meta, record) {
     var date = new Date(1900, 0, 1);
