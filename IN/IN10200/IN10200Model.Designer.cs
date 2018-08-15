@@ -12420,6 +12420,54 @@ namespace IN10200
         private Nullable<global::System.Boolean> _IsChangeSite;
         partial void OnIsChangeSiteChanging(Nullable<global::System.Boolean> value);
         partial void OnIsChangeSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowImport
+        {
+            get
+            {
+                return _ShowImport;
+            }
+            set
+            {
+                OnShowImportChanging(value);
+                ReportPropertyChanging("ShowImport");
+                _ShowImport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowImport");
+                OnShowImportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowImport;
+        partial void OnShowImportChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowImportChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowExport
+        {
+            get
+            {
+                return _ShowExport;
+            }
+            set
+            {
+                OnShowExportChanging(value);
+                ReportPropertyChanging("ShowExport");
+                _ShowExport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowExport");
+                OnShowExportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowExport;
+        partial void OnShowExportChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowExportChanged();
 
         #endregion
 

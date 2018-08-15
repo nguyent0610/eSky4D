@@ -77,6 +77,10 @@ namespace IN10200.Controllers
             bool showWhseLocColumn = false;
             bool isChangeSite = false;
             bool allowSlsper = false;
+            bool showImport = false;
+            bool showExport = false;
+
+
             var objConfig = _app.IN10200_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -89,6 +93,8 @@ namespace IN10200.Controllers
                 showWhseLocColumn = objConfig.ShowWhseLocColumn ?? false;
                 isChangeSite = objConfig.IsChangeSite ?? false;
                 allowSlsper = objConfig.AllowSlsper ?? false;
+                showImport = objConfig.ShowImport ?? false;
+                showExport = objConfig.ShowExport ?? false;
             }
             //var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
 
@@ -120,6 +126,8 @@ namespace IN10200.Controllers
 
             ViewBag.perpost = perPost;
             ViewBag.checkPerPost = checkPerPost;
+            ViewBag.showImport = showImport;
+            ViewBag.showExport = showExport;
 
             return View();
         }
@@ -1834,13 +1842,14 @@ namespace IN10200.Controllers
             t.TranDesc = s.TranDesc;
             t.TranType = s.TranType;
             t.TranDate = batch.DateEnt;
-            t.UnitCost = s.UnitCost;
+            t.UnitCost = s.UnitCost; 
             t.UnitDesc = s.UnitDesc;
             t.UnitMultDiv = s.UnitMultDiv;
             t.UnitPrice = s.UnitPrice;
             t.WhseLoc = s.WhseLoc; //_form["cboWhseLoc"].PassNull();
             t.ReasonCD = s.ReasonCD;//batch.ReasonCD;
-            t.SlsperID = s.SlsperID; //_form["SlsperID"].PassNull();
+            t.SlsperID = _form["SlsperID"].PassNull(); // s.SlsperID;
+            
             t.PosmID = s.PosmID;
         }
         private bool Update_Lot(IN_LotTrans t, IN10200_pgIN_LotTrans_Result s, Batch batch, IN_Trans tran, bool isNew)

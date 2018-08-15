@@ -1313,6 +1313,8 @@
           <Property Type="Boolean" Name="ShowSiteColumn" Nullable="true" />
           <Property Type="Boolean" Name="ShowWhseLocColumn" Nullable="true" />
           <Property Type="Boolean" Name="IsChangeSite" Nullable="true" />
+          <Property Type="Boolean" Name="ShowImport" Nullable="true" />
+          <Property Type="Boolean" Name="ShowExport" Nullable="true" />
           </ComplexType>
         <ComplexType Name="IN10200_peSiteID_Result">
           <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
@@ -1980,6 +1982,8 @@
                 <ScalarProperty Name="ShowSiteColumn" ColumnName="ShowSiteColumn" />
                 <ScalarProperty Name="ShowWhseLocColumn" ColumnName="ShowWhseLocColumn" />
                 <ScalarProperty Name="IsChangeSite" ColumnName="IsChangeSite" />
+                <ScalarProperty Name="ShowImport" ColumnName="ShowImport" />
+                <ScalarProperty Name="ShowExport" ColumnName="ShowExport" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

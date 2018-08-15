@@ -170,7 +170,8 @@ var frmMain_BoxReady = function () {
         }
       
     }
-    
+    App.btnImport.setVisible(HQ.showImport);
+    App.btnExport.setVisible(HQ.showExport);
     HQ.common.showBusy(true, HQ.waitMsg);
     if (HQ.showQtyOnhand) {
         App.colQtyOnHand.show();
@@ -1170,10 +1171,10 @@ var save = function () {
 
 
     var checkPerPost = false;
-    if (HQ.checkperPost) {
+    if (HQ.checkPerPost) {
         var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
         if (objPerPost != undefined) {
-            var tam = App.DateEnt.getValue();
+            var tam = App.txtDateEnt.getValue();
             if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
                 checkPerPost = true;
             }
@@ -1311,7 +1312,7 @@ var save = function () {
                 }
 
                 setChange(false);
-                if (HQ.checkperPost && this.result.data.checkPerPost) {
+                if (HQ.checkPerPost && this.result.data.checkPerPost) {
                     HQ.message.show(2018071311, '', '', true);
                 } else {
                 HQ.message.process(msg, data, true);
