@@ -89,7 +89,8 @@ namespace OM21100.Controllers
                 , hideInvtIDSolomon = false
                 , hideDiscPrice= false
                 , hideCopy=false
-                , hideSite = false;
+                , hideSite = false
+                , hideSiteSolomon = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -115,6 +116,7 @@ namespace OM21100.Controllers
                 hideDiscPrice = objConfig.HideDiscPrice.HasValue && objConfig.HideDiscPrice.Value;
                 hideCopy = objConfig.HideCopy.HasValue && objConfig.HideCopy.Value;
                 hideSite = objConfig.HideSite.HasValue && objConfig.HideSite.Value;
+                hideSiteSolomon = objConfig.HideSiteSolomon.HasValue && objConfig.HideSiteSolomon.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -138,6 +140,7 @@ namespace OM21100.Controllers
             ViewBag.hideDiscPrice = hideDiscPrice;
             ViewBag.hideCopy = hideCopy;
             ViewBag.hideSite = hideSite;
+            ViewBag.hideSiteSolomon = hideSiteSolomon;
             return View();
         }
 
@@ -3305,6 +3308,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.POEndDate = inputDiscSeq.POEndDate.ToDateShort();
             updatedDiscSeq.POStartDate = inputDiscSeq.POStartDate.ToDateShort();
             updatedDiscSeq.ExactQty = inputDiscSeq.ExactQty;
+            updatedDiscSeq.SolomonSite = inputDiscSeq.SolomonSite;
             updatedDiscSeq.ExcludeOtherDisc = inputDiscSeq.ExcludeOtherDisc;
             updatedDiscSeq.PctDiscountByLevel = inputDiscSeq.PctDiscountByLevel;
             if (hidechkPctDiscountByLevel == false || prorateAmtType.PassNull()=="")

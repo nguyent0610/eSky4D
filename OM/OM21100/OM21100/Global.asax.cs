@@ -31,13 +31,13 @@ namespace OM21100
             Current.FormatDate = "dd.MM.yyyy";
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();TRUONGSAD;HOANGSAD
-            Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "PhuThai_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM21100"] = acc;
-            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "PhuThai_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18247";
             Session["Language"] = Current.Language = "vi";

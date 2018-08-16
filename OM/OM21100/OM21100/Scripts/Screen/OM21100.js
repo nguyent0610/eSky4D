@@ -13,6 +13,7 @@ var _copy = 0;
 var _siteID = '';
 var _siteEdit = '';
 var _discSeqNew = '';
+var _branchID = '';
 var Main = {
 
     Process: {
@@ -855,7 +856,7 @@ var Main = {
             App.btnCopy.setVisible(HQ.hideCopy);
             App.FreeITemSiteWhseLoc.setVisible(HQ.hideSite);
             App.FreeITemSiteID.setVisible(HQ.hideSite);
-            
+            App.cboSolomonSite.setVisible(HQ.hideSiteSolomon);
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -2319,6 +2320,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(true);
                 App.cboSubBreakType.setReadOnly(true);
                 App.cboBreakBoundType.setReadOnly(true);
+                App.cboSolomonSite.setReadOnly(true);
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
             }
             else {
@@ -2327,6 +2329,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(false);
                 App.cboSubBreakType.setReadOnly(false);
                 App.cboBreakBoundType.setReadOnly(false);
+                App.cboSolomonSite.setReadOnly(false);
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(false);
             }
 
@@ -2973,16 +2976,19 @@ var DiscDefintion = {
                 //}
 
                 if (cbo.value == "A") {
-                    App.chkAutoFreeItem.setDisabled(false);
+                    
                     App.chkAutoFreeItem.setValue(false);
+                    App.chkAutoFreeItem.setDisabled(false);
                 }
                 else if (cbo.value == "M") {
-                    App.chkAutoFreeItem.setDisabled(true);
+                    
                     App.chkAutoFreeItem.setValue(true);
+                    App.chkAutoFreeItem.setDisabled(true);
                 }
                 else {
-                    App.chkAutoFreeItem.setDisabled(false);
+                    
                     App.chkAutoFreeItem.setValue(false);
+                    App.chkAutoFreeItem.setDisabled(false);
                 }
             //}
         },
@@ -4772,6 +4778,18 @@ var DiscDefintion = {
             }
             if(e.field=="FreeITemSiteID")
             {
+                //var lstCompany = App.grdCompany.store.snapshot || App.grdCompany.store.allData || App.grdCompany.store.data;
+                //if(lstCompany!=undefined){
+                //    for(var i=0;i<lstCompany.length;i++){
+                //        _branchID +=lstCompany.items[i].data.CpnyID + ",";
+                //    }
+                //}
+
+                //if (_branchID == '')
+                //{
+                //    HQ.message.show(2018081663, [HQ.common.getLang("AppComp")], '', true);
+                //    return false;
+                //}
                 var tam = "@@@@@@@@@@";
                 App.cboFreeITemSiteWhseLoc.store.clearFilter();
                 if (e.record.data.FreeITemSiteID != "" && e.record.data.FreeITemSiteID != null) {
@@ -5272,3 +5290,16 @@ var cboFreeITemSiteID_change = function(chk, newValue, oldValue, eOpts)
     App.cboFreeITemSiteWhseLoc.store.reload();
     App.cboFreeITemSiteWhseLoc.clearValue();
 }
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+
+    return returnValue;
+};
