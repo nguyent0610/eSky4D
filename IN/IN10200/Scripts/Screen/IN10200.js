@@ -393,6 +393,12 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
 
 var cboStatus_Change = function (item, newValue, oldValue) {
     App.cboHandle.getStore().reload();
+    if (App.cboStatus.getValue() == "C" || App.cboStatus.getValue() == "V") {
+        App.cboPerPost.setReadOnly(true);
+    }
+    else {
+        App.cboPerPost.setReadOnly(false);
+    }
 };
 
 var cboFromToSiteID_Change = function (item, newValue, oldValue) {
