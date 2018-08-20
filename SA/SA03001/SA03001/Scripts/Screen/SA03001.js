@@ -84,6 +84,14 @@ var menuClick = function (command) {
                 else {
                     App.txtCpnyID.allowBlank = true;
                 }
+                if (HQ.IsBrandID) {
+                    App.cboBrandID.hide();
+                    App.cboBrandID.allowBlank = true;
+                }
+                else {
+                    App.cboBrandID.show();
+                    App.cboBrandID.allowBlank = false;
+                }
                 App.winLocation.setTitle("New")
                 App.winLocation.show();
                 App.txtUserName.setReadOnly(false);
@@ -115,6 +123,7 @@ var menuClick = function (command) {
                 App.txtCpnyID.isValid();
                 App.cboStatus.isValid();
                 App.chkAuto.setValue(0);
+                App.cboBrandID.setValue('');
                 HQ.isNew = true;
 
             }
@@ -184,6 +193,12 @@ var firstLoad = function () {
     }
     else {
         App.MultiLogin.show();
+    }
+    if (HQ.IsBrandID) {
+        App.BrandID.hide();
+    }
+    else {
+        App.BrandID.show();
     }
     App.stoUser.reload();
     HQ.util.checkAccessRight();
@@ -303,6 +318,14 @@ var btnEdit_Click = function (record) {
     }
     else {
         App.ckbMultiLogin.show();
+    }
+    if (HQ.IsBrandID) {
+        App.cboBrandID.hide();
+        App.cboBrandID.allowBlank = true;
+    }
+    else {
+        App.cboBrandID.show();
+        App.cboBrandID.allowBlank = false;
     }
     _tstamp = record.data.tstamp;
     App.frmDetail.loadRecord(record);

@@ -61,7 +61,7 @@
           <Property Name="JobTitle" Type="nvarchar" MaxLength="200" />
           <Property Name="Manager" Type="varchar" MaxLength="30" />
           <Property Name="Department" Type="nvarchar" MaxLength="200" />
-          <Property Name="Channel" Type="varchar" MaxLength="200" />
+          <Property Name="Channel" Type="varchar" MaxLength="500" />
           <Property Name="AutoID" Type="varchar" MaxLength="50" />
           <Property Name="ExpireDay" Type="int" Nullable="false" />
           <Property Name="FailedLoginCount" Type="int" Nullable="false" />
@@ -82,6 +82,7 @@
           <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="StartWork" Type="datetime" Nullable="false" />
           <Property Name="EndWork" Type="datetime" Nullable="false" />
+          <Property Name="BrandID" Type="varchar(max)" Nullable="false" />
         </EntityType>
         <Function Name="SA03001_pdBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -243,19 +244,21 @@
           <Property Type="DateTime" Name="StartDate" Nullable="true" />
           <Property Type="DateTime" Name="EndDate" Nullable="true" />
           <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="StatusDescr" Nullable="true" MaxLength="14" />
           <Property Type="String" Name="PositionDescr" Nullable="true" MaxLength="3" />
           <Property Type="String" Name="JobTitle" Nullable="true" MaxLength="200" />
-          <Property Type="DateTime" Name="StartWork" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="EndWork" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="StartWork" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="EndWork" Nullable="false" Precision="23" />
           <Property Type="DateTime" Name="BeginDay" Nullable="false" Precision="23" />
           <Property Type="Int32" Name="ExpireDay" Nullable="false" />
           <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="1" />
           <Property Type="Boolean" Name="CheckFirstLogin" Nullable="false" />
           <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Tel" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="Channel" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="MultiLogin" Nullable="false" />
+          <Property Type="String" Name="BrandID" Nullable="false" />
         </ComplexType>
         <ComplexType Name="SA03001_pgBranchAllByUser_Result">
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
@@ -346,6 +349,8 @@
           <Property Type="Boolean" Name="Tel" Nullable="true" />
           <Property Type="Boolean" Name="Channel" Nullable="true" />
           <Property Type="Boolean" Name="MultiLogin" Nullable="true" />
+          <Property Type="Boolean" Name="BrandID" Nullable="true" />
+          <Property Type="Boolean" Name="MultiChannel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SA03001_ptTreeNode_Result">
           <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
@@ -395,7 +400,7 @@
           <Property Name="JobTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Manager" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Department" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Channel" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="AutoID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ExpireDay" Type="Int32" Nullable="false" />
           <Property Name="FailedLoginCount" Type="Int32" Nullable="false" />
@@ -416,6 +421,7 @@
           <Property Name="Status" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="StartWork" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndWork" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BrandID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -456,6 +462,8 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -575,6 +583,8 @@
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="MultiChannel" ColumnName="MultiChannel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -614,6 +624,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SA03001Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="EndWork" ColumnName="EndWork" />
                 <ScalarProperty Name="StartWork" ColumnName="StartWork" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

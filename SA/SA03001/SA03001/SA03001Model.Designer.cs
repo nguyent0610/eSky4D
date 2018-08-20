@@ -1329,7 +1329,8 @@ namespace SA03001
         /// <param name="status">Initial value of the Status property.</param>
         /// <param name="startWork">Initial value of the StartWork property.</param>
         /// <param name="endWork">Initial value of the EndWork property.</param>
-        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Byte[] tstamp, global::System.Double crtLmt, global::System.Double crtLmtInvoice, global::System.String status, global::System.DateTime startWork, global::System.DateTime endWork)
+        /// <param name="brandID">Initial value of the BrandID property.</param>
+        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Byte[] tstamp, global::System.Double crtLmt, global::System.Double crtLmtInvoice, global::System.String status, global::System.DateTime startWork, global::System.DateTime endWork, global::System.String brandID)
         {
             User user = new User();
             user.UserName = userName;
@@ -1346,6 +1347,7 @@ namespace SA03001
             user.Status = status;
             user.StartWork = startWork;
             user.EndWork = endWork;
+            user.BrandID = brandID;
             return user;
         }
 
@@ -2339,6 +2341,30 @@ namespace SA03001
         private global::System.DateTime _EndWork;
         partial void OnEndWorkChanging(global::System.DateTime value);
         partial void OnEndWorkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 
@@ -2732,6 +2758,54 @@ namespace SA03001
         private Nullable<global::System.Boolean> _MultiLogin;
         partial void OnMultiLoginChanging(Nullable<global::System.Boolean> value);
         partial void OnMultiLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _BrandID;
+        partial void OnBrandIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnBrandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> MultiChannel
+        {
+            get
+            {
+                return _MultiChannel;
+            }
+            set
+            {
+                OnMultiChannelChanging(value);
+                ReportPropertyChanging("MultiChannel");
+                _MultiChannel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MultiChannel");
+                OnMultiChannelChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _MultiChannel;
+        partial void OnMultiChannelChanging(Nullable<global::System.Boolean> value);
+        partial void OnMultiChannelChanged();
 
         #endregion
 
@@ -3601,21 +3675,31 @@ namespace SA03001
         /// <param name="userName">Initial value of the UserName property.</param>
         /// <param name="blocked">Initial value of the Blocked property.</param>
         /// <param name="failedLoginCount">Initial value of the FailedLoginCount property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="startWork">Initial value of the StartWork property.</param>
+        /// <param name="endWork">Initial value of the EndWork property.</param>
         /// <param name="beginDay">Initial value of the BeginDay property.</param>
         /// <param name="expireDay">Initial value of the ExpireDay property.</param>
         /// <param name="hideColumn">Initial value of the HideColumn property.</param>
         /// <param name="checkFirstLogin">Initial value of the CheckFirstLogin property.</param>
-        public static SA03001_pgLoadGrid_Result CreateSA03001_pgLoadGrid_Result(global::System.String manager, global::System.String userName, global::System.Boolean blocked, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Int32 expireDay, global::System.String hideColumn, global::System.Boolean checkFirstLogin)
+        /// <param name="multiLogin">Initial value of the MultiLogin property.</param>
+        /// <param name="brandID">Initial value of the BrandID property.</param>
+        public static SA03001_pgLoadGrid_Result CreateSA03001_pgLoadGrid_Result(global::System.String manager, global::System.String userName, global::System.Boolean blocked, global::System.Int32 failedLoginCount, global::System.String status, global::System.DateTime startWork, global::System.DateTime endWork, global::System.DateTime beginDay, global::System.Int32 expireDay, global::System.String hideColumn, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.String brandID)
         {
             SA03001_pgLoadGrid_Result sA03001_pgLoadGrid_Result = new SA03001_pgLoadGrid_Result();
             sA03001_pgLoadGrid_Result.Manager = manager;
             sA03001_pgLoadGrid_Result.UserName = userName;
             sA03001_pgLoadGrid_Result.Blocked = blocked;
             sA03001_pgLoadGrid_Result.FailedLoginCount = failedLoginCount;
+            sA03001_pgLoadGrid_Result.Status = status;
+            sA03001_pgLoadGrid_Result.StartWork = startWork;
+            sA03001_pgLoadGrid_Result.EndWork = endWork;
             sA03001_pgLoadGrid_Result.BeginDay = beginDay;
             sA03001_pgLoadGrid_Result.ExpireDay = expireDay;
             sA03001_pgLoadGrid_Result.HideColumn = hideColumn;
             sA03001_pgLoadGrid_Result.CheckFirstLogin = checkFirstLogin;
+            sA03001_pgLoadGrid_Result.MultiLogin = multiLogin;
+            sA03001_pgLoadGrid_Result.BrandID = brandID;
             return sA03001_pgLoadGrid_Result;
         }
 
@@ -4034,7 +4118,7 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Status
         {
@@ -4046,7 +4130,7 @@ namespace SA03001
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, true);
+                _Status = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -4130,9 +4214,9 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> StartWork
+        public global::System.DateTime StartWork
         {
             get
             {
@@ -4147,16 +4231,16 @@ namespace SA03001
                 OnStartWorkChanged();
             }
         }
-        private Nullable<global::System.DateTime> _StartWork;
-        partial void OnStartWorkChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _StartWork;
+        partial void OnStartWorkChanging(global::System.DateTime value);
         partial void OnStartWorkChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> EndWork
+        public global::System.DateTime EndWork
         {
             get
             {
@@ -4171,8 +4255,8 @@ namespace SA03001
                 OnEndWorkChanged();
             }
         }
-        private Nullable<global::System.DateTime> _EndWork;
-        partial void OnEndWorkChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _EndWork;
+        partial void OnEndWorkChanging(global::System.DateTime value);
         partial void OnEndWorkChanged();
     
         /// <summary>
@@ -4342,6 +4426,54 @@ namespace SA03001
         private global::System.String _Channel;
         partial void OnChannelChanging(global::System.String value);
         partial void OnChannelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean MultiLogin
+        {
+            get
+            {
+                return _MultiLogin;
+            }
+            set
+            {
+                OnMultiLoginChanging(value);
+                ReportPropertyChanging("MultiLogin");
+                _MultiLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MultiLogin");
+                OnMultiLoginChanged();
+            }
+        }
+        private global::System.Boolean _MultiLogin;
+        partial void OnMultiLoginChanging(global::System.Boolean value);
+        partial void OnMultiLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 

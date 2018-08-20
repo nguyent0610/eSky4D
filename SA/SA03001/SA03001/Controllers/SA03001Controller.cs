@@ -34,6 +34,8 @@ namespace SA03001.Controllers
         private bool isTell = false;
         private bool isChannel = false;
         private bool isMultiLogin = false;
+        private bool isBrandID = false;
+        private bool isMultiChannel = false;
 
         List<SA03001_ptTreeNode_Result> lstAllNode = new List<SA03001_ptTreeNode_Result>();
         List<SA03001_ptTreeNodeUserReplace_Result> lstAllNodetMP = new List<SA03001_ptTreeNodeUserReplace_Result>();
@@ -51,6 +53,8 @@ namespace SA03001.Controllers
                 isTell = objUserTypes.Tel.ToBool();
                 isChannel = objUserTypes.Channel.ToBool();
                 isMultiLogin = objUserTypes.MultiLogin.ToBool();
+                isBrandID = objUserTypes.BrandID.ToBool();
+                isMultiChannel = objUserTypes.MultiChannel.ToBool();
             }
             ViewBag.IsShowUserTypes = isShowUserTypes;
             ViewBag.IsRequiredCpny = isRequiredCpny;
@@ -59,7 +63,8 @@ namespace SA03001.Controllers
             ViewBag.IsTel = isTell;
             ViewBag.IsChannel = isChannel;
             ViewBag.IsMultiLogin = isMultiLogin;
-
+            ViewBag.IsBrandID = isBrandID;
+            ViewBag.IsMultiChannel = isMultiChannel;
 
             var objSA02500Check = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check");
             var objSA02500CheckAdmin = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500CheckAdmin");
@@ -74,7 +79,7 @@ namespace SA03001.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -121,7 +126,7 @@ namespace SA03001.Controllers
                 //DateTime EndDate = DateTime.Parse(tmpEndDate);
                 string tmpBeginDay = data["dtpBeginDay"].PassNull();
                 DateTime BeginDay = DateTime.Parse(tmpBeginDay);
-                int ExpireDay = Convert.ToInt32(data["txtExpireDay"].PassNull() == "" ? "0" : data["txtExpireDay"].PassNull());
+                int ExpireDay = (data["txtExpireDay"].PassNull() == "" ? "0" : data["txtExpireDay"].PassNull()).ToInt();
                 DateTime StartWork = data["dtpStartWork"].ToDateShort();
                 DateTime EndWork = data["dtpEndWork"].ToDateShort();
                 bool checkFirstLogin = data["valueCheckFirstLogin"].PassNull().ToBool();
@@ -130,6 +135,7 @@ namespace SA03001.Controllers
                 string tel = data["txtTel"].PassNull();
                 string channel = data["cboChannel"].PassNull();
                 bool multiLogin = data["valueMultiLogin"].PassNull().ToBool();
+                string brandID = data["cboBrandID"].PassNull();
                 if (auto == true)
                 {
                     bool b = true;
@@ -209,7 +215,7 @@ namespace SA03001.Controllers
                     objUser.LoggedIn = false;
                     objUser.Tel = tel;
                     objUser.Channel = channel;
-
+                    objUser.BrandID = brandID;
                 }
                 else
                 {
