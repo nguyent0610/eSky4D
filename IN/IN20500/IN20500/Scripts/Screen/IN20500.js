@@ -288,6 +288,10 @@ var stoLoad = function (sto) {
         App.cboValMthd.show();
     else
         App.cboValMthd.hide();
+    if (HQ.GiftPoint)
+        App.txtGiftPoint.show();
+    else
+        App.txtGiftPoint.hide();
 };
 
 

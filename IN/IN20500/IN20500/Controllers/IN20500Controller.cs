@@ -73,6 +73,7 @@ namespace IN20500.Controllers
             Util.InitRight(_screenNbr);
             var isHideChkPublic = false;
             var DfltValMthd = false;
+            var GiftPoint = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
             var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
@@ -82,9 +83,11 @@ namespace IN20500.Controllers
             if (objConfigHideShow!= null)
             {
                 DfltValMthd = objConfigHideShow.DfltValMthd.HasValue ? objConfigHideShow.DfltValMthd.Value : false;
+                GiftPoint = objConfigHideShow.GiftPoint.HasValue ? objConfigHideShow.GiftPoint.Value : false;
             }
             ViewBag.isHideChkPublic = isHideChkPublic;
             ViewBag.DfltValMthd = DfltValMthd;
+            ViewBag.GiftPoint = GiftPoint;
             return View();
         }
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -393,6 +396,7 @@ namespace IN20500.Controllers
             t.VendID1 = s.VendID1;
             t.VendID2 = s.VendID2;
             t.LotSerRcptAuto = s.LotSerRcptAuto;
+            t.GiftPoint = s.GiftPoint;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

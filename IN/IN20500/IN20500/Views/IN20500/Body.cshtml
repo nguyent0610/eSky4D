@@ -176,6 +176,8 @@
                             {
                                 lst.Change.Fn = "chkPublic_Change";
                             })  
+                         , HQ.NumberField().ID("txtGiftPoint").Name("txtStkVol").HQLangCode("GiftPoint").DataIndex("GiftPoint").Hidden(true)
+                            .Width(300).Value(0).DecimalPrecision(0).MarginSpec("5 0 5 0").EnableKeyEvents(true)
                     )//Header Row 4
             )
             .Listeners(lss =>
