@@ -341,12 +341,12 @@ var setReadOnly = function (isReadOnly) {
 /////////////////////////////// GIRD AR_CustDisplayMethod /////////////////////////////////
 var stoCpny_Load = function (sto) {
     //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
-    if (HQ.isFirstLoad) {
+    //if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keysTab);
         }
         HQ.isFirstLoad = false; //sto load cuoi se su dung
-    }
+    //}
     frmChange();
     if (_isLoadMaster) {
         if (_copy == true) {
@@ -812,6 +812,8 @@ var cboClassID_Change = function (sender, e) {
             App.cboLotSerTrack.setValue(objTmp.data.LotSerTrack);
             App.cboBuyer.setValue(objTmp.data.Buyer);
             App.cboStkUnit.setValue(objTmp.data.StkUnit);
+            App.cboDfltPOUnit.forceSelection = false;
+            App.cboDfltSOUnit.forceSelection = false;
             App.cboDfltPOUnit.setValue(objTmp.data.DfltPOUnit);
             App.cboDfltSOUnit.setValue(objTmp.data.DfltSOUnit);
             App.cboMaterialType.setValue(objTmp.data.MaterialType);

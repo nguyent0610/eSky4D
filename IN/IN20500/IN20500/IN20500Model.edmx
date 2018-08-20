@@ -293,7 +293,7 @@
           <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SerAssign" Nullable="true" MaxLength="1" />
           <Property Type="Int16" Name="ShelfLife" Nullable="false" />
-          <Property Type="String" Name="Size" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Size" Nullable="true" MaxLength="50" />
           <Property Type="Double" Name="SOFee" Nullable="false" />
           <Property Type="Double" Name="SOPrice" Nullable="false" />
           <Property Type="String" Name="Source" Nullable="true" MaxLength="1" />
@@ -436,7 +436,7 @@
           <Property Name="PriceClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SerAssign" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="ShelfLife" Type="Int16" Nullable="false" />
-          <Property Name="Size" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SOFee" Type="Double" Nullable="false" />
           <Property Name="SOPrice" Type="Double" Nullable="false" />
           <Property Name="Source" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
