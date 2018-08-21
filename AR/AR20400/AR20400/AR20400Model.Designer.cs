@@ -10453,6 +10453,174 @@ namespace AR20400
         private Nullable<global::System.Boolean> _RequirePhone;
         partial void OnRequirePhoneChanging(Nullable<global::System.Boolean> value);
         partial void OnRequirePhoneChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DefaultCrRule
+        {
+            get
+            {
+                return _DefaultCrRule;
+            }
+            set
+            {
+                OnDefaultCrRuleChanging(value);
+                ReportPropertyChanging("DefaultCrRule");
+                _DefaultCrRule = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DefaultCrRule");
+                OnDefaultCrRuleChanged();
+            }
+        }
+        private global::System.String _DefaultCrRule;
+        partial void OnDefaultCrRuleChanging(global::System.String value);
+        partial void OnDefaultCrRuleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTerms
+        {
+            get
+            {
+                return _RequireTerms;
+            }
+            set
+            {
+                OnRequireTermsChanging(value);
+                ReportPropertyChanging("RequireTerms");
+                _RequireTerms = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTerms");
+                OnRequireTermsChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTerms;
+        partial void OnRequireTermsChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequireTermsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTerritory
+        {
+            get
+            {
+                return _RequireTerritory;
+            }
+            set
+            {
+                OnRequireTerritoryChanging(value);
+                ReportPropertyChanging("RequireTerritory");
+                _RequireTerritory = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTerritory");
+                OnRequireTerritoryChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTerritory;
+        partial void OnRequireTerritoryChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequireTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTaxID00
+        {
+            get
+            {
+                return _RequireTaxID00;
+            }
+            set
+            {
+                OnRequireTaxID00Changing(value);
+                ReportPropertyChanging("RequireTaxID00");
+                _RequireTaxID00 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTaxID00");
+                OnRequireTaxID00Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTaxID00;
+        partial void OnRequireTaxID00Changing(Nullable<global::System.Boolean> value);
+        partial void OnRequireTaxID00Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTaxID01
+        {
+            get
+            {
+                return _RequireTaxID01;
+            }
+            set
+            {
+                OnRequireTaxID01Changing(value);
+                ReportPropertyChanging("RequireTaxID01");
+                _RequireTaxID01 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTaxID01");
+                OnRequireTaxID01Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTaxID01;
+        partial void OnRequireTaxID01Changing(Nullable<global::System.Boolean> value);
+        partial void OnRequireTaxID01Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTaxID02
+        {
+            get
+            {
+                return _RequireTaxID02;
+            }
+            set
+            {
+                OnRequireTaxID02Changing(value);
+                ReportPropertyChanging("RequireTaxID02");
+                _RequireTaxID02 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTaxID02");
+                OnRequireTaxID02Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTaxID02;
+        partial void OnRequireTaxID02Changing(Nullable<global::System.Boolean> value);
+        partial void OnRequireTaxID02Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireTaxID03
+        {
+            get
+            {
+                return _RequireTaxID03;
+            }
+            set
+            {
+                OnRequireTaxID03Changing(value);
+                ReportPropertyChanging("RequireTaxID03");
+                _RequireTaxID03 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireTaxID03");
+                OnRequireTaxID03Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireTaxID03;
+        partial void OnRequireTaxID03Changing(Nullable<global::System.Boolean> value);
+        partial void OnRequireTaxID03Changed();
 
         #endregion
 

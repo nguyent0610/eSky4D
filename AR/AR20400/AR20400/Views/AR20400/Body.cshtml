@@ -7,6 +7,26 @@
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
+    AR20400Entities _db = Util.CreateObjectContext<AR20400Entities>(false);
+    var RequirePhone = false;
+    var RequireTerms = false;
+    var RequireTerritory = false;
+    var RequireTaxID00 = false;
+    var RequireTaxID01 = false;
+    var RequireTaxID02 = false;
+    var RequireTaxID03 = false;
+    var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+    if (objConfig != null)
+    {
+        RequirePhone = !(objConfig.RequirePhone.HasValue ? objConfig.RequirePhone.Value : false);
+        RequireTerms = !(objConfig.RequireTerms.HasValue ? objConfig.RequireTerms.Value : false);
+        RequireTerritory = !(objConfig.RequireTerritory.HasValue ? objConfig.RequireTerritory.Value : false);
+        RequireTaxID00 = !(objConfig.RequireTaxID00.HasValue ? objConfig.RequireTaxID00.Value : false);
+        RequireTaxID01 = !(objConfig.RequireTaxID01.HasValue ? objConfig.RequireTaxID01.Value : false);
+        RequireTaxID02 = !(objConfig.RequireTaxID02.HasValue ? objConfig.RequireTaxID02.Value : false);
+        RequireTaxID03 = !(objConfig.RequireTaxID03.HasValue ? objConfig.RequireTaxID03.Value : false);
+        
+    }
 }
 
 @(X.Viewport()
@@ -246,7 +266,7 @@
                                         .HQProcedure("AR20400_pcTerms_Cust").HQColumnShow("TermsID,Descr")
                                         .DisplayField("Descr").ValueField("TermsID")
                                         .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                        .AllowBlank(false)
+                                        .AllowBlank(RequireTerms)
                                         .LoadData()
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .Listeners(lst =>
@@ -446,7 +466,7 @@
 
                                 HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("TERRITORY").DataIndex("Territory")
                                     .HQProcedure("AR20400_pcTerritory").HQColumnShow("Territory,Descr")
-                                    .DisplayField("Descr").ValueField("Territory").AllowBlank(false)
+                                    .DisplayField("Descr").ValueField("Territory").AllowBlank(RequireTerritory)
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -726,7 +746,7 @@
                                 .Width(250).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").DataIndex("Addr1").HQLangCode("ADDR1")
-                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
+                                .EnforceMaxLength(true).AllowBlank(false).HideLabel(true)//.MaxLength(200)
                                 .Width(250).MarginSpec("5 0 0 0")
                                 .Listeners(lst =>
                                 {
@@ -734,7 +754,7 @@
                                 })
 
                             , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").DataIndex("Addr2")
-                                .EnforceMaxLength(true).MaxLength(200)
+                                .EnforceMaxLength(true)//.MaxLength(200)
                                 .Width(250).MarginSpec("5 0 0 0")
                                 .Listeners(lst =>
                                 {
@@ -848,14 +868,17 @@
                             , HQ.TextBox().ID("txtZip").Name("txtZip").DataIndex("Zip")
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Listeners(p=>p.Change.Fn = "txtZip_Change")
 
                             , HQ.TextBox().ID("txtPhone").Name("txtPhone").DataIndex("Phone").HQLangCode("PHONE")
-                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true)
+                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true).AllowBlank(RequirePhone)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Listeners(p=>p.Change.Fn = "txtPhone_Change")
 
                             , HQ.TextBox().ID("txtFax").Name("txtFax").DataIndex("Fax")
                                 .EnforceMaxLength(true).MaxLength(30)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                 .Listeners(p=>p.Change.Fn = "txtFax_Change")
 
                             , HQ.TextBox().ID("txtEMailAddr").Name("txtEMailAddr").DataIndex("EMailAddr")
                                 .EnforceMaxLength(true).MaxLength(30)
@@ -1004,14 +1027,17 @@
                             , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("BillZip")
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Listeners(p => p.Change.Fn = "txtBillZip_Change")
 
                             , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("BillPhone").HQLangCode("PHONE")
-                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true)
+                                .EnforceMaxLength(true).MaxLength(30).HideLabel(true).AllowBlank(RequirePhone)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Listeners(p => p.Change.Fn = "txtBillPhone_Change")
 
                             , HQ.TextBox().ID("txtBillFax").Name("txtBillFax").DataIndex("BillFax")
                                 .EnforceMaxLength(true).MaxLength(30)
                                 .Width(250).MarginSpec("5 0 59 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Listeners(p=>p.Change.Fn = "txtBillFax_Change")
                         )
 
                 )//Tab dia chi
@@ -1055,7 +1081,7 @@
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
                                 .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .AllowBlank(false)
+                                .AllowBlank(RequireTaxID00)
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -1068,7 +1094,7 @@
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
                                 .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .AllowBlank(false)
+                                .AllowBlank(RequireTaxID01)
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -1081,7 +1107,7 @@
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
                                 .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .AllowBlank(false)
+                                .AllowBlank(RequireTaxID02)
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -1094,7 +1120,7 @@
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
                                 .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
-                                .AllowBlank(false)
+                                .AllowBlank(RequireTaxID03)
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>

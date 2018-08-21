@@ -124,6 +124,7 @@ namespace AR20400.Controllers
             var showVendorBuyer = false;
             var showMarket = false;
             var RequirePhone = false;
+            var DefaultCrRule = string.Empty;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -138,6 +139,7 @@ namespace AR20400.Controllers
                 showVendorBuyer = objConfig.ShowVendorBuyer ?? false;
                 showMarket = objConfig.ShowMarket.HasValue && objConfig.ShowMarket.Value;
                 RequirePhone = objConfig.RequirePhone.HasValue ? objConfig.RequirePhone.Value : false;
+                DefaultCrRule = objConfig.DefaultCrRule == "" ? "" : objConfig.DefaultCrRule;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
@@ -150,6 +152,7 @@ namespace AR20400.Controllers
             ViewBag.showVendorBuyer = showVendorBuyer;
             ViewBag.showMarket = showMarket;
             ViewBag.RequirePhone = RequirePhone;
+            ViewBag.DefaultCrRule = DefaultCrRule;
             Util.InitRight(_screenNbr);
             return View();
         }

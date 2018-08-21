@@ -1123,6 +1123,13 @@
           <Property Type="Boolean" Name="ShowVendorBuyer" Nullable="true" />
           <Property Type="Boolean" Name="ShowMarket" Nullable="true" />
           <Property Type="Boolean" Name="RequirePhone" Nullable="true" />
+          <Property Type="String" Name="DefaultCrRule" Nullable="true" MaxLength="1" />
+          <Property Type="Boolean" Name="RequireTerms" Nullable="true" />
+          <Property Type="Boolean" Name="RequireTerritory" Nullable="true" />
+          <Property Type="Boolean" Name="RequireTaxID00" Nullable="true" />
+          <Property Type="Boolean" Name="RequireTaxID01" Nullable="true" />
+          <Property Type="Boolean" Name="RequireTaxID02" Nullable="true" />
+          <Property Type="Boolean" Name="RequireTaxID03" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1776,6 +1783,13 @@
                 <ScalarProperty Name="ShowVendorBuyer" ColumnName="ShowVendorBuyer" />
                 <ScalarProperty Name="ShowMarket" ColumnName="ShowMarket" />
                 <ScalarProperty Name="RequirePhone" ColumnName="RequirePhone" />
+                <ScalarProperty Name="DefaultCrRule" ColumnName="DefaultCrRule" />
+                <ScalarProperty Name="RequireTerms" ColumnName="RequireTerms" />
+                <ScalarProperty Name="RequireTerritory" ColumnName="RequireTerritory" />
+                <ScalarProperty Name="RequireTaxID00" ColumnName="RequireTaxID00" />
+                <ScalarProperty Name="RequireTaxID01" ColumnName="RequireTaxID01" />
+                <ScalarProperty Name="RequireTaxID02" ColumnName="RequireTaxID02" />
+                <ScalarProperty Name="RequireTaxID03" ColumnName="RequireTaxID03" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

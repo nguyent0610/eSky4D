@@ -464,7 +464,7 @@ var stoLoad = function (sto) {
         else
             record.set('CustType', 'L');
         record.set('TaxDflt', 'C');
-        record.set('CrRule', 'A');
+        record.set('CrRule', HQ.DefaultCrRule);
         record.set('Status', 'H');
         record.set('ExpiryDate', HQ.bussinessDate);
         record.set('EstablishDate', HQ.bussinessDate);
@@ -539,14 +539,6 @@ var stoLoad = function (sto) {
         if (curRecord.data.OUnit) {
             HQ.combo.expand(App.cboOunit, ',');
         }
-    }
-    if (HQ.RequirePhone){
-        App.txtPhone.allowBlank = false;
-        App.txtBillPhone.allowBlank = false;
-    }
-    else {
-        App.txtPhone.allowBlank = true;
-        App.txtBillPhone.allowBlank = true;
     }
 };
 
@@ -1167,7 +1159,42 @@ var cboCountry_Select = function (sender, value) {
         App.cboDistrict.setValue('');
     }
 };
-
+var txtPhone_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtPhone.setValue('');
+    }
+};
+var txtBillPhone_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtBillPhone.setValue('');
+    }
+};
+var txtFax_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtFax.setValue('');
+    }
+};
+var txtBillFax_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtBillFax.setValue('');
+    }
+};
+var txtZip_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtZip.setValue('');
+    }
+};
+var txtBillZip_Change = function (sender) {
+    var regex = /^[0-9-*#()+ ]/;
+    if (HQ.util.passNull(sender.value).match(regex) == null) {
+        App.txtBillZip.setValue('');
+    }
+};
 var btnCopytoDiffDB_Click = function () {
     App.txtBillName.setValue(App.lblName.getValue());
     App.txtBillAttn.setValue(App.txtAttn.getValue());
