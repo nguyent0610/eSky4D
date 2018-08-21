@@ -266,6 +266,14 @@ var stoLoad = function (sto) {
         App.cboClassID.focus(true);
         sto.commitChanges();
     }
+    App.cboDfltInvtType.store.clearFilter();
+    App.cboDfltValMthd.store.clearFilter();
+    App.cboDfltSource.store.clearFilter();
+    App.cboDfltStkUnit.store.clearFilter();
+    App.cboDfltPOUnit.store.clearFilter();
+    App.cboDfltSOUnit.store.clearFilter();
+    App.cboDfltSlsTaxCat.store.clearFilter();
+    App.cboDfltLotSerTrack.store.clearFilter();
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     if (!HQ.isNew) {
