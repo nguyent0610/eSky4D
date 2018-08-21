@@ -499,13 +499,17 @@ var cboDfltLotSerFxdTyp_Change = function (sender, value) {
         checkLotSerial(value);
         //}
         App.txtDfltLotSerFxdVal.setValue('');
+        App.txtDfltLotSerNumVal.setValue('');
         if (value == "D") {
             App.txtDfltLotSerFxdLen.setValue('8');
             App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
+            App.txtDfltLotSerNumLen.setValue('8');
+            App.txtDfltLotSerNumVal.setValue(HQ.IN20200Date);
         }
         else
         {
             App.txtDfltLotSerFxdLen.setValue('0');
+            App.txtDfltLotSerNumLen.setValue('0');
         }
     }
 };
@@ -595,10 +599,14 @@ var checkLotSerial = function (type) {
     if (type == 'D') {
         App.txtDfltLotSerFxdVal.setReadOnly(true);
         App.txtDfltLotSerFxdLen.setReadOnly(true);
+        App.txtDfltLotSerNumLen.setReadOnly(true);
+        App.txtDfltLotSerNumVal.setReadOnly(true);
     }
     else {
         App.txtDfltLotSerFxdVal.setReadOnly(false);
         App.txtDfltLotSerFxdLen.setReadOnly(false);
+        App.txtDfltLotSerNumLen.setReadOnly(false);
+        App.txtDfltLotSerNumVal.setReadOnly(false);
     }
 
 };

@@ -389,6 +389,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.Focus.Handler = "this.forceSelection = true;";
                             })
                             .LoadData()
                             )
