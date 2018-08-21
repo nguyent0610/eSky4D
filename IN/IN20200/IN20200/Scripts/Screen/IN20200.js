@@ -274,6 +274,8 @@ var stoLoad = function (sto) {
     App.cboDfltSOUnit.store.clearFilter();
     App.cboDfltSlsTaxCat.store.clearFilter();
     App.cboDfltLotSerTrack.store.clearFilter();
+    App.cboDfltLotSerAssign.store.clearFilter();
+    App.cboDfltLotSerMthd.store.clearFilter();
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     if (!HQ.isNew) {
@@ -500,6 +502,10 @@ var cboDfltLotSerFxdTyp_Change = function (sender, value) {
         if (value == "D") {
             App.txtDfltLotSerFxdLen.setValue('8');
             App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
+        }
+        else
+        {
+            App.txtDfltLotSerFxdLen.setValue('0');
         }
     }
 };

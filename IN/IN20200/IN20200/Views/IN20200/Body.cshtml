@@ -383,7 +383,7 @@
                     , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(120).ID("txtCpny")
                         .Editor(
                             HQ.Combo().ID("cboCpnyID").Name("cboCpnyID")
-                            .HQDBSys(false).HQProcedure("IN20200_pcClassCpnyID").HQHeightWidth(400, 300)
+                            .HQDBSys(false).ForceSelection(true).HQProcedure("IN20200_pcClassCpnyID").HQHeightWidth(400, 300)
                             .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
