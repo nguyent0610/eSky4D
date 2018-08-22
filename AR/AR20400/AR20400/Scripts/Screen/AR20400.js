@@ -1160,37 +1160,37 @@ var cboCountry_Select = function (sender, value) {
     }
 };
 var txtPhone_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtPhone.setValue('');
     }
 };
 var txtBillPhone_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtBillPhone.setValue('');
     }
 };
 var txtFax_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtFax.setValue('');
     }
 };
 var txtBillFax_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtBillFax.setValue('');
     }
 };
 var txtZip_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtZip.setValue('');
     }
 };
 var txtBillZip_Change = function (sender) {
-    var regex = /^[0-9-*#()+ ]/;
+    var regex = /^([0-9\(\)\/\+ \-]*)$/;
     if (HQ.util.passNull(sender.value).match(regex) == null) {
         App.txtBillZip.setValue('');
     }
