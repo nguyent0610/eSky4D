@@ -33,9 +33,14 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.checkPerPost = HQ.util.toBool('@ViewBag.checkPerPost');
+        HQ.perpost = '@ViewBag.perpost';
         HQ.inSite = '@ViewBag.INSite';
         HQ.WhseLoc = '@ViewBag.WhseLoc';
         HQ.showWhseLoc = @ViewBag.showWhseLoc;
+        HQ.showSiteColumn = HQ.util.toBool('@ViewBag.showSiteColumn');
+        HQ.showWhseLocColumn = HQ.util.toBool('@ViewBag.showWhseLocColumn');
+        HQ.IsChangeSite = HQ.util.toBool('@ViewBag.IsChangeSite');
 
     </script>  
     <title>@ViewBag.Title</title>

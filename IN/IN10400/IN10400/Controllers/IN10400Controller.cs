@@ -45,12 +45,28 @@ namespace IN10400.Controllers
         {
             Util.InitRight(_screenNbr);
             int showWhseLoc = 0;
-            var objconfig = _app.IN10400_pdConfig(Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault();
-            if (objconfig != null)
+            string perPost = string.Empty;
+            bool checkPerPost = false;
+            bool showSiteColumn = false;
+            bool showWhseLocColumn = false;
+            bool isChangeSite = false;
+            var objConfig = _app.IN10400_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
             {
-                showWhseLoc = objconfig.ShowWhseLoc.Value;
+                if (objConfig.ShowWhseLoc != null) showWhseLoc = objConfig.ShowWhseLoc.Value;
+                perPost = objConfig.PerPost;
+                checkPerPost = objConfig.CheckPerPost ?? false;
+                showSiteColumn = objConfig.ShowSiteColumn ?? false;
+                showWhseLocColumn = objConfig.ShowWhseLocColumn ?? false;
+                isChangeSite = objConfig.IsChangeSite ?? false;
             }
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            ViewBag.showSiteColumn = showSiteColumn;
+            ViewBag.showWhseLocColumn = showWhseLocColumn;
+            ViewBag.isChangeSite = isChangeSite;
+            ViewBag.perpost = perPost;
+            ViewBag.checkPerPost = checkPerPost;
             if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
             {
                 return View("Popup");
@@ -65,7 +81,7 @@ namespace IN10400.Controllers
 
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -75,7 +91,7 @@ namespace IN10400.Controllers
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstBatch = _app.IN10400_pcBatch(branchID, query, start, start + 20).ToList();
+            var lstBatch = _app.IN10400_pcBatch(Current.UserName,branchID, query, start, start + 20).ToList();
             var paging = new Paging<IN10400_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
@@ -244,12 +260,12 @@ namespace IN10400.Controllers
             {
                 _form = data;
                 SaveData(data);
-
+                bool checkPerPost = data["checkPerPost"].ToBool();
                 if (_logMessage != null)
                 {
                     return _logMessage;
                 }
-                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr });
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr, checkPerPost });
             }
             catch (Exception ex)
             {
@@ -894,6 +910,10 @@ namespace IN10400.Controllers
             t.TotAmt = Math.Round(_objBatch.TotAmt, _decAmt);
             t.Rlsed = 0;
             t.Status = _objBatch.Status;
+            t.PerPost = _objBatch.PerPost;
+
+            t.WhseLoc = _objBatch.WhseLoc;
+            t.SiteID = _objBatch.SiteID;
         }
         private void Update_Trans(Batch batch, IN_Trans t, IN10400_pgAdjustmentLoad_Result s, string whseLoc, bool isNew)
         {
@@ -956,7 +976,7 @@ namespace IN10400.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
-            t.WhseLoc = whseLoc.PassNull();
+            //t.WhseLoc = whseLoc.PassNull();
             t.ReasonCD = batch.ReasonCD;
             t.CnvFact = s.CnvFact;
             t.ExtCost = Math.Round(s.TranAmt, _decAmt);
@@ -978,7 +998,9 @@ namespace IN10400.Controllers
             t.UnitDesc = s.UnitDesc;
             t.UnitMultDiv = s.UnitMultDiv;
             t.UnitPrice = Math.Round(s.UnitPrice, _decPrice);
-           // t.SlsperID = _form["SlsperID"].PassNull();
+            t.WhseLoc = s.WhseLoc;
+            t.ReasonCD = s.ReasonCD;
+            // t.SlsperID = _form["SlsperID"].PassNull();
         }
         private bool Update_Lot(IN_LotTrans t, IN10400_pgIN_LotTrans_Result s, Batch batch, IN_Trans tran, string whseLoc, bool isNew)
         {

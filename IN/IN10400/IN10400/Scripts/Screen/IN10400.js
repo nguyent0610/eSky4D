@@ -13,7 +13,7 @@ var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
 var _firstLoad = true;
-
+var _siteID = '';
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 var checkLoad = function () {
@@ -178,6 +178,8 @@ var firstLoad = function () {
     App.stoSetup.addListener('load', stoSetup_Load);
     App.stoUnitConversion.addListener('load', store_Load);
     App.cboReasonCD.getStore().addListener('load', store_Load);
+    App.cboPerPost.store.addListener('load', cboPerPost_Load);
+    App.cboPerPost.store.reload();
     if (HQ.showWhseLoc == 0) {
         App.cboWhseLoc.setVisible(false);
         App.cboWhseLoc.allowBlank = true;
@@ -265,7 +267,10 @@ var grdTrans_BeforeEdit = function (editor, e) {
             return false;
         }
     }
-
+    if (e.field === 'WhseLoc') {
+        _siteID = e.record.data.SiteID;
+        App.cboWhseLocTrans.store.reload();
+    }
     if (Ext.isEmpty(App.cboReasonCD.getValue())) {
         HQ.message.show(15, [App.cboReasonCD.fieldLabel], '', true);
         return false;
@@ -334,6 +339,12 @@ var grdTrans_SelectionChange = function (item, selected) {
         }
     }
 };
+
+function cboPerPost_Load() {
+    if (HQ.perpost) {
+        App.cboPerPost.setValue(HQ.perpost);
+    }
+}
 var grdTrans_Edit = function (item, e) {
     HQ.focus = 'trans';
     var key = e.field;
@@ -342,6 +353,9 @@ var grdTrans_Edit = function (item, e) {
         if (e.record.invt == undefined) {
             var rcInvt = HQ.store.findRecord(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
             e.record.invt = rcInvt.data;
+        }
+        if (e.field === 'SiteID') {
+            e.record.set('WhseLoc', '');
         }
         var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
@@ -415,6 +429,9 @@ var grdTrans_Edit = function (item, e) {
     }
 };
 var grdTrans_ValidateEdit = function (item, e) {
+    if (e.field === "SiteID" && e.value === e.record.data.SiteID) {
+        return false;
+    }
     return HQ.grid.checkValidateEdit(App.grdTrans, e, keys, false);
 };
 
@@ -431,7 +448,17 @@ var grdLot_BeforeEdit = function (item, e) {
     if (key != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
     if (key == 'LotSerNbr' && !Ext.isEmpty(record.data.LotSerNbr)) return false;
     if (key == "UnitDesc") return false;
+    if ((e.field === 'WhseLoc' || e.field === 'SiteID') && !HQ.IsChangeSite) {
+        return false;
+    }
 
+    if (e.field === 'WhseLoc' && !HQ.showWhseLocColumn) {
+        return false;
+    }
+
+    if (e.field === 'SiteID' && !HQ.showSiteColumn) {
+        return false;
+    }
     if (Ext.isEmpty(record.data.InvtID)) {
         record.data.InvtID = App.winLot.record.data.InvtID;
         record.data.SiteID = App.winLot.record.data.SiteID;
@@ -558,7 +585,11 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
         if (HQ.recentRecord != record) {
             App.cboBatNbr.store.reload();
         }
-        else {
+        if (HQ.perpost) {
+            App.cboPerPost.setValue(HQ.perpost);
+        } else {
+
+            App.cboPerPost.setValue('');
         }
     }
     HQ.recentRecord = record;
@@ -573,8 +604,13 @@ var bindBatch = function (record) {
     // App.cboFromToSiteID.events['change'].suspend();
     App.frmMain.events['fieldchange'].suspend();
     App.cboStatus.forceSelection = false;
+
+    if (HQ.perpost && !HQ.objBatch.data.PerPost) {
+        HQ.objBatch.data.PerPost = HQ.perpost;
+    }
     App.frmMain.loadRecord(HQ.objBatch);
     App.cboStatus.forceSelection = false;
+
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
     App.cboSiteID.events['change'].resume();
@@ -597,6 +633,10 @@ var bindTran = function () {
         var objFirst = App.stoTrans.data.items[0].data;
         App.cboSiteID.setValue(objFirst.SiteID);
         App.cboWhseLoc.setValue(objFirst.WhseLoc);
+
+        App.cboSiteID.store.reload();
+        App.cboWhseLocTrans.store.reload();
+        App.cboReasonTrans.store.reload();
         //App.cboSlsperID.setValue(objFirst.SlsperID);
     }
     App.lblQtyAvail.setText('');
@@ -820,7 +860,19 @@ var save = function () {
         HQ.message.show(2015020803, '', '', true);
         return;
     }
-
+    var checkPerPost = false;
+    if (HQ.checkPerPost) {
+        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
+        if (objPerPost != undefined) {
+            var tam = App.txtDateEnt.getValue();
+            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
+                checkPerPost = true;
+            }
+        }
+        else {
+            checkPerPost = true;
+        }
+    }
     if (App.stoTrans.data.items.length <= 1) {
         HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
         return;
@@ -855,6 +907,20 @@ var save = function () {
             //    flat = true;
             //    return false;
             //}
+
+            if (HQ.showSiteColumn) {
+                if (!item.data.SiteID) {
+                    HQ.message.show(1000, 'SiteID');
+                    return false;
+                }
+            }
+
+            if (HQ.showWhseLocColumn) {
+                if (!item.data.WhseLoc) {
+                    HQ.message.show(1000, 'WhseLoc');
+                    return false;
+                }
+            }
             if (Ext.isEmpty(item.data.SiteID)) {
                 HQ.message.show(1000, [HQ.common.getLang('siteid')], '', true);
                 App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
@@ -913,13 +979,15 @@ var save = function () {
                 params: {
                     //lstbatch: Ext.encode(App.stoBatch.getById(App.cboBatNbr.getValue()).data),
                     lstTrans: Ext.encode(App.stoTrans.getRecordsValues()),
-                    lstLot: Ext.encode(App.stoLotTrans.getRecordsValues())
+                    lstLot: Ext.encode(App.stoLotTrans.getRecordsValues()),
+                    PerPost: App.cboPerPost.getValue(),
+                    checkPerPost: checkPerPost
                 },
                 success: function (msg, data) {
                     var batNbr = '';
 
                     if (this.result.data != undefined && this.result.data.batNbr != null) {
-                        var batNbr = this.result.data.batNbr
+                        var batNbr = this.result.data.batNbr;
                     }
                     if (!Ext.isEmpty(batNbr)) {
                         App.cboBatNbr.forceSelection = false
@@ -932,7 +1000,11 @@ var save = function () {
                         App.stoBatch.reload();
                     }
                     setChange(false);
-                    HQ.message.process(msg, data, true);
+                    if (HQ.checkPerPost && this.result.data.checkPerPost) {
+                        HQ.message.show(2018071311, '', '', true);
+                    } else {
+                        HQ.message.process(msg, data, true);
+                    }
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
@@ -1015,6 +1087,7 @@ var checkSetDefault = function () {
 };
 
 var defaultOnNew = function () {
+    
     HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
@@ -1027,10 +1100,19 @@ var defaultOnNew = function () {
     }
     else {
         App.cboWhseLoc.setValue(HQ.WhseLoc);
-    }    
+    }
+    if (HQ.perpost) {
+        App.cboPerPost.setValue(HQ.perpost);
+    }
     //App.cboSlsperID.setValue('');
-    // App.cboReasonCD.getStore().reload();
+    //// App.cboReasonCD.getStore().reload();
     App.frmMain.validate();
+    if (HQ.showSiteColumn) {
+        App.colSiteID.show();
+    }
+    if (HQ.showWhseLocColumn) {
+        App.colWhseLoc.show();
+    }
 
     bindBatch(record);
 };
@@ -1748,4 +1830,14 @@ var rendererWarrantyDate = function (value, meta, record) {
             return Ext.util.Format.date(value, 'd-m-Y');
         }
     }
+}
+
+var rendererReason = function (val) {
+    var record = HQ.store.findRecord(App.ReasonCD.store, ["ReasonCD"], [val]);
+    return (record) ? record.data.Descr : val;
+}
+
+var rendererWhseLoc = function (val) {
+    var record = HQ.store.findRecord(App.cboWhseLoc.store, ["WhseLoc"], [val]);
+    return (record) ? record.data.Descr : val;
 }

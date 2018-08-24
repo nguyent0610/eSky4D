@@ -116,22 +116,6 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Batch> Batches
-        {
-            get
-            {
-                if ((_Batches == null))
-                {
-                    _Batches = base.CreateObjectSet<Batch>("Batches");
-                }
-                return _Batches;
-            }
-        }
-        private ObjectSet<Batch> _Batches;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemLoc> IN_ItemLoc
         {
             get
@@ -224,6 +208,22 @@ namespace IN10400
             }
         }
         private ObjectSet<IN_Trans> _IN_Trans;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Batch> Batches
+        {
+            get
+            {
+                if ((_Batches == null))
+                {
+                    _Batches = base.CreateObjectSet<Batch>("Batches");
+                }
+                return _Batches;
+            }
+        }
+        private ObjectSet<Batch> _Batches;
 
         #endregion
 
@@ -251,14 +251,6 @@ namespace IN10400
         public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
         {
             base.AddObject("IN_UnitConversion", iN_UnitConversion);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Batches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToBatches(Batch batch)
-        {
-            base.AddObject("Batches", batch);
         }
     
         /// <summary>
@@ -307,6 +299,14 @@ namespace IN10400
         public void AddToIN_Trans(IN_Trans iN_Trans)
         {
             base.AddObject("IN_Trans", iN_Trans);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Batches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToBatches(Batch batch)
+        {
+            base.AddObject("Batches", batch);
         }
 
         #endregion
@@ -395,12 +395,23 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="query">No Metadata Documentation available.</param>
         /// <param name="from">No Metadata Documentation available.</param>
         /// <param name="to">No Metadata Documentation available.</param>
-        public ObjectResult<IN10400_pcBatch_Result> IN10400_pcBatch(global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
+        public ObjectResult<IN10400_pcBatch_Result> IN10400_pcBatch(global::System.String userID, global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
         {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
             ObjectParameter branchIDParameter;
             if (branchID != null)
             {
@@ -441,7 +452,7 @@ namespace IN10400
                 toParameter = new ObjectParameter("To", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction<IN10400_pcBatch_Result>("IN10400_pcBatch", branchIDParameter, queryParameter, fromParameter, toParameter);
+            return base.ExecuteFunction<IN10400_pcBatch_Result>("IN10400_pcBatch", userIDParameter, branchIDParameter, queryParameter, fromParameter, toParameter);
         }
     
         /// <summary>
@@ -592,11 +603,22 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN10400_pdConfig_Result> IN10400_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<IN10400_pdConfig_Result> IN10400_pdConfig(global::System.String branchID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
             ObjectParameter userNameParameter;
             if (userName != null)
             {
@@ -627,7 +649,7 @@ namespace IN10400
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<IN10400_pdConfig_Result>("IN10400_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<IN10400_pdConfig_Result>("IN10400_pdConfig", branchIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -803,7 +825,8 @@ namespace IN10400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String perPost)
         {
             Batch batch = new Batch();
             batch.BranchID = branchID;
@@ -821,6 +844,7 @@ namespace IN10400
             batch.LUpd_Prog = lUpd_Prog;
             batch.LUpd_User = lUpd_User;
             batch.tstamp = tstamp;
+            batch.PerPost = perPost;
             return batch;
         }
 
@@ -1532,6 +1556,78 @@ namespace IN10400
         private global::System.String _DiscSeq;
         partial void OnDiscSeqChanging(global::System.String value);
         partial void OnDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 
@@ -9323,13 +9419,15 @@ namespace IN10400
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="dateEnt">Initial value of the DateEnt property.</param>
         /// <param name="totAmt">Initial value of the TotAmt property.</param>
-        public static IN10400_pcBatch_Result CreateIN10400_pcBatch_Result(global::System.String batNbr, global::System.String branchID, global::System.DateTime dateEnt, global::System.Double totAmt)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static IN10400_pcBatch_Result CreateIN10400_pcBatch_Result(global::System.String batNbr, global::System.String branchID, global::System.DateTime dateEnt, global::System.Double totAmt, global::System.String perPost)
         {
             IN10400_pcBatch_Result iN10400_pcBatch_Result = new IN10400_pcBatch_Result();
             iN10400_pcBatch_Result.BatNbr = batNbr;
             iN10400_pcBatch_Result.BranchID = branchID;
             iN10400_pcBatch_Result.DateEnt = dateEnt;
             iN10400_pcBatch_Result.TotAmt = totAmt;
+            iN10400_pcBatch_Result.PerPost = perPost;
             return iN10400_pcBatch_Result;
         }
 
@@ -9672,6 +9770,78 @@ namespace IN10400
         private Nullable<global::System.Int32> _TotalRecords;
         partial void OnTotalRecordsChanging(Nullable<global::System.Int32> value);
         partial void OnTotalRecordsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 
@@ -10100,6 +10270,126 @@ namespace IN10400
         private Nullable<global::System.Int32> _ShowWhseLoc;
         partial void OnShowWhseLocChanging(Nullable<global::System.Int32> value);
         partial void OnShowWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckPerPost
+        {
+            get
+            {
+                return _CheckPerPost;
+            }
+            set
+            {
+                OnCheckPerPostChanging(value);
+                ReportPropertyChanging("CheckPerPost");
+                _CheckPerPost = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckPerPost");
+                OnCheckPerPostChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckPerPost;
+        partial void OnCheckPerPostChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowSiteColumn
+        {
+            get
+            {
+                return _ShowSiteColumn;
+            }
+            set
+            {
+                OnShowSiteColumnChanging(value);
+                ReportPropertyChanging("ShowSiteColumn");
+                _ShowSiteColumn = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowSiteColumn");
+                OnShowSiteColumnChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowSiteColumn;
+        partial void OnShowSiteColumnChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowSiteColumnChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowWhseLocColumn
+        {
+            get
+            {
+                return _ShowWhseLocColumn;
+            }
+            set
+            {
+                OnShowWhseLocColumnChanging(value);
+                ReportPropertyChanging("ShowWhseLocColumn");
+                _ShowWhseLocColumn = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowWhseLocColumn");
+                OnShowWhseLocColumnChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowWhseLocColumn;
+        partial void OnShowWhseLocColumnChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowWhseLocColumnChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsChangeSite
+        {
+            get
+            {
+                return _IsChangeSite;
+            }
+            set
+            {
+                OnIsChangeSiteChanging(value);
+                ReportPropertyChanging("IsChangeSite");
+                _IsChangeSite = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsChangeSite");
+                OnIsChangeSiteChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsChangeSite;
+        partial void OnIsChangeSiteChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsChangeSiteChanged();
 
         #endregion
 
