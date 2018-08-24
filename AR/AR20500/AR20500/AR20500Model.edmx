@@ -104,12 +104,12 @@
           <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
           <Property Name="StandID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
           <Property Name="DisplayID" Type="varchar" MaxLength="10" />
+          <Property Name="SizeID" Type="varchar" MaxLength="10" />
+          <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="Mobile" Type="varchar" MaxLength="20" />
           <Property Name="Market" Type="varchar" MaxLength="30" />
           <Property Name="BillMarket" Type="varchar" MaxLength="30" />
-          <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="LocationCheckType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="VendorID" Type="nvarchar" MaxLength="30" />
           <Property Name="BuyerID" Type="nvarchar" MaxLength="30" />
@@ -206,16 +206,16 @@
           <Property Name="UpdateType" Type="int" Nullable="false" />
           <Property Name="Reason" Type="varchar" MaxLength="8000" />
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
-          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
           <Property Name="VisitsPerDay" Type="int" Nullable="false" />
+          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
           <Property Name="StandID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
           <Property Name="SizeID" Type="varchar" MaxLength="10" />
+          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
           <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="Market" Type="varchar" MaxLength="30" />
           <Property Name="Date1" Type="datetime" />
           <Property Name="Date2" Type="datetime" />
-          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -343,6 +343,39 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="District" Type="varchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="CS_Leads">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="LeadID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LeadID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeadName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="SourceID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Channel" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Addr1" Type="nvarchar(max)" />
+          <Property Name="Addr2" Type="nvarchar(max)" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="30" />
+          <Property Name="MobileNumber1" Type="varchar" MaxLength="30" />
+          <Property Name="MobileNumber2" Type="varchar" MaxLength="30" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Zalo" Type="nvarchar" MaxLength="100" />
+          <Property Name="Facebook" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyCycle" Type="float" />
+          <Property Name="PersonInCharge" Type="varchar" MaxLength="50" />
+          <Property Name="Image" Type="varchar" MaxLength="100" />
+          <Property Name="Note" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="OM_SalesRouteDet">
           <Key>
             <PropertyRef Name="SalesRouteID" />
@@ -408,7 +441,7 @@
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
           <Property Name="DelRouteDet" Type="bit" Nullable="false" />
           <Property Name="VisitsPerDay" Type="int" Nullable="false" />
-          <Property Name="ExtendRoute" Type="bit" />
+          <Property Name="ExtendRoute" Type="bit" Nullable="false" />
         </EntityType>
         <Function Name="AR20500_AfterApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NewcustID" Type="varchar" Mode="In" />
@@ -456,6 +489,17 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="AR20500_pgAR_Consumer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="EndDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="AR20500_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
@@ -483,12 +527,28 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="AR20500_ppUpdateOMPDASalesOrdPG" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="ConsumerID" Type="varchar" Mode="In" />
+          <Parameter Name="NewConsumerID" Type="varchar" Mode="In" />
+          <Parameter Name="Phone" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CS30100_pdCSNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="AR_Customer" EntityType="Self.AR_Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_CustomerLocation" EntityType="Self.AR_CustomerLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_NewCustomerInfor" EntityType="Self.AR_NewCustomerInfor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_NewCustomerInforHis" EntityType="Self.AR_NewCustomerInforHis" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_SOAddress" EntityType="Self.AR_SOAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CS_Leads" EntityType="Self.CS_Leads" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_SalesRouteDet" EntityType="Self.OM_SalesRouteDet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="Self.OM_SalesRouteMaster" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -577,6 +637,33 @@
           </FunctionImport>
           <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
           <EntitySet Name="AR_NewCustomerInforHis" EntityType="AR20500Model.AR_NewCustomerInforHis" />
+          <EntitySet Name="CS_Leads" EntityType="AR20500Model.CS_Leads" />
+          <FunctionImport Name="AR20500_pgAR_Consumer" ReturnType="Collection(AR20500Model.AR20500_pgAR_Consumer_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CS30100_pdCSNumbering" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_ppUpdateOMPDASalesOrdPG">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="ConsumerID" Mode="In" Type="String" />
+            <Parameter Name="NewConsumerID" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -701,7 +788,7 @@
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DelRouteDet" Type="Boolean" Nullable="false" />
           <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
-          <Property Name="ExtendRoute" Type="Boolean" />
+          <Property Name="ExtendRoute" Type="Boolean" Nullable="false" />
         </EntityType>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -1112,6 +1199,70 @@
           <Property Name="Date1" Type="DateTime" Precision="3" />
           <Property Name="Date2" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="CS_Leads">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="LeadID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LeadID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LeadName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SourceID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Channel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Addr1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Addr2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Zalo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Facebook" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyCycle" Type="Double" />
+          <Property Name="PersonInCharge" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="AR20500_pgAR_Consumer_Result">
+          <Property Type="Boolean" Name="ColCheck" Nullable="true" />
+          <Property Type="String" Name="ConsumerID" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ConsumerName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="NumberHouse" Nullable="false" />
+          <Property Type="String" Name="StreetNames" Nullable="false" />
+          <Property Type="String" Name="Ward" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="District" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="NewConsumerID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Note" Nullable="false" MaxLength="500" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SourceID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileNumber1" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="MobileNumber2" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Zalo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Facebook" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="BuyCycle" Nullable="true" />
+          <Property Type="String" Name="PersonInCharge" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Image" Nullable="true" MaxLength="100" />
+          </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1666,6 +1817,76 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CS_Leads">
+            <EntityTypeMapping TypeName="AR20500Model.CS_Leads">
+              <MappingFragment StoreEntitySet="CS_Leads">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PersonInCharge" ColumnName="PersonInCharge" />
+                <ScalarProperty Name="BuyCycle" ColumnName="BuyCycle" />
+                <ScalarProperty Name="Facebook" ColumnName="Facebook" />
+                <ScalarProperty Name="Zalo" ColumnName="Zalo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MobileNumber2" ColumnName="MobileNumber2" />
+                <ScalarProperty Name="MobileNumber1" ColumnName="MobileNumber1" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="LeadName" ColumnName="LeadName" />
+                <ScalarProperty Name="LeadID" ColumnName="LeadID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_pgAR_Consumer" FunctionName="eBiz4DWebSysModel.Store.AR20500_pgAR_Consumer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20500Model.AR20500_pgAR_Consumer_Result">
+                <ScalarProperty Name="ColCheck" ColumnName="ColCheck" />
+                <ScalarProperty Name="ConsumerID" ColumnName="ConsumerID" />
+                <ScalarProperty Name="ConsumerName" ColumnName="ConsumerName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="NumberHouse" ColumnName="NumberHouse" />
+                <ScalarProperty Name="StreetNames" ColumnName="StreetNames" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NewConsumerID" ColumnName="NewConsumerID" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="MobileNumber1" ColumnName="MobileNumber1" />
+                <ScalarProperty Name="MobileNumber2" ColumnName="MobileNumber2" />
+                <ScalarProperty Name="Zalo" ColumnName="Zalo" />
+                <ScalarProperty Name="Facebook" ColumnName="Facebook" />
+                <ScalarProperty Name="BuyCycle" ColumnName="BuyCycle" />
+                <ScalarProperty Name="PersonInCharge" ColumnName="PersonInCharge" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CS30100_pdCSNumbering" FunctionName="eBiz4DWebSysModel.Store.CS30100_pdCSNumbering" />
+          <FunctionImportMapping FunctionImportName="AR20500_ppUpdateOMPDASalesOrdPG" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppUpdateOMPDASalesOrdPG" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1695,6 +1916,7 @@
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.CS_Leads" Width="1.5" PointX="9.375" PointY="0.75" />
         </Diagram>
     </Diagrams>
   </Designer>

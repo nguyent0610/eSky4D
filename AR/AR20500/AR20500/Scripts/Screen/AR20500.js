@@ -168,121 +168,180 @@ var ColCheck_Header_Change = function (value) {
         stoChanged(App.stoCust);
     }
 };
+var ColCheck_HeaderPG_Change = function (value) {
 
-var btnProcess_Click = function () {
-    var count = 0;
-    App.grdCust.store.clearFilter();
-    var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
-    for (var i = 0; i < allData.length ; i++) {
-        var data = allData.items[i].data;
-        if (data.ColCheck) {
-            count++;
+    if (value) {
+        if (!checkEditDet()) {
+            App.ColCheck_HeaderPG.events['change'].suspend();
+            App.ColCheck_HeaderPG.setValue(!value.checked);
+            App.ColCheck_HeaderPG.events['change'].resume();
+            return false;
         }
+        App.stoCustPG.suspendEvents();
+
+        var allData = App.grdCustPG.store.snaptshot || App.grdCustPG.store.allData || App.grdCustPG.store.data;
+        allData.each(function (item) {
+            if (item.data.Status == App.cboStatus.getValue())
+                item.set("ColCheck", value.checked);
+        });
+        App.stoCustPG.resumeEvents();
+        App.grdCustPG.view.refresh();
+        stoChanged(App.stoCustPG);
     }
-    if (count == 0) {
-        HQ.message.show(718);
-    }
-    if (App.cboHandle.getValue() && count > 0) {
-        var erroState = "";
-        var erroDistrict = "";
+};
+var btnProcess_Click = function () {
+    if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1) {
+        var count = 0;
+        App.grdCust.store.clearFilter();
+        var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
         for (var i = 0; i < allData.length ; i++) {
-            if (allData.items[i].data.ColCheck) {
-                if(allData.items[i].data.State==""||allData.items[i].data.State==null){
-                    erroState = erroState + (allData.items[i].index + 1) + ",";
-                }
-                if (allData.items[i].data.District == "" || allData.items[i].data.District == null) {
-                    erroDistrict = erroDistrict + (allData.items[i].index + 1) + ",";
-                }
+            var data = allData.items[i].data;
+            if (data.ColCheck) {
+                count++;
             }
         }
-        if (erroState != "") {
-            HQ.message.show(2018041211, [HQ.common.getLang('State'), erroState], '', true);
-            return;
+        if (count == 0) {
+            HQ.message.show(718);
         }
-        else if (erroDistrict!="") {
-            HQ.message.show(2018041211, [HQ.common.getLang('District'), erroDistrict], '', true);
-            return;
-        }
+        if (App.cboHandle.getValue() && count > 0) {
+            var erroState = "";
+            var erroDistrict = "";
+            for (var i = 0; i < allData.length ; i++) {
+                if (allData.items[i].data.ColCheck) {
+                    if (allData.items[i].data.State == "" || allData.items[i].data.State == null) {
+                        erroState = erroState + (allData.items[i].index + 1) + ",";
+                    }
+                    if (allData.items[i].data.District == "" || allData.items[i].data.District == null) {
+                        erroDistrict = erroDistrict + (allData.items[i].index + 1) + ",";
+                    }
+                }
+            }
+            if (erroState != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('State'), erroState], '', true);
+                return;
+            }
+            else if (erroDistrict != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('District'), erroDistrict], '', true);
+                return;
+            }
 
-        if ((App.cboHandle.getValue() == 'A' || App.cboHandle.getValue() == 'O') && App.cboUpdateType.getValue() == 0) {
-            
-            var rowerror = '';
-            var isnullclass = '';
-            var isnullpriceclass = '';
-            if (HQ.IsRequireRefCustID) {
-                for (var i = 0; i < allData.length ; i++) {
-                    var data = allData.items[i].data;
-                    if (data.ColCheck) {
-                        if (Ext.isEmpty(data.ERPCustID)) {
-                            HQ.message.show(1000, HQ.common.getLang('ERPCustID'), '');
-                            rowerror += i + 1 + ',';
-                            break;
+            if ((App.cboHandle.getValue() == 'A' || App.cboHandle.getValue() == 'O') && App.cboUpdateType.getValue() == 0) {
+
+                var rowerror = '';
+                var isnullclass = '';
+                var isnullpriceclass = '';
+                if (HQ.IsRequireRefCustID) {
+                    for (var i = 0; i < allData.length ; i++) {
+                        var data = allData.items[i].data;
+                        if (data.ColCheck) {
+                            if (Ext.isEmpty(data.ERPCustID)) {
+                                HQ.message.show(1000, HQ.common.getLang('ERPCustID'), '');
+                                rowerror += i + 1 + ',';
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            if (rowerror != '') {
-                return;
-            }
-            var minDate = HQ.bussinessDate;
-            var errorFreq = '';
-            for (var i = 0; i < allData.length ; i++) {
-                var data = allData.items[i].data;
-                if (data.ColCheck) {
-                    if (data.MinMCPDate < minDate) {
-                        minDate = data.MinMCPDate;
-                    }
-                    if (Ext.isEmpty(data.SlsFreq)) {
-                        rowerror = 'err';
-                        HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SlsFreq') + ')', '', false);
-                        //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
-                        break;
-                    }
-                    if (HQ.showSubRoute && Ext.isEmpty(data.SubRouteID)) {
-                        rowerror = 'err';
-                        HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID') + ')', '', false);
-                        //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
-                        break;
-                    }
-                    if (!isValidSel(data)) {
-                        errorFreq += i + 1 + ',';
-                    }
-                    if (HQ.showVisitsPerDay && (data.VisitsPerDay > HQ.maxVisitPerDay || data.VisitsPerDay == 0)) {
-                        HQ.message.show(2018010101, [(i + 1), HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'VisitsPerDay'), HQ.maxVisitPerDay], '', true);
-                        rowerror = 'err';
-                        break;
-                    }
-                    if (HQ.showOUnit == 2 && (data.OUnit == '')) {
-                        HQ.message.show(201302071, (i + 1) + ' (' + App.clmOUnit.text + ')', '', false);
-                        rowerror = 'err';
-                        break;
-                    }
-                    if (HQ.showMobile == 2 && (data.Mobile == '')) {
-                        HQ.message.show(201302071, (i + 1) + ' (' + App.clmMobile.text + ')', '', false);
-                        rowerror = 'err';
-                        break;
-                    }
-                    //if(data.ClassId==''||data.ClassId==null)
-                    //    isnullclass += i + 1 + ',';
-                    //if (data.PriceClass == '' || data.PriceClass == null)
-                    //    isnullpriceclass += i + 1 + ',';
+                if (rowerror != '') {
+                    return;
                 }
+                var minDate = HQ.bussinessDate;
+                var errorFreq = '';
+                for (var i = 0; i < allData.length ; i++) {
+                    var data = allData.items[i].data;
+                    if (data.ColCheck) {
+                        if (data.MinMCPDate < minDate) {
+                            minDate = data.MinMCPDate;
+                        }
+                        if (Ext.isEmpty(data.SlsFreq)) {
+                            rowerror = 'err';
+                            HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SlsFreq') + ')', '', false);
+                            //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
+                            break;
+                        }
+                        if (HQ.showSubRoute && Ext.isEmpty(data.SubRouteID)) {
+                            rowerror = 'err';
+                            HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID') + ')', '', false);
+                            //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
+                            break;
+                        }
+                        if (!isValidSel(data)) {
+                            errorFreq += i + 1 + ',';
+                        }
+                        if (HQ.showVisitsPerDay && (data.VisitsPerDay > HQ.maxVisitPerDay || data.VisitsPerDay == 0)) {
+                            HQ.message.show(2018010101, [(i + 1), HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'VisitsPerDay'), HQ.maxVisitPerDay], '', true);
+                            rowerror = 'err';
+                            break;
+                        }
+                        if (HQ.showOUnit == 2 && (data.OUnit == '')) {
+                            HQ.message.show(201302071, (i + 1) + ' (' + App.clmOUnit.text + ')', '', false);
+                            rowerror = 'err';
+                            break;
+                        }
+                        if (HQ.showMobile == 2 && (data.Mobile == '')) {
+                            HQ.message.show(201302071, (i + 1) + ' (' + App.clmMobile.text + ')', '', false);
+                            rowerror = 'err';
+                            break;
+                        }
+                        //if(data.ClassId==''||data.ClassId==null)
+                        //    isnullclass += i + 1 + ',';
+                        //if (data.PriceClass == '' || data.PriceClass == null)
+                        //    isnullpriceclass += i + 1 + ',';
+                    }
+                }
+                if (rowerror != '') {
+                    return;
+                }
+                if (errorFreq != '') {
+                    HQ.message.show(2017022101, errorFreq, '');
+                    return;
+                }
+                if (App.cboHandle.getValue() == 'A') {
+                    App.dteFromDate.setValue(minDate);
+                    App.dteToDate.setValue(HQ.EndDateYear);
+                    App.dteFromDate.setMinValue(minDate);
+                    App.dteFromDate.validate();
+                    App.dteToDate.validate();
+                    App.winProcess.show();
+                } else {
+                    var d = Ext.Date.parse("01/01/1990", "m/d/Y");
+                    if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
+                    var flat = false;
+                    App.stoCust.data.each(function (item) {
+                        if (item.data.ColCheck) {
+                            flat = true;
+                            return false;
+                        }
+                    });
+                    if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
+                        App.frmMain.submit({
+                            clientValidation: false,
+                            waitMsg: HQ.common.getLang("Handle"),
+                            method: 'POST',
+                            url: 'AR20500/Process',
+                            timeout: 1800000,
+                            params: {
+                                lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]),
+                                fromDate: HQ.bussinessDate,
+                                toDate: HQ.bussinessDate,
+                                askApprove: 0
+                            },
+                            success: function (msg, data) {
+                                HQ.message.show(201405071);
+                                App.stoCust.reload();
+                            },
+                            failure: function (msg, data) {
+                                if (data && data.response && data.response.status == 0) {
+                                    btnProcess_Click();
+                                } else
+                                    HQ.message.process(msg, data, true);
+                            }
+                        });
+                    }
+                }
+
             }
-            if (rowerror != '') {
-                return;
-            }
-            if (errorFreq != '') {
-                HQ.message.show(2017022101, errorFreq, '');
-                return;
-            }
-            if (App.cboHandle.getValue() == 'A') {
-                App.dteFromDate.setValue(minDate);
-                App.dteToDate.setValue(HQ.EndDateYear);
-                App.dteFromDate.setMinValue(minDate);
-                App.dteFromDate.validate();
-                App.dteToDate.validate();
-                App.winProcess.show();
-            } else {
+            else if (App.cboHandle.getValue() != 'A' || App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() != 0) {
                 var d = Ext.Date.parse("01/01/1990", "m/d/Y");
                 if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
                 var flat = false;
@@ -313,50 +372,92 @@ var btnProcess_Click = function () {
                             if (data && data.response && data.response.status == 0) {
                                 btnProcess_Click();
                             } else
-                            HQ.message.process(msg, data, true);
+                                HQ.message.process(msg, data, true);
                         }
                     });
                 }
             }
-            
-        }
-        else if (App.cboHandle.getValue() != 'A' || App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() != 0) {
-            var d = Ext.Date.parse("01/01/1990", "m/d/Y");
-            if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
-            var flat = false;
-            App.stoCust.data.each(function (item) {
-                if (item.data.ColCheck) {
-                    flat = true;
-                    return false;
-                }
-            });
-            if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
-                App.frmMain.submit({
-                    clientValidation: false,
-                    waitMsg: HQ.common.getLang("Handle"),
-                    method: 'POST',
-                    url: 'AR20500/Process',
-                    timeout: 1800000,
-                    params: {
-                        lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]),
-                        fromDate: HQ.bussinessDate,
-                        toDate: HQ.bussinessDate,
-                        askApprove: 0
-                    },
-                    success: function (msg, data) {
-                        HQ.message.show(201405071);
-                        App.stoCust.reload();
-                    },
-                    failure: function (msg, data) {
-                        if (data && data.response && data.response.status == 0) {
-                            btnProcess_Click();
-                        } else
-                        HQ.message.process(msg, data, true);
-                    }
-                });
-            }
         }
     }
+    else if (App.cboUpdateType.getValue() == 2) {
+        var count = 0;
+        App.grdCustPG.store.clearFilter();
+        var allData = App.grdCustPG.store.snaptshot || App.grdCustPG.store.allData || App.grdCustPG.store.data;
+        for (var i = 0; i < allData.length ; i++) {
+            var data = allData.items[i].data;
+            if (data.ColCheck) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            HQ.message.show(718);
+            return;
+        }
+        if (App.cboHandle.getValue() && count > 0) {
+            var erroState = "";
+            var erroChannel = "";
+            var erroSourceID = "";
+            var errorClassID = "";
+            for (var i = 0; i < allData.length ; i++) {
+                if (allData.items[i].data.ColCheck) {
+                    if (allData.items[i].data.State == "" || allData.items[i].data.State == null) {
+                        erroState = erroState + (allData.items[i].index + 1) + ",";
+                    }
+                    if (allData.items[i].data.Channel == "" || allData.items[i].data.Channel == null) {
+                        erroChannel = erroChannel + (allData.items[i].index + 1) + ",";
+                    }
+                    if (allData.items[i].data.SourceID == "" || allData.items[i].data.SourceID == null) {
+                        erroSourceID = erroSourceID + (allData.items[i].index + 1) + ",";
+                    }
+                    if (allData.items[i].data.ClassID == "" || allData.items[i].data.ClassID == null) {
+                        errorClassID = errorClassID + (allData.items[i].index + 1) + ",";
+                    }
+                }
+            }
+            if (erroState != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('State'), erroState], '', true);
+                return;
+            }
+            else if (erroChannel != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('Channel'), erroChannel], '', true);
+                return;
+            }
+            else if (erroSourceID != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('SourceID'), erroSourceID], '', true);
+                return;
+            }
+            else if (errorClassID != "") {
+                HQ.message.show(2018041211, [HQ.common.getLang('ClassID'), errorClassID], '', true);
+                return;
+            }
+        }
+        if (!Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
+            App.frmMain.submit({
+                clientValidation: false,
+                waitMsg: HQ.common.getLang("Handle"),
+                method: 'POST',
+                url: 'AR20500/ProcessPG',
+                timeout: 1800000,
+                params: {
+                    lstCustPG: HQ.store.getAllData(App.grdCustPG.store, ['ColCheck'], [true]),
+                    fromDate: HQ.bussinessDate,
+                    toDate: HQ.bussinessDate,
+                    askApprove: 0
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    App.stoCustPG.reload();
+                },
+                failure: function (msg, data) {
+                    if (data && data.response && data.response.status == 0) {
+                        btnProcess_Click();
+                    } else
+                        HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+
 };
 
 var btnOKMCP_Click = function () {
@@ -726,6 +827,70 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     App.cboMarket.store.clearFilter();
 };
 
+var grdCustPG_BeforeEdit = function (item, e) {
+    if (e.field == 'State') {
+        var territory = e.record.data.Territory;
+        if (territory == '') {
+            territory = '@@';
+        }
+        App.cboColStatePG.store.clearFilter();
+        App.cboColStatePG.store.filter('Territory', territory);
+    } else if (e.field == 'District') {
+        App.cboColDistrictPG.store.clearFilter();
+        var state = e.record.data.State;
+        if (state == '') {
+            state = '@@';
+        }
+        App.cboColDistrictPG.store.filter('State', state);
+    }
+};
+var grdCustPG_Edit = function (item, e) {
+    if (e.field == 'Phone') {
+        if (isNumeric(e.value) == true) {
+            e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
+            if (!HQ.editPhone)
+                HQ.message.show(20171118, '');
+            else
+                HQ.message.show(2018022701, '');
+        }
+    }
+    else if (e.field == 'Territory') {
+        e.record.set('State', '');
+        e.record.set('District', '');
+        e.record.set('Ward', '');
+        e.record.set('Addr1', '');
+        e.record.set('Addr2', '');
+    } else if (e.field == 'State') {
+        e.record.set('District', '');
+        e.record.set('Ward', '');
+        e.record.set('Addr1', '');
+        e.record.set('Addr2', '');
+    } else if (e.field == 'District') {
+        e.record.set('Ward', '');
+        e.record.set('Addr1', '');
+        e.record.set('Addr2', '');
+    }
+
+};
+var grdCustPG_ValidateEdit = function (item, e) {
+    if (e.field == 'Territory') {
+        if (e.value == e.record.data.Territory) {
+            return false;
+        }
+    } else if (e.field == 'State') {
+        if (e.value == e.record.data.State) {
+            return false;
+        }
+    } else if (e.field == 'Channel') {
+        if (e.value == e.record.data.Channel) {
+            return false;
+        }
+    }
+};
+var grdCustPG_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdCust);
+    stoChanged(App.stoCustPG);
+};
 function isNumeric(n) {
     if (!HQ.editPhone) {
         var regex = /^([0-9()-.;#/ ])*$/;
@@ -879,7 +1044,10 @@ function refresh(item) {
     if (item == 'yes') {
         _Change = false;
         App.ColCheck_Header.setValue(false);
-        App.stoCust.reload();
+        if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1)
+            App.stoCust.reload();
+        else if (App.cboUpdateType.getValue() == 2)
+            App.stoCustPG.reload();
     }
 };
 
@@ -903,6 +1071,13 @@ var renderChannel = function (value) {
     var obj = App.cboColChannel.store.findRecord("Code", value);
     if (obj) {
         return obj.data.Descr;
+    }
+    return value;
+};
+var renderSourceID = function (value) {
+    var obj = App.cboColSourceID.store.findRecord("SourceID", value);
+    if (obj) {
+        return obj.data.SourceDescr;
     }
     return value;
 };
@@ -1092,6 +1267,14 @@ var stringFilter = function (record) {
         App.cboMarket.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboMarket.store, "Market", "Descr");
     }
+    else if (this.dataIndex == 'ClassID') {
+        App.cboClassCustPG.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboClassCustPG.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'SourceID') {
+        App.cboColSourceID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColSourceID.store, "SourceID", "SourceDescr");
+    }
 }
 
 var renderWeekofVisit = function (value) {
@@ -1113,7 +1296,9 @@ var renderSalesRouteID = function (value) {
 var renderIndex = function (value, metaData, record, rowIndex, colIndex, store) {
     return App.stoCust.indexOf(record) + 1;
 }
-
+var renderIndexPG = function (value, metaData, record, rowIndex, colIndex, store) {
+    return App.stoCustPG.indexOf(record) + 1;
+}
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {
@@ -1160,12 +1345,21 @@ var pnlGridMCL_viewGetRowClass = function (record) {
 var cboUpdateType_Change = function () {
 
     Ext.suspendLayouts();
-
-    if (App.cboUpdateType.getValue() == 0) {
+    if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1)
+    {
+        App.grdCust.show();
+        App.grdCustPG.hide();
+    }
+    else if (App.cboUpdateType.getValue() == 2) {
+        App.grdCust.hide();
+        App.grdCustPG.show();
+    }
+    if (App.cboUpdateType.getValue() == 0) {     
         HQ.grid.show(App.grdCust, _hideColumn);
     } else if (App.cboUpdateType.getValue() == 1) {
         HQ.grid.hide(App.grdCust, _hideColumn);
     }
+    
     if (!HQ.showVisitsPerDay) {
         HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
     }
@@ -1722,8 +1916,15 @@ var cboHandle_BeforeChange = function () {
 var confirmChangeHanle = function (item) {
     if (item == 'yes') {
         setHideControls();
-        App.stoCust.rejectChanges();
-        App.grdCust.view.refresh();
+        if (App.cboUpdateType.getValue() == 2) {
+            App.stoCustPG.rejectChanges();
+            App.grdCustPG.view.refresh();
+        }
+        else if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1) {
+            App.stoCust.rejectChanges();
+            App.grdCust.view.refresh();
+        }
+
     } else {
         App.cboHandle.events['change'].suspend();
         App.cboHandle.setValue(currentStatus);

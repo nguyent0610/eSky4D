@@ -781,6 +781,240 @@
                                 X.StringFilter().DataIndex("TypeCabinetsDescr")
                             )
                     )// grid
+                    , X.GridPanel().ID("grdCustPG")
+                    .Hidden(true)
+                    .Scroll(ScrollMode.Both)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                        .GetRowClass(grc => grc.Fn = "pnlGridMCL_viewGetRowClass")
+                    )
+                    .Region(Region.Center)
+                    .SelectionMemory(false)
+                    .Store(
+                        X.Store()
+                        .ID("stoCustPG")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(AR20500_pgAR_Consumer_Result), "mdlAR20500_pgAR_Consumer", "ID", true))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustListPG")).Timeout(int.MaxValue)).AutoLoad(false)
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("fromDate", "App.FromDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("toDate", "App.ToDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("status", "App.cboStatus.getValue()", ParameterMode.Raw));
+                        })
+                        .Listeners(l =>
+                        {
+                            l.BeforeLoad.Fn = "stoBeforeLoad";
+                            l.Load.Fn = "stoLoad";
+                            l.Update.Fn = "stoChanged";
+                        })
+                    )
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40).Renderer("renderIndexPG")
+
+                        //Colum Check
+                        , X.CheckColumn().ID("ColCheckPG").DataIndex("ColCheck").Width(30).Editable(true).HideTitleEl(true).Align(Alignment.Center)
+                            .HeaderItems(
+                                HQ.Checkbox().ID("ColCheck_HeaderPG")
+                                    .Listeners(l =>
+                                    {
+                                        l.ValidityChange.Fn = "ColCheck_Header_ValidityChange";
+                                        l.Change.Fn = "ColCheck_HeaderPG_Change";
+                                    })
+                        )
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("ConsumerID").Width(100)
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("ConsumerName").Width(120).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("Addr")).DataIndex("Addr").Width(250).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("NumberHouse")).DataIndex("Addr1").Width(100).Editor(X.TextField())
+                        , X.Column().Text(Util.GetLang("StreetNames")).DataIndex("Addr2").Width(100).Editor(X.TextField())
+                        , X.Column().Text(Util.GetLang("AR20500Ward")).DataIndex("Ward").Width(120).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("District")).DataIndex("District").Renderer("renderDistrict").Width(120)
+                        .Editor(
+                            HQ.Combo().ID("cboColDistrictPG").HQProcedure("AR20500_pcDistrict")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .ForceSelection(true).HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                        , X.Column().Text(Util.GetLang("State")).DataIndex("State").Renderer("renderState").Width(120)
+                        .Editor(
+                        HQ.Combo().ID("cboColStatePG").HQProcedure("AR20500_pcState")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .ForceSelection(true).HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        )
+                        , X.Column().Text(Util.GetLang("AR20500Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
+                        .Editor(
+                        HQ.Combo().ID("cboColTerritoryPG").HQProcedure("AR20500_pcTerritory")
+                        .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory")
+                        .ForceSelection(true).HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                        , X.Column().Text(Util.GetLang("ClassCust")).DataIndex("ClassID").Renderer("renderClassCust").Width(120)
+                        .Editor(
+                            HQ.Combo().ID("cboClassCustPG").HQProcedure("AR20500_pcClassCust")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .ForceSelection(true).HQHeightWidth(400, 300).HQAutoLoad(true)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                        , X.Column()
+                        .Text(Util.GetLang("Channel")).DataIndex("Channel").Renderer("renderChannel").Width(120)
+                        .Editor(
+                                HQ.Combo().ID("cboColChannelPG").HQProcedure("AR20500_pcAR_Channel")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .ForceSelection(true).HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                         , X.Column()
+                        .Text(Util.GetLang("SourceCustDescr")).DataIndex("SourceID").Renderer("renderSourceID").Width(120)
+                        .Editor(
+                            HQ.Combo().ID("cboColSourceID").HQProcedure("AR20500_pcSourceID")
+                            .HQColumnShow("SourceID,SourceDescr").DisplayField("SourceDescr").ValueField("SourceID")
+                            .ForceSelection(true).HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                        , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(90)//.Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
+                        , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
+                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(100)
+                        , X.Column().Text(Util.GetLang("Note")).DataIndex("Note").Width(100).Editor(X.TextField().MaxLength(500).EnforceMaxLength(true))
+                        , X.CommandColumn().Width(200)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l =>
+                        {
+                            l.Command.Handler = "grdCustPG_Reject(record);";
+                        })
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmCustPG").Mode(SelectionMode.Multi))
+                        .BottomBar(
+                            X.PagingToolbar().HideRefresh(true)
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                            )
+                            .Plugins(X.ProgressBarPager())
+                        )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+
+                            ls.BeforeEdit.Fn = "grdCustPG_BeforeEdit";
+                            ls.Edit.Fn = "grdCustPG_Edit";
+                            ls.ValidateEdit.Fn = "grdCustPG_ValidateEdit";
+
+                        })
+                    )
+
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.BooleanFilter().DataIndex("ColCheck")
+                               , X.StringFilter().DataIndex("ConsumerID")
+                               , X.StringFilter().DataIndex("ConsumerName")
+                               , X.StringFilter().DataIndex("Addr")
+                               , X.StringFilter().DataIndex("Addr1")
+                               , X.StringFilter().DataIndex("Addr2")
+                               , X.StringFilter().DataIndex("Ward")
+                               , X.StringFilter().DataIndex("District")
+                               , X.StringFilter().DataIndex("State")
+                               , X.StringFilter().DataIndex("Territory")
+                               , X.StringFilter().DataIndex("ClassID").ValidateRecord(p => p.Fn = "stringFilter")
+                               , X.StringFilter().DataIndex("Channel").ValidateRecord(p => p.Fn = "stringFilter")
+                               , X.StringFilter().DataIndex("SourceID").ValidateRecord(p => p.Fn = "stringFilter")
+                               , X.StringFilter().DataIndex("Phone")
+                               , X.StringFilter().DataIndex("SlsperID")
+                               , X.StringFilter().DataIndex("Name")
+                               , X.StringFilter().DataIndex("NewCustID")
+                               , X.StringFilter().DataIndex("Note")
+                            )
+                    )// grid
                      ,X.Panel().Region(Region.South).Layout(LayoutType.HBox).Height(200)
                      .Items(
                             X.Panel().ID("map_canvas").Flex(1).Height(200).Listeners(x =>

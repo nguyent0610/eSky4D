@@ -187,7 +187,7 @@ namespace AR20500.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -208,7 +208,22 @@ namespace AR20500.Controllers
             var data = _db.AR20500_pgDetail(BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status, terr, updateType, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(data);
         }
-
+        public ActionResult GetCustListPG(string BranchID, DateTime fromDate, DateTime toDate, List<string> slsperID, string status, List<string> territory)
+        {
+            string sls = string.Empty;
+            if (slsperID != null)
+            {
+                sls = string.Join(",", slsperID);
+            }
+            string terr = string.Empty;
+            if (territory != null)
+            {
+                terr = string.Join(",", territory);
+            }
+            _db.CommandTimeout = int.MaxValue;
+            var data = _db.AR20500_pgAR_Consumer(Current.UserName, Current.CpnyID, Current.LangID, BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status, terr).ToList();
+            return this.Store(data);
+        }
         [HttpPost]
         public ActionResult Process(FormCollection data, DateTime fromDate, DateTime toDate, int askApprove)
         {
@@ -823,7 +838,107 @@ namespace AR20500.Controllers
             objAR_SOAddress.Zip = objCust.Zip;
         }
         #endregion
+        public ActionResult ProcessPG(FormCollection data, DateTime fromDate, DateTime toDate, int askApprove)
+        {
+            try
+            {
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstCustPG"]);
+                var lstCustPG = custHandler.ObjectData<AR20500_pgAR_Consumer_Result>();
+                var access = Session[_screenNbr] as AccessRight;
+                var calUpdate = false;
+                if (!access.Update && !access.Insert)
+                    throw new MessageException(MessageType.Message, "728");
+                handle = data["cboHandle"];
+                status = data["cboStatus"];
+                foreach (var item in lstCustPG)
+                {
+                    if (item.ColCheck == true)
+                    {
+                        var objCust = _db.CS_Leads.Where(x => x.LeadID == item.NewConsumerID && x.BranchID == item.BranchID).FirstOrDefault();
+                        if (status == "H")
+                        {
+                            if (objCust != null)
+                            {
+                                UpCS_Leads(objCust, item, false, handle);
+                                calUpdate = true;
+                            }
+                            else
+                            {
+                                if (item.ConsumerID.PassNull() != "")
+                                {
+                                    objCust = new CS_Leads();
+                                    objCust.ResetET();
+                                    objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
+                                    objCust.BranchID = item.BranchID;
+                                    UpCS_Leads(objCust, item, true, handle);
+                                    _db.CS_Leads.AddObject(objCust);
+                                    calUpdate = true;
+                                }
+                            }
+                        }
+                        _db.SaveChanges();
+                        if (calUpdate)
+                            _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                    }
+                }
 
+                if (mLogMessage != null)
+                {
+                    return mLogMessage;
+                }
+                else
+                    return Json(new { success = true, type = "message", code = "8009" });
+            }
+            catch(Exception ex){
+                if (ex is System.Data.SqlClient.SqlException)
+                {
+                    return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
+                }
+                else if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+          }
+        private void UpCS_Leads(CS_Leads t, AR20500_pgAR_Consumer_Result s, bool isNew, string handle)
+        {
+            if (isNew)
+            {
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.LeadName = s.ConsumerName;
+            t.Note = s.Note;
+            t.PhoneNumber = s.Phone;
+            t.Status = handle;
+            t.State = s.State;
+            t.Addr1 = s.NumberHouse;
+            t.Addr2 = s.StreetNames;
+            t.Email = s.Email;
+            t.SourceID = s.SourceID;
+            t.ClassID = s.ClassID;
+            t.Channel = s.Channel;
+            t.MobileNumber1 = s.MobileNumber1;
+            t.MobileNumber2 = s.MobileNumber2;
+            t.Zalo = s.Zalo;
+            t.Facebook = s.Facebook;
+            t.BuyCycle = s.BuyCycle;
+            t.PersonInCharge = s.PersonInCharge;
+            t.Image = s.Image;
+
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+
+
+
+        }
         public void CreateRoute(OM_SalesRouteMaster master)//(clsOM_SalesRouteMaster objSaleMaster)
         {
             Int32 weekStart = default(Int32);
@@ -1960,64 +2075,64 @@ namespace AR20500.Controllers
             return false;
         }
 
-        //[HttpPost]
-        //public ActionResult ExportExcel(FormCollection data, string reportNbr, string ReportName)
-        //{
-        //    try
-        //    {
-        //        ////RPTController rpt = new RPTController();
-        //        ////return rpt.ExportExcelDirect(185, "IN_ItemList");
-        //        //string ReportName = "IN_ItemList";
-        //        int ReportID = UpdateRPT(data, reportNbr, ReportName);
+        [HttpPost]
+        public ActionResult ExportExcel(FormCollection data, string reportNbr, string ReportName)
+        {
+            try
+            {
+                ////RPTController rpt = new RPTController();
+                ////return rpt.ExportExcelDirect(185, "IN_ItemList");
+                //string ReportName = "IN_ItemList";
+                int ReportID = UpdateRPT(data, reportNbr, ReportName);
 
 
-        //        var objRPT_peGetName = _dbRPT.RPT_peGetName(ReportID).FirstOrDefault();
-        //        string nameReport = objRPT_peGetName.NameExport == "" ? ReportName + ReportID : objRPT_peGetName.NameExport;
+                var objRPT_peGetName = _dbRPT.RPT_peGetName(ReportID).FirstOrDefault();
+                string nameReport = objRPT_peGetName.NameExport == "" ? ReportName + ReportID : objRPT_peGetName.NameExport;
 
-        //        string strConnection = EntityConnectionStringHelper.Build(
-        //                                      Current.Server,
-        //                                      Current.DBApp,
-        //                                      "HQ.eSkySysModel");
-        //        EntityConnectionStringBuilder entityBuilder =
-        //            new EntityConnectionStringBuilder(strConnection);
+                string strConnection = EntityConnectionStringHelper.Build(
+                                              Current.Server,
+                                              Current.DBApp,
+                                              "HQ.eSkySysModel");
+                EntityConnectionStringBuilder entityBuilder =
+                    new EntityConnectionStringBuilder(strConnection);
 
-        //        var report = new StiReport();
+                var report = new StiReport();
 
-        //        report.Load(Server.MapPath("~/Reports/" + ReportName + ".mrt"));
+                report.Load(Server.MapPath("~/Reports/" + ReportName + ".mrt"));
 
-        //        string provider = ConfigurationManager.AppSettings["SQLNCLI"] ?? "SQLNCLI11.0";
-        //        report.Dictionary.Databases.Clear();
-        //        //report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiSqlDatabase("Data", entityBuilder.ProviderConnectionString + ";Connect Timeout=60000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";ApplicationIntent=ReadOnly")));//
-        //        report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiOleDbDatabase("Data", @"Provider=" + provider + ";" + entityBuilder.ProviderConnectionString + ";Connect Timeout=60000;General Timeout=6000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";Application Intent=ReadOnly")));//Data Source=MARSSVR\SQL2012;Initial Catalog=eBiz4DWebApp;Persist Security Info=True;User ID=sa;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework"));           
+                string provider = ConfigurationManager.AppSettings["SQLNCLI"] ?? "SQLNCLI11.0";
+                report.Dictionary.Databases.Clear();
+                //report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiSqlDatabase("Data", entityBuilder.ProviderConnectionString + ";Connect Timeout=60000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";ApplicationIntent=ReadOnly")));//
+                report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiOleDbDatabase("Data", @"Provider=" + provider + ";" + entityBuilder.ProviderConnectionString + ";Connect Timeout=60000;General Timeout=6000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";Application Intent=ReadOnly")));//Data Source=MARSSVR\SQL2012;Initial Catalog=eBiz4DWebApp;Persist Security Info=True;User ID=sa;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework"));           
 
-        //        for (int j = 0; j < report.Dictionary.DataSources.Count; j++)
-        //        {
-        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).CommandTimeout = 600000;
-        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Expression = ReportID.ToString();
-        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Type = 2;
-        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).SqlCommand = ((StiOleDbSource)report.Dictionary.DataSources[j]).ToString();
-        //        }
-        //        report.Compile();
+                for (int j = 0; j < report.Dictionary.DataSources.Count; j++)
+                {
+                    ((StiOleDbSource)report.Dictionary.DataSources[j]).CommandTimeout = 600000;
+                    ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Expression = ReportID.ToString();
+                    ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Type = 2;
+                    ((StiOleDbSource)report.Dictionary.DataSources[j]).SqlCommand = ((StiOleDbSource)report.Dictionary.DataSources[j]).ToString();
+                }
+                report.Compile();
 
-        //        report.Render(false);
-        //        //report.Dictionary.Variables.Clear();
-        //        Stream stream = new MemoryStream();
-        //        //report.ExportDocument(StiExportFormat.Excel2007, stream);
-        //        //stream.Flush();
-        //        //stream.Position = 0;
-        //        //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = nameReport + ".xlsx" };
+                report.Render(false);
+                //report.Dictionary.Variables.Clear();
+                Stream stream = new MemoryStream();
+                //report.ExportDocument(StiExportFormat.Excel2007, stream);
+                //stream.Flush();
+                //stream.Position = 0;
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = nameReport + ".xlsx" };
 
-        //        var fileName = nameReport + DateTime.Now.ToString("yyyyMMddHHmm") + ReportID + ".xlsx";
-        //        string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
-        //        report.ExportDocument(StiExportFormat.Excel2007, fullPath);
-        //        return Json(new { success = true, fileName = fileName, errorMessage = "" });
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return Json(new { success = false, type = "error", errorMsg = ex.Message });
-               
-        //    }
-        //}
+                var fileName = nameReport + DateTime.Now.ToString("yyyyMMddHHmm") + ReportID + ".xlsx";
+                string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
+                report.ExportDocument(StiExportFormat.Excel2007, fullPath);
+                return Json(new { success = true, fileName = fileName, errorMessage = "" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, type = "error", errorMsg = ex.Message });
+
+            }
+        }
         [HttpGet]
         [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
         public ActionResult DownloadAndDelete(string file)
