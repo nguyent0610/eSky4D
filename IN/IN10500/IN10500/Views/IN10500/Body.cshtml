@@ -47,6 +47,7 @@
         X.Panel().ID("pnlHeader")
         .Region(Region.North)
         .Layout(LayoutType.HBox)
+        .Height(130)
         .AutoScroll(true)
         .Items(
             X.Container().Layout(LayoutType.VBox)
@@ -82,6 +83,7 @@
                     })
                     .HQParam(new StoreParameterCollection(){                      
                         new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@TagID", Value = "App.cboTagID.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
@@ -131,6 +133,7 @@
                         new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
                         , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
                         , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
@@ -258,6 +261,22 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); App.cboSiteID.store.clearFilter();}";
+                    })
+                    .LoadData()
+                    
+                ,HQ.Combo().ID("cboPerPost").Name("cboPerPost").MarginSpec("5 0 0 0").Width(300)//.AllowBlank(false)
+                    .HQLangCode("IN10500PerPost").HQDBSys(false).HQProcedure("IN10500_pcPerPost").DataIndex("PerPost")
+                    .HQColumnShow("Code,StartDate,EndDate").ForceSelection(true)
+                    .DisplayField("Code").ValueField("Code").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();}";
                     })
                     .LoadData()      
                                
@@ -407,6 +426,7 @@
                     })
                     .HQParam(new StoreParameterCollection(){                      
                         new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@TagID", Value = "App.cboTagID.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
@@ -556,8 +576,8 @@
                     .Editor(
                         X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
                         .ValueField("LotSerNbr").DisplayField("LotSerNbr")
-                        .SubmitValue(false)
-                        .MinChars(1).TypeAhead(false).ForceSelection(true)
+                        .SubmitValue(false).MaxLength(25).EnforceMaxLength(true)
+                        .MinChars(1).TypeAhead(false)//.ForceSelection(true)
                         .TriggerAction(TriggerAction.All)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(l =>

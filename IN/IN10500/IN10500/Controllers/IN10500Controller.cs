@@ -45,6 +45,8 @@ namespace IN10500.Controllers
             bool editSiteWhseLoc = false;
             int showColWhseLoc = 0;
             int showWhseLoc = 0;
+            bool checkperPost = false;
+            string perPost = "";
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
             if (BranchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
             {
@@ -74,6 +76,8 @@ namespace IN10500.Controllers
                 showColSiteID = objConfig.ShowColSiteID.HasValue && objConfig.ShowColSiteID.Value;
                 showColWhseLoc =objConfig.ShowColWhseLoc.Value;
                 editSiteWhseLoc = objConfig.EditSiteWhseLoc.HasValue && objConfig.EditSiteWhseLoc.Value;
+                perPost = objConfig.PerPost;
+                checkperPost = objConfig.CheckPerPost.HasValue && objConfig.CheckPerPost.Value;
             }
 
             ViewBag.BranchID = BranchID;
@@ -88,6 +92,8 @@ namespace IN10500.Controllers
             ViewBag.showColSiteID = showColSiteID;
             ViewBag.showColWhseLoc = showColWhseLoc;
             ViewBag.editSiteWhseLoc = editSiteWhseLoc;
+            ViewBag.perPost = perPost;
+            ViewBag.checkperPost = checkperPost;
             return View();
         }
 
@@ -146,9 +152,9 @@ namespace IN10500.Controllers
             return this.Store(data);
         }
         [DirectMethod]
-        public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID, string ClassID)
+        public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID, string ClassID,string WhseLoc)
         {
-            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();
+            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, ClassID,WhseLoc, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();
             return this.Direct(chkINTag);
         }
 
@@ -290,7 +296,7 @@ namespace IN10500.Controllers
                 }
                 else
                 {
-                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, ClassID,curHeader.WhseLoc, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     if (!string.IsNullOrWhiteSpace(chkINTag)) // KHi không đc tạo thẻ kho
                     {
                         throw new MessageException(MessageType.Message, "2015070801", "", parm: new string[] { chkINTag });
@@ -377,6 +383,56 @@ namespace IN10500.Controllers
                                                                     && p.LineRef == currDet.LineRef
                                                                     && p.InvtID == currDet.InvtID);
 
+                    var objInvt = _app.IN_Inventory.FirstOrDefault(p=>p.InvtID==currDet.InvtID);
+                    if (objInvt.LotSerTrack == "L" && currDet.ActualEAQty == 0)
+                    {
+                        var lstLot = new List<IN_ItemLot>();
+                        if (currDet.WhseLoc.PassNull() != "")
+                        {
+                            lstLot = _app.IN_ItemLot.Where(p => p.InvtID == currDet.InvtID && p.SiteID == currDet.SiteID && p.WhseLoc == currDet.WhseLoc).ToList();
+                        }
+                        else
+                        {
+                            lstLot = _app.IN_ItemLot.Where(p => p.InvtID == currDet.InvtID && p.SiteID == currDet.SiteID).ToList();
+                        }
+
+                        foreach (var item in lstLot)
+                        {
+                            var objTagID = lstIN_TagLot.FirstOrDefault(p => p.BranchID == header.BranchID && p.TAGID == curHeader.TAGID && p.LineRef == currDet.LineRef && p.LotSerNbr == item.LotSerNbr && p.InvtID == item.InvtID);
+                            if (objTagID == null)
+                            {
+                                var objTaglot = _app.IN_TagLot.FirstOrDefault(p => p.TAGID == header.TAGID && p.BranchID == header.BranchID && p.LineRef == currDet.LineRef && p.InvtID == item.InvtID && p.LotSerNbr == item.LotSerNbr);
+                                if (objTaglot == null)
+                                {
+                                    objTaglot = new IN_TagLot();
+                                    objTaglot.ResetET();
+                                    objTaglot.BranchID = header.BranchID;
+                                    objTaglot.TAGID = header.TAGID;
+                                    objTaglot.SiteID = currDet.SiteID;
+                                    objTaglot.LotSerNbr = item.LotSerNbr;
+                                    objTaglot.Crtd_DateTime = DateTime.Now;
+                                    objTaglot.Crtd_Prog = _screenNbr;
+                                    objTaglot.Crtd_User = _userName;
+                                    objTaglot.ExpDate = DateTime.Now.ToDateShort();
+                                    objTaglot.InvtID = item.InvtID;
+                                    objTaglot.InvtMult = 1;
+                                    objTaglot.ActualEAQty = 0;
+                                    objTaglot.BookEAQty = item.QtyAvail;
+                                    objTaglot.OffsetEAQty = -item.QtyAvail;
+                                    objTaglot.TranDate = DateTime.Now.ToDateShort();
+                                    objTaglot.TranType = "";
+                                    objTaglot.UnitCost = 0;
+                                    objTaglot.UnitDesc = currDet.EAUnit;
+                                    objTaglot.LineRef = currDet.LineRef;
+                                    objTaglot.WhseLoc = currDet.WhseLoc;
+                                    objTaglot.LUpd_DateTime = DateTime.Now;
+                                    objTaglot.LUpd_Prog = _screenNbr;
+                                    objTaglot.LUpd_User = _userName;
+                                    _app.IN_TagLot.AddObject(objTaglot);
+                                }
+                            }
+                        }
+                    }
                     if (tagDet != null)
                     {
                         if (tagDet.tstamp.ToHex() == currDet.tstamp.ToHex())
@@ -537,6 +593,7 @@ namespace IN10500.Controllers
             t.Descr = s.Descr;
             t.ReasonCD = s.ReasonCD;
             t.INBatNbr = s.INBatNbr;
+            t.PerPost = s.PerPost;
             t.TranDate = s.TranDate;
             t.Type = s.Type;
             t.Note = s.Note;
@@ -544,9 +601,6 @@ namespace IN10500.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
-
-
-       
 
 
         //Update IN_TagDetail
@@ -588,6 +642,7 @@ namespace IN10500.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+ 
         #endregion
 
         #region Delete
@@ -896,6 +951,15 @@ namespace IN10500.Controllers
                     sheetTrans.Cells["G1"].SetStyle(style);
                     sheetTrans.Cells["H1"].SetStyle(style);
                     style = sheetTrans.Cells["D2"].GetStyle();
+
+                    sheetTrans.Cells.Columns[1].Width = 30;
+                    sheetTrans.Cells.Columns[2].Width = 20 ;
+                    sheetTrans.Cells.Columns[4].Width = 20 ;
+                    sheetTrans.Cells.Columns[5].Width = 20 ;
+                    sheetTrans.Cells.Columns[6].Width = 20 ;
+                    sheetTrans.Cells.Columns[7].Width = 20 ;
+                    sheetTrans.Cells.Columns[9].Width = 20 ;
+
                     style.Custom = "#,##0";
                     Range range = sheetTrans.Cells.CreateRange("D2", "E" + (dt.Rows.Count + 2));
                     range.ApplyStyle(style, flag);

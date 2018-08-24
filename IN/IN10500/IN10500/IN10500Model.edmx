@@ -82,7 +82,7 @@
           <Property Name="ImageModifiedDate" Type="datetime" />
           <Property Name="VideoModifiedDate" Type="datetime" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
-          <Property Name="KitType" Type="bit" />
+          <Property Name="KitType" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_ItemLoc">
           <Key>
@@ -219,7 +219,7 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="30" />
           <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_TagHeader">
@@ -244,8 +244,9 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="30" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="PerPost" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_TagLot">
           <Key>
@@ -381,6 +382,7 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
+          <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -506,14 +508,6 @@
           </FunctionImport>
           <EntitySet Name="RPTRunnings" EntityType="IN10500Model.RPTRunning" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN10500Model.IN_UnitConversion" />
-          <FunctionImport Name="IN10500_pdCheckCreateIN_Tag" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="SiteID" Mode="In" Type="String" />
-            <Parameter Name="ClassID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="IN10500_peUnit" ReturnType="Collection(String)" />
           <EntitySet Name="IN_Inventory" EntityType="IN10500Model.IN_Inventory" />
           <FunctionImport Name="IN10500_pdConfig" ReturnType="Collection(IN10500Model.IN10500_pdConfig_Result)">
@@ -521,7 +515,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="IN_TagHeader" EntityType="IN10500Model.IN_TagHeader" />
           <FunctionImport Name="IN10500_pgLoadGrid" ReturnType="Collection(IN10500Model.IN10500_pgLoadGrid_Result)">
             <Parameter Name="TagID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -592,6 +585,16 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="IN10500_pdCheckCreateIN_Tag" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="IN_TagHeader" EntityType="IN10500Model.IN_TagHeader" />
         </EntityContainer>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -799,7 +802,7 @@
           <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="CnvFact" Type="Double" Nullable="false" />
-          <Property Name="KitType" Type="Boolean" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
         </EntityType>
         <ComplexType Name="IN10500_pdConfig_Result">
           <Property Type="Int32" Name="ShowWhseLoc" Nullable="true" />
@@ -808,36 +811,13 @@
           <Property Type="Boolean" Name="ShowColSiteID" Nullable="true" />
           <Property Type="Int32" Name="ShowColWhseLoc" Nullable="true" />
           <Property Type="Boolean" Name="EditSiteWhseLoc" Nullable="true" />
+          <Property Type="String" Name="PerPost" Nullable="true" MaxLength="6" />
+          <Property Type="Boolean" Name="CheckPerPost" Nullable="true" />
         </ComplexType>
         <ComplexType Name="IN10500_pdDefaultSite_Result">
           <Property Type="String" Name="INSite" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="INWhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
-        <EntityType Name="IN_TagHeader">
-          <Key>
-            <PropertyRef Name="TAGID" />
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="SiteID" />
-          </Key>
-          <Property Name="TAGID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Descr" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="INBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ReasonCD" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
         <ComplexType Name="IN10500_pgLoadGrid_Result">
           <Property Type="String" Name="TAGID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
@@ -1063,7 +1043,7 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WhseLoc" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="IN_TagLot">
@@ -1125,6 +1105,32 @@
           <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <EntityType Name="IN_TagHeader">
+          <Key>
+            <PropertyRef Name="TAGID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SiteID" />
+          </Key>
+          <Property Name="TAGID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="INBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ReasonCD" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="WhseLoc" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PerPost" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1262,7 +1268,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10500_pdCheckCreateIN_Tag" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdCheckCreateIN_Tag" />
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="IN10500Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
@@ -1352,33 +1357,11 @@
                 <ScalarProperty Name="ShowColSiteID" ColumnName="ShowColSiteID" />
                 <ScalarProperty Name="ShowColWhseLoc" ColumnName="ShowColWhseLoc" />
                 <ScalarProperty Name="EditSiteWhseLoc" ColumnName="EditSiteWhseLoc" />
+                <ScalarProperty Name="PerPost" ColumnName="PerPost" />
+                <ScalarProperty Name="CheckPerPost" ColumnName="CheckPerPost" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="IN_TagHeader">
-            <EntityTypeMapping TypeName="IN10500Model.IN_TagHeader">
-              <MappingFragment StoreEntitySet="IN_TagHeader">
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="INBatNbr" ColumnName="INBatNbr" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="TAGID" ColumnName="TAGID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="IN10500_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.IN10500_pgLoadGrid">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10500Model.IN10500_pgLoadGrid_Result">
@@ -1691,6 +1674,32 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10500_pdCheckCreateIN_Tag" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdCheckCreateIN_Tag" />
+          <EntitySetMapping Name="IN_TagHeader">
+            <EntityTypeMapping TypeName="IN10500Model.IN_TagHeader">
+              <MappingFragment StoreEntitySet="IN_TagHeader">
+                <ScalarProperty Name="PerPost" ColumnName="PerPost" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="INBatNbr" ColumnName="INBatNbr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="TAGID" ColumnName="TAGID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1718,11 +1727,11 @@
         <EntityTypeShape EntityType="IN10500Model.RPTRunning" Width="1.5" PointX="11.027514058643726" PointY="22.892224650314184" />
         <EntityTypeShape EntityType="IN10500Model.IN_UnitConversion" Width="1.5" PointX="0.15234164341927584" PointY="7.9606077410097269" />
         <EntityTypeShape EntityType="IN10500Model.IN_Inventory" Width="1.5" PointX="4.1008809525989376" PointY="20.295305157217804" />
-        <EntityTypeShape EntityType="IN10500Model.IN_TagHeader" Width="1.5" PointX="3.375" PointY="7.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_ItemLoc" Width="1.5" PointX="7.375" PointY="8.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_ItemLot" Width="1.5" PointX="9.375" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_TagDetail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_TagLot" Width="1.5" PointX="9.375" PointY="7.75" />
+        <EntityTypeShape EntityType="IN10500Model.IN_TagHeader" Width="1.5" PointX="3.375" PointY="7.75" />
       </Diagram>
     </Diagrams>
   </Designer>

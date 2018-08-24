@@ -148,22 +148,6 @@ namespace IN10500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_TagHeader> IN_TagHeader
-        {
-            get
-            {
-                if ((_IN_TagHeader == null))
-                {
-                    _IN_TagHeader = base.CreateObjectSet<IN_TagHeader>("IN_TagHeader");
-                }
-                return _IN_TagHeader;
-            }
-        }
-        private ObjectSet<IN_TagHeader> _IN_TagHeader;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemLoc> IN_ItemLoc
         {
             get
@@ -224,6 +208,22 @@ namespace IN10500
             }
         }
         private ObjectSet<IN_TagLot> _IN_TagLot;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_TagHeader> IN_TagHeader
+        {
+            get
+            {
+                if ((_IN_TagHeader == null))
+                {
+                    _IN_TagHeader = base.CreateObjectSet<IN_TagHeader>("IN_TagHeader");
+                }
+                return _IN_TagHeader;
+            }
+        }
+        private ObjectSet<IN_TagHeader> _IN_TagHeader;
 
         #endregion
 
@@ -270,14 +270,6 @@ namespace IN10500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_TagHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_TagHeader(IN_TagHeader iN_TagHeader)
-        {
-            base.AddObject("IN_TagHeader", iN_TagHeader);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_ItemLoc EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_ItemLoc(IN_ItemLoc iN_ItemLoc)
@@ -307,6 +299,14 @@ namespace IN10500
         public void AddToIN_TagLot(IN_TagLot iN_TagLot)
         {
             base.AddObject("IN_TagLot", iN_TagLot);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_TagHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_TagHeader(IN_TagHeader iN_TagHeader)
+        {
+            base.AddObject("IN_TagHeader", iN_TagHeader);
         }
 
         #endregion
@@ -456,80 +456,6 @@ namespace IN10500
             }
     
             return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN10500_pdAddNewInvtRight", userIDParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="siteID">No Metadata Documentation available.</param>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN10500_pdCheckCreateIN_Tag(global::System.String branchID, global::System.String siteID, global::System.String classID, global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter siteIDParameter;
-            if (siteID != null)
-            {
-                siteIDParameter = new ObjectParameter("SiteID", siteID);
-            }
-            else
-            {
-                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter classIDParameter;
-            if (classID != null)
-            {
-                classIDParameter = new ObjectParameter("ClassID", classID);
-            }
-            else
-            {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("IN10500_pdCheckCreateIN_Tag", branchIDParameter, siteIDParameter, classIDParameter, userIDParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -1180,6 +1106,91 @@ namespace IN10500
     
             return base.ExecuteFunction<IN10500_piInvtory_Result>("IN10500_piInvtory", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="classID">No Metadata Documentation available.</param>
+        /// <param name="whseLoc">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> IN10500_pdCheckCreateIN_Tag(global::System.String branchID, global::System.String siteID, global::System.String classID, global::System.String whseLoc, global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
+            ObjectParameter whseLocParameter;
+            if (whseLoc != null)
+            {
+                whseLocParameter = new ObjectParameter("WhseLoc", whseLoc);
+            }
+            else
+            {
+                whseLocParameter = new ObjectParameter("WhseLoc", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("IN10500_pdCheckCreateIN_Tag", branchIDParameter, siteIDParameter, classIDParameter, whseLocParameter, userIDParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -1236,7 +1247,8 @@ namespace IN10500
         /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
         /// <param name="cnvFact">Initial value of the CnvFact property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact)
+        /// <param name="kitType">Initial value of the KitType property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact, global::System.Boolean kitType)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -1273,6 +1285,7 @@ namespace IN10500
             iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
             iN_Inventory.CnvFact = cnvFact;
+            iN_Inventory.KitType = kitType;
             return iN_Inventory;
         }
 
@@ -3038,9 +3051,9 @@ namespace IN10500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> KitType
+        public global::System.Boolean KitType
         {
             get
             {
@@ -3055,8 +3068,8 @@ namespace IN10500
                 OnKitTypeChanged();
             }
         }
-        private Nullable<global::System.Boolean> _KitType;
-        partial void OnKitTypeChanging(Nullable<global::System.Boolean> value);
+        private global::System.Boolean _KitType;
+        partial void OnKitTypeChanging(global::System.Boolean value);
         partial void OnKitTypeChanged();
 
         #endregion
@@ -6055,7 +6068,8 @@ namespace IN10500
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_TagHeader CreateIN_TagHeader(global::System.String tAGID, global::System.String branchID, global::System.String siteID, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static IN_TagHeader CreateIN_TagHeader(global::System.String tAGID, global::System.String branchID, global::System.String siteID, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String perPost)
         {
             IN_TagHeader iN_TagHeader = new IN_TagHeader();
             iN_TagHeader.TAGID = tAGID;
@@ -6069,6 +6083,7 @@ namespace IN10500
             iN_TagHeader.LUpd_Prog = lUpd_Prog;
             iN_TagHeader.LUpd_User = lUpd_User;
             iN_TagHeader.tstamp = tstamp;
+            iN_TagHeader.PerPost = perPost;
             return iN_TagHeader;
         }
 
@@ -6516,6 +6531,30 @@ namespace IN10500
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
 
         #endregion
 
@@ -9306,6 +9345,54 @@ namespace IN10500
         private Nullable<global::System.Boolean> _EditSiteWhseLoc;
         partial void OnEditSiteWhseLocChanging(Nullable<global::System.Boolean> value);
         partial void OnEditSiteWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckPerPost
+        {
+            get
+            {
+                return _CheckPerPost;
+            }
+            set
+            {
+                OnCheckPerPostChanging(value);
+                ReportPropertyChanging("CheckPerPost");
+                _CheckPerPost = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckPerPost");
+                OnCheckPerPostChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckPerPost;
+        partial void OnCheckPerPostChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckPerPostChanged();
 
         #endregion
 

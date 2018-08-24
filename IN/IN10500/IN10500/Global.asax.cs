@@ -39,14 +39,14 @@ namespace IN10500
 
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "PhuThai_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); ND_eSky4DSys eBiz4DCloudSysJFV
+            Current.DBSys = "PhuThai_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); ND_eSky4DSys eBiz4DCloudSysJFV
             Current.FormatDate = "MM-dd-yyyy";
             AccessRight acc = new AccessRight() ;
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10500"] = acc;
-            Session["DBApp"] = Current.DBApp = "PhuThai_Test_eSky4DApp";// "eBiz4DWebApp";Kowil_eSky4DApp ND_eSky4DApp eBiz4DCloudAppJFV
+            Session["DBApp"] = Current.DBApp = "PhuThai_eSky4DApp";// "eBiz4DWebApp";Kowil_eSky4DApp ND_eSky4DApp eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "10106TMT1";
             Session["Language"] = Current.Language = "vi";
