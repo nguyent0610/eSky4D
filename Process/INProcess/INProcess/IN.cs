@@ -1085,6 +1085,7 @@ namespace INProcess
                     Status = "C",
                     Rlsed = 1,
                     DateEnt = objTagHeader.TranDate,
+                    PerPost=objTagHeader.PerPost.PassNull(),
                     //DateTime.Now.Short(),
                     JrnlType = "IN",
                     EditScrnNbr = "IN10500",
