@@ -312,6 +312,7 @@ var btnEdit_Click = function (record) {
     }
     else {
         App.cboChannel.show();
+
     }
     if (HQ.IsMultiLogin) {
         App.ckbMultiLogin.hide();
@@ -326,6 +327,10 @@ var btnEdit_Click = function (record) {
     else {
         App.cboBrandID.show();
         App.cboBrandID.allowBlank = false;
+       
+    }
+    if (HQ.IsMultiChannel) {
+        App.cboChannel.multiSelect = true;
     }
     _tstamp = record.data.tstamp;
     App.frmDetail.loadRecord(record);
@@ -337,8 +342,11 @@ var btnEdit_Click = function (record) {
     //App.ckbCheckFirstLogin.setValue(0);
     //App.cboUserTypes.forceSelection = false;
     //App.cboUserGroup.forceSelection = false;
+    
     App.winLocation.show();
     App.stoForm.reload();
+    HQ.combo.expand(App.cboBrandID, ',');
+    HQ.combo.expand(App.cboChannel, ',')
 };
 var btnLocationCancel_Click = function () {
     App.winLocation.hide();

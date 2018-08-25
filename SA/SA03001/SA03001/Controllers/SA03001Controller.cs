@@ -213,9 +213,8 @@ namespace SA03001.Controllers
                     objUser.ExpireDay = 90;
                     objUser.BeginDay = DateTime.Now;
                     objUser.LoggedIn = false;
-                    objUser.Tel = tel;
-                    objUser.Channel = channel;
-                    objUser.BrandID = brandID;
+                    
+                    
                 }
                 else
                 {
@@ -259,7 +258,8 @@ namespace SA03001.Controllers
                         }
                     }
                 }
-
+                objUser.Tel = tel;
+                objUser.Channel = channel;
                 objUser.Blocked = isBlock;
                 if (!string.IsNullOrEmpty(data["dteBlockedTime"]))
                     objUser.BlockedTime = Convert.ToDateTime(data["dteBlockedTime"]);
@@ -284,6 +284,7 @@ namespace SA03001.Controllers
                 objUser.LUpd_User = _userName;
                 objUser.CheckFirstLogin = checkFirstLogin;
                 objUser.MultiLogin = multiLogin;
+                objUser.BrandID = brandID;
                 if(auto==false)
                 {
                     objUser.AutoID ="0";
