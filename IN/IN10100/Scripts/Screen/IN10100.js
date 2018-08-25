@@ -340,7 +340,28 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isBusy == false) {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
-                    save();
+
+                    var checkPerPost = true;
+                    if (HQ.checkPerPost) {
+                        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
+                        if (objPerPost != undefined) {
+                            var tam = App.DateEnt.getValue();
+                            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
+                                checkPerPost = false;
+                            }
+                        }
+                        else {
+                            checkPerPost = false;
+                        }
+                    }
+
+                    if (HQ.checkPerPost && !checkPerPost) {
+                        HQ.message.show(2018081311, '', 'checkSave');
+
+                    }
+                    else {
+                        save();
+                    }
                 }
             }
             break;
@@ -421,6 +442,12 @@ var menuClick = function (command) {
             }
             break;
         default:
+    }
+};
+
+function checkSave(item) {
+    if (item == 'yes') {
+        save();
     }
 };
 
@@ -698,8 +725,6 @@ var btnExport_Click = function () {
             HQ.message.process(msg, data, true);
         }
     });
-
-
 };
 var btnPopupOk_Click = function () {
     if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
@@ -809,6 +834,16 @@ var grdTrans_BeforeEdit = function (item, e) {
         return false;
     }
 
+    if (Ext.isEmpty(e.record.data.SiteID) && HQ.showWhseLocColumn && e.field == 'Qty') {
+        HQ.message.show(1000, [HQ.common.getLang('SiteID')], '', true);
+        return false;
+    }
+
+    if (HQ.showWhseLoc == 2 && Ext.isEmpty(e.record.data.WhseLoc) && HQ.showWhseLocColumn && e.field == 'Qty') {
+        HQ.message.show(1000, [HQ.common.getLang('WhseLoc')], '', true);
+        return false;
+    }
+
     //if (Ext.isEmpty(App.SlsperID.getValue())) {
     //    HQ.message.show(1000, [HQ.common.getLang('SlsperID')], '', true);
     //    return false;
@@ -831,6 +866,7 @@ var grdTrans_BeforeEdit = function (item, e) {
         e.record.data.BatNbr = HQ.objBatch.data.BatNbr;
         e.record.data.TranDate = App.DateEnt.getValue();
         e.record.data.SiteID = App.SiteID.getValue();
+        e.record.data.WhseLoc = App.cboWhseLoc.getValue();
         e.record.commit();
     }
 
@@ -844,9 +880,6 @@ var grdTrans_BeforeEdit = function (item, e) {
 };
 var grdTrans_SelectionChange = function (item, selected) {
     HQ.focus = 'trans';
-
-
-
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
@@ -876,7 +909,10 @@ var grdTrans_Edit = function (item, e) {
         }
         if (e.field === 'SiteID') {
             e.record.set('WhseLoc', '');
+            
         }
+        
+        
         var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
 
@@ -1261,19 +1297,7 @@ var save = function () {
         return;
     }
 
-    var checkPerPost = false;
-    if (HQ.checkperPost) {
-        var objPerPost = HQ.store.findRecord(App.cboPerPost.store, ['CycleNbr'], [App.cboPerPost.getValue()]);
-        if (objPerPost != undefined) {
-            var tam = App.DateEnt.getValue();
-            if (tam > objPerPost.data.EndDate || tam < objPerPost.data.StartDate) {
-                checkPerPost = true;
-            }
-        }
-        else {
-            checkPerPost = true;
-        }
-    }
+    
     if ((App.BatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.BatNbr.value) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
         return;
@@ -1307,6 +1331,7 @@ var save = function () {
             if (HQ.showSiteColumn) {
                 if (!item.data.SiteID) {
                     HQ.message.show(1000, 'SiteID');
+                    flat = true;
                     return false;
                 }
             }
@@ -1314,10 +1339,10 @@ var save = function () {
             if (HQ.showWhseLocColumn) {
                 if (!item.data.WhseLoc) {
                     HQ.message.show(1000, 'WhseLoc');
+                    flat = true;
                     return false;
                 }
             }
-
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
                 App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
@@ -1330,6 +1355,13 @@ var save = function () {
                 flat = true;
                 return false;
             }
+            if (Ext.isEmpty(item.data.WhseLoc) && HQ.showWhseLocColumn && HQ.showWhseLoc==2) {
+                HQ.message.show(1000, [HQ.common.getLang('WhseLoc')], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                flat = true;
+                return false;
+            }
+
             if (Ext.isEmpty(item.invt)) {
                 item.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [item.data.InvtID]);
             }
@@ -1374,6 +1406,7 @@ var save = function () {
         return;
     }
     if (App.frmMain.isValid()) {
+        App.ReasonCD.store.clearFilter();
         App.frmMain.submit({
             waitMsg: HQ.waitMsg,
             method: 'POST',
@@ -1383,8 +1416,7 @@ var save = function () {
                 lstTrans: Ext.encode(App.stoTrans.getRecordsValues()),
                 lstLot: Ext.encode(App.stoLotTrans.getRecordsValues()),
                 isTransfer: HQ.isTransfer,
-                PerPost: App.cboPerPost.getValue(),
-                checkPerPost: checkPerPost
+                PerPost: App.cboPerPost.getValue()
     },
             success: function (msg, data) {
                 if (HQ.isTransfer) {
@@ -1403,14 +1435,8 @@ var save = function () {
                         HQ.recentRecord = batNbr;
                     }
                 }
-                 
-                if (HQ.checkperPost && this.result.data.checkPerPost) {
-                    HQ.message.show(2018071311, '', '', true);
-                } else {
-                    HQ.message.process(msg, data, true);
 
-                }
-
+                HQ.message.process(msg, data, true);
                 if (!Ext.isEmpty(App.BatNbr.getValue())) {
                     App.stoBatch.reload();
                 } else {

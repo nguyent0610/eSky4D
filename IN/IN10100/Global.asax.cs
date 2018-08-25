@@ -39,7 +39,7 @@ namespace IN10100
 
             Current.Authorize = false;
             //Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.Server = "TRUONGSAD";// TRUONGSAD   HOANGSAD
+            Current.Server = "HOANGSAD";// TRUONGSAD   HOANGSAD
             Current.DBSys = "PhuThai_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); PhuThai_Test_eSky4DSys PhuThai_eSky4DSys
             Current.FormatDate = "dd-MM-yyyy";
             AccessRight acc = new AccessRight();
