@@ -36,7 +36,11 @@ var checkLoad = function (sto) {
 var firstLoad = function () {
 
     App.chkPublic.setVisible(!HQ.isHideChkPublic);
-   
+    App.chkKitType.setVisible(HQ.KitType);
+    if (HQ.KitType == false)
+    {
+        App.CtnKitType.setMargin("22 0 0 0");
+    }
     if (HQ.isHideChkPublic) {
         App.tabDetail.child('#pnlCpnyID').tab.setDisabled(true);
         if (App.tabDetail.activeTab.id == "pnlCpnyID") {

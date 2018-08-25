@@ -177,7 +177,7 @@
                                 lst.Change.Fn = "chkPublic_Change";
                             })  
                          , HQ.NumberField().ID("txtGiftPoint").Name("txtStkVol").HQLangCode("GiftPoint").DataIndex("GiftPoint").Hidden(true)
-                            .Width(300).Value(0).DecimalPrecision(0).MarginSpec("5 0 5 0").EnableKeyEvents(true)
+                            .Width(300).Value(0).DecimalPrecision(0).MarginSpec("5 0 5 0").EnableKeyEvents(true).MinValue(0)
                     )//Header Row 4
             )
             .Listeners(lss =>
@@ -405,9 +405,11 @@
                             )// Image
                     )
                     
-                    , X.Container().Layout(LayoutType.VBox).MarginSpec("32 0 0 0").MinWidth(240)
+                    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0").MinWidth(240).ID("CtnKitType")
                     .Items(
-                        X.Container().MarginSpec("0 0 0 0")
+                     HQ.Checkbox().ID("chkKitType").Name("chkKitType").HQLangCode("IN20500KitType").DataIndex("KitType")
+                                .Width(240).MarginSpec("0 0 0 0")  
+                        ,X.Container().MarginSpec("5 0 0 0")
                         .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                         .Items(
                             X.Hidden().ID("hdnPPCStoreMediaReq").DataIndex("Media")
