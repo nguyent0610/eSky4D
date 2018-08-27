@@ -298,7 +298,7 @@
                     .LoadData()
                     .Listeners(lst =>
                     {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); App.cboWhseLoc.setValue('');}";
                         lst.Change.Fn = "cboSiteID_Change";
                         lst.Focus.Handler = "HQ.focus='batch';";
                     })
@@ -510,7 +510,7 @@
                 ,
 
                 X.FieldContainer()
-                .MarginSpec("0 0 10 0")
+                .MarginSpec("0 0 5 0")
                 .Layout(LayoutType.HBox)
                 .Items(
 
@@ -687,11 +687,11 @@
                                       new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                       new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                                 })
-                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                //.Listeners(lst =>
-                                //{
-                                //    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                //})
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
                                 .LoadData()
                             )
                             ,
@@ -714,11 +714,11 @@
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
                                     })
-                                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                    //.Listeners(lst =>
-                                    //{
-                                    //    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    //})
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
                                     .LoadData()
                             )
                             
