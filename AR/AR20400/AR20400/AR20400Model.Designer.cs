@@ -1037,8 +1037,7 @@ namespace AR20400
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="district">No Metadata Documentation available.</param>
-        public ObjectResult<AR20400_pcMarket_Result> AR20400_pcMarket(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String district)
+        public ObjectResult<AR20400_pcMarket_Result> AR20400_pcMarket(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -1070,17 +1069,81 @@ namespace AR20400
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            ObjectParameter districtParameter;
-            if (district != null)
+            return base.ExecuteFunction<AR20400_pcMarket_Result>("AR20400_pcMarket", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="taxRegNbr">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_pdCheckDublicateTaxRegNbr(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String taxRegNbr, global::System.String custID, global::System.String branchID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
             {
-                districtParameter = new ObjectParameter("District", district);
+                userNameParameter = new ObjectParameter("UserName", userName);
             }
             else
             {
-                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20400_pcMarket_Result>("AR20400_pcMarket", cpnyIDParameter, userNameParameter, langIDParameter, districtParameter);
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter taxRegNbrParameter;
+            if (taxRegNbr != null)
+            {
+                taxRegNbrParameter = new ObjectParameter("TaxRegNbr", taxRegNbr);
+            }
+            else
+            {
+                taxRegNbrParameter = new ObjectParameter("TaxRegNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20400_pdCheckDublicateTaxRegNbr", userNameParameter, cpnyIDParameter, langIDParameter, taxRegNbrParameter, custIDParameter, branchIDParameter);
         }
 
         #endregion
@@ -5347,6 +5410,54 @@ namespace AR20400
         private global::System.String _BuyerID;
         partial void OnBuyerIDChanging(global::System.String value);
         partial void OnBuyerIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OriCustID
+        {
+            get
+            {
+                return _OriCustID;
+            }
+            set
+            {
+                OnOriCustIDChanging(value);
+                ReportPropertyChanging("OriCustID");
+                _OriCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OriCustID");
+                OnOriCustIDChanged();
+            }
+        }
+        private global::System.String _OriCustID;
+        partial void OnOriCustIDChanging(global::System.String value);
+        partial void OnOriCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GeneralCustID
+        {
+            get
+            {
+                return _GeneralCustID;
+            }
+            set
+            {
+                OnGeneralCustIDChanging(value);
+                ReportPropertyChanging("GeneralCustID");
+                _GeneralCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("GeneralCustID");
+                OnGeneralCustIDChanged();
+            }
+        }
+        private global::System.String _GeneralCustID;
+        partial void OnGeneralCustIDChanging(global::System.String value);
+        partial void OnGeneralCustIDChanged();
 
         #endregion
 
@@ -8996,7 +9107,8 @@ namespace AR20400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowHandle sI_ApprovalFlowHandle = new SI_ApprovalFlowHandle();
             sI_ApprovalFlowHandle.AppFolID = appFolID;
@@ -9010,6 +9122,7 @@ namespace AR20400
             sI_ApprovalFlowHandle.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowHandle.LUpd_User = lUpd_User;
             sI_ApprovalFlowHandle.tstamp = tstamp;
+            sI_ApprovalFlowHandle.BranchID = branchID;
             return sI_ApprovalFlowHandle;
         }
 
@@ -9652,6 +9765,33 @@ namespace AR20400
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -10621,6 +10761,30 @@ namespace AR20400
         private Nullable<global::System.Boolean> _RequireTaxID03;
         partial void OnRequireTaxID03Changing(Nullable<global::System.Boolean> value);
         partial void OnRequireTaxID03Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> chkDublicateTaxRegNbr
+        {
+            get
+            {
+                return _chkDublicateTaxRegNbr;
+            }
+            set
+            {
+                OnchkDublicateTaxRegNbrChanging(value);
+                ReportPropertyChanging("chkDublicateTaxRegNbr");
+                _chkDublicateTaxRegNbr = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("chkDublicateTaxRegNbr");
+                OnchkDublicateTaxRegNbrChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _chkDublicateTaxRegNbr;
+        partial void OnchkDublicateTaxRegNbrChanging(Nullable<global::System.Boolean> value);
+        partial void OnchkDublicateTaxRegNbrChanged();
 
         #endregion
 

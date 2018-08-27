@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -199,6 +199,8 @@
           <Property Name="LocationCheckType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="VendorID" Type="nvarchar" MaxLength="30" />
           <Property Name="BuyerID" Type="nvarchar" MaxLength="30" />
+          <Property Name="OriCustID" Type="varchar" MaxLength="50" />
+          <Property Name="GeneralCustID" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -385,6 +387,7 @@
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
+            <PropertyRef Name="BranchID" />
           </Key>
           <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
@@ -412,6 +415,7 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="SI_Hierarchy">
           <Key>
@@ -440,7 +444,14 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
-          <Parameter Name="District" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pdCheckDublicateTaxRegNbr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="TaxRegNbr" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AR20400_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -635,7 +646,14 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="District" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pdCheckDublicateTaxRegNbr" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="TaxRegNbr" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
@@ -892,6 +910,7 @@
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
+            <PropertyRef Name="BranchID" />
           </Key>
           <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -919,6 +938,7 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SI_Hierarchy">
           <Key>
@@ -1130,6 +1150,7 @@
           <Property Type="Boolean" Name="RequireTaxID01" Nullable="true" />
           <Property Type="Boolean" Name="RequireTaxID02" Nullable="true" />
           <Property Type="Boolean" Name="RequireTaxID03" Nullable="true" />
+          <Property Type="Boolean" Name="chkDublicateTaxRegNbr" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1239,6 +1260,8 @@
           <Property Name="LocationCheckType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="VendorID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="BuyerID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="OriCustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GeneralCustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="AR20400_pgCompetitor_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
@@ -1513,6 +1536,7 @@
           <EntitySetMapping Name="SI_ApprovalFlowHandle">
             <EntityTypeMapping TypeName="AR20400Model.SI_ApprovalFlowHandle">
               <MappingFragment StoreEntitySet="SI_ApprovalFlowHandle">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
                 <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -1790,12 +1814,15 @@
                 <ScalarProperty Name="RequireTaxID01" ColumnName="RequireTaxID01" />
                 <ScalarProperty Name="RequireTaxID02" ColumnName="RequireTaxID02" />
                 <ScalarProperty Name="RequireTaxID03" ColumnName="RequireTaxID03" />
+                <ScalarProperty Name="chkDublicateTaxRegNbr" ColumnName="chkDublicateTaxRegNbr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="GeneralCustID" ColumnName="GeneralCustID" />
+                <ScalarProperty Name="OriCustID" ColumnName="OriCustID" />
                 <ScalarProperty Name="BuyerID" ColumnName="BuyerID" />
                 <ScalarProperty Name="VendorID" ColumnName="VendorID" />
                 <ScalarProperty Name="LocationCheckType" ColumnName="LocationCheckType" />
@@ -1924,6 +1951,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pdCheckDublicateTaxRegNbr" FunctionName="eBiz4DWebSysModel.Store.AR20400_pdCheckDublicateTaxRegNbr" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

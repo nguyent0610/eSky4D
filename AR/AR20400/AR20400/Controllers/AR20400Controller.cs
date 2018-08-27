@@ -216,6 +216,7 @@ namespace AR20400.Controllers
                 string Status = data["cboStatus"].PassNull();
                 string Handle = data["cboHandle"].PassNull();
                 bool checkFlag = false;
+                bool chkDublicateTaxRegNbr = false;
                 string LineRef_tmp = string.Empty;
 
                 //strRefix = _db.AR20400_ppRefixCustomer(_userName, BranchID).FirstOrDefault();
@@ -239,7 +240,11 @@ namespace AR20400.Controllers
                 var lstAR_LTTContractDetail = dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>() == null ? new List<AR20400_pgAR_LTTContractDetail_Result>() : dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>().Where(p => p.Type != "");
                 StoreDataHandler dataHandler7 = new StoreDataHandler(data["lstAR_CustomerChild"]);
                 ChangeRecords<AR20400_pgAR_CustomerChild_Result> lstAR_CustomerChild = dataHandler7.BatchObjectData<AR20400_pgAR_CustomerChild_Result>();
-
+                var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                if (objConfig != null)
+                {
+                    chkDublicateTaxRegNbr = objConfig.chkDublicateTaxRegNbr.Value;
+                }
                 var objAR_Setup = _db.AR_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupId == "AR");
                 if (objAR_Setup != null)
                 {
@@ -256,6 +261,13 @@ namespace AR20400.Controllers
                         {
                             isNew = "true";
                             var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", curHeader.Channel, ClassId, curHeader.CustName, curHeader.State, curHeader.District).FirstOrDefault();
+                            if(chkDublicateTaxRegNbr)
+                            {
+                                if (_db.AR20400_pdCheckDublicateTaxRegNbr(Current.UserName, Current.CpnyID, Current.LangID, curHeader.TaxRegNbr, BranchID, objCustID.PassNull()).FirstOrDefault().ToString() == "1")
+                                {
+                                    throw new MessageException(MessageType.Message, "2018082701", parm: new string[] { curHeader.TaxRegNbr });
+                                }
+                            }
                             header = new AR_Customer();
                             header.ResetET();
                             header.CustId = objCustID.PassNull();
@@ -273,6 +285,13 @@ namespace AR20400.Controllers
                         }
                         else
                         {
+                            if (chkDublicateTaxRegNbr)
+                            {
+                                if (_db.AR20400_pdCheckDublicateTaxRegNbr(Current.UserName, Current.CpnyID, Current.LangID, curHeader.TaxRegNbr, BranchID, CustId).FirstOrDefault().ToString() == "1")
+                                {
+                                    throw new MessageException(MessageType.Message, "2018082701", parm: new string[] { curHeader.TaxRegNbr });
+                                }
+                            }
                             isNew = "true";
                             header = new AR_Customer();
                             header.ResetET();
@@ -294,6 +313,13 @@ namespace AR20400.Controllers
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                         {
+                            if (chkDublicateTaxRegNbr)
+                            {
+                                if (_db.AR20400_pdCheckDublicateTaxRegNbr(Current.UserName, Current.CpnyID, Current.LangID, curHeader.TaxRegNbr, BranchID, CustId).FirstOrDefault().ToString() == "1")
+                                {
+                                    throw new MessageException(MessageType.Message, "2018082701", parm: new string[] { curHeader.TaxRegNbr });
+                                }
+                            }
                             UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, HiddenTree, Status, Handle);
                         }
                         else
