@@ -129,8 +129,8 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.store.checkRequirePass(App.stoSite, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-                    var lstLot = App.stoLotTrans4Save.data;
-                    var lstComponent = App.stoComponent4Save.data;
+                    var lstLot = App.stoLotTrans4Save.snapshot || App.stoLotTrans4Save.allData || App.stoLotTrans4Save.data;
+                    var lstComponent = App.stoComponent4Save.snapshot|| App.stoComponent4Save.allData||  App.stoComponent4Save.data;
                     if (lstComponent != undefined) {
                         for (var i = 0; i < lstComponent.length; i++) {
                             var QtyLoc = 0;
@@ -140,7 +140,7 @@ var menuClick = function (command) {
                                 }                              
                             }
                             if (QtyLoc != lstComponent.items[i].data.ComponentQty && lstComponent.items[i].data.LotSerTrack != 'N') {
-                                HQ.message.show(2018060760, [HQ.common.getLang("IN11700Component")], '', true);
+                                HQ.message.show(2018082711, [lstComponent.items[i].data.ComponentID, HQ.common.getLang("IN11700Component")], '', true);
                                 return;
                             }
                         }
@@ -234,21 +234,21 @@ var stoSite_Load = function (sto, records, successful, eOpts) {
 };
 
 var stoComponent_Load = function (sto, records, successful, eOpts) {
-    for (var i = 0; i < sto.data.length; i++) {
-        //var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['LineRef', 'ComponentID'], [records[i].data.LineRef, records[i].data.ComponentID]);
-        var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['InvtID', 'ComponentID'], [records[i].data.InvtID, records[i].data.ComponentID]);
-        if (objComponent == undefined)
-        {
-            if (sto.data.items[i].data.LineRef == "")
-            {
-                sto.data.items[i].data.LineRef = lastLineRef();
+    if (records != undefined) {
+        for (var i = 0; i < sto.data.length; i++) {
+            //var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['LineRef', 'ComponentID'], [records[i].data.LineRef, records[i].data.ComponentID]);
+            var objComponent = HQ.store.findRecord(App.stoComponent4Save, ['InvtID', 'ComponentID'], [records[i].data.InvtID, records[i].data.ComponentID]);
+            if (objComponent == undefined) {
+                if (sto.data.items[i].data.LineRef == "") {
+                    sto.data.items[i].data.LineRef = lastLineRef();
+                }
+                sto.data.items[i].data.InvtMult = 1;
+                sto.data.items[i].data.JrnlType = 'IN';
+                App.stoComponent4Save.add(sto.data.items[i]);
             }
-            sto.data.items[i].data.InvtMult = 1;
-            sto.data.items[i].data.JrnlType = 'IN';
-            App.stoComponent4Save.add(sto.data.items[i]);
-        }
 
-    }
+        }
+    }    
     //if (App.cboStatus.getValue() != "C")
     //{
     //    if (HQ.isInsert) {
@@ -471,7 +471,9 @@ var grdSite_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 var grdSite_Edit = function (item, e) {
+    
     if (e.field == 'InvtID') {
+        
         if (App.cboKitID.valueModels != undefined && App.cboKitID.valueModels.length > 0) {
             var objKitID = HQ.store.findInStore(App.cboKitID.store, ['KitID'], [e.value]);
             var cnv = setUOM(e.value, objKitID.ClassID, objKitID.StkUnit, objKitID.StkUnit);
@@ -512,7 +514,7 @@ var grdSite_Edit = function (item, e) {
     }
     var grid = App.grdComponent.getSelectionModel();
     var record = grid.getStore().getRange();
-    var lstComponent = App.grdComponent.store.data;
+    var lstComponent = App.grdComponent.store.snapshot || App.grdComponent.store.allData|| App.grdComponent.store.data;
     if (e.field == 'Qty')
     {
         if (e.value > 0) {
@@ -522,44 +524,59 @@ var grdSite_Edit = function (item, e) {
         {
             if (e.record.data.InvtID == lstComponent.items[i].data.InvtID)
             {
-                record[i].set("ComponentQty", record[i].data.QtyTemp * e.record.data.Qty);
-                App.stoComponent.resumeEvents();
-            App.grdComponent.view.refresh();
+                lstComponent.items[i].set("ComponentQty", (lstComponent.items[i].data.QtyTemp * e.record.data.Qty));
+            
             }     
         }
         
+        //App.stoComponent.resumeEvents();
+        //App.grdComponent.view.refresh();
     }
     if (e.field == "Qty")
     {
         
         if(e.record.data.Qty!=_QtySite)
         {
+            var lstCompo4Save = App.stoComponent4Save.snapshot || App.stoComponent4Save.allData || App.stoComponent4Save.data;
             var lstLot = App.stoLotTrans4Save.snapshot || App.stoLotTrans4Save.allData || App.stoLotTrans4Save.data;
-            if(lstLot!=undefined)
-            {
-                var lstCompo4Save = HQ.store.findRecord(App.stoComponent4Save, ['InvtID'], [e.record.data.InvtID]);
-                if(lstCompo4Save!=undefined)
-                {
-                    lstCompo4Save.set("ComponentQty", e.record.data.Qty);
-                    var lstLot4Save = HQ.store.findRecord(App.stoLotTrans4Save, ['INTranLineRef', 'ComponentID'], [lstCompo4Save.data.LineRef, lstCompo4Save.data.ComponentID]);
-                    for(var i=0;i<lstLot.length;i++)
-                    {
-                        if (lstLot4Save != undefined) {
-                            if (lstLot.items[i].data.INTranLineRef == lstLot4Save.data.INTranLineRef && lstLot.items[i].data.ComponentID == lstLot4Save.data.ComponentID) {
-                                lstLot.remove(lstLot.items[i]);
+
+            if (lstCompo4Save != undefined) {
+                for (var i = 0; i < lstCompo4Save.length; i++) {
+                    if (lstCompo4Save.items[i].data.InvtID == e.record.data.InvtID) {
+                        lstCompo4Save.items[i].set("ComponentQty", lstCompo4Save.items[i].data.QtyTemp * e.record.data.Qty);
+                        if (lstLot != undefined) {                           
+                            for (var j = lstLot.length; j > 0; j--) {
+                                if (lstLot.items[j - 1].data.INTranLineRef == lstCompo4Save.items[i].data.LineRef && lstLot.items[j - 1].data.ComponentID == lstCompo4Save.items[i].data.ComponentID) {
+                                    App.stoLotTrans4Save.remove(lstLot.items[j-1]);
+                                }                                
                             }
-                        }                      
-                    }
+                        }
+                    }  
                 }
-            }
+            }           
         }
     }
+    
+    getQtyAvail(e.record);
+
     HQ.grid.checkInsertKey(App.grdSite, e, keys);
     checkDPBBAdd();
     frmChange();
 };
 var grdSite_ValidateEdit = function (item, e) {
-    
+    if (e.field == "Qty") {
+        var obj = HQ.store.findRecord(App.stoItemSiteKit, ['InvtID', 'SiteID', 'WhseLoc'], [e.record.data.InvtID, App.cboSite.getValue(), App.cboSiteLocation.getValue()]);
+        if (obj != undefined) {
+            if (obj.data.QtyAvail < e.value) {                
+                HQ.message.show(2018082811, [e.record.data.InvtID], '', true);
+                return false;
+            }
+        }
+        else {
+            HQ.message.show(2018082811, [e.record.data.InvtID], '', true);
+            return false;
+        }
+    }
     return checkValidateEdit(App.grdSite, e, keys);
 };
 var grdSite_Reject = function (record) {
@@ -1014,35 +1031,35 @@ var bindBatch = function (record) {
    App.cboHandle.setValue('N');
 };
 var cboBatNbr_Change = function (item, newValue, oldValue) {
-    var record = App.stoBatch.getById(newValue);
-    if (record) {
-        HQ.isNew = false;
-        bindBatch(record);
-    } else {
-        if (HQ.recentRecord != record) {
-            App.cboBatNbr.store.reload();
+    if (item.hasFocus) {
+        var record = App.stoBatch.getById(newValue);
+        if (record) {
+            HQ.isNew = false;
+            bindBatch(record);
+        } else {
+            if (HQ.recentRecord != record) {
+                App.cboBatNbr.store.reload();
+            }
+            else {
+            }
+        }
+        if (App.cboBatNbr.getValue() != null) {
+            App.cboReason.setReadOnly(true);
+            App.txtDescr.setReadOnly(true);
+            App.txtDateEnd.setReadOnly(true);
         }
         else {
+            App.cboReason.setReadOnly(false);
+            App.txtDescr.setReadOnly(false);
+            App.txtDateEnd.setReadOnly(false);
         }
-    }
-    if (App.cboBatNbr.getValue() != null)
-    {
-        App.cboReason.setReadOnly(true);
-        App.txtDescr.setReadOnly(true);
-        App.txtDateEnd.setReadOnly(true);
-    }
-    else
-    {
-        App.cboReason.setReadOnly(false);
-        App.txtDescr.setReadOnly(false);
-        App.txtDateEnd.setReadOnly(false);
-    }
-    HQ.recentRecord = record;
-    App.stoLotTrans4Save.clearData();
-    App.stoComponent4Save.clearData();
-    App.stoKitID.reload();
-    App.stoComponent.reload();
-    App.stoLotTrans.reload();
+        HQ.recentRecord = record;
+        App.stoLotTrans4Save.clearData();
+        App.stoComponent4Save.clearData();
+        App.stoKitID.reload();
+        App.stoComponent.reload();
+        App.stoLotTrans.reload();
+    }    
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -1062,6 +1079,7 @@ function refresh(item) {
 };
 function addnew() {
     HQ.isNew = true;
+    App.cboBatNbr.setValue('');
     var record = Ext.create('App.mdlBatch');
     App.stoLotTrans4Save.loadData([], false);
     App.stoComponent4Save.loadData([], false);
@@ -1830,7 +1848,12 @@ var slmHeader_select = function (slm, selRec, idx, eOpts) {
     _invtID = selRec.data.InvtID;
     _kitID = selRec.data.InvtID;
     App.grdComponent.store.clearData();
-    if (!selRec.data.IsSelected && (selRec.data.InvtID!="" && selRec.data.InvtID!=null)) {
+    App.stoItemSiteKit.load({
+        params: { siteID: App.cboSite.getValue(), invtID: selRec.data.InvtID, whseLoc: App.cboSiteLocation.getValue(), showWhseLoc: HQ.showWhseLoc },
+        callback: checkSelect,
+        row: selRec
+    });
+    if (!selRec.data.IsSelected && (selRec.data.InvtID != "" && selRec.data.InvtID != null)) {
         selRec.set('IsSelected', true);
         App.grdComponent.store.reload();
     } else {
@@ -1843,7 +1866,52 @@ var slmHeader_select = function (slm, selRec, idx, eOpts) {
         App.stoComponent.resumeEvents();
         App.grdComponent.view.refresh();
     }
-}
+    if (!Ext.isEmpty(selRec.data.InvtID)) {
+
+    }
+    else {
+        App.lblKitQtyAvail.setText('');
+    }
+};
+
+var getQtyAvail = function (row) {
+    var qtyOnhand = 0;
+    var site = HQ.store.findInStore(App.stoItemSiteKit, ['InvtID', 'SiteID', 'WhseLoc'], [row.data.InvtID, App.cboSite.getValue(), App.cboSiteLocation.getValue()]);
+
+    var qty = 0;
+    if (!Ext.isEmpty(site)) {
+        qty = site.QtyAvail - row.data.Qty; //calculateInvtTotal(row.data.InvtID, row.data.SiteID, row.data.WhseLoc, "");
+    }
+    else {
+        qty = 0 - row.data.Qty;
+    }
+    qty = qty;//HQ.util.mathRound(row.data.UnitMultDiv == "M" ? qty / row.data.CnvFact : qty * row.data.CnvFact, 2);
+    App.lblKitQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ": " + qty + " " + row.data.UnitDesc);
+};
+
+var checkSelect = function (records, options, success) {   
+    HQ.common.showBusy(false);
+    getQtyAvail(options.row);
+};
+
+//var calculateInvtTotal = function (invtID, siteID, whseLoc, lineRef) {
+//    var qty = 0;
+//    var qtyOld = 0;
+//    var store = App.stoSite;
+//    var allRecords = store.snapshot || store.allData || store.data;
+//    allRecords.each(function (item) {
+//        if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc == whseLoc && (lineRef == "" || (lineRef != "" && lineRef != item.data.LineRef))) {
+//            qty += HQ.util.mathRound(item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact, 2);
+//        }
+//    });
+//    App.stoOldTrans.each(function (item) {
+//        if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc == whseLoc) {
+//            qtyOld += HQ.util.mathRound(item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact, 2);
+//        }
+//    });
+//    return qty - qtyOld;
+//};
+
 var slmDetData_select = function (slm, selRec, idx, eOpts) {
     _componentID = selRec.data.ComponentID;
 
@@ -1875,6 +1943,7 @@ var slmDetData_select = function (slm, selRec, idx, eOpts) {
         selRec.commit();
     }
 };
+
 var getAllData = function (store) {
     var lstData = [];
     var allData = store.snapshot || store.allData || store.data;
@@ -1911,6 +1980,13 @@ var cboSiteLocation_Focus = function () {
     }
     App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
 }
+
+var cboSiteLocation_Change = function () {
+    App.stoItemSiteKit.load({
+        params: { siteID: App.cboSite.getValue(), invtID: '', whseLoc: App.cboSiteLocation.getValue(), showWhseLoc: HQ.showWhseLoc }
+    });
+}
+
 var cboSiteTPLocation_Focus = function () {
     App.cboSiteTPLocation.store.clearFilter();
     var code = "@@@@@";

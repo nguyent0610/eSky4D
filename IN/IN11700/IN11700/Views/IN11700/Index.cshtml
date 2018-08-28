@@ -231,7 +231,17 @@
     })
 )
 
-
+@(
+ X.Store()
+    .ID("stoItemSiteKit")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetItemSiteKit_Result), "mdlItemSiteKit", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemSiteKit", "IN11700"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
 
 
         @X.GridFilters()<!--Khi cache cho grid-->

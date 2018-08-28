@@ -74,6 +74,11 @@ namespace IN11700.Controllers
             return this.Store(_db.IN11700_pgReceiptLoad(BatNbr, branchID, "%", "%",Current.CpnyID, Current.UserName, Current.LangID).ToList());
         }
 
+        public ActionResult GetItemSiteKit(string invtID, string siteID, string whseLoc, int showWhseLoc)
+        {
+            var objSite = _db.IN11700_pdGetItemSiteKit(showWhseLoc, whseLoc, Current.CpnyID, Current.UserName, Current.LangID);
+            return this.Store(objSite);
+        }
         public ActionResult GetComponent(string KitID, string branchID, string lineRef, string refNbr, string batNbr)
         {
             return this.Store(_db.IN11700_pgComponent(Current.CpnyID, Current.UserName, Current.LangID, KitID, branchID, lineRef, refNbr,batNbr).ToList());
