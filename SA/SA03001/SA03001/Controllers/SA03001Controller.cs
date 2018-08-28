@@ -110,6 +110,7 @@ namespace SA03001.Controllers
                 User objTemp = new User();
                 objTemp = dataHandler.ObjectData<User>().FirstOrDefault();
                 string userName = data["txtUserName"].PassNull();
+                string userNamePopUp = data["userName"].PassNull();
                 string firstName = data["txtFirstName"].PassNull();
                 string passWord = data["txtPassword"].PassNull();
                 string email = data["txtEmail"].PassNull();
@@ -136,39 +137,7 @@ namespace SA03001.Controllers
                 string channel = data["cboChannel"].PassNull();
                 bool multiLogin = data["valueMultiLogin"].PassNull().ToBool();
                 string brandID = data["cboBrandID"].PassNull();
-                if (auto == true)
-                {
-                    bool b = true;
-                    string strID = "";
-                    while (b)
-                    {
-                        strID = (DateTime.Now.ToString("yyyyMMddhhmmssff") + data["FirstName"]).GetHashCode().ToString().ToHex() + "000000";
-                        strID = strID.Substring(1, 6);
-                        userName = strID;
-                        var obj = (from p in _db.Users select p).Where(p => p.UserName.ToUpper().Trim() == userName.ToUpper().Trim()).FirstOrDefault();
-                        if (obj == null) b = false;
-                    }
-                }
-
-
-                var lstdataErro = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
-                if (lstdataErro.Count>0)
-                {
-                    string strUserID = "";
-                    string strBranchID = "";
-                    string strTypeUser = "";
-                    foreach (var item in lstdataErro)
-                    {
-                        strUserID = strUserID + item.UserID + ",";
-                        strBranchID = strBranchID + item.BranchID + ",";
-                        strTypeUser = strTypeUser + item.TypeUser + ",";
-                    }
-                    if (strUserID != "" && strBranchID != "" && strTypeUser != "")
-                    {
-                        string messageerorr = string.Format(Message.GetString("2018032711", null), strUserID, strBranchID, strTypeUser);
-                        throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
-                    }
-                }
+               
                 var objUserTypes = _db.SA03001_pdConfigHideShow(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                 if (objUserTypes != null)
                 {
@@ -187,8 +156,20 @@ namespace SA03001.Controllers
                 }
                 int failedLoginCount = Convert.ToInt32(data["txtFailedLoginCount"].PassNull() == "" ? "0" : data["txtFailedLoginCount"].PassNull());
                 string manager = data["cboManager"].PassNull();
-
-                var objUser = _db.Users.FirstOrDefault(p => p.UserName == userName);
+                if (auto == true && isNewUser)
+                {
+                    bool b = true;
+                    string strID = "";
+                    while (b)
+                    {
+                        strID = (DateTime.Now.ToString("yyyyMMddhhmmssff") + data["FirstName"]).GetHashCode().ToString().ToHex() + "000000";
+                        strID = strID.Substring(1, 6);
+                        userName = strID;
+                        var obj = (from p in _db.Users select p).Where(p => p.UserName.ToUpper().Trim() == userName.ToUpper().Trim()).FirstOrDefault();
+                        if (obj == null) b = false;
+                    }
+                }
+                var objUser = _db.Users.FirstOrDefault(p => p.UserName == userNamePopUp);
                 if (isNewUser == true)
                 {
                     if (objUser != null)
@@ -199,6 +180,24 @@ namespace SA03001.Controllers
                 bool isNew = false;
                 if (objUser == null)
                 {
+                    var lstdataErro = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                    if (lstdataErro.Count > 0)
+                    {
+                        string strUserID = "";
+                        string strBranchID = "";
+                        string strTypeUser = "";
+                        foreach (var item in lstdataErro)
+                        {
+                            strUserID = strUserID + item.UserID + ",";
+                            strBranchID = strBranchID + item.BranchID + ",";
+                            strTypeUser = strTypeUser + item.TypeUser + ",";
+                        }
+                        if (strUserID != "" && strBranchID != "" && strTypeUser != "")
+                        {
+                            string messageerorr = string.Format(Message.GetString("2018032711", null), strUserID, strBranchID, strTypeUser);
+                            throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
+                        }
+                    }
                     isNew = true;
                     objUser = new User();
                     objUser.ResetET();

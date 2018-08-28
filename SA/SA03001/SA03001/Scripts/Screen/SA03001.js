@@ -92,6 +92,7 @@ var menuClick = function (command) {
                     App.cboBrandID.show();
                     App.cboBrandID.allowBlank = false;
                 }
+                App.txtUserName.allowBlank = false;
                 App.winLocation.setTitle("New")
                 App.winLocation.show();
                 App.txtUserName.setReadOnly(false);
@@ -125,7 +126,7 @@ var menuClick = function (command) {
                 App.chkAuto.setValue(0);
                 App.cboBrandID.setValue('');
                 HQ.isNew = true;
-
+                _userName = '';
             }
             break;
         //case "delete":
@@ -244,7 +245,17 @@ var stoBranch_Load = function (sto) {
 
 var stoForm_load = function (sto) {
     var record = sto.getAt(0);
+    _userName = record.data.UserName;
     App.txtPassWord.setValue(record.data.Password);
+    App.chkAuto.setValue(record.data.AutoID);
+    App.cboChannel.store.clearFilter();
+    App.cboBrandID.store.clearFilter();
+    App.cboChannel.setValue(record.data.Channel);
+    App.cboBrandID.setValue(record.data.BrandID);
+    HQ.combo.expand(App.cboBrandID, ',');
+    HQ.combo.expand(App.cboChannel, ',');
+    App.cboChannel.forceSelection = true;
+    App.cboBrandID.forceSelection = true;
 };
 
 //trước khi load trang busy la dang load data
@@ -345,8 +356,8 @@ var btnEdit_Click = function (record) {
     
     App.winLocation.show();
     App.stoForm.reload();
-    HQ.combo.expand(App.cboBrandID, ',');
-    HQ.combo.expand(App.cboChannel, ',')
+    App.cboBrandID.forceSelection = false;
+    App.cboChannel.forceSelection = false;
 };
 var btnLocationCancel_Click = function () {
     App.winLocation.hide();
@@ -528,6 +539,7 @@ var save = function () {
             valueBloked: App.ckbBloked.getValue(),
             lstCpnyID : App.txtCpnyID.getValue().join(','),
             isNewUser: HQ.isNew,
+            userName: _userName,
             //valueStartDate: App.dtpStartDate.getValue().toDateString(),
             //valueEndDate: App.dtpEndDate.getValue().toDateString(),
             valueTstamp: _tstamp,

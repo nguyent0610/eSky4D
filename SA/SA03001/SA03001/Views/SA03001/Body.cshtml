@@ -297,8 +297,8 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(l => {
                             l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            l.Focus.Handler="App.cboBrandID.forceSelection=false;";
-                            l.Blur.Handler = "App.cboBrandID.forceSelection=true;";
+                            l.Focus.Handler = "App.cboBrandID.forceSelection=true;";
+                            //l.Blur.Handler = "App.cboBrandID.forceSelection=true;";
                         })
                     )
                        , X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
@@ -362,7 +362,7 @@
                                 .HQProcedure("SA03001_pcChannel")
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                                 .HQHeightWidth(400, 300)
-                                        .HQDBSys(false).HQAutoLoad(true).MultiSelect(false)//.ForceSelection(true)
+                                .HQDBSys(false).HQAutoLoad(true).MultiSelect(false)//.ForceSelection(true)
                                 .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
@@ -373,8 +373,8 @@
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(l => {
                                     l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    l.Focus.Handler = "App.cboChannel.forceSelection=false;";
-                                    l.Blur.Handler = "App.cboChannel.forceSelection=true;";
+                                    l.Focus.Handler = "App.cboChannel.forceSelection=true;";
+                                    //l.Blur.Handler = "App.cboChannel.forceSelection=true;";
                                 
                                 })
                                 , HQ.Checkbox().ID("ckbCheckFirstLogin").Name("ckbCheckFirstLogin").HQLangCode("CheckFirstLogin").DataIndex("CheckFirstLogin").LabelWidth(180).MarginSpec("0 0 0 185")
