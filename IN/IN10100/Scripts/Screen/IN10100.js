@@ -547,6 +547,7 @@ var btnImport_Click = function (c, e) {
 
                     App.stoLotTrans.clearFilter();
                     App.stoLotTrans.suspendEvents();
+                    var date = new Date(1900, 0, 1);
                     this.result.data.lstLot.forEach(function (item) {
                         var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
                         var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
@@ -555,8 +556,14 @@ var btnImport_Click = function (c, e) {
                             var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
                             newLot.set('LotSerNbr', item.LotSerNbr);
                             newLot.set('WhseLoc', item.WhseLoc);
-                            newLot.set('INTranLineRef',objTrans.data.LineRef);
-                            newLot.set('ExpDate',new Date(parseInt(item.ExpDate.substr(6))));
+                            newLot.set('INTranLineRef', objTrans.data.LineRef);
+                            if (date > new Date(parseInt(item.ExpDate.substr(6)))) {
+                                newLot.set('ExpDate', date);
+                            }
+                            else {
+                                newLot.set('ExpDate', new Date(parseInt(item.ExpDate.substr(6))));
+                            }
+                            
                             newLot.set('InvtID',item.InvtID);
                             newLot.set('InvtMult',item.InvtMult);
                             newLot.set('MfgrLotSerNbr',item.MfgrLotSerNbr);
@@ -564,8 +571,14 @@ var btnImport_Click = function (c, e) {
                             newLot.set('QtyOnHand', item.QtyOnHand);
                             newLot.set('SiteID',item.SiteID);
                             newLot.set('SlsperID',item.SlsperID);
-                            newLot.set('TranDate',App.DateEnt.getValue());
-                            newLot.set('WarrantyDate',new Date(parseInt(item.WarrantyDate.substr(6))));
+                            newLot.set('TranDate', App.DateEnt.getValue());
+                            if (date > new Date(parseInt(item.WarrantyDate.substr(6)))) {
+                                newLot.set('WarrantyDate', date);
+                            }
+                            else {
+                                newLot.set('WarrantyDate', new Date(parseInt(item.WarrantyDate.substr(6))));
+                            }
+                            
                             newLot.set('TranType','RC');
                             newLot.set('UnitCost',item.UnitCost);
                             newLot.set('UnitDesc',item.UnitDesc);
@@ -909,9 +922,13 @@ var grdTrans_Edit = function (item, e) {
         }
         if (e.field === 'SiteID') {
             e.record.set('WhseLoc', '');
-            
+            e.record.set('Qty', 0);
+            deleteLotExit(e.record);
         }
-        
+        if (e.field === 'WhseLoc') {
+            e.record.set('Qty', 0);
+            deleteLotExit(e.record);
+        }
         
         var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
@@ -982,6 +999,18 @@ var grdTrans_Edit = function (item, e) {
         }
     }
 };
+
+var deleteLotExit = function (record) {
+    var lstDataLot = App.stoLotTrans.snapshot || App.stoLotTrans.allData || App.stoLotTrans.data;
+    if (lstDataLot != undefined) {
+        for (var i = lstDataLot.length; i > 0; i--) {
+            if (lstDataLot.items[i - 1].data.INTranLineRef == record.data.LineRef && lstDataLot.items[i - 1].data.InvtID == record.data.InvtID) {
+                App.stoLotTrans.remove(lstDataLot.items[i - 1]);
+            }
+        }
+    }
+};
+
 var grdTrans_ValidateEdit = function (item, e) {
     if (e.field === "SiteID" && e.value === e.record.data.SiteID) {
         return false;
@@ -1319,7 +1348,10 @@ var save = function () {
     }
     var flat = false;
     App.stoLotTrans.clearFilter();
+    var i = 0;
+    var line = "";
     allRecords1.each(function (item) {
+        i++;
         if (!Ext.isEmpty(item.data.InvtID)) {
             if (Ext.isEmpty(item.data.UnitDesc)) {
                 HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
@@ -1338,9 +1370,10 @@ var save = function () {
 
             if (HQ.showWhseLocColumn) {
                 if (!item.data.WhseLoc) {
-                    HQ.message.show(1000, 'WhseLoc');
-                    flat = true;
-                    return false;
+                    //HQ.message.show(1000, 'WhseLoc');
+                    //flat = true;
+                    //return false;
+                    line = line + i + ',';
                 }
             }
             if (item.data.Qty == 0) {
@@ -1402,6 +1435,13 @@ var save = function () {
             }
         }
     });
+
+    if (line != "") {
+        HQ.message.show(2018082812, line);
+        flat = true;
+        return false;
+    }
+
     if (flat) {
         return;
     }

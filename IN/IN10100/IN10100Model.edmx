@@ -202,9 +202,9 @@
           <Property Name="UnitDesc" Type="varchar" MaxLength="10" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
           <Property Name="UnitMultDiv" Type="varchar" MaxLength="1" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" />
           <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_PacTrans">
           <Key>
@@ -305,8 +305,8 @@
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
           <Property Name="RptExpDate" Type="datetime" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_Transfer">
           <Key>
@@ -508,6 +508,11 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="IN10100_piUnit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="IN10100_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -673,6 +678,11 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="IN10100_piUnit" ReturnType="Collection(IN10100Model.IN10100_piUnit_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_ItemLot">
           <Key>
@@ -778,8 +788,8 @@
           <Property Type="String" Name="UnitDesc" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IN_Setup">
@@ -1033,8 +1043,8 @@
           <Property Type="Double" Name="QtyUncosted" Nullable="false" />
           <Property Type="String" Name="PosmID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="RptExpDate" Type="DateTime" Precision="3" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <ComplexType Name="IN10100_pgReceiptLoad_Result">
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
@@ -1369,6 +1379,10 @@
           <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN10100_piUnit_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2110,6 +2124,14 @@
                 <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
                 <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10100_piUnit" FunctionName="eBiz4DWebSysModel.Store.IN10100_piUnit">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10100Model.IN10100_piUnit_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
