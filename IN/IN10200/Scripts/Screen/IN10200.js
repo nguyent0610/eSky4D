@@ -1081,6 +1081,7 @@ var grdLot_BeforeEdit = function (item, e) {
     if (Ext.isEmpty(record.data.InvtID)) {
         record.data.InvtID = App.winLot.record.data.InvtID;
         record.data.SiteID = App.winLot.record.data.SiteID;
+        record.data.WhseLoc = App.winLot.record.data.WhseLoc;
     }
 
     record.commit();
@@ -1473,7 +1474,7 @@ var calcLot = function (record) {
                     invtID: det.InvtID,
                     branchID: App.txtBranchID.getValue(),
                     batNbr: App.cboBatNbr.getValue(),
-                    whseLoc: App.cboWhseLoc.getValue(),
+                    whseLoc: det.WhseLoc,
                     showWhseLoc: HQ.showWhseLoc,
                     CnvFact: det.CnvFact
                 },
@@ -1491,7 +1492,7 @@ var calcLot = function (record) {
                         var curQty = 0;
 
                         App.stoLotTrans.data.each(function (item2) {
-                            if (item2.data.LotSerNbr == item.data.LotSerNbr && item2.data.InvtID == item.data.InvtID && item2.data.SiteID == item.data.SiteID) {
+                            if (item2.data.LotSerNbr == item.data.LotSerNbr && item2.data.InvtID == item.data.InvtID && item2.data.SiteID == item.data.SiteID && item2.data.WhseLoc == item.data.WhseLoc) {
                                 curQty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
                             }
                         });
@@ -1583,7 +1584,7 @@ var showLot = function (record, loadCombo) {
                 invtID: record.data.InvtID,
                 branchID: App.txtBranchID.getValue(),
                 batNbr: App.cboBatNbr.getValue(),
-                whseLoc: App.cboWhseLoc.getValue(),
+                whseLoc: record.data.WhseLoc,
                 showWhseLoc: HQ.showWhseLoc,
                 CnvFact: record.data.CnvFact
             }
@@ -1990,8 +1991,9 @@ var checkExitEditLot = function (row) {
         lot.UnitPrice = lot.UnitCost = App.winLot.record.data.UnitPrice;
         lot.UnitMultDiv = App.winLot.record.data.UnitMultDiv;
         lot.CnvFact = App.winLot.record.data.CnvFact;
-        if (HQ.showWhseLoc==2 ||(HQ.showWhseLoc==1 && !Ext.isEmpty(App.cboWhseLoc.getValue())) ) {
-            var itemLot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', 'LotSerNbr', 'WhseLoc'], [lot.InvtID, lot.SiteID, lot.LotSerNbr, App.cboWhseLoc.getValue()]);
+        lot.WhseLoc = App.winLot.record.data.WhseLoc;
+        if (HQ.showWhseLoc == 2 || (HQ.showWhseLoc == 1 && !Ext.isEmpty(App.winLot.record.data.WhseLoc))) {
+            var itemLot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', 'LotSerNbr', 'WhseLoc'], [lot.InvtID, lot.SiteID, lot.LotSerNbr, lot.WhseLoc]);
         }
         else {
             var itemLot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', 'LotSerNbr'], [lot.InvtID, lot.SiteID, lot.LotSerNbr]);
@@ -2070,7 +2072,7 @@ var getQtyAvail = function (row) {
 
 var getLotQtyAvail = function (row) {
     if (HQ.showWhseLoc == 2 || (HQ.showWhseLoc == 1 && !Ext.isEmpty(App.cboWhseLoc.getValue()))) {
-        var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr'], 'WhseLoc'], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr, App.cboWhseLoc.getValue()]);
+        var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr'], 'WhseLoc'], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr, row.data.WhseLoc]);
     }
     else {
         var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr']], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr]);
@@ -2079,7 +2081,7 @@ var getLotQtyAvail = function (row) {
     var qtyAvail = 0;
     var qtyOnhand = 0;
     App.stoLotTrans.snapshot.each(function (item2) {
-        if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID) {
+        if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID && item2.data.WhseLoc == row.data.WhseLoc) {
             qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
         }
     });

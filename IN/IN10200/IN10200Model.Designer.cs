@@ -148,22 +148,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_LotTrans> IN_LotTrans
-        {
-            get
-            {
-                if ((_IN_LotTrans == null))
-                {
-                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
-                }
-                return _IN_LotTrans;
-            }
-        }
-        private ObjectSet<IN_LotTrans> _IN_LotTrans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemLoc> IN_ItemLoc
         {
             get
@@ -176,22 +160,6 @@ namespace IN10200
             }
         }
         private ObjectSet<IN_ItemLoc> _IN_ItemLoc;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_ItemLot> IN_ItemLot
-        {
-            get
-            {
-                if ((_IN_ItemLot == null))
-                {
-                    _IN_ItemLot = base.CreateObjectSet<IN_ItemLot>("IN_ItemLot");
-                }
-                return _IN_ItemLot;
-            }
-        }
-        private ObjectSet<IN_ItemLot> _IN_ItemLot;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -256,6 +224,38 @@ namespace IN10200
             }
         }
         private ObjectSet<Batch> _Batches;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_ItemLot> IN_ItemLot
+        {
+            get
+            {
+                if ((_IN_ItemLot == null))
+                {
+                    _IN_ItemLot = base.CreateObjectSet<IN_ItemLot>("IN_ItemLot");
+                }
+                return _IN_ItemLot;
+            }
+        }
+        private ObjectSet<IN_ItemLot> _IN_ItemLot;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_LotTrans> IN_LotTrans
+        {
+            get
+            {
+                if ((_IN_LotTrans == null))
+                {
+                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
+                }
+                return _IN_LotTrans;
+            }
+        }
+        private ObjectSet<IN_LotTrans> _IN_LotTrans;
 
         #endregion
 
@@ -302,27 +302,11 @@ namespace IN10200
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
-        {
-            base.AddObject("IN_LotTrans", iN_LotTrans);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_ItemLoc EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_ItemLoc(IN_ItemLoc iN_ItemLoc)
         {
             base.AddObject("IN_ItemLoc", iN_ItemLoc);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_ItemLot EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_ItemLot(IN_ItemLot iN_ItemLot)
-        {
-            base.AddObject("IN_ItemLot", iN_ItemLot);
         }
     
         /// <summary>
@@ -355,6 +339,22 @@ namespace IN10200
         public void AddToBatches(Batch batch)
         {
             base.AddObject("Batches", batch);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_ItemLot EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_ItemLot(IN_ItemLot iN_ItemLot)
+        {
+            base.AddObject("IN_ItemLot", iN_ItemLot);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
+        {
+            base.AddObject("IN_LotTrans", iN_LotTrans);
         }
 
         #endregion
@@ -6990,6 +6990,30 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Reason
+        {
+            get
+            {
+                return _Reason;
+            }
+            set
+            {
+                OnReasonChanging(value);
+                ReportPropertyChanging("Reason");
+                _Reason = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Reason");
+                OnReasonChanged();
+            }
+        }
+        private global::System.String _Reason;
+        partial void OnReasonChanging(global::System.String value);
+        partial void OnReasonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String WhseLoc
@@ -7034,30 +7058,6 @@ namespace IN10200
         private global::System.String _ToWhseLoc;
         partial void OnToWhseLocChanging(global::System.String value);
         partial void OnToWhseLocChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Reason
-        {
-            get
-            {
-                return _Reason;
-            }
-            set
-            {
-                OnReasonChanging(value);
-                ReportPropertyChanging("Reason");
-                _Reason = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Reason");
-                OnReasonChanged();
-            }
-        }
-        private global::System.String _Reason;
-        partial void OnReasonChanging(global::System.String value);
-        partial void OnReasonChanged();
 
         #endregion
 
