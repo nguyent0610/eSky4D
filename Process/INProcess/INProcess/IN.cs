@@ -24,6 +24,8 @@ namespace INProcess
         public string User { get; set; }
         public DataAccess Dal { get; set; }
         public List<MessageException> LogList { get; set; }
+        public int QtyDecimalPlaces = 0;
+        public int CostDecimalPlaces = 0;
 
         public IN(string User, string prog,DataAccess dal)
         {
@@ -42,6 +44,7 @@ namespace INProcess
             clsIN_ItemLoc itemLoc;
             clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
             clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+            clsIN_ItemPack objItemPack = new clsIN_ItemPack(Dal);
             setup.GetByKey(branchID, "IN");
             DataTable trans = tran.GetAll(branchID, batNbr, "%", "%");
             double qty = 0;
@@ -76,11 +79,11 @@ namespace INProcess
                     var decimalPlace = GetDecimalPlace(inventory.LotSerTrack);
 
                     if (isTransfer) itemSite.QtyInTransit -= qty;
-                    itemSite.QtyOnHand = Math.Round(itemSite.QtyOnHand + qty, decimalPlace);
-                    itemSite.QtyAvail = Math.Round(itemSite.QtyAvail + qty, decimalPlace);
-                    itemSite.AvgCost = Math.Round(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand : itemSite.AvgCost, decimalPlace);                    
+                    itemSite.QtyOnHand = MathRound(itemSite.QtyOnHand + qty, decimalPlace);
+                    itemSite.QtyAvail = MathRound(itemSite.QtyAvail + qty, decimalPlace);
+                    itemSite.AvgCost = MathRound(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand : itemSite.AvgCost, CostDecimalPlaces);                    
                 }
-                itemSite.TotCost = Math.Round(itemSite.TotCost + inTran.Double("ExtCost"), 0);
+                itemSite.TotCost = MathRound(itemSite.TotCost + inTran.Double("ExtCost"), CostDecimalPlaces);
                 itemSite.LUpd_DateTime = DateTime.Now;
                 itemSite.LUpd_Prog = inTran.String("LUpd_Prog");
                 itemSite.LUpd_User = inTran.String("LUpd_User");
@@ -105,11 +108,11 @@ namespace INProcess
                         var decimalPlace = GetDecimalPlace(inventory.LotSerTrack);
 
                         if (isTransfer) itemLoc.QtyInTransit -= qty;
-                        itemLoc.QtyOnHand = Math.Round(itemLoc.QtyOnHand + qty, decimalPlace);
-                        itemLoc.QtyAvail = Math.Round(itemLoc.QtyAvail + qty, decimalPlace);
-                        itemLoc.AvgCost = Math.Round(itemLoc.QtyOnHand > 0 ? (itemLoc.TotCost + inTran.Double("ExtCost")) / itemLoc.QtyOnHand : itemLoc.AvgCost, decimalPlace);
+                        itemLoc.QtyOnHand = MathRound(itemLoc.QtyOnHand + qty, decimalPlace);
+                        itemLoc.QtyAvail = MathRound(itemLoc.QtyAvail + qty, decimalPlace);
+                        itemLoc.AvgCost = MathRound(itemLoc.QtyOnHand > 0 ? (itemLoc.TotCost + inTran.Double("ExtCost")) / itemLoc.QtyOnHand : itemLoc.AvgCost, CostDecimalPlaces);
                     }
-                    itemLoc.TotCost = Math.Round(itemLoc.TotCost + inTran.Double("ExtCost"), 0);
+                    itemLoc.TotCost = MathRound(itemLoc.TotCost + inTran.Double("ExtCost"), CostDecimalPlaces);
                     itemLoc.LUpd_DateTime = DateTime.Now;
                     itemLoc.LUpd_Prog = inTran.String("LUpd_Prog");
                     itemLoc.LUpd_User = inTran.String("LUpd_User");
@@ -123,15 +126,16 @@ namespace INProcess
                     DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", inTran.String("LineRef"));
                     foreach (DataRow lotRow in dtLot.Rows)
                     {
-                        var decimalPlace = inventory.LotSerTrack == "Q" ? 2 : 0;
-                        qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 10);                       
-                        
-                        if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                        var decimalPlace = GetDecimalPlace(inventory.LotSerTrack);
+/// Check lai cho lam tron nay
+                        qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace);
+
+                        if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                         {
                             objItemLot.Reset();
                             objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                             objItemLot.InvtID = lotRow.String("InvtID");
-                            objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                            objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                             objItemLot.SiteID = lotRow.String("SiteID");
                             objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                             objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -148,13 +152,17 @@ namespace INProcess
                             if (inventory.LotSerTrack == "Q")
                             {
                                 sql.Insert_IN_ItemPack(branchID, batNbr, Prog, User, lotRow.String("RefNbr"), objItemLot.LotSerNbr, lotRow.String("INTranLineRef"));
+                                if (objItemPack.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+                                {
+                                    objItemLot.PackageID = objItemPack.PackageID;
+                                }
                             }
                         }
 
                         objItemLot.ExpDate = lotRow.Date("ExpDate");
                         
-                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, decimalPlace);
-                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, decimalPlace);
+                        objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
+                        objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
                         objItemLot.Cost = itemSite.AvgCost * objItemLot.QtyOnHand;
 
                         objItemLot.LUpd_DateTime = DateTime.Now;
@@ -352,8 +360,8 @@ namespace INProcess
                                     objTran.GetByKey(branchID, batNbr, tran.String("RefNbr"), tran.String("LineRef"));                        
                                     objTran.Qty = qtyUpdate;
                                     objTran.UnitCost = fl.Double("UnitCost");
-                                    objTran.ExtCost = Math.Round(qtyCal * fl.Double("UnitCost"), 0);
-                                    objTran.TranAmt = Math.Round(qtyUpdate * tran.Double("UnitPrice"), 0);
+                                    objTran.ExtCost = MathRound(qtyCal * fl.Double("UnitCost"), CostDecimalPlaces);
+                                    objTran.TranAmt = MathRound(qtyUpdate * tran.Double("UnitPrice"), CostDecimalPlaces);
                                     objTran.CostID= fl.String("CostID");
 
                                     if (count == 0)
@@ -371,8 +379,8 @@ namespace INProcess
                                     }
                                     qtyCost = qtyCost + fl.Double("Qty");
                                     cost.GetByKey(fl.Int("CostIdentity"));
-                                    cost.Qty= Math.Round(cost.Qty - qtyCal);
-                                    cost.TotCost = Math.Round(cost.TotCost - qtyCal * cost.UnitCost, 0);
+                                    cost.Qty= MathRound(cost.Qty - qtyCal, QtyDecimalPlaces);
+                                    cost.TotCost = MathRound(cost.TotCost - qtyCal * cost.UnitCost, CostDecimalPlaces);
                                     if (cost.Qty == 0 && cost.TotCost == 0)
                                         cost.Delete(fl.Int("CostIdentity"));
                                     else
@@ -401,7 +409,7 @@ namespace INProcess
                     {
                         throw new MessageException(MessageType.Message,"606");
                     }
-
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
                     if (objInvt.StkItem == 1)
                     {
                         if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
@@ -409,31 +417,31 @@ namespace INProcess
                         else
                             qty = tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
                     }
-                    if (!objSetup.NegQty && Math.Round(objSite.QtyOnHand + qty, 0) < 0)
+                    if (!objSetup.NegQty && MathRound(objSite.QtyOnHand + qty, decimalPlace) < 0)
                     {
                         throw new MessageException(MessageType.Message, "608","", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
                     if (tran.String("JrnlType") == "IN" || (tran.String("JrnlType") == "OM" && Prog == "OM10300"))
                     {
-                        objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + qty, 0);
-                        objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
-                        objSite.AvgCost = Math.Round(objSite.QtyOnHand != 0
+                        objSite.QtyAllocIN = MathRound(objSite.QtyAllocIN + qty, decimalPlace);
+                        objSite.QtyOnHand = MathRound(objSite.QtyOnHand + qty, decimalPlace);
+                        objSite.AvgCost = MathRound(objSite.QtyOnHand != 0
                                            ? (objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objSite.QtyOnHand
-                                           : objSite.AvgCost, 0);
+                                           : objSite.AvgCost, CostDecimalPlaces);
                     }
                     else if (tran.String("JrnlType") == "OM" || Prog != "OM10300")
                     {
-                        objSite.QtyShipNotInv = Math.Round(objSite.QtyShipNotInv + (tran.String("TranType") == "IN" ? qty : 0), 0);
-                        objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
-                        objSite.QtyAvail = Math.Round(objSite.QtyAvail + (tran.String("TranType") == "CM" ? qty : 0), 0);
+                        objSite.QtyShipNotInv = MathRound(objSite.QtyShipNotInv + (tran.String("TranType") == "IN" ? qty : 0), decimalPlace);
+                        objSite.QtyOnHand = MathRound(objSite.QtyOnHand + qty, decimalPlace);
+                        objSite.QtyAvail = MathRound(objSite.QtyAvail + (tran.String("TranType") == "CM" ? qty : 0), decimalPlace);
                     }
-                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                    if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message, "607","", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
-                    objSite.TotCost = Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objSite.TotCost = MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objSite.LUpd_DateTime = DateTime.Now;
                     objSite.LUpd_Prog = Prog;
                     objSite.LUpd_User = User;
@@ -457,31 +465,31 @@ namespace INProcess
                             else
                                 qty = tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
                         }
-                        if (!objSetup.NegQty && Math.Round(objLoc.QtyOnHand + qty, 0) < 0)
+                        if (!objSetup.NegQty && MathRound(objLoc.QtyOnHand + qty, decimalPlace) < 0)
                         {
                             throw new MessageException(MessageType.Message, "2018051411", "", new[] { objLoc.InvtID, objLoc.SiteID, objLoc.WhseLoc });
                         }
 
                         if (tran.String("JrnlType") == "IN" || (tran.String("JrnlType") == "OM" && Prog == "OM10300"))
                         {
-                            objLoc.QtyAllocIN = Math.Round(objLoc.QtyAllocIN + qty, 0);
-                            objLoc.QtyOnHand = Math.Round(objLoc.QtyOnHand + qty, 0);
-                            objLoc.AvgCost = Math.Round(objLoc.QtyOnHand != 0
+                            objLoc.QtyAllocIN = MathRound(objLoc.QtyAllocIN + qty, decimalPlace);
+                            objLoc.QtyOnHand = MathRound(objLoc.QtyOnHand + qty, decimalPlace);
+                            objLoc.AvgCost = MathRound(objLoc.QtyOnHand != 0
                                                ? (objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objLoc.QtyOnHand
-                                               : objLoc.AvgCost, 0);
+                                               : objLoc.AvgCost, CostDecimalPlaces);
                         }
                         else if (tran.String("JrnlType") == "OM" || Prog != "OM10300")
                         {
-                            objLoc.QtyShipNotInv = Math.Round(objLoc.QtyShipNotInv + (tran.String("TranType") == "IN" ? qty : 0), 0);
-                            objLoc.QtyOnHand = Math.Round(objLoc.QtyOnHand + qty, 0);
-                            objLoc.QtyAvail = Math.Round(objLoc.QtyAvail + (tran.String("TranType") == "CM" ? qty : 0), 0);
+                            objLoc.QtyShipNotInv = MathRound(objLoc.QtyShipNotInv + (tran.String("TranType") == "IN" ? qty : 0), decimalPlace);
+                            objLoc.QtyOnHand = MathRound(objLoc.QtyOnHand + qty, decimalPlace);
+                            objLoc.QtyAvail = MathRound(objLoc.QtyAvail + (tran.String("TranType") == "CM" ? qty : 0), decimalPlace);
                         }
-                        if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                        if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                         {
                             throw new MessageException(MessageType.Message, "2018051411", "", new[] { objLoc.InvtID, objLoc.SiteID, objLoc.WhseLoc });
                         }
 
-                        objLoc.TotCost = Math.Round(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objLoc.TotCost = MathRound(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         objLoc.LUpd_DateTime = DateTime.Now;
                         objLoc.LUpd_Prog = Prog;
                         objLoc.LUpd_User = User;
@@ -496,14 +504,15 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
+                            // check lai cho lam tron nay
+                            qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -528,15 +537,15 @@ namespace INProcess
 
                             if (tran.String("JrnlType") == "IN" || (tran.String("JrnlType") == "OM" && Prog == "OM10300"))
                             {
-                                objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
-                                objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+                                objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + qty, decimalPlace);
+                                objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
                               
                             }
                             else if (tran.String("JrnlType") == "OM" || Prog != "OM10300")
                             {
-                                objItemLot.QtyShipNotInv = Math.Round(objItemLot.QtyShipNotInv + (lotRow.String("TranType") == "IN" ? qty : 0), GetDecimalPlace(objInvt.LotSerTrack));
-                                objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + (lotRow.String("TranType") == "CM" ? qty : 0), GetDecimalPlace(objInvt.LotSerTrack));
+                                objItemLot.QtyShipNotInv = MathRound(objItemLot.QtyShipNotInv + (lotRow.String("TranType") == "IN" ? qty : 0), decimalPlace);
+                                objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                                objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + (lotRow.String("TranType") == "CM" ? qty : 0), decimalPlace);
                             }
 
                             objItemLot.Cost = objSite.TotCost * objItemLot.QtyOnHand;
@@ -552,7 +561,7 @@ namespace INProcess
                         sql.GetCostByCostID(ref cost,tran.String("InvtID"),tran.String("SiteID"),tran.String("CostID"));
                         if(cost.CostIdentity>0)
                         {
-                            cost.TotCost= Math.Round(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"));
+                            cost.TotCost= MathRound(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                             if(cost.Qty==0 && cost.TotCost==0) 
                                 sql.DelCostByCostID(tran.String("InvtID"),tran.String("SiteID"),tran.String("CostID"));
                             else
@@ -618,7 +627,7 @@ namespace INProcess
                     foreach (DataRow tran in lstTrans.Rows)
                     {
                         objInvt.GetByKey(tran["InvtID"].ToString());
-
+                        var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
                         if (!objItem.GetByKey(tran["InvtID"].ToString(),tran["SiteID"].ToString()))
                         {
                             throw new MessageException(MessageType.Message, "606");
@@ -630,17 +639,17 @@ namespace INProcess
                             else
                                 qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                            objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
-                            objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                            objItem.AvgCost = Math.Round(  objItem.QtyOnHand != 0 ? (objItem.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"))/objItem.QtyOnHand
-                                        : objItem.AvgCost, 0);
+                            objItem.QtyAllocIN = MathRound(objItem.QtyAllocIN + qty, decimalPlace);
+                            objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                            objItem.AvgCost = MathRound(  objItem.QtyOnHand != 0 ? (objItem.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"))/objItem.QtyOnHand
+                                        : objItem.AvgCost, CostDecimalPlaces);
                         }
-                        if(!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost+ tran.Double("ExtCost") * tran.Short("InvtMult"),0)<0)
+                        if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItem.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                         {
                             throw new MessageException(MessageType.Message, "607","", new[] { objItem.InvtID, objItem.SiteID });
                         }
 
-                        objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objItem.TotCost = MathRound(objItem.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         objItem.LUpd_DateTime = DateTime.Now;
                         objItem.LUpd_Prog = prog;
                         objItem.LUpd_User = User;
@@ -662,7 +671,7 @@ namespace INProcess
                         
                         if (objInvt.StkItem == 1 && transfer.String("TransferType") == "2")
                         {
-                            objToItem.QtyInTransit = Math.Round(objToItem.QtyInTransit + Math.Abs(qty), 0);
+                            objToItem.QtyInTransit = MathRound(objToItem.QtyInTransit + Math.Abs(qty), decimalPlace);
                             objToItem.Update();
                         }
 
@@ -682,17 +691,17 @@ namespace INProcess
                                 else
                                     qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                                objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
-                                objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
-                                objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand
+                                objItemLoc.QtyAllocIN = MathRound(objItemLoc.QtyAllocIN + qty, decimalPlace);
+                                objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + qty, decimalPlace);
+                                objItemLoc.AvgCost = MathRound(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand
                                             : objItemLoc.AvgCost, 0);
                             }
-                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                            if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                             {
                                 throw new MessageException(MessageType.Message, "607", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID });
                             }
 
-                            objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                            objItemLoc.TotCost = MathRound(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                             objItemLoc.LUpd_DateTime = DateTime.Now;
                             objItemLoc.LUpd_Prog = prog;
                             objItemLoc.LUpd_User = User;
@@ -718,7 +727,7 @@ namespace INProcess
                             }
                             if (objInvt.StkItem == 1 && transfer.String("TransferType") == "2")
                             {
-                                objToItemLoc.QtyInTransit = Math.Round(objToItemLoc.QtyInTransit + Math.Abs(qty), 0);
+                                objToItemLoc.QtyInTransit = MathRound(objToItemLoc.QtyInTransit + Math.Abs(qty), decimalPlace);
                                 objToItemLoc.Update();
                             }
                         }
@@ -747,7 +756,7 @@ namespace INProcess
                             newTran.BatNbr = tran.String("BatNbr");
                             newTran.LineRef = lineRef;
                             newTran.CnvFact = tran.Double("CnvFact");
-                            newTran.ExtCost = Math.Round(tran.Double("ExtCost"), 0);
+                            newTran.ExtCost = MathRound(tran.Double("ExtCost"), CostDecimalPlaces);
                             newTran.InvtID = tran.String("InvtID");
                             newTran.InvtMult = 1;
                             newTran.JrnlType = tran.String("JrnlType");
@@ -762,24 +771,24 @@ namespace INProcess
                             newTran.ShipperLineRef = tran.String("ShipperLineRef");
                             newTran.ToSiteID = string.Empty;
                             newTran.ToWhseLoc = string.Empty;
-                            newTran.TranAmt = Math.Round(tran.Double("TranAmt"), 0);
+                            newTran.TranAmt = MathRound(tran.Double("TranAmt"), CostDecimalPlaces);
                             newTran.TranFee = tran.Double("TranFee");
                             newTran.TranDate = tran.Date("TranDate");
                             newTran.TranDesc = tran["TranDesc"].ToString();
                             newTran.TranType = tran["TranType"].ToString();
-                            newTran.UnitCost = Math.Round(tran.Double("UnitCost"), 0);
+                            newTran.UnitCost = MathRound(tran.Double("UnitCost"), CostDecimalPlaces);
                             newTran.UnitDesc = tran.String("UnitDesc");
-                            newTran.UnitPrice = Math.Round(tran.Double("UnitPrice"), 0);
+                            newTran.UnitPrice = MathRound(tran.Double("UnitPrice"), CostDecimalPlaces);
                             newTran.UnitMultDiv = tran.String("UnitMultDiv");
                             newTran.Crtd_DateTime = newTran.LUpd_DateTime = DateTime.Now;
                             newTran.Crtd_Prog = newTran.LUpd_Prog = prog;
                             newTran.Crtd_User = newTran.LUpd_User = User;
                             newTran.Add();
 
-                            objToItem.QtyOnHand = Math.Round(objToItem.QtyOnHand + Math.Abs(qty), 0);
-                            objToItem.QtyAvail = Math.Round(objToItem.QtyAvail + Math.Abs(qty), 0);
-                            objToItem.TotCost = Math.Round(objToItem.TotCost + tran.Double("ExtCost"), 0);
-                            objToItem.AvgCost = Math.Round(objToItem.QtyOnHand != 0 ? objToItem.TotCost / objToItem.QtyOnHand : objToItem.AvgCost, 0);
+                            objToItem.QtyOnHand = MathRound(objToItem.QtyOnHand + Math.Abs(qty), decimalPlace);
+                            objToItem.QtyAvail = MathRound(objToItem.QtyAvail + Math.Abs(qty), decimalPlace);
+                            objToItem.TotCost = MathRound(objToItem.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                            objToItem.AvgCost = MathRound(objToItem.QtyOnHand != 0 ? objToItem.TotCost / objToItem.QtyOnHand : objToItem.AvgCost, CostDecimalPlaces);
                             objToItem.LUpd_DateTime = DateTime.Now;
                             objToItem.LUpd_Prog = prog;
                             objToItem.LUpd_User = User;
@@ -787,10 +796,10 @@ namespace INProcess
 
                             if (newTran.WhseLoc.PassNull()!="")
                             {
-                                objToItemLoc.QtyOnHand = Math.Round(objToItemLoc.QtyOnHand + Math.Abs(qty), 0);
-                                objToItemLoc.QtyAvail = Math.Round(objToItemLoc.QtyAvail + Math.Abs(qty), 0);
-                                objToItemLoc.TotCost = Math.Round(objToItemLoc.TotCost + tran.Double("ExtCost"), 0);
-                                objToItemLoc.AvgCost = Math.Round(objToItemLoc.QtyOnHand != 0 ? objToItemLoc.TotCost / objToItemLoc.QtyOnHand : objToItemLoc.AvgCost, 0);
+                                objToItemLoc.QtyOnHand = MathRound(objToItemLoc.QtyOnHand + Math.Abs(qty), decimalPlace);
+                                objToItemLoc.QtyAvail = MathRound(objToItemLoc.QtyAvail + Math.Abs(qty), decimalPlace);
+                                objToItemLoc.TotCost = MathRound(objToItemLoc.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                                objToItemLoc.AvgCost = MathRound(objToItemLoc.QtyOnHand != 0 ? objToItemLoc.TotCost / objToItemLoc.QtyOnHand : objToItemLoc.AvgCost, CostDecimalPlaces);
                                 objToItemLoc.LUpd_DateTime = DateTime.Now;
                                 objToItemLoc.LUpd_Prog = prog;
                                 objToItemLoc.LUpd_User = User;
@@ -803,7 +812,7 @@ namespace INProcess
                             DataTable dtLot = objLot.GetAll(branchID, batNbr, transfer.String("RefNbr"),"%", tran.String("LineRef"));
                             foreach (DataRow lotRow in dtLot.Rows)
                             {
-                                if (objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                                if (objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                                 {
                                     double lotQty = 0;
                                     if (lotRow.String("UnitMultDiv") == "M" || lotRow.String("UnitMultDiv").PassNull() == string.Empty)
@@ -811,8 +820,8 @@ namespace INProcess
                                     else
                                         lotQty = (lotRow.Double("Qty") * lotRow.Short("InvtMult")) / lotRow.Double("CnvFact");
 
-                                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + lotQty, 0);
-                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + lotQty, 0);
+                                    objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + lotQty, decimalPlace);
+                                    objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + lotQty, decimalPlace);
 
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
@@ -824,12 +833,12 @@ namespace INProcess
                                     throw new MessageException(MessageType.Message, "606");
                                 }
 
-                                if (!objItemLot.GetByKey(lotRow.String("ToSiteID"), lotRow.String("InvtID"), lotRow.String("ToWhseLoc"), lotRow.String("LotSerNbr")))
+                                if (!objItemLot.GetByKey(lotRow.String("ToSiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("ToWhseLoc").PassNull()))
                                 {
                                     objItemLot.Reset();
                                     objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                     objItemLot.InvtID = lotRow.String("InvtID");
-                                    objItemLot.WhseLoc = lotRow.String("ToWhseLoc");
+                                    objItemLot.WhseLoc = lotRow.String("ToWhseLoc").PassNull();
                                     objItemLot.SiteID = lotRow.String("ToSiteID");
                                     objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                     objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -866,12 +875,12 @@ namespace INProcess
                                     newLot.InvtMult = 1;
                                     newLot.Qty = lotRow.Double("Qty");
                                     newLot.SiteID = lotRow.String("ToSiteID");
-                                    newLot.WhseLoc = lotRow.String("ToWhseLoc");
+                                    newLot.WhseLoc = lotRow.String("ToWhseLoc").PassNull();
                                     newLot.TranDate = tran.Date("TranDate");                                 
                                     newLot.TranType = tran["TranType"].ToString();
-                                    newLot.UnitCost = Math.Round(lotRow.Double("UnitCost"), 0);
+                                    newLot.UnitCost = MathRound(lotRow.Double("UnitCost"), CostDecimalPlaces);
                                     newLot.UnitDesc = lotRow.String("UnitDesc");
-                                    newLot.UnitPrice = Math.Round(lotRow.Double("UnitPrice"), 0);
+                                    newLot.UnitPrice = MathRound(lotRow.Double("UnitPrice"), CostDecimalPlaces);
                                     newLot.UnitMultDiv = lotRow.String("UnitMultDiv");
                                     newLot.ExpDate = lotRow.Date("ExpDate");
                                     newLot.WarrantyDate = lotRow.Date("WarrantyDate");
@@ -881,8 +890,8 @@ namespace INProcess
                                     newLot.Crtd_User = newLot.LUpd_User = User;
                                     newLot.Add();
 
-                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + Math.Abs(newLot.Qty), 0);
-                                    objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + Math.Abs(newLot.Qty), 0);
+                                    objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + Math.Abs(newLot.Qty), decimalPlace);
+                                    objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + Math.Abs(newLot.Qty), decimalPlace);
 
                                     objItemLot.Cost = objToItem.AvgCost * objItemLot.QtyOnHand;
                                   
@@ -931,6 +940,7 @@ namespace INProcess
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
                     //// IN_ItemLoc
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
                     if (tran.String("WhseLoc").PassNull() != "")
                     {
                         if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc")))
@@ -944,20 +954,20 @@ namespace INProcess
                             else
                                 qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                            //objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
-                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
-                            if (qty < 0) objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                            //objItemLoc.QtyAllocIN = MathRound(objItemLoc.QtyAllocIN + qty, 0);
+                            objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + qty, decimalPlace);
+                            if (qty < 0) objItemLoc.QtyAllocIN = MathRound(objItemLoc.QtyAllocIN + qty, decimalPlace);
                             if (qty > 0)
                             {
-                                objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                                objItemLoc.QtyAvail = MathRound(objItemLoc.QtyAvail + qty, decimalPlace);
                             }
                         }
-                        if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0) < 0)
+                        if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLoc.TotCost + tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                         {
                             throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID, objItemLoc.WhseLoc });
                         }
-                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0);
-                        objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                        objItemLoc.TotCost = MathRound(objItemLoc.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                        objItemLoc.AvgCost = MathRound(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, CostDecimalPlaces); // tinh lai AvgCost 20160624
                         objItemLoc.LUpd_DateTime = DateTime.Now;
                         objItemLoc.LUpd_Prog = prog;
                         objItemLoc.LUpd_User = User;
@@ -979,20 +989,20 @@ namespace INProcess
                         else
                             qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                        //objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        if (qty < 0) objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        //objItem.QtyAllocIN = MathRound(objItem.QtyAllocIN + qty, 0);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        if (qty < 0) objItem.QtyAllocIN = MathRound(objItem.QtyAllocIN + qty, decimalPlace);
                         if (qty > 0)
                         {
-                            objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);                         
+                            objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);                         
                         }
                     }
-                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0) < 0)
+                    if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItem.TotCost + tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message, "607","", new[] { objItem.InvtID, objItem.SiteID });
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0);
-                    objItem.AvgCost = Math.Round(objItem.QtyOnHand == 0 ? objItem.AvgCost : objItem.TotCost / objItem.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                    objItem.TotCost = MathRound(objItem.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                    objItem.AvgCost = MathRound(objItem.QtyOnHand == 0 ? objItem.AvgCost : objItem.TotCost / objItem.QtyOnHand, CostDecimalPlaces); // tinh lai AvgCost 20160624
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = prog;
                     objItem.LUpd_User = User;
@@ -1006,13 +1016,14 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            /// cần check lại chỗ làm tròn này
+                            qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
@@ -1029,15 +1040,15 @@ namespace INProcess
                             if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
                             {
                                 throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr,objItemLot.WhseLoc });
-                            }                         
-                            
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                            if (qty<0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
-                            if (qty > 0)
-                            {                           
-                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
                             }
-                            objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
+
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            if (qty < 0) objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + qty, decimalPlace);
+                            if (qty > 0)
+                            {
+                                objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
+                            }
+                            objItemLot.Cost = MathRound(objItem.TotCost * objItemLot.QtyOnHand,CostDecimalPlaces);
                             objItemLot.LUpd_DateTime = DateTime.Now;
                             objItemLot.LUpd_Prog = Prog;
                             objItemLot.LUpd_User = User;
@@ -1117,7 +1128,7 @@ namespace INProcess
                     clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
                     objInvt.GetByKey(tagDetail.String("InvtID").ToString());
                     objCnv.GetByKey("3", "*", tagDetail.String("InvtID"), "THUNG", objInvt.StkUnit);
-                    
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
                     clsIN_Trans newTran = new clsIN_Trans(Dal)
                     {
                         BatNbr = batNbr,
@@ -1151,8 +1162,8 @@ namespace INProcess
                     {
                         if (objItemLoc.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID"), tagDetail.String("WhseLoc")))
                         {
-                            objItemLoc.QtyOnHand = objItemLoc.QtyOnHand + tagDetail.Double("OffsetEAQty");
-                            objItemLoc.QtyAvail = objItemLoc.QtyAvail + tagDetail.Double("OffsetEAQty");
+                            objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + tagDetail.Double("OffsetEAQty"),decimalPlace);
+                            objItemLoc.QtyAvail = MathRound(objItemLoc.QtyAvail + tagDetail.Double("OffsetEAQty"),decimalPlace);
                             //objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
                             //objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
                             objItemLoc.LUpd_DateTime = System.DateTime.Now;
@@ -1164,8 +1175,8 @@ namespace INProcess
 
                     if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
                     {
-                        objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
-                        objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + tagDetail.Double("OffsetEAQty"),decimalPlace);
+                        objItem.QtyAvail = MathRound(objItem.QtyAvail + tagDetail.Double("OffsetEAQty"),decimalPlace);
                         //objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
                         //objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
                         objItem.LUpd_DateTime = System.DateTime.Now;
@@ -1190,15 +1201,15 @@ namespace INProcess
                     {
                         if (itemTagLot.String("InvtID") == tagDetail.String("InvtID"))
                         {
-                            if (objItemLot.GetByKey(itemTagLot.String("SiteID"), itemTagLot.String("InvtID"), itemTagLot.String("WhseLoc"), itemTagLot.String("LotSerNbr")))
+                            if (objItemLot.GetByKey(itemTagLot.String("SiteID"), itemTagLot.String("InvtID"), itemTagLot.String("LotSerNbr"), itemTagLot.String("WhseLoc").PassNull()))
                             {
                                 if (itemTagLot.Double("OffsetEAQty") > 0)
                                 {
-                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + itemTagLot.Double("OffsetEAQty"), 0);
-                                    if (itemTagLot.Double("OffsetEAQty") < 0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + itemTagLot.Double("OffsetEAQty"), 0);
+                                    objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + itemTagLot.Double("OffsetEAQty"), decimalPlace);
+                                    if (itemTagLot.Double("OffsetEAQty") < 0) objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + itemTagLot.Double("OffsetEAQty"), decimalPlace);
                                     if (itemTagLot.Double("OffsetEAQty") > 0)
                                     {
-                                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + itemTagLot.Double("OffsetEAQty"), 0);
+                                        objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + itemTagLot.Double("OffsetEAQty"), decimalPlace);
                                     }
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
@@ -1248,7 +1259,7 @@ namespace INProcess
                                     if (Math.Abs(qty) > qtyAvail)
                                     {
                                         valTran = qtyAvail;
-                                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - valTran, 0);
+                                        objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand - valTran, decimalPlace);
                                         objItemLot.QtyAvail = 0;
                                         objItemLot.Cost = 0;
                                         objItemLot.Update();
@@ -1257,8 +1268,8 @@ namespace INProcess
                                     else
                                     {
                                         valTran = qty;
-                                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - valTran, 0);
-                                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - valTran, 0);
+                                        objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand - valTran, decimalPlace);
+                                        objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail - valTran, decimalPlace);
                                         objItemLot.Cost = objItem.TotCost * Math.Abs(objItemLot.QtyOnHand);
                                         objItemLot.Update();
                                         qty = 0;
@@ -1411,6 +1422,7 @@ namespace INProcess
                     if (!release && (tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == 1)) continue;
 
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (!objItem.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
                     {
@@ -1424,13 +1436,13 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        objItem.AvgCost = Math.Round(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
-                            objItem.AvgCost, 0);
+                        objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        objItem.AvgCost = MathRound(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
+                            objItem.AvgCost, CostDecimalPlaces);
 
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objItem.TotCost = MathRound(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = Prog;
                     objItem.LUpd_User = User;
@@ -1450,13 +1462,13 @@ namespace INProcess
                             else
                                 qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                            objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
-                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
-                            objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
-                                objItemLoc.AvgCost, 0);
+                            objItemLoc.QtyAvail = MathRound(objItemLoc.QtyAvail + qty, decimalPlace);
+                            objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + qty, decimalPlace);
+                            objItemLoc.AvgCost = MathRound(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
+                                objItemLoc.AvgCost, CostDecimalPlaces);
 
                         }
-                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objItemLoc.TotCost = MathRound(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         objItemLoc.LUpd_DateTime = DateTime.Now;
                         objItemLoc.LUpd_Prog = Prog;
                         objItemLoc.LUpd_User = User;
@@ -1469,14 +1481,15 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
+                            /// cần check lai chỗ làm tròn này
+                            qty = -1 * MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
                                 objItemLot.ExpDate = lotRow.Date("ExpDate"); 
@@ -1492,11 +1505,11 @@ namespace INProcess
                                 objItemLot.Add();
                             }
                             objItemLot.Cost = objItem.TotCost;
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, GetDecimalPlace(objInvt.LotSerTrack));
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
 
 
-                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, GetDecimalPlace(objInvt.LotSerTrack)) < 0)
+                            if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLot.Cost, CostDecimalPlaces) < 0)
                             {
                                 throw new MessageException("607", new[] { objInvt.InvtID, objItemLot.SiteID + " - " + objItemLot.LotSerNbr });
                             }
@@ -1512,8 +1525,8 @@ namespace INProcess
                     sql.GetCostByCostID(ref cost,tran.String("InvtID"),tran.String("SiteID"),tran.String("CostID"));
                     if(cost.CostIdentity>0)
                     {
-                        cost.Qty = Math.Round(cost.Qty + qty, 0);
-                        cost.TotCost = Math.Round(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        cost.Qty = MathRound(cost.Qty + qty, decimalPlace);
+                        cost.TotCost = MathRound(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         cost.Update();
                     }
                     else
@@ -1582,6 +1595,7 @@ namespace INProcess
                     if (!release && tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == -1) continue;
                    
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     #region -IN_ItemSite-
                     if (!objSite.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
@@ -1597,10 +1611,10 @@ namespace INProcess
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
                         if (isTransfer && tran.String("TranType") == "TR") objSite.QtyInTransit -= qty;
-                        
-                        objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                        objSite.QtyAvail = Math.Round(objSite.QtyAvail + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                        objSite.AvgCost = Math.Round(objSite.QtyOnHand != 0 ? (objSite.TotCost - tran.Double("ExtCost")) / objSite.QtyOnHand : objSite.AvgCost, GetDecimalPlace(objInvt.LotSerTrack));
+
+                        objSite.QtyOnHand = MathRound(objSite.QtyOnHand + qty, decimalPlace);
+                        objSite.QtyAvail = MathRound(objSite.QtyAvail + qty, decimalPlace);
+                        objSite.AvgCost = MathRound(objSite.QtyOnHand != 0 ? (objSite.TotCost - tran.Double("ExtCost")) / objSite.QtyOnHand : objSite.AvgCost, CostDecimalPlaces);
                         
                         if (!setup.NegQty && objSite.QtyAvail < 0)
                         {
@@ -1608,13 +1622,13 @@ namespace INProcess
                         }
                     }
 
-                    if (!setup.NegQty && setup.CheckINVal && Math.Round(objSite.TotCost - tran.Double("ExtCost"), 0) < 0)
+                    if (!setup.NegQty && setup.CheckINVal && MathRound(objSite.TotCost - tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message,"607","", new[] { objInvt.InvtID, objSite.SiteID });
                     
                     }
 
-                    objSite.TotCost = Math.Round(objSite.TotCost - tran.Double("ExtCost"), 0);
+                    objSite.TotCost = MathRound(objSite.TotCost - tran.Double("ExtCost"), CostDecimalPlaces);
                     objSite.LUpd_DateTime = DateTime.Now;
                     objSite.LUpd_Prog = tran.String("LUpd_Prog");
                     objSite.LUpd_User = tran.String("LUpd_User");
@@ -1641,9 +1655,9 @@ namespace INProcess
                             }
                             if (isTransfer && tran.String("TranType") == "TR") itemLoc.QtyInTransit -= qty;
 
-                            itemLoc.QtyOnHand = Math.Round(itemLoc.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                            itemLoc.QtyAvail = Math.Round(itemLoc.QtyAvail + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                            itemLoc.AvgCost = Math.Round(itemLoc.QtyOnHand != 0 ? (itemLoc.TotCost - tran.Double("ExtCost")) / itemLoc.QtyOnHand : itemLoc.AvgCost, GetDecimalPlace(objInvt.LotSerTrack));
+                            itemLoc.QtyOnHand = MathRound(itemLoc.QtyOnHand + qty, decimalPlace);
+                            itemLoc.QtyAvail = MathRound(itemLoc.QtyAvail + qty, decimalPlace);
+                            itemLoc.AvgCost = MathRound(itemLoc.QtyOnHand != 0 ? (itemLoc.TotCost - tran.Double("ExtCost")) / itemLoc.QtyOnHand : itemLoc.AvgCost, CostDecimalPlaces);
 
                             if (!setup.NegQty && itemLoc.QtyAvail < 0)
                             {
@@ -1651,13 +1665,13 @@ namespace INProcess
                             }
                         }
 
-                        if (!setup.NegQty && setup.CheckINVal && Math.Round(itemLoc.TotCost - tran.Double("ExtCost"), 0) < 0)
+                        if (!setup.NegQty && setup.CheckINVal && MathRound(itemLoc.TotCost - tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                         {
                             throw new MessageException(MessageType.Message, "607", "", new[] { objInvt.InvtID, itemLoc.SiteID });
 
                         }
 
-                        itemLoc.TotCost = Math.Round(itemLoc.TotCost - tran.Double("ExtCost"), 0);
+                        itemLoc.TotCost = MathRound(itemLoc.TotCost - tran.Double("ExtCost"), CostDecimalPlaces);
                         itemLoc.LUpd_DateTime = DateTime.Now;
                         itemLoc.LUpd_Prog = tran.String("LUpd_Prog");
                         itemLoc.LUpd_User = tran.String("LUpd_User");
@@ -1673,20 +1687,20 @@ namespace INProcess
                         {
                             if (objInvt.LotSerTrack == "Q")
                             {
-                                qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 2);
+                                qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace);
                             }
                             else
                             {
-                                qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0);
+                                qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace);
                             }
 
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.WarrantyDate =lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
                                 objItemLot.ExpDate = lotRow.Date("ExpDate"); 
@@ -1709,8 +1723,8 @@ namespace INProcess
                             {
                                 throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID + "-" + objItemLot.LotSerNbr });
                             }
-                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - qty, objInvt.LotSerTrack == "Q" ? 2: 0);
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - qty, objInvt.LotSerTrack == "Q" ? 2 : 0);
+                            objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail - qty, decimalPlace);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand - qty, decimalPlace);
                            
 
                             if (setup.CheckINVal && objItemLot.Cost < 0)
@@ -1794,6 +1808,7 @@ namespace INProcess
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
                     objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (objInvt.ValMthd == "F" || objInvt.ValMthd == "L")
                     {
@@ -1837,8 +1852,8 @@ namespace INProcess
                                     objTran.GetByKey(branchID, batNbr, tran.String("RefNbr"), tran.String("LineRef"));
                                     objTran.Qty = qtyUpdate;
                                     objTran.UnitCost = fl.Double("UnitCost");
-                                    objTran.ExtCost = Math.Round(qtyCal * fl.Double("UnitCost"), 0);
-                                    objTran.TranAmt = Math.Round(qtyUpdate * tran.Double("UnitPrice"), 0);
+                                    objTran.ExtCost = MathRound(qtyCal * fl.Double("UnitCost"), CostDecimalPlaces);
+                                    objTran.TranAmt = MathRound(qtyUpdate * tran.Double("UnitPrice"), CostDecimalPlaces);
                                     objTran.CostID = fl.String("CostID");
 
                                     if (count == 0)
@@ -1856,8 +1871,8 @@ namespace INProcess
                                     }
                                     qtyCost = qtyCost + fl.Double("Qty");
                                     cost.GetByKey(fl.Int("CostIdentity"));
-                                    cost.Qty = Math.Round(cost.Qty - qtyCal);
-                                    cost.TotCost = Math.Round(cost.TotCost - qtyCal * cost.UnitCost, 0);
+                                    cost.Qty = MathRound(cost.Qty - qtyCal, decimalPlace);
+                                    cost.TotCost = MathRound(cost.TotCost - qtyCal * cost.UnitCost, CostDecimalPlaces);
                                     if (cost.Qty == 0 && cost.TotCost == 0)
                                         cost.Delete(fl.Int("CostIdentity"));
                                     else
@@ -1888,6 +1903,7 @@ namespace INProcess
                     {
                         throw new MessageException(MessageType.Message, "606");
                     }
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (objInvt.StkItem == 1)
                     {
@@ -1896,23 +1912,23 @@ namespace INProcess
                         else
                             qty = tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
                     }
-                    if (!objSetup.NegQty && Math.Round(objSite.QtyOnHand + qty, 0) < 0)
+                    if (!objSetup.NegQty && MathRound(objSite.QtyOnHand + qty, decimalPlace) < 0)
                     {
                         throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID });
                     }
-                    
-                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + qty, 0);
-                    objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
-                    objSite.AvgCost = Math.Round(objSite.QtyOnHand != 0
+
+                    objSite.QtyAllocIN = MathRound(objSite.QtyAllocIN + qty, decimalPlace);
+                    objSite.QtyOnHand = MathRound(objSite.QtyOnHand + qty, decimalPlace);
+                    objSite.AvgCost = MathRound(objSite.QtyOnHand != 0
                                         ? (objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objSite.QtyOnHand
-                                        : objSite.AvgCost, 0);
+                                        : objSite.AvgCost, CostDecimalPlaces);
                     
-                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                    if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message, "607", "", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
-                    objSite.TotCost = Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objSite.TotCost = MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objSite.LUpd_DateTime = DateTime.Now;
                     objSite.LUpd_Prog = Prog;
                     objSite.LUpd_User = User;
@@ -1926,8 +1942,8 @@ namespace INProcess
                         }
                         else
                         {
-                            objBranchSite.QtyOnHand = Math.Round(objBranchSite.QtyOnHand + tranQty, 0);
-                            objBranchSite.QtyAvail = Math.Round(objBranchSite.QtyAvail + tranQty, 0);
+                            objBranchSite.QtyOnHand = MathRound(objBranchSite.QtyOnHand + tranQty, decimalPlace);
+                            objBranchSite.QtyAvail = MathRound(objBranchSite.QtyAvail + tranQty, decimalPlace);
                             objBranchSite.LUpd_DateTime = DateTime.Now;
                             objBranchSite.LUpd_Prog = Prog;
                             objBranchSite.LUpd_User = User;
@@ -1941,14 +1957,14 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -1968,9 +1984,9 @@ namespace INProcess
                             {
                                 throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID + "-" + objItemLot.LotSerNbr });
                             }
-                           
-                            objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);                           
+
+                            objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + qty, decimalPlace);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);                           
 
                             objItemLot.Cost = objSite.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
@@ -1981,14 +1997,14 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                                 {
                                     Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.WhseLoc, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
                                 }
                                 else
                                 {
-                                    objBranchLot.QtyOnHand = Math.Round(objBranchLot.QtyOnHand + transLotQty, 0);
-                                    objBranchLot.QtyAvail = Math.Round(objBranchLot.QtyAvail + transLotQty, 0);
+                                    objBranchLot.QtyOnHand = MathRound(objBranchLot.QtyOnHand + transLotQty, decimalPlace);
+                                    objBranchLot.QtyAvail = MathRound(objBranchLot.QtyAvail + transLotQty, decimalPlace);
                                     objBranchLot.LUpd_DateTime = DateTime.Now;
                                     objBranchLot.LUpd_Prog = Prog;
                                     objBranchLot.LUpd_User = User;
@@ -2005,7 +2021,7 @@ namespace INProcess
                         sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                         if (cost.CostIdentity > 0)
                         {
-                            cost.TotCost = Math.Round(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"));
+                            cost.TotCost = MathRound(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"),CostDecimalPlaces);
                             if (cost.Qty == 0 && cost.TotCost == 0)
                                 sql.DelCostByCostID(tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                             else
@@ -2065,6 +2081,7 @@ namespace INProcess
                     if (!release && (tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == 1)) continue;
 
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (!objItem.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
                     {
@@ -2078,13 +2095,13 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        objItem.AvgCost = Math.Round(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
-                            objItem.AvgCost, 0);
+                        objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        objItem.AvgCost = MathRound(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
+                            objItem.AvgCost, CostDecimalPlaces);
 
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objItem.TotCost = MathRound(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = Prog;
                     objItem.LUpd_User = User;
@@ -2103,8 +2120,8 @@ namespace INProcess
                         }
                         else
                         {
-                            objBranchSite.QtyOnHand = Math.Round(objBranchSite.QtyOnHand - tranQty, 0);
-                            objBranchSite.QtyAvail = Math.Round(objBranchSite.QtyAvail  - tranQty, 0);
+                            objBranchSite.QtyOnHand = MathRound(objBranchSite.QtyOnHand - tranQty, decimalPlace);
+                            objBranchSite.QtyAvail = MathRound(objBranchSite.QtyAvail - tranQty, decimalPlace);
                             objBranchSite.LUpd_DateTime = DateTime.Now;
                             objBranchSite.LUpd_Prog = Prog;
                             objBranchSite.LUpd_User = User;
@@ -2117,13 +2134,13 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            qty = -1 * MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -2140,11 +2157,11 @@ namespace INProcess
                                 objItemLot.Add();
                             }
                             objItemLot.Cost = objItem.TotCost;
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
 
 
-                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, 0) < 0)
+                            if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLot.Cost, CostDecimalPlaces) < 0)
                             {
                                 throw new MessageException("607", new[] { objInvt.InvtID, objItemLot.SiteID + " - " + objItemLot.LotSerNbr });
                             }
@@ -2157,15 +2174,15 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")) || objBranchLot.QtyAvail == 0 || objBranchLot.QtyOnHand == 0)
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()) || objBranchLot.QtyAvail == 0 || objBranchLot.QtyOnHand == 0)
                                 {
                                     throw new MessageException(MessageType.Message, "201508181", "", new[] { "", tran.String("InvtID") + " " + Util.GetLang("Site") + " " + toSiteID, lotRow.String("LotSerNbr"), transLotQty.ToString() }); 
                                     //throw new MessageException(MessageType.Message, "606"); //Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
                                 }
                                 else
                                 {
-                                    objBranchLot.QtyOnHand = Math.Round(objBranchLot.QtyOnHand - transLotQty, 0);
-                                    objBranchLot.QtyAvail = Math.Round(objBranchLot.QtyAvail - transLotQty, 0);
+                                    objBranchLot.QtyOnHand = MathRound(objBranchLot.QtyOnHand - transLotQty, decimalPlace);
+                                    objBranchLot.QtyAvail = MathRound(objBranchLot.QtyAvail - transLotQty, decimalPlace);
                                     objBranchLot.LUpd_DateTime = DateTime.Now;
                                     objBranchLot.LUpd_Prog = Prog;
                                     objBranchLot.LUpd_User = User;
@@ -2179,8 +2196,8 @@ namespace INProcess
                     sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                     if (cost.CostIdentity > 0)
                     {
-                        cost.Qty = Math.Round(cost.Qty + qty, 0);
-                        cost.TotCost = Math.Round(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        cost.Qty = MathRound(cost.Qty + qty, decimalPlace);
+                        cost.TotCost = MathRound(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         cost.Update();
                     }
                     else
@@ -2382,6 +2399,7 @@ namespace INProcess
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
                     objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (objInvt.ValMthd == "F" || objInvt.ValMthd == "L")
                     {
@@ -2425,8 +2443,8 @@ namespace INProcess
                                     objTran.GetByKey(branchID, batNbr, tran.String("RefNbr"), tran.String("LineRef"));
                                     objTran.Qty = qtyUpdate;
                                     objTran.UnitCost = fl.Double("UnitCost");
-                                    objTran.ExtCost = Math.Round(qtyCal * fl.Double("UnitCost"), 0);
-                                    objTran.TranAmt = Math.Round(qtyUpdate * tran.Double("UnitPrice"), 0);
+                                    objTran.ExtCost = MathRound(qtyCal * fl.Double("UnitCost"), CostDecimalPlaces);
+                                    objTran.TranAmt = MathRound(qtyUpdate * tran.Double("UnitPrice"), CostDecimalPlaces);
                                     objTran.CostID = fl.String("CostID");
 
                                     if (count == 0)
@@ -2444,8 +2462,8 @@ namespace INProcess
                                     }
                                     qtyCost = qtyCost + fl.Double("Qty");
                                     cost.GetByKey(fl.Int("CostIdentity"));
-                                    cost.Qty = Math.Round(cost.Qty - qtyCal);
-                                    cost.TotCost = Math.Round(cost.TotCost - qtyCal * cost.UnitCost, 0);
+                                    cost.Qty = MathRound(cost.Qty - qtyCal, decimalPlace);
+                                    cost.TotCost = MathRound(cost.TotCost - qtyCal * cost.UnitCost, CostDecimalPlaces);
                                     if (cost.Qty == 0 && cost.TotCost == 0)
                                         cost.Delete(fl.Int("CostIdentity"));
                                     else
@@ -2476,6 +2494,7 @@ namespace INProcess
                     {
                         throw new MessageException(MessageType.Message, "606");
                     }
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (objInvt.StkItem == 1)
                     {
@@ -2484,23 +2503,23 @@ namespace INProcess
                         else
                             qty = tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
                     }
-                    if (!objSetup.NegQty && Math.Round(objSite.QtyOnHand + qty, 0) < 0)
+                    if (!objSetup.NegQty && MathRound(objSite.QtyOnHand + qty, decimalPlace) < 0)
                     {
                         throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
-                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + qty, 0);
-                    objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
-                    objSite.AvgCost = Math.Round(objSite.QtyOnHand != 0
+                    objSite.QtyAllocIN = MathRound(objSite.QtyAllocIN + qty, decimalPlace);
+                    objSite.QtyOnHand = MathRound(objSite.QtyOnHand + qty, decimalPlace);
+                    objSite.AvgCost = MathRound(objSite.QtyOnHand != 0
                                         ? (objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objSite.QtyOnHand
-                                        : objSite.AvgCost, 0);
+                                        : objSite.AvgCost, CostDecimalPlaces);
 
-                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                    if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message, "607", "", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
-                    objSite.TotCost = Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objSite.TotCost = MathRound(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objSite.LUpd_DateTime = DateTime.Now;
                     objSite.LUpd_Prog = Prog;
                     objSite.LUpd_User = User;
@@ -2514,8 +2533,8 @@ namespace INProcess
                         }
                         else
                         {
-                            objBranchSite.QtyOnHand = Math.Round(objBranchSite.QtyOnHand + tranQty, 0);
-                            objBranchSite.QtyAvail = Math.Round(objBranchSite.QtyAvail + tranQty, 0);
+                            objBranchSite.QtyOnHand = MathRound(objBranchSite.QtyOnHand + tranQty, decimalPlace);
+                            objBranchSite.QtyAvail = MathRound(objBranchSite.QtyAvail + tranQty, decimalPlace);
                             objBranchSite.LUpd_DateTime = DateTime.Now;
                             objBranchSite.LUpd_Prog = Prog;
                             objBranchSite.LUpd_User = User;
@@ -2529,13 +2548,13 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
@@ -2557,8 +2576,8 @@ namespace INProcess
                                 throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID + "-" + objItemLot.LotSerNbr });
                             }
 
-                            objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+                            objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + qty, decimalPlace);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
 
                             objItemLot.Cost = objSite.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
@@ -2569,14 +2588,14 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                                 {
                                     Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.WhseLoc, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
                                 }
                                 else
                                 {
-                                    objBranchLot.QtyOnHand = Math.Round(objBranchLot.QtyOnHand + transLotQty, 0);
-                                    objBranchLot.QtyAvail = Math.Round(objBranchLot.QtyAvail + transLotQty, 0);
+                                    objBranchLot.QtyOnHand = MathRound(objBranchLot.QtyOnHand + transLotQty, decimalPlace);
+                                    objBranchLot.QtyAvail = MathRound(objBranchLot.QtyAvail + transLotQty, decimalPlace);
                                     objBranchLot.LUpd_DateTime = DateTime.Now;
                                     objBranchLot.LUpd_Prog = Prog;
                                     objBranchLot.LUpd_User = User;
@@ -2593,7 +2612,7 @@ namespace INProcess
                         sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                         if (cost.CostIdentity > 0)
                         {
-                            cost.TotCost = Math.Round(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"));
+                            cost.TotCost = MathRound(cost.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"),CostDecimalPlaces);
                             if (cost.Qty == 0 && cost.TotCost == 0)
                                 sql.DelCostByCostID(tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                             else
@@ -2653,6 +2672,7 @@ namespace INProcess
                     if (!release && (tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == 1)) continue;
 
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (!objItem.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
                     {
@@ -2666,13 +2686,13 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        objItem.AvgCost = Math.Round(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
-                            objItem.AvgCost, 0);
+                        objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        objItem.AvgCost = MathRound(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
+                            objItem.AvgCost, CostDecimalPlaces);
 
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objItem.TotCost = MathRound(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = Prog;
                     objItem.LUpd_User = User;
@@ -2691,8 +2711,8 @@ namespace INProcess
                         }
                         else
                         {
-                            objBranchSite.QtyOnHand = Math.Round(objBranchSite.QtyOnHand - tranQty, 0);
-                            objBranchSite.QtyAvail = Math.Round(objBranchSite.QtyAvail - tranQty, 0);
+                            objBranchSite.QtyOnHand = MathRound(objBranchSite.QtyOnHand - tranQty, decimalPlace);
+                            objBranchSite.QtyAvail = MathRound(objBranchSite.QtyAvail - tranQty, decimalPlace);
                             objBranchSite.LUpd_DateTime = DateTime.Now;
                             objBranchSite.LUpd_Prog = Prog;
                             objBranchSite.LUpd_User = User;
@@ -2705,13 +2725,13 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            qty = -1 * MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                 objItemLot.InvtID = lotRow.String("InvtID");
-                                objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -2728,11 +2748,11 @@ namespace INProcess
                                 objItemLot.Add();
                             }
                             objItemLot.Cost = objItem.TotCost;
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
 
 
-                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, 0) < 0)
+                            if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLot.Cost, CostDecimalPlaces) < 0)
                             {
                                 throw new MessageException("607", new[] { objInvt.InvtID, objItemLot.SiteID + " - " + objItemLot.LotSerNbr });
                             }
@@ -2745,15 +2765,15 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")) || objBranchLot.QtyAvail == 0 || objBranchLot.QtyOnHand == 0)
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()) || objBranchLot.QtyAvail == 0 || objBranchLot.QtyOnHand == 0)
                                 {
                                     throw new MessageException(MessageType.Message, "201508181", "", new[] { "", tran.String("InvtID") + " " + Util.GetLang("Site") + " " + toSiteID, lotRow.String("LotSerNbr"), transLotQty.ToString() });
                                     //throw new MessageException(MessageType.Message, "606"); //Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
                                 }
                                 else
                                 {
-                                    objBranchLot.QtyOnHand = Math.Round(objBranchLot.QtyOnHand - transLotQty, 0);
-                                    objBranchLot.QtyAvail = Math.Round(objBranchLot.QtyAvail - transLotQty, 0);
+                                    objBranchLot.QtyOnHand = MathRound(objBranchLot.QtyOnHand - transLotQty, decimalPlace);
+                                    objBranchLot.QtyAvail = MathRound(objBranchLot.QtyAvail - transLotQty, decimalPlace);
                                     objBranchLot.LUpd_DateTime = DateTime.Now;
                                     objBranchLot.LUpd_Prog = Prog;
                                     objBranchLot.LUpd_User = User;
@@ -2766,8 +2786,8 @@ namespace INProcess
                     sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                     if (cost.CostIdentity > 0)
                     {
-                        cost.Qty = Math.Round(cost.Qty + qty, 0);
-                        cost.TotCost = Math.Round(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        cost.Qty = MathRound(cost.Qty + qty, decimalPlace);
+                        cost.TotCost = MathRound(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         cost.Update();
                     }
                     else
@@ -2833,6 +2853,8 @@ namespace INProcess
             {
 
                 inventory.GetByKey(inTran.String("InvtID"));
+                var decimalPlace = GetDecimalPlace(inventory.LotSerTrack);
+
                 if (!itemSite.GetByKey(inTran.String("InvtID"), inTran.String("SiteID")))
                 {
                     itemSite.Reset();
@@ -2872,11 +2894,11 @@ namespace INProcess
 
                     if (isTransfer) itemSite.QtyInTransit -= qty;
 
-                    itemSite.QtyOnHand = Math.Round(itemSite.QtyOnHand + qty, GetDecimalPlace(inventory.LotSerTrack));
-                    itemSite.QtyAvail = Math.Round(itemSite.QtyAvail + qty, GetDecimalPlace(inventory.LotSerTrack));
-                    itemSite.AvgCost = Math.Round(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand : itemSite.AvgCost, GetDecimalPlace(inventory.LotSerTrack));
+                    itemSite.QtyOnHand = MathRound(itemSite.QtyOnHand + qty, decimalPlace);
+                    itemSite.QtyAvail = MathRound(itemSite.QtyAvail + qty, decimalPlace);
+                    itemSite.AvgCost = MathRound(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand : itemSite.AvgCost, CostDecimalPlaces);
                 }
-                itemSite.TotCost = Math.Round(itemSite.TotCost + inTran.Double("ExtCost"), 0);
+                itemSite.TotCost = MathRound(itemSite.TotCost + inTran.Double("ExtCost"), CostDecimalPlaces);
                 itemSite.LUpd_DateTime = DateTime.Now;
                 itemSite.LUpd_Prog = inTran.String("LUpd_Prog");
                 itemSite.LUpd_User = inTran.String("LUpd_User");
@@ -2886,13 +2908,14 @@ namespace INProcess
                     DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", inTran.String("LineRef"));
                     foreach (DataRow lotRow in dtLot.Rows)
                     {
-                        qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 10);
-                        if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                        // chú ý check lại phần làm tròn này
+                        qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace);
+                        if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                         {
                             objItemLot.Reset();
                             objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                             objItemLot.InvtID = lotRow.String("InvtID");
-                            objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                            objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                             objItemLot.SiteID = lotRow.String("SiteID");
                             objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                             objItemLot.LIFODate = lotRow.Date("ExpDate");
@@ -2908,8 +2931,8 @@ namespace INProcess
                         }
 
                         objItemLot.ExpDate = lotRow.Date("ExpDate");
-                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, GetDecimalPlace(inventory.LotSerTrack));
-                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, GetDecimalPlace(inventory.LotSerTrack));
+                        objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
+                        objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
                         objItemLot.Cost = itemSite.AvgCost * objItemLot.QtyOnHand;
 
                         objItemLot.LUpd_DateTime = DateTime.Now;
@@ -3046,6 +3069,8 @@ namespace INProcess
                 foreach (DataRow tran in lstTrans.Rows)
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
+
                     //// IN_ItemLoc
                     if (tran.String("WhseLoc").PassNull() != "" && tran.String("ToWhseLoc").PassNull() != "")
                     {
@@ -3071,20 +3096,20 @@ namespace INProcess
                             else
                                 qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                            //objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
-                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
-                            if (qty < 0) objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                            //objItemLoc.QtyAllocIN = MathRound(objItemLoc.QtyAllocIN + qty, 0);
+                            objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + qty, decimalPlace);
+                            if (qty < 0) objItemLoc.QtyAllocIN = MathRound(objItemLoc.QtyAllocIN + qty, decimalPlace);
                             if (qty > 0)
                             {
-                                objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                                objItemLoc.QtyAvail = MathRound(objItemLoc.QtyAvail + qty, decimalPlace);
                             }
                         }
-                        if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0) < 0)
+                        if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLoc.TotCost + tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                         {
                             throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID, objItemLoc.WhseLoc });
                         }
-                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0);
-                        objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                        objItemLoc.TotCost = MathRound(objItemLoc.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                        objItemLoc.AvgCost = MathRound(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, CostDecimalPlaces); // tinh lai AvgCost 20160624
                         objItemLoc.LUpd_DateTime = DateTime.Now;
                         objItemLoc.LUpd_Prog = prog;
                         objItemLoc.LUpd_User = User;
@@ -3106,20 +3131,20 @@ namespace INProcess
                         else
                             qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                        //objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        if (qty < 0) objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        //objItem.QtyAllocIN = MathRound(objItem.QtyAllocIN + qty, 0);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        if (qty < 0) objItem.QtyAllocIN = MathRound(objItem.QtyAllocIN + qty, decimalPlace);
                         if (qty > 0)
                         {
-                            objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
+                            objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);
                         }
                     }
-                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0) < 0)
+                    if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItem.TotCost + tran.Double("ExtCost"), CostDecimalPlaces) < 0)
                     {
                         throw new MessageException(MessageType.Message, "607", "", new[] { objItem.InvtID, objItem.SiteID });
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0);
-                    objItem.AvgCost = Math.Round(objItem.QtyOnHand == 0 ? objItem.AvgCost : objItem.TotCost / objItem.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                    objItem.TotCost = MathRound(objItem.TotCost + tran.Double("ExtCost"), CostDecimalPlaces);
+                    objItem.AvgCost = MathRound(objItem.QtyOnHand == 0 ? objItem.AvgCost : objItem.TotCost / objItem.QtyOnHand, CostDecimalPlaces); // tinh lai AvgCost 20160624
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = prog;
                     objItem.LUpd_User = User;
@@ -3133,15 +3158,15 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
+                            qty = MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
                             if (tran.Short("InvtMult") == -1)
                             {
-                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                                 {
                                     objItemLot.Reset();
                                     objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                     objItemLot.InvtID = lotRow.String("InvtID");
-                                    objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                    objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                     objItemLot.SiteID = lotRow.String("SiteID");
                                     objItemLot.ExpDate = lotRow.Date("ExpDate");
                                     objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
@@ -3183,11 +3208,11 @@ namespace INProcess
                                 throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr, objItemLot.WhseLoc });
                             }
 
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                            if (qty < 0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            if (qty < 0) objItemLot.QtyAllocIN = MathRound(objItemLot.QtyAllocIN + qty, decimalPlace);
                             if (qty > 0)
                             {
-                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+                                objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
                             }
                             objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
@@ -3252,6 +3277,7 @@ namespace INProcess
                     //if (!release && (tran.Short("Rlsed") == -1 || tran.Short("InvtMult") == 1)) continue;
 
                     objInvt.GetByKey(tran.String("InvtID"));
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
                     if (!objItem.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
                     {
@@ -3265,13 +3291,13 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
-                        objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-                        objItem.AvgCost = Math.Round(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
-                            objItem.AvgCost, 0);
+                        objItem.QtyAvail = MathRound(objItem.QtyAvail + qty, decimalPlace);
+                        objItem.QtyOnHand = MathRound(objItem.QtyOnHand + qty, decimalPlace);
+                        objItem.AvgCost = MathRound(objItem.QtyOnHand != 0 ? (objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItem.QtyOnHand :
+                            objItem.AvgCost, CostDecimalPlaces);
 
                     }
-                    objItem.TotCost = Math.Round(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                    objItem.TotCost = MathRound(objItem.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = Prog;
                     objItem.LUpd_User = User;
@@ -3303,13 +3329,13 @@ namespace INProcess
                             else
                                 qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                            objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
-                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
-                            objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
-                                objItemLoc.AvgCost, 0);
+                            objItemLoc.QtyAvail = MathRound(objItemLoc.QtyAvail + qty, decimalPlace);
+                            objItemLoc.QtyOnHand = MathRound(objItemLoc.QtyOnHand + qty, decimalPlace);
+                            objItemLoc.AvgCost = MathRound(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
+                                objItemLoc.AvgCost, CostDecimalPlaces);
 
                         }
-                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objItemLoc.TotCost = MathRound(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         objItemLoc.LUpd_DateTime = DateTime.Now;
                         objItemLoc.LUpd_Prog = Prog;
                         objItemLoc.LUpd_User = User;
@@ -3322,16 +3348,16 @@ namespace INProcess
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
-                            qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
+                            qty = -1 * MathRound(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), decimalPlace) * lotRow.Short("InvtMult");
                             if (tran.Short("InvtMult") == -1)
                             {
-                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
+                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr"), lotRow.String("WhseLoc").PassNull()))
                                 {
                                     objItemLot.Reset();
                                     objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                     objItemLot.InvtID = lotRow.String("InvtID");
                                     objItemLot.SiteID = lotRow.String("SiteID");
-                                    objItemLot.WhseLoc = lotRow.String("WhseLoc");
+                                    objItemLot.WhseLoc = lotRow.String("WhseLoc").PassNull();
                                     objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                     objItemLot.LIFODate = lotRow.Date("ExpDate");
                                     objItemLot.ExpDate = lotRow.Date("ExpDate");
@@ -3372,11 +3398,11 @@ namespace INProcess
                                 }
                             }
                             objItemLot.Cost = objItem.TotCost;
-                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, GetDecimalPlace(objInvt.LotSerTrack));
-                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, GetDecimalPlace(objInvt.LotSerTrack));
+                            objItemLot.QtyOnHand = MathRound(objItemLot.QtyOnHand + qty, decimalPlace);
+                            objItemLot.QtyAvail = MathRound(objItemLot.QtyAvail + qty, decimalPlace);
 
 
-                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, GetDecimalPlace(objInvt.LotSerTrack)) < 0)
+                            if (!objSetup.NegQty && objSetup.CheckINVal && MathRound(objItemLot.Cost, CostDecimalPlaces) < 0)
                             {
                                 throw new MessageException("607", new[] { objInvt.InvtID, objItemLot.SiteID + " - " + objItemLot.LotSerNbr });
                             }
@@ -3392,8 +3418,8 @@ namespace INProcess
                     sql.GetCostByCostID(ref cost, tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
                     if (cost.CostIdentity > 0)
                     {
-                        cost.Qty = Math.Round(cost.Qty + qty, 0);
-                        cost.TotCost = Math.Round(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        cost.Qty = MathRound(cost.Qty + qty, decimalPlace);
+                        cost.TotCost = MathRound(cost.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), CostDecimalPlaces);
                         cost.Update();
                     }
                     else
@@ -3432,6 +3458,12 @@ namespace INProcess
         private int GetDecimalPlace(string lotSerTrack)
         {
             return (lotSerTrack != "Q" ? 0 : 2);
+        }
+
+        private double MathRound(double value, int digits)
+        {
+            value = Math.Round(value, digits);
+            return value;
         }
     }
 }
