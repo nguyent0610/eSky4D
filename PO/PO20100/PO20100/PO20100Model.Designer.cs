@@ -1208,6 +1208,30 @@ namespace PO20100
         private Nullable<global::System.Boolean> _hidebtnCopy;
         partial void OnhidebtnCopyChanging(Nullable<global::System.Boolean> value);
         partial void OnhidebtnCopyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> hideChkPublic
+        {
+            get
+            {
+                return _hideChkPublic;
+            }
+            set
+            {
+                OnhideChkPublicChanging(value);
+                ReportPropertyChanging("hideChkPublic");
+                _hideChkPublic = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("hideChkPublic");
+                OnhideChkPublicChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _hideChkPublic;
+        partial void OnhideChkPublicChanging(Nullable<global::System.Boolean> value);
+        partial void OnhideChkPublicChanged();
 
         #endregion
 

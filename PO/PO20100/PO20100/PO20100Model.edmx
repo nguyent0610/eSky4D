@@ -153,6 +153,7 @@
           <Property Type="Int32" Name="DecimalPrecision" Nullable="true" />
           <Property Type="Boolean" Name="NoPriceCalculation" Nullable="true" />
           <Property Type="Boolean" Name="hidebtnCopy" Nullable="true" />
+          <Property Type="Boolean" Name="hideChkPublic" Nullable="true" />
         </ComplexType>
         <EntityType Name="PO_PriceCpny">
           <Key>
@@ -239,6 +240,7 @@
                 <ScalarProperty Name="DecimalPrecision" ColumnName="DecimalPrecision" />
                 <ScalarProperty Name="NoPriceCalculation" ColumnName="NoPriceCalculation" />
                 <ScalarProperty Name="hidebtnCopy" ColumnName="hidebtnCopy" />
+                <ScalarProperty Name="hideChkPublic" ColumnName="hideChkPublic" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

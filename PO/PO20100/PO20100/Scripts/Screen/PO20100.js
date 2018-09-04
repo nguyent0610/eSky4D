@@ -252,6 +252,10 @@ var firstLoad = function () {
     //HQ.isFirstLoad = true;
     // App.frmMain.isValid();
     App.btnCopy.setVisible(!HQ.hidebtnCopy);
+    if (HQ.hideChkPublic) {
+        App.Public.setValue(true);
+        App.Public.setVisible(false);
+    }
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     loadSourceCombo();
 };
@@ -290,7 +294,7 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "PriceID");
         record = sto.getAt(0);
-
+        record.data.Public = HQ.hideChkPublic;
         HQ.isNew = true;//record la new    
         App.cboPriceID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            

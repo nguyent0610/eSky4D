@@ -28,14 +28,17 @@ namespace PO20100.Controllers
             Util.InitRight(_screenNbr);
             bool noPriceCalculation = false;
             bool hidebtnCopy = false;
-            var objConfig = _db.PO20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            bool hideChkPublic = false;
+            var objConfig = _db.PO20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();            
             if (objConfig != null)
             {
                 noPriceCalculation = objConfig.NoPriceCalculation.HasValue && objConfig.NoPriceCalculation.Value;
                 hidebtnCopy = objConfig.hidebtnCopy.HasValue && objConfig.hidebtnCopy.Value;
+                hideChkPublic = objConfig.hideChkPublic.HasValue && objConfig.hideChkPublic.Value;
             }
             ViewBag.hidebtnCopy = hidebtnCopy;
             ViewBag.noPriceCalculation = noPriceCalculation;
+            ViewBag.hideChkPublic = hideChkPublic;
             return View();
         }
 
