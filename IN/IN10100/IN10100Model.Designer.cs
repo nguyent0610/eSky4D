@@ -68,6 +68,22 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<IN_ItemLot> IN_ItemLot
+        {
+            get
+            {
+                if ((_IN_ItemLot == null))
+                {
+                    _IN_ItemLot = base.CreateObjectSet<IN_ItemLot>("IN_ItemLot");
+                }
+                return _IN_ItemLot;
+            }
+        }
+        private ObjectSet<IN_ItemLot> _IN_ItemLot;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<IN_ItemSite> IN_ItemSite
         {
             get
@@ -80,6 +96,22 @@ namespace IN10100
             }
         }
         private ObjectSet<IN_ItemSite> _IN_ItemSite;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_LotTrans> IN_LotTrans
+        {
+            get
+            {
+                if ((_IN_LotTrans == null))
+                {
+                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
+                }
+                return _IN_LotTrans;
+            }
+        }
+        private ObjectSet<IN_LotTrans> _IN_LotTrans;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -148,6 +180,38 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<IN_ItemPack> IN_ItemPack
+        {
+            get
+            {
+                if ((_IN_ItemPack == null))
+                {
+                    _IN_ItemPack = base.CreateObjectSet<IN_ItemPack>("IN_ItemPack");
+                }
+                return _IN_ItemPack;
+            }
+        }
+        private ObjectSet<IN_ItemPack> _IN_ItemPack;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_PacTrans> IN_PacTrans
+        {
+            get
+            {
+                if ((_IN_PacTrans == null))
+                {
+                    _IN_PacTrans = base.CreateObjectSet<IN_PacTrans>("IN_PacTrans");
+                }
+                return _IN_PacTrans;
+            }
+        }
+        private ObjectSet<IN_PacTrans> _IN_PacTrans;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<IN_Transfer> IN_Transfer
         {
             get
@@ -192,74 +256,18 @@ namespace IN10100
             }
         }
         private ObjectSet<Batch> _Batches;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_ItemLot> IN_ItemLot
-        {
-            get
-            {
-                if ((_IN_ItemLot == null))
-                {
-                    _IN_ItemLot = base.CreateObjectSet<IN_ItemLot>("IN_ItemLot");
-                }
-                return _IN_ItemLot;
-            }
-        }
-        private ObjectSet<IN_ItemLot> _IN_ItemLot;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_ItemPack> IN_ItemPack
-        {
-            get
-            {
-                if ((_IN_ItemPack == null))
-                {
-                    _IN_ItemPack = base.CreateObjectSet<IN_ItemPack>("IN_ItemPack");
-                }
-                return _IN_ItemPack;
-            }
-        }
-        private ObjectSet<IN_ItemPack> _IN_ItemPack;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_LotTrans> IN_LotTrans
-        {
-            get
-            {
-                if ((_IN_LotTrans == null))
-                {
-                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
-                }
-                return _IN_LotTrans;
-            }
-        }
-        private ObjectSet<IN_LotTrans> _IN_LotTrans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_PacTrans> IN_PacTrans
-        {
-            get
-            {
-                if ((_IN_PacTrans == null))
-                {
-                    _IN_PacTrans = base.CreateObjectSet<IN_PacTrans>("IN_PacTrans");
-                }
-                return _IN_PacTrans;
-            }
-        }
-        private ObjectSet<IN_PacTrans> _IN_PacTrans;
 
         #endregion
 
         #region AddTo Methods
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_ItemLot EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_ItemLot(IN_ItemLot iN_ItemLot)
+        {
+            base.AddObject("IN_ItemLot", iN_ItemLot);
+        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the IN_ItemSite EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -267,6 +275,14 @@ namespace IN10100
         public void AddToIN_ItemSite(IN_ItemSite iN_ItemSite)
         {
             base.AddObject("IN_ItemSite", iN_ItemSite);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
+        {
+            base.AddObject("IN_LotTrans", iN_LotTrans);
         }
     
         /// <summary>
@@ -302,6 +318,22 @@ namespace IN10100
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the IN_ItemPack EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_ItemPack(IN_ItemPack iN_ItemPack)
+        {
+            base.AddObject("IN_ItemPack", iN_ItemPack);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_PacTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_PacTrans(IN_PacTrans iN_PacTrans)
+        {
+            base.AddObject("IN_PacTrans", iN_PacTrans);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the IN_Transfer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_Transfer(IN_Transfer iN_Transfer)
@@ -323,38 +355,6 @@ namespace IN10100
         public void AddToBatches(Batch batch)
         {
             base.AddObject("Batches", batch);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_ItemLot EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_ItemLot(IN_ItemLot iN_ItemLot)
-        {
-            base.AddObject("IN_ItemLot", iN_ItemLot);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_ItemPack EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_ItemPack(IN_ItemPack iN_ItemPack)
-        {
-            base.AddObject("IN_ItemPack", iN_ItemPack);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
-        {
-            base.AddObject("IN_LotTrans", iN_LotTrans);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_PacTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_PacTrans(IN_PacTrans iN_PacTrans)
-        {
-            base.AddObject("IN_PacTrans", iN_PacTrans);
         }
 
         #endregion
@@ -3091,7 +3091,6 @@ namespace IN10100
         /// </summary>
         /// <param name="siteID">Initial value of the SiteID property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="lotSerNbr">Initial value of the LotSerNbr property.</param>
         /// <param name="cost">Initial value of the Cost property.</param>
         /// <param name="expDate">Initial value of the ExpDate property.</param>
@@ -3113,13 +3112,13 @@ namespace IN10100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="qtyAllocPDASO">Initial value of the QtyAllocPDASO property.</param>
-        public static IN_ItemLot CreateIN_ItemLot(global::System.String siteID, global::System.String invtID, global::System.String whseLoc, global::System.String lotSerNbr, global::System.Double cost, global::System.DateTime expDate, global::System.DateTime lIFODate, global::System.String mfgrLotSerNbr, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocOther, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyOnHand, global::System.Double qtyShipNotInv, global::System.DateTime warrantyDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double qtyAllocPDASO)
+        public static IN_ItemLot CreateIN_ItemLot(global::System.String siteID, global::System.String invtID, global::System.String lotSerNbr, global::System.Double cost, global::System.DateTime expDate, global::System.DateTime lIFODate, global::System.String mfgrLotSerNbr, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocOther, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyOnHand, global::System.Double qtyShipNotInv, global::System.DateTime warrantyDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String whseLoc, global::System.Double qtyAllocPDASO)
         {
             IN_ItemLot iN_ItemLot = new IN_ItemLot();
             iN_ItemLot.SiteID = siteID;
             iN_ItemLot.InvtID = invtID;
-            iN_ItemLot.WhseLoc = whseLoc;
             iN_ItemLot.LotSerNbr = lotSerNbr;
             iN_ItemLot.Cost = cost;
             iN_ItemLot.ExpDate = expDate;
@@ -3141,6 +3140,7 @@ namespace IN10100
             iN_ItemLot.LUpd_Prog = lUpd_Prog;
             iN_ItemLot.LUpd_User = lUpd_User;
             iN_ItemLot.tstamp = tstamp;
+            iN_ItemLot.WhseLoc = whseLoc;
             iN_ItemLot.QtyAllocPDASO = qtyAllocPDASO;
             return iN_ItemLot;
         }
@@ -3202,33 +3202,6 @@ namespace IN10100
         private global::System.String _InvtID;
         partial void OnInvtIDChanging(global::System.String value);
         partial void OnInvtIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String WhseLoc
-        {
-            get
-            {
-                return _WhseLoc;
-            }
-            set
-            {
-                if (_WhseLoc != value)
-                {
-                    OnWhseLocChanging(value);
-                    ReportPropertyChanging("WhseLoc");
-                    _WhseLoc = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("WhseLoc");
-                    OnWhseLocChanged();
-                }
-            }
-        }
-        private global::System.String _WhseLoc;
-        partial void OnWhseLocChanging(global::System.String value);
-        partial void OnWhseLocChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3572,30 +3545,6 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String PackageID
-        {
-            get
-            {
-                return _PackageID;
-            }
-            set
-            {
-                OnPackageIDChanging(value);
-                ReportPropertyChanging("PackageID");
-                _PackageID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("PackageID");
-                OnPackageIDChanged();
-            }
-        }
-        private global::System.String _PackageID;
-        partial void OnPackageIDChanging(global::System.String value);
-        partial void OnPackageIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.DateTime Crtd_DateTime
@@ -3760,6 +3709,57 @@ namespace IN10100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                if (_WhseLoc != value)
+                {
+                    OnWhseLocChanging(value);
+                    ReportPropertyChanging("WhseLoc");
+                    _WhseLoc = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("WhseLoc");
+                    OnWhseLocChanged();
+                }
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PackageID
+        {
+            get
+            {
+                return _PackageID;
+            }
+            set
+            {
+                OnPackageIDChanging(value);
+                ReportPropertyChanging("PackageID");
+                _PackageID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PackageID");
+                OnPackageIDChanged();
+            }
+        }
+        private global::System.String _PackageID;
+        partial void OnPackageIDChanging(global::System.String value);
+        partial void OnPackageIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5640,30 +5640,6 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Reason
-        {
-            get
-            {
-                return _Reason;
-            }
-            set
-            {
-                OnReasonChanging(value);
-                ReportPropertyChanging("Reason");
-                _Reason = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Reason");
-                OnReasonChanged();
-            }
-        }
-        private global::System.String _Reason;
-        partial void OnReasonChanging(global::System.String value);
-        partial void OnReasonChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String WhseLoc
@@ -5708,6 +5684,30 @@ namespace IN10100
         private global::System.String _ToWhseLoc;
         partial void OnToWhseLocChanging(global::System.String value);
         partial void OnToWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Reason
+        {
+            get
+            {
+                return _Reason;
+            }
+            set
+            {
+                OnReasonChanging(value);
+                ReportPropertyChanging("Reason");
+                _Reason = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Reason");
+                OnReasonChanged();
+            }
+        }
+        private global::System.String _Reason;
+        partial void OnReasonChanging(global::System.String value);
+        partial void OnReasonChanged();
 
         #endregion
 
@@ -11119,30 +11119,6 @@ namespace IN10100
         private Nullable<global::System.Boolean> _IsChangeSite;
         partial void OnIsChangeSiteChanging(Nullable<global::System.Boolean> value);
         partial void OnIsChangeSiteChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> ShowPackageID
-        {
-            get
-            {
-                return _ShowPackageID;
-            }
-            set
-            {
-                OnShowPackageIDChanging(value);
-                ReportPropertyChanging("ShowPackageID");
-                _ShowPackageID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ShowPackageID");
-                OnShowPackageIDChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _ShowPackageID;
-        partial void OnShowPackageIDChanging(Nullable<global::System.Boolean> value);
-        partial void OnShowPackageIDChanged();
 
         #endregion
 

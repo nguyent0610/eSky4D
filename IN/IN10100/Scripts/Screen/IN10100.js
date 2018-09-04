@@ -10,6 +10,7 @@ HQ.currentDet;
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
+
 var stoTrans_BeforeLoad = function () {
     //App.grdTrans.view.loadMask.disable();
 };
@@ -509,104 +510,101 @@ var btnImport_Click = function (c, e) {
 
             },
             success: function (msg, data) {
-                if (!Ext.isEmpty(this.result.data.message)) {
-                    var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
-                    HQ.message.show('2013103001', [result], '', true);
-                    return false;
-                }
-                else {
-                    if (this.result.data.lstTrans != undefined) {
-                        App.stoTrans.suspendEvents();
-                        this.result.data.lstTrans.forEach(function (item) {
-                            var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID','SiteID','WhseLoc'], [item.InvtID, item.SiteID,item.WhseLoc]);
-                            if (!objTrans) {
-                                HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
-                                var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
-                                newTrans.set('JrnlType', item.JrnlType);
-                                newTrans.set('WhseLoc', item.WhseLoc);
-                                newTrans.set('ReasonCD', item.ReasonCD);
-                                newTrans.set('TranAmt', item.TranAmt);
-                                newTrans.set('BranchID', HQ.cpnyID);
-                                newTrans.set('CnvFact', item.CnvFact);
-                                newTrans.set('ExtCost', item.TranAmt);
-                                newTrans.set('InvtID', item.InvtID);
-                                newTrans.set('InvtMult', item.InvtMult);
-                                newTrans.set('LineRef', item.LineRef);
-                                newTrans.set('Qty', item.Qty);
-                                newTrans.set('QtyOnHand', item.QtyOnHand);
-                                newTrans.set('SiteID', item.SiteID);
-                                newTrans.set('TranDate', App.DateEnt.getValue());
-                                newTrans.set('TranDesc', item.TranDesc);
-                                newTrans.set('TranType', item.TranType);
-                                newTrans.set('UnitCost', item.UnitCost);
-                                newTrans.set('UnitDesc', item.UnitDesc);
-                                newTrans.set('UnitMultDiv', item.UnitMultDiv);
-                                newTrans.set('UnitPrice', item.UnitPrice);
-                                newTrans.set('LotSerTrack', item.LotSerTrack);
+                if (this.result.data.lstTrans != undefined) {
+                    App.stoTrans.suspendEvents();
+                    this.result.data.lstTrans.forEach(function (item) {
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objTrans) {
+                            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
+                            var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
+                            newTrans.set('JrnlType', item.JrnlType);
+                            newTrans.set('WhseLoc', item.WhseLoc);
+                            newTrans.set('ReasonCD', item.ReasonCD);
+                            newTrans.set('TranAmt', item.TranAmt);
+                            newTrans.set('BranchID', HQ.cpnyID);
+                            newTrans.set('CnvFact', item.CnvFact);
+                            newTrans.set('ExtCost', item.TranAmt);
+                            newTrans.set('InvtID', item.InvtID);
+                            newTrans.set('InvtMult', item.InvtMult);
+                            newTrans.set('LineRef', item.LineRef);
+                            newTrans.set('Qty', item.Qty);
+                            newTrans.set('QtyOnHand', item.QtyOnHand);
+                            newTrans.set('SiteID', item.SiteID);
+                            newTrans.set('TranDate', App.DateEnt.getValue());
+                            newTrans.set('TranDesc', item.TranDesc);
+                            newTrans.set('TranType', item.TranType);
+                            newTrans.set('UnitCost', item.UnitCost);
+                            newTrans.set('UnitDesc', item.UnitDesc);
+                            newTrans.set('UnitMultDiv', item.UnitMultDiv);
+                            newTrans.set('UnitPrice', item.UnitPrice);
+                        }
+                        else {
+                            objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
+                        }
+                    });
+                    App.stoTrans.resumeEvents();
+                    App.grdTrans.view.refresh();
+
+                    App.stoLotTrans.clearFilter();
+                    App.stoLotTrans.suspendEvents();
+                    var date = new Date(1900, 0, 1);
+                    this.result.data.lstLot.forEach(function (item) {
+                        var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objLot) {
+                            HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), false);
+                            var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
+                            newLot.set('LotSerNbr', item.LotSerNbr);
+                            newLot.set('WhseLoc', item.WhseLoc);
+                            newLot.set('INTranLineRef', objTrans.data.LineRef);
+                            if (date > new Date(parseInt(item.ExpDate.substr(6)))) {
+                                newLot.set('ExpDate', date);
                             }
                             else {
-                                objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
+                                newLot.set('ExpDate', new Date(parseInt(item.ExpDate.substr(6))));
                             }
-                        });
-                        App.stoTrans.resumeEvents();
-                        App.grdTrans.view.refresh();
-
-                        App.stoLotTrans.clearFilter();
-                        App.stoLotTrans.suspendEvents();
-                        var date = new Date(1900, 0, 1);
-                        this.result.data.lstLot.forEach(function (item) {                            
-                            var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID', 'SiteID', 'WhseLoc'], [item.InvtID, item.SiteID, item.WhseLoc]);
-                            var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr', 'INTranLineRef'], [item.InvtID, item.LotSerNbr, objTrans.data.LineRef]);
-                            if (!objLot) {
-                                HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), false);
-                                var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
-                                newLot.set('LotSerNbr', item.LotSerNbr);
-                                newLot.set('WhseLoc', item.WhseLoc);
-                                newLot.set('INTranLineRef', objTrans.data.LineRef);
-                                if (date > new Date(parseInt(item.ExpDate.substr(6)))) {
-                                    newLot.set('ExpDate', date);
-                                }
-                                else {
-                                    newLot.set('ExpDate', new Date(parseInt(item.ExpDate.substr(6))));
-                                }
-
-                                newLot.set('InvtID', item.InvtID);
-                                newLot.set('InvtMult', item.InvtMult);
-                                newLot.set('MfgrLotSerNbr', item.MfgrLotSerNbr);
-                                newLot.set('Qty', item.Qty);
-                                newLot.set('QtyOnHand', item.QtyOnHand);
-                                newLot.set('SiteID', item.SiteID);
-                                newLot.set('SlsperID', item.SlsperID);
-                                newLot.set('TranDate', App.DateEnt.getValue());
-                                if (date > new Date(parseInt(item.WarrantyDate.substr(6)))) {
-                                    newLot.set('WarrantyDate', date);
-                                }
-                                else {
-                                    newLot.set('WarrantyDate', new Date(parseInt(item.WarrantyDate.substr(6))));
-                                }
-
-                                newLot.set('TranType', 'RC');
-                                newLot.set('UnitCost', item.UnitCost);
-                                newLot.set('UnitDesc', item.UnitDesc);
-                                newLot.set('UnitMultDiv', item.UnitMultDiv);
-                                newLot.set('UnitPrice', item.UnitPrice);
-                                newLot.set('CnvFact', item.CnvFact);
-                                newLot.set('MfgrLotSerNbr', '');
-                                newLot.set('PackageID', item.PackageID);
+                            
+                            newLot.set('InvtID',item.InvtID);
+                            newLot.set('InvtMult',item.InvtMult);
+                            newLot.set('MfgrLotSerNbr',item.MfgrLotSerNbr);
+                            newLot.set('Qty', item.Qty);
+                            newLot.set('QtyOnHand', item.QtyOnHand);
+                            newLot.set('SiteID',item.SiteID);
+                            newLot.set('SlsperID',item.SlsperID);
+                            newLot.set('TranDate', App.DateEnt.getValue());
+                            if (date > new Date(parseInt(item.WarrantyDate.substr(6)))) {
+                                newLot.set('WarrantyDate', date);
                             }
                             else {
-                                objLot.set('Qty', (objLot.data.Qty + item.Qty));
+                                newLot.set('WarrantyDate', new Date(parseInt(item.WarrantyDate.substr(6))));
                             }
-                        });
-                        App.stoLotTrans.resumeEvents();
-                        calculate();
-                        checkTransAdd();
-                        HQ.message.process(msg, data, true);
+                            
+                            newLot.set('TranType','RC');
+                            newLot.set('UnitCost',item.UnitCost);
+                            newLot.set('UnitDesc',item.UnitDesc);
+                            newLot.set('UnitMultDiv',item.UnitMultDiv);
+                            newLot.set('UnitPrice',item.UnitPrice);
+                            newLot.set('CnvFact',item.CnvFact);
+                            newLot.set('MfgrLotSerNbr','');
+                        }
+                        else {
+                            objLot.set('Qty',(objLot.data.Qty + item.Qty)); 
+                        }
+                    });
+                    App.stoLotTrans.resumeEvents();
+                    calculate();
+                    checkTransAdd();
+
+                    if (!Ext.isEmpty(this.result.data.message)) {
+                       var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
+                        HQ.message.show('2013103001', [result], '', true);
+                      //  HQ.message.show('2013103001', [this.result.data.message], '', true);
                     } else {
                         HQ.message.process(msg, data, true);
                     }
+                } else {
+                    HQ.message.process(msg, data, true);
                 }
-                
                 App.btnImport.reset();
             },
             failure: function (msg, data) {
@@ -624,7 +622,6 @@ var btnLotOK_Click = function () {
 
         var lstData = App.stoLotTrans.data;
         var lsterro = "";
-        var lsterorPackage = "";
         if (lstData != undefined) {
             for (var i = 0; i < lstData.length; i++) {
                 if (lstData.items[i].data.LotSerNbr != "" && lstData.items[i].data.LotSerNbr != null && lstData.items[i].data.WarrantyDate != null && lstData.items[i].data.WarrantyDate != "" && lstData.items[i].data.ExpDate != null && lstData.items[i].data.ExpDate != "") {
@@ -634,23 +631,12 @@ var btnLotOK_Click = function () {
                         lsterro = lsterro + (i + 1).toString() + ",";
                     }
                 }
-                
-                if (!Ext.isEmpty(lstData.items[i].data.LotSerNbr) && App.winLot.record.data.LotSerTrack == _lotQ && Ext.isEmpty(lstData.items[i].data.PackageID)) {
-                    lsterorPackage = lsterorPackage + (i + 1).toString() + ",";
-                }
             }
         }
-
         if (lsterro != "") {
             HQ.message.show(2018052211, [lsterro, HQ.common.getLang('IN10100WarrantyDate'), HQ.common.getLang('ExpDate')], '', true);
             return false;
         }
-
-        if (lsterorPackage != "") {
-            HQ.message.show(2018083011, [lsterorPackage, HQ.common.getLang('PackageID')], '', true);
-            return false;
-        }
-
         var det = App.winLot.record.data;
         var flat = null;
         App.stoLotTrans.data.each(function (item) {
