@@ -41,6 +41,8 @@ namespace IN10100.Controllers
     public class IN_LotTransExt : IN_LotTrans
     {
         public double QtyOnHand { get; set; }
+
+        public string PackageID { get; set; }
     }
     [DirectController]
     [CustomAuthorize]
@@ -59,6 +61,7 @@ namespace IN10100.Controllers
         private List<IN10100_pgLotTrans_Result> _lstLot;
         private IN_Setup _objIN;
         private List<string> _lstLotPack = new List<string>();
+        public int CostDecimalPlaces = 0;
         public ActionResult Index(string branchID)
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
@@ -522,7 +525,7 @@ namespace IN10100.Controllers
                 IN10100_pdInventory_Result objInvt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                 if (objInvt != null && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                 {
-                    var decimalPlace = objInvt.LotSerTrack == "Q" ? 2 : 0;
+                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
                     var lstLot = _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef).ToList();
                     double lotQty = 0;
                     foreach (var item in lstLot)
@@ -540,8 +543,8 @@ namespace IN10100.Controllers
 
                         lotQty += item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
                     }
-                    lotQty = Math.Round(lotQty, decimalPlace);
-                    double detQty = Math.Round(_lstTrans[i].UnitMultDiv == "M" ? _lstTrans[i].Qty * _lstTrans[i].CnvFact : _lstTrans[i].Qty / _lstTrans[i].CnvFact, decimalPlace);
+                    lotQty = MathRound(lotQty, decimalPlace);
+                    double detQty = MathRound(_lstTrans[i].UnitMultDiv == "M" ? _lstTrans[i].Qty * _lstTrans[i].CnvFact : _lstTrans[i].Qty / _lstTrans[i].CnvFact, decimalPlace);
                     if (detQty != lotQty)
                     {
                         throw new MessageException("2015040502", new[] { _lstTrans[i].InvtID });
@@ -740,7 +743,7 @@ namespace IN10100.Controllers
 
             t.ReasonCD = s.ReasonCD;//batch.ReasonCD;
             t.CnvFact = s.CnvFact;
-            t.ExtCost = Math.Round(s.TranAmt, 0);
+            t.ExtCost = MathRound(s.TranAmt, CostDecimalPlaces);
             t.InvtID = s.InvtID;
             t.InvtMult = s.InvtMult;
             t.JrnlType = s.JrnlType;
@@ -839,7 +842,7 @@ namespace IN10100.Controllers
             return lineRef;
         }
 
-        public ActionResult Export(FormCollection data, string branchID)
+        public ActionResult Export1(FormCollection data, string branchID)
         {
             try
             {
@@ -1249,6 +1252,378 @@ namespace IN10100.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Export(FormCollection data, string branchID)
+        {
+            try
+            {
+                int showWhseLoc = 0;
+                bool showPackageID = false;
+                var config = _app.IN10100_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                if (config != null)
+                {
+                    showWhseLoc = config.ShowWhseLoc.ToInt();
+                    showPackageID = config.ShowPackageID.HasValue && config.ShowPackageID.Value;
+                }
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                workbook.Worksheets.Add();
+                Worksheet sheetTrans = workbook.Worksheets[0];
+                Worksheet masterData = workbook.Worksheets[1];
+
+                sheetTrans.Name = "Details";
+                masterData.Name = "MasterData";
+
+                DataAccess dal = Util.Dal();
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(data["cboWhseLoc"].PassNull()), ParameterDirection.Input, 30));
+                DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
+
+                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
+                masterData.Cells.ImportDataTable(dt, true, 1, 26, false);
+
+                //lấy data cho combo SiteID
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+                DataTable dtSite = dal.ExecDataTable("IN10100_peSiteID", CommandType.StoredProcedure, ref pc);
+                masterData.Cells.ImportDataTable(dtSite, true, 0, 19, false);
+
+                ////lấy data cho combo SiteLocation
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+                DataTable dtSiteLocation = dal.ExecDataTable("IN10100_peSiteLocation", CommandType.StoredProcedure, ref pc);
+                masterData.Cells.ImportDataTable(dtSiteLocation, true, 0, 35, false);
+
+                var colTextsHeader = GetHeader(showPackageID, showWhseLoc);
+
+                for (int i = 0; i < colTextsHeader.Count ; i++)
+                {
+                    SetCellValue(sheetTrans.Cells[3, i], Util.GetLang(colTextsHeader[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10, false);
+                }
+
+                Style style = workbook.GetStyleInPool(0);
+                style.Font.Color = Color.Transparent;
+                style.IsLocked = true;
+                StyleFlag flag = new StyleFlag();
+                flag.FontColor = true;
+                flag.NumberFormat = true;
+                flag.Locked = true;
+
+                //sheetTrans.Cells.Columns[19].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[20].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[21].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[26].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[27].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[28].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[29].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[35].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[36].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[37].ApplyStyle(style, flag);
+
+
+                var cell = sheetTrans.Cells["B1"];
+                cell.PutValue("CHI TIẾT NHẬP KHO");
+                style = cell.GetStyle();
+                style.Font.IsBold = true;
+                style.Font.Size = 16;
+                style.Font.Color = Color.Blue;
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                cell.SetStyle(style);
+
+                sheetTrans.Cells.Merge(0, 1, 1, 6);
+
+
+                cell = sheetTrans.Cells["B2"];
+                cell.PutValue("Tổng Tiền");
+                style = cell.GetStyle();
+                style.Font.IsBold = true;
+                style.VerticalAlignment = TextAlignmentType.Center;
+                style.HorizontalAlignment = TextAlignmentType.Right;
+                cell.SetStyle(style);
+
+                cell = sheetTrans.Cells["C2"];
+                string sum = string.Format("=SUM({0}:{1}{2})",Getcell(colTextsHeader.IndexOf("IN10100TranAmt"))+"5",Getcell(colTextsHeader.IndexOf("IN10100TranAmt")),(dt.Rows.Count + 5).ToString());
+                cell.Formula = sum;
+                style = cell.GetStyle();
+                style.IsLocked = true;
+                style.Custom = "#,##0";
+                cell.SetStyle(style);              
+
+
+                style = sheetTrans.Cells["A4"].GetStyle();
+                style.Font.IsBold = true;
+                sheetTrans.Cells["A4"].SetStyle(style);
+                sheetTrans.Cells["B4"].SetStyle(style);
+                sheetTrans.Cells["C4"].SetStyle(style);
+                sheetTrans.Cells["D4"].SetStyle(style);
+                sheetTrans.Cells["E4"].SetStyle(style);
+                sheetTrans.Cells["F4"].SetStyle(style);
+                sheetTrans.Cells["G4"].SetStyle(style);
+                sheetTrans.Cells["H4"].SetStyle(style);
+                sheetTrans.Cells["I4"].SetStyle(style);
+                sheetTrans.Cells["J4"].SetStyle(style);
+
+                style = workbook.GetStyleInPool(0);
+                style.Number = 49; //Text
+                style.Font.Color = Color.Black;
+
+                sheetTrans.Cells.Columns[colTextsHeader.IndexOf("IN10100InvtID")].ApplyStyle(style, flag);
+
+                Validation validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.Operator = OperatorType.Between;
+                validation.InCellDropDown = true;
+                validation.Formula1 = "=MasterData!$AA$2:$AA$" + dt.Rows.Count;
+                validation.ShowError = true;
+                validation.AlertStyle = ValidationAlertType.Stop;
+                validation.ErrorTitle = "Error";
+                validation.InputMessage = "Chọn mã mặt hàng";
+                validation.ErrorMessage = "Mã mặt hàng này không tồn tại";
+
+                CellArea area;
+                area.StartRow = 4;
+                area.EndRow = dt.Rows.Count * 2 + 4;
+                area.StartColumn = 0;
+                area.EndColumn = 0;
+
+                validation.AddArea(area);
+                try
+                {
+                    string formulaInventory = string.Format("=IF(ISERROR(VLOOKUP({0},MasterData!$AA:$AD,2,0)),\"\",VLOOKUP({0},MasterData!$AA$1:$AD${1},2,0))", Getcell(colTextsHeader.IndexOf("IN10100InvtID")) + "5", dt.Rows.Count.ToString());
+                    sheetTrans.Cells[4, colTextsHeader.IndexOf("Descr")].SetSharedFormula(formulaInventory, dt.Rows.Count * 2, 1);
+
+                    string formulaUnitInventory = string.Format("=IF(ISERROR(VLOOKUP({0},MasterData!$AA:$AD,3,0)),\"\",VLOOKUP({0},MasterData!$AA:$AD,3,0))", Getcell(colTextsHeader.IndexOf("IN10100InvtID"))+"5");
+                    sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10100Unit")) + "5"].SetSharedFormula(formulaUnitInventory, dt.Rows.Count * 2, 1);
+
+
+                    string formulaPriceInventory = string.Format("=IF({1}<>\"\",IF(ISERROR(VLOOKUP({0},MasterData!$AA:$AD,4,0)),\"\",VLOOKUP({0},MasterData!$AA:$AD,4,0)),\"\")", Getcell(colTextsHeader.IndexOf("IN10100InvtID")) + "5",Getcell(colTextsHeader.IndexOf("IN10100Unit")) + "5");
+                    sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("Price")) + "5"].SetSharedFormula(formulaPriceInventory, dt.Rows.Count * 2, 1);
+
+                    string formulaTranAmt = string.Format("=IF(ISERROR({0}*{1}),\"\",{0}*{1})", Getcell(colTextsHeader.IndexOf("Qty")) + "5", Getcell(colTextsHeader.IndexOf("Price")) + "5");
+                    sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10100TranAmt")) + "5"].SetSharedFormula(formulaTranAmt, dt.Rows.Count * 2, 1);
+
+                    //Site
+                    string formulaSiteID = string.Format("=MasterData!$T${0}:$T$" + (dtSite.Rows.Count), colTextsHeader.IndexOf("SiteID"));
+                    validation = GetValidation(ref sheetTrans, formulaSiteID, "Chọn kho", "Mã kho không tồn tại");
+                    validation.AddArea(GetCellArea(1, dtSite.Rows.Count + 100, 2));
+
+                    //SiteLocation
+                    //string formulaSiteLocationID = "=Details!$AJ$2:$AJ$" + (dtSiteLocation.Rows.Count + 2);
+                    if (showWhseLoc != 0)
+                    {
+                        string formulaSiteLocationID = string.Format("=OFFSET(MasterData!$AJ$1,IFERROR(MATCH(C{0},MasterData!$AK${3}:$AK${1},0),{2}),0, IF(COUNTIF(MasterData!$AK${3}:$AK${1},C{0})=0,1,COUNTIF(MasterData!$AK${3}:$AK${1},C{0})),1)",
+                        new string[] { "2", (dtSiteLocation.Rows.Count + 100).ToString(), (dtSiteLocation.Rows.Count + 64).ToString(), colTextsHeader.IndexOf("SiteID").ToString() });
+
+                        validation = GetValidation(ref sheetTrans, formulaSiteLocationID, "Chọn vị trí kho", "Mã vị trí kho Không tồn tại");
+                        validation.AddArea(GetCellArea(1, dtSiteLocation.Rows.Count + 100, 3));
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10100TranAmt"))+"5"].GetStyle();
+                style.Custom = "#,##0";
+                Range range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10100TranAmt")) + "5", Getcell(colTextsHeader.IndexOf("IN10100TranAmt")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("Price"))+"5", Getcell(colTextsHeader.IndexOf("Price")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10100InvtID")) + "5"].GetStyle();
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10100InvtID")) + "5", Getcell(colTextsHeader.IndexOf("IN10100InvtID")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+
+                style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("SiteID")) + "5"].GetStyle();
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("SiteID")) + "5", Getcell(colTextsHeader.IndexOf("SiteID")) + (dtSite.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                if (showWhseLoc != 0)
+                {
+                    style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("WhseLoc")) + "5"].GetStyle();
+                    style.IsLocked = false;
+
+                    range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("WhseLoc")) + "5", Getcell(colTextsHeader.IndexOf("WhseLoc")) + (dt.Rows.Count * 2 + 5));
+                    range.ApplyStyle(style, flag);
+                }
+               
+                style.Number = 49;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10100Unit")) + "5", Getcell(colTextsHeader.IndexOf("IN10100Unit")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                if (showPackageID)
+                {
+                    style.Number = 2;
+                }
+                else
+                {
+                    style.Number = 1;
+                }
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("Qty")) + "5", Getcell(colTextsHeader.IndexOf("Qty")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style.Number = 49;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("LotSerNbr")) + "5", Getcell(colTextsHeader.IndexOf("LotSerNbr")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+
+                style.Number = 49;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10100DateEnt")) + "5", Getcell(colTextsHeader.IndexOf("IN10100DateEnt")) + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+
+                style.Number = 49;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("I5", "I" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+                if (showPackageID)
+                {
+                    range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10100PackageID")) + "5", Getcell(colTextsHeader.IndexOf("IN10100PackageID")) + (dt.Rows.Count * 2 + 5));
+                    range.ApplyStyle(style, flag);
+                }                            
+
+                sheetTrans.AutoFitColumns();
+
+                sheetTrans.Cells.Columns[1].Width = 30;
+                sheetTrans.Cells.Columns[2].Width = 15;
+                sheetTrans.Cells.Columns[4].Width = 15;
+                sheetTrans.Cells.Columns[5].Width = 15;
+                sheetTrans.Cells.Columns[6].Width = 15;
+                sheetTrans.Cells.Columns[7].Width = 15;
+                sheetTrans.Cells.Columns[8].Width = 15;
+                sheetTrans.Protect(ProtectionType.All);
+
+                masterData.Protect(ProtectionType.All);
+                masterData.VisibilityType = VisibilityType.Hidden;
+                int row = 5;
+                if (showWhseLoc == 0)
+                {
+                    foreach (var item in lstDetail)
+                    {
+                        var invt = _app.IN10100_pdInventory(item.InvtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                        if (invt != null && invt.LotSerTrack == "L")
+                        {
+                            var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == item.BatNbr && p.INTranLineRef == item.LineRef).ToList();
+                            foreach (var item2 in lstLot)
+                            {
+                                sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                                sheetTrans.Cells["E" + row].PutValue(item2.Qty);
+                                sheetTrans.Cells["D" + row].PutValue(item2.UnitDesc);
+                                sheetTrans.Cells["H" + row].PutValue(item2.LotSerNbr);
+                                sheetTrans.Cells["I" + row].PutValue(item2.ExpDate.ToString("yyyy/MM/dd"));
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                            sheetTrans.Cells["E" + row].PutValue(item.Qty);
+                            sheetTrans.Cells["D" + row].PutValue(item.UnitDesc);
+                            sheetTrans.Cells["H" + row].PutValue("");
+                            sheetTrans.Cells["I" + row].PutValue("");
+                            row++;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in lstDetail)
+                    {
+                        var invt = _app.IN10100_pdInventory(item.InvtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                        if (invt != null && invt.LotSerTrack == "L")
+                        {
+                            var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == item.BatNbr && p.INTranLineRef == item.LineRef).ToList();
+                            foreach (var item2 in lstLot)
+                            {
+                                sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                                sheetTrans.Cells["F" + row].PutValue(item2.Qty);
+                                sheetTrans.Cells["E" + row].PutValue(item2.UnitDesc);
+                                sheetTrans.Cells["I" + row].PutValue(item2.LotSerNbr);
+                                sheetTrans.Cells["J" + row].PutValue(item2.ExpDate.ToString("yyyy/MM/dd"));
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                            sheetTrans.Cells["F" + row].PutValue(item.Qty);
+                            sheetTrans.Cells["E" + row].PutValue(item.UnitDesc);
+                            sheetTrans.Cells["I" + row].PutValue("");
+                            sheetTrans.Cells["J" + row].PutValue("");
+                            row++;
+                        }
+                    }
+                }
+
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Position = 0;
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = (data["BatNbr"].PassNull() == "" ? "IN10100" : data["BatNbr"].PassNull()) + ".xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle, bool isBackground = false)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            style.IsTextWrapped = true;
+            //style.ForegroundColor = Color.Red;
+            if (isTitle)
+            {
+                style.Font.Color = Color.Red;
+            }
+            if (isBackground)
+            {
+                style.Font.Color = Color.Red;
+                style.Pattern = BackgroundType.Solid;
+                style.ForegroundColor = Color.Yellow;
+            }
+            c.SetStyle(style);
+        }
+
+
+
         public ActionResult Import(FormCollection data, string branchID)
         {
             try
@@ -1261,17 +1636,20 @@ namespace IN10100.Controllers
                 List<IN_LotTransExt> lstLot = new List<IN_LotTransExt>();
              
                 bool isChangeSite = false;
+                bool showPackageID = false;
                 int showWhseLoc = 0;
                 var config = _app.IN10100_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                 if (config != null)
                 {
                     isChangeSite = config.IsChangeSite ?? false;
                     showWhseLoc = config.ShowWhseLoc.ToInt();
+                    showPackageID = config.ShowPackageID.HasValue && config.ShowPackageID.Value;
                 }
-
+                _lstLotPack = _app.IN10100_pdLotPack("", branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                 var lstUnit = _app.IN10100_piUnit(Current.CpnyID,Current.UserName,Current.LangID).ToList();
                 var lstSite = _app.IN10100_peSiteID(branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                 var lstSiteLocation = _app.IN10100_peSiteLocation(branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
                 if (showWhseLoc != 0)
                 {
                     if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
@@ -1287,125 +1665,155 @@ namespace IN10100.Controllers
                             if (workbook.Worksheets.Count > 0)
                             {
                                 Worksheet workSheet = workbook.Worksheets[0];
-                                string invtID = string.Empty;
+                                var colTextsHeader = GetHeader(showPackageID, showWhseLoc);
+
+                                bool checkHeader = false;
+                                for (int i = 0; i < colTextsHeader.Count; i++)
+                                {
+                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != Util.GetLang(colTextsHeader[i]).ToUpper().Trim())
+                                    {
+                                        checkHeader = true;
+                                        break;
+                                    }
+                                }
+                                if (checkHeader)
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
 
                                 for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                                 {
-                                    invtID = workSheet.Cells[i, 0].StringValue;
-                                    if (invtID == string.Empty) break;
-                                    string unitDesc="";
-                                    var objInvt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                                    if (objInvt == null)
+                                    string invtIDImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10100InvtID")].StringValue.PassNull();
+                                    if (invtIDImport == string.Empty)
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
                                         continue;
                                     }
-                                    else{
-                                        invtID=objInvt.InvtID;
+                                    string descrImport = workSheet.Cells[i, colTextsHeader.IndexOf("Descr")].StringValue.PassNull();                                                                      
+                                    string siteIDImport = workSheet.Cells[i, colTextsHeader.IndexOf("SiteID")].StringValue.PassNull();
+                                    string whseLocImport = colTextsHeader.IndexOf("WhseLoc")!= -1 ? workSheet.Cells[i, colTextsHeader.IndexOf("WhseLoc")].StringValue.PassNull() : "";
+                                    string unitDescImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10100Unit")].StringValue.PassNull();  
+                                    string qtyImport = workSheet.Cells[i, colTextsHeader.IndexOf("Qty")].StringValue.PassNull();
+                                    string priceImport = workSheet.Cells[i, colTextsHeader.IndexOf("Price")].StringValue.PassNull();
+                                    string tranAmtImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10100TranAmt")].StringValue.PassNull();
+                                    string lotSerNbrImport = workSheet.Cells[i, colTextsHeader.IndexOf("LotSerNbr")].StringValue.PassNull();
+                                    string dateEntImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10100DateEnt")].StringValue.PassNull();
+                                    string packageIDImport = colTextsHeader.IndexOf("IN10100PackageID") != -1 ? workSheet.Cells[i, colTextsHeader.IndexOf("IN10100PackageID")].StringValue.PassNull() : "";
+
+                                    var objInvt = _app.IN10100_pdInventory(invtIDImport, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                                    if (objInvt == null)
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtIDImport);
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        invtIDImport = objInvt.InvtID;
                                     }
 
-                                    if (lstInvtID.All(x => x.InvtID != invtID))
+                                    if (lstInvtID.All(x => x.InvtID != invtIDImport))
                                     {
                                         lstInvtID.Add(objInvt);
                                     }
-                                    var siteID = workSheet.Cells[i, 2].StringValue.PassNull();
-                                    if (string.IsNullOrEmpty(siteID))
+
+                                    if (string.IsNullOrEmpty(siteIDImport))
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có kho <br/>", (i + 1).ToString(), invtID);
+                                        message += string.Format("Dòng {0} mặt hàng {1} không có kho! <br/>", (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else if (isChangeSite)
                                     {
-                                        var objSiteID = lstSite.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower());
+                                        var objSiteID = lstSite.FirstOrDefault(x => x.SiteID.ToLower() == siteIDImport.ToLower());
                                         if (objSiteID == null)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho không tồn tại <br/>", (i + 1).ToString(), invtID);
+                                            message += string.Format("Dòng {0} mặt hàng {1} kho không tồn tại <br/>", (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                         else
                                         {
-                                            siteID = objSiteID.SiteID;
+                                            siteIDImport = objSiteID.SiteID;
                                         }
                                     }
                                     else
                                     {
-                                        if (siteID.ToLower() != data["SiteID"].PassNull().ToLower())
+                                        if (siteIDImport.ToLower() != data["SiteID"].PassNull().ToLower())
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
+                                            message += string.Format("Dòng {0} mặt hàng {1} kho sai dữ liệu <br/>", (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                         else
                                         {
-                                            siteID = data["SiteID"].PassNull();
+                                            siteIDImport = data["SiteID"].PassNull();
                                         }
                                     }
 
-                                    var siteLocation = workSheet.Cells[i, 3].StringValue.PassNull();
-                                    if (string.IsNullOrEmpty(siteLocation))
+                                    if( showWhseLoc != 0)
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có vị trí kho <br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    else if (isChangeSite)
-                                    {
-                                        var objWhseLoc = lstSiteLocation.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower() && x.WhseLoc.ToLower() == siteLocation.ToLower());
-                                        if (objWhseLoc == null)
+                                        if (string.IsNullOrEmpty(whseLocImport))
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho không tồn tại <br/>", (i + 1).ToString(), invtID);
+                                            message += string.Format("Dòng {0} mặt hàng {1} không có vị trí kho <br/>", (i + 1).ToString(), invtIDImport);
                                             continue;
+                                        }
+                                        else if (isChangeSite)
+                                        {
+                                            var objWhseLoc = lstSiteLocation.FirstOrDefault(x => x.SiteID.ToLower() == siteIDImport.ToLower() && x.WhseLoc.ToLower() == whseLocImport.ToLower());
+                                            if (objWhseLoc == null)
+                                            {
+                                                message += string.Format("Dòng {0} mặt hàng {1} vị trí kho không tồn tại <br/>", (i + 1).ToString(), invtIDImport);
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                whseLocImport = objWhseLoc.WhseLoc;
+                                            }
                                         }
                                         else
                                         {
-                                            siteLocation = objWhseLoc.WhseLoc;
+                                            if (whseLocImport.ToLower() != whseLoc.ToLower())
+                                            {
+                                                message += string.Format("Dòng {0} mặt hàng {1} vị trí kho sai dữ liệu <br/>", (i + 1).ToString(), invtIDImport);
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                whseLocImport = whseLoc;
+                                            }
                                         }
                                     }
-                                    else
+
+                                    if (string.IsNullOrEmpty(unitDescImport))
                                     {
-                                        if (siteLocation.ToLower() != whseLoc.ToLower())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                        else
-                                        {
-                                            siteLocation = whseLoc;
-                                        }
-                                    }
-                                    unitDesc = workSheet.Cells[i, 4].StringValue.PassNull();
-                                    if (workSheet.Cells[i, 4].StringValue.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
+                                        message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
 
                                     else
                                     {
-                                        var objUnit = lstUnit.FirstOrDefault(p => p.InvtID == invtID && p.Unit.ToUpper()== unitDesc.ToUpper());
+                                        var objUnit = lstUnit.FirstOrDefault(p => p.InvtID == invtIDImport && p.Unit.ToUpper() == unitDescImport.ToUpper());
                                         if (objUnit == null)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} có đơn vị không tồn tại<br/>", (i + 1).ToString(), invtID);
+                                            message += string.Format("Dòng {0} mặt hàng {1} có đơn vị không tồn tại<br/>", (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                         else
                                         {
-                                            unitDesc = objUnit.Unit;
+                                            unitDescImport = objUnit.Unit;
                                         }
                                     }
 
-                                    if (workSheet.Cells[i, 5].StringValue.PassNull() == "")
+                                    if (string.IsNullOrEmpty(qtyImport))
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
+                                        message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else
                                     {
                                         float n;
-                                        bool isNumeric = float.TryParse(workSheet.Cells[i, 5].StringValue, out n);
+                                        bool isNumeric = float.TryParse(qtyImport, out n);
                                         if (isNumeric == true)
                                         {
-                                            if (workSheet.Cells[i, 5].StringValue.ToDouble() == 0)
+                                            if (qtyImport.ToDouble() == 0)
                                             {
-                                                message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
+                                                message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtIDImport);
                                                 continue;
                                             }
                                         }
@@ -1416,22 +1824,28 @@ namespace IN10100.Controllers
                                         }
                                     }
 
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].StringValue.PassNull() == string.Empty)
+                                    if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && lotSerNbrImport == "")
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
+                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
 
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 9].Value.PassNull() == string.Empty)
+                                    if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && lotSerNbrImport.Length>50)
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtID);
+                                        message += string.Format("Dòng {0} mặt hàng {1} có số LOT vượt quá độ dài cho phép! <br/>", (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
-                                    else if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 9].Value.PassNull() != string.Empty)
+
+                                    if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && dateEntImport == "")
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtIDImport);
+                                        continue;
+                                    }
+                                    else if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && dateEntImport !="")
                                     {
 
                                         DateTime parsed;
-                                        bool valid = DateTime.TryParseExact(workSheet.Cells[i, 9].StringValue, "yyyy/MM/dd",
+                                        bool valid = DateTime.TryParseExact(dateEntImport, "yyyy/MM/dd",
                                                                             CultureInfo.InvariantCulture,
                                                                             DateTimeStyles.None,
                                                                             out parsed);
@@ -1444,12 +1858,37 @@ namespace IN10100.Controllers
                                     }
 
 
-                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr == workSheet.Cells[i, 8].StringValue))
+                                    if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && lstLot.Any(p => p.InvtID == invtIDImport && p.LotSerNbr == lotSerNbrImport && p.SiteID==siteIDImport && p.WhseLoc==whseLocImport))
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 8].StringValue);
+                                        message += string.Format("Dòng {0} mặt hàng {1} trùng số lot {2}<br/>", (i + 1).ToString(), invtIDImport, lotSerNbrImport);
                                         continue;
                                     }
 
+                                    if (objInvt.LotSerTrack == "Q" && string.IsNullOrEmpty(packageIDImport) && showPackageID)
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập {2}<br/>", (i + 1).ToString(), invtIDImport, Util.GetLang("IN10100PackageID"));
+                                        continue;
+                                    }
+
+                                    if (objInvt.LotSerTrack == "Q" && packageIDImport.Length>100 && showPackageID)
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} có {2} vượt quá độ dài cho phép!<br/>", (i + 1).ToString(), invtIDImport, Util.GetLang("IN10100PackageID"));
+                                        continue;
+                                    }
+
+                                    if (objInvt.LotSerTrack == "Q" && showPackageID)
+                                    {
+                                        if (_lstLotPack.Any(x => x == lotSerNbrImport))
+                                        {
+                                            //throw new MessageException(MessageType.Message, "2018040901", "", new string[] { lotCur.LotSerNbr, lotCur.InvtID });
+                                            message += string.Format("Dòng {0} Số Lot/Serial {1} ở mặt hàng {2} đã bị trùng!<br/>", (i + 1).ToString(),lotSerNbrImport, invtIDImport);
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            _lstLotPack.Add(lotSerNbrImport);
+                                        }
+                                    }
 
                                     var newLot = new IN_LotTransExt();
 
@@ -1457,13 +1896,13 @@ namespace IN10100.Controllers
                                     workSheet.Cells[i, 6].Calculate(true, null);
 
                                     newLot.CnvFact = 1;
-                                    if (objInvt.LotSerTrack == "L")
+                                    if (objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q")
                                     {
-                                        string[] strExpDate = workSheet.Cells[i, 9].StringValue.PassNull().Split('/');
+                                        string[] strExpDate = dateEntImport.Split('/');
                                         DateTime dExpDate = new DateTime(int.Parse(strExpDate[0]), int.Parse(strExpDate[1]), int.Parse(strExpDate[2]));
 
-                                        newLot.LotSerNbr = workSheet.Cells[i, 8].StringValue.PassNull();
-                                        var item = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.LotSerNbr == newLot.LotSerNbr);
+                                        newLot.LotSerNbr = lotSerNbrImport;
+                                        var item = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtIDImport && p.LotSerNbr == newLot.LotSerNbr);
                                         if (item != null)
                                         {
                                             newLot.ExpDate = item.ExpDate;
@@ -1475,18 +1914,20 @@ namespace IN10100.Controllers
                                         }
 
                                     }
+                                    var decimalPlace = GetDecimalPlace(objInvt.LotSerTrack);
 
-                                    newLot.InvtID = invtID.ToUpper();
+                                    newLot.InvtID = invtIDImport;
                                     newLot.InvtMult = 1;
-                                    newLot.Qty = workSheet.Cells[i, 5].StringValue.PassNull() == "" ? 0 : workSheet.Cells[i, 5].StringValue.ToDouble();
+                                    newLot.Qty = qtyImport == "" ? 0 : MathRound(qtyImport.ToDouble(), decimalPlace);
 
-                                    newLot.SiteID = siteID; //data["SiteID"].PassNull();
-                                    newLot.WhseLoc = siteLocation;//whseLoc;
+                                    newLot.SiteID = siteIDImport; //data["SiteID"].PassNull();
+                                    newLot.WhseLoc = whseLocImport;//whseLoc;
                                     newLot.TranDate = data["DateEnt"].ToDateShort();
                                     newLot.TranType = "RC";
-                                    newLot.UnitDesc = unitDesc;
+                                    newLot.UnitDesc = unitDescImport;
                                     newLot.UnitMultDiv = "M";
                                     newLot.WarrantyDate = ("1-1-1900").ToDateShort();
+                                    newLot.PackageID=packageIDImport;
                                     //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
                                     //{
                                     //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
@@ -1497,7 +1938,7 @@ namespace IN10100.Controllers
                                     //}
                                     //else
                                     //{
-                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10100_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate, objInvt.ValMthd, newLot.SiteID).FirstOrDefault().Price.Value;
+                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10100_pdPrice("", invtIDImport, newLot.UnitDesc, newLot.TranDate, objInvt.ValMthd, newLot.SiteID).FirstOrDefault().Price.Value;
                                     //}
 
                                     var qtyLotOnHand = _app.IN_ItemLot.FirstOrDefault(x => x.InvtID == newLot.InvtID && x.SiteID == newLot.SiteID && x.LotSerNbr == newLot.LotSerNbr);
@@ -1509,14 +1950,25 @@ namespace IN10100.Controllers
                                     lstLot.Add(newLot);
                                 }
                             }
-
+                            
                             var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
-                            foreach (var item in lstInvt)
+                            //var lstInvt = lstLot.GroupBy(x => new { x.InvtID, x.SiteID, x.WhseLoc }).Select(x => x.FirstOrDefault()).ToList();
+                            //List<IN_LotTransExt> lstLot = new List<IN_LotTransExt>();
+                            var lst = new List<IN_LotTransExt>();
+                            foreach (var item in lstLot)
                             {
+                                if (!lst.Any(x => x.InvtID == item.InvtID && x.SiteID == item.SiteID && x.WhseLoc == item.WhseLoc))
+                                {
+                                    lst.Add(item);
+                                }                                
+                            }
+                            foreach (var item in lst)
+                            {
+                                var objInvt1 = _app.IN10100_pdInventory(item.InvtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                                 var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
-
+                                var decimalPlace = GetDecimalPlace(objInvt1.LotSerTrack);
                                 var newTrans = new IN10100_pgReceiptLoad_Result();
-                                newTrans.InvtID = item.InvtID.ToUpper();
+                                newTrans.InvtID = item.InvtID;
                                 newTrans.LineRef = LastLineRef(lineRef);
                                 newTrans.ReasonCD = data["ReasonCD"].PassNull();
                                 newTrans.TranDate = item.TranDate;
@@ -1528,13 +1980,14 @@ namespace IN10100.Controllers
                                 newTrans.JrnlType = "IN";
                                 newTrans.TranDesc = objInvt.Descr;
                                 newTrans.WhseLoc = item.WhseLoc;// whseLoc;
+                                newTrans.LotSerTrack = objInvt.LotSerTrack;
 
-                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
+                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID && p.SiteID ==item.SiteID && p.WhseLoc ==item.WhseLoc).ToList();
                                 foreach (var lot in tmp)
                                 {
-                                    newTrans.Qty += lot.Qty;
+                                    newTrans.Qty += MathRound(lot.Qty,decimalPlace);
                                     lot.INTranLineRef = newTrans.LineRef;
-                                    if (objInvt.LotSerTrack != "L")
+                                    if (objInvt.LotSerTrack != "L" && objInvt.LotSerTrack != "Q")
                                     {
                                         lstLot.Remove(lot);
                                     }
@@ -1542,7 +1995,7 @@ namespace IN10100.Controllers
 
 
                                 newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
-                                newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
+                                newTrans.TranAmt = MathRound(newTrans.UnitPrice * newTrans.Qty, CostDecimalPlaces);
                                 newTrans.SiteID = item.SiteID;
                                 var qtyOnHand = _app.IN_ItemSite.FirstOrDefault(x => x.InvtID == newTrans.InvtID && x.SiteID == newTrans.SiteID);
                                 if (qtyOnHand != null)
@@ -1553,7 +2006,6 @@ namespace IN10100.Controllers
                                 lstTrans.Add(newTrans);
 
                                 lineRef++;
-
                             }
                             //if (check)
                             //{
@@ -1563,6 +2015,12 @@ namespace IN10100.Controllers
                             //{
                             Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
                             //}
+
+                            //if (message == "" || message == string.Empty)
+                            //{
+                            //    _db.SaveChanges();
+                            //}
+                            //Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
 
                         }
                         catch (Exception ex)
@@ -1800,7 +2258,8 @@ namespace IN10100.Controllers
                                 }
                             }
 
-                            var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
+                            //var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
+                            var lstInvt = lstLot.GroupBy(x => new { x.InvtID, x.SiteID, x.WhseLoc }).Select(x => x.FirstOrDefault()).ToList();
                             foreach (var item in lstInvt)
                             {
                                 var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
@@ -1832,7 +2291,7 @@ namespace IN10100.Controllers
 
 
                                 newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
-                                newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
+                                newTrans.TranAmt = MathRound(newTrans.UnitPrice * newTrans.Qty, CostDecimalPlaces);
                                 newTrans.SiteID = item.SiteID;
                                 var qtyOnHand = _app.IN_ItemSite.FirstOrDefault(x => x.InvtID == newTrans.InvtID && x.SiteID == newTrans.SiteID);
                                 if (qtyOnHand != null)
@@ -1950,6 +2409,64 @@ namespace IN10100.Controllers
                 }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
+        }
+
+        private int GetDecimalPlace(string lotSerTrack)
+        {
+            return (lotSerTrack != "Q" ? 0 : 2);
+        }
+
+        private double MathRound(double value, int digits)
+        {
+            value = Math.Round(value, digits);
+            return value;
+        }
+
+        private string Getcell(int column) // Hàm bị sai khi lấy vị trí column AA
+        {
+            if (column == 0)
+            {
+                return "A";
+            }
+            bool flag = false;
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string cell = "";
+            while (column / 26 >= 1)
+            {
+                cell += ABC.Substring((column / 26) - 1, 1);
+                column = column - 26;
+                flag = true;
+            }
+            if (column % 26 != 0)
+            {
+                cell += ABC.Substring(column % 26, 1);
+            }
+            else
+            {
+                if (column % 26 == 0 && flag)
+                {
+                    cell += ABC.Substring(0, 1);
+                }
+            }
+
+            return cell;
+        }
+
+        private List<string> GetHeader(bool showPackageID, int showWhseLoc)
+        {
+            var colTextsHeader = new List<string>() { "IN10100InvtID", "Descr", "SiteID", "WhseLoc", "IN10100Unit", "Qty", "Price", "IN10100TranAmt", "LotSerNbr", "IN10100DateEnt", "IN10100PackageID" };
+
+            if (showWhseLoc == 0)
+            {
+                colTextsHeader.Remove("WhseLoc");
+            }
+
+            if (!showPackageID)
+            {
+                colTextsHeader.Remove("IN10100PackageID");
+            }
+            return colTextsHeader;
+
         }
     }
 }
