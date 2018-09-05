@@ -384,7 +384,7 @@ var grdPO_Price_Edit = function (item, e) {
 
 var grdPO_Price_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdPO_Price, e, keys);
+    return HQ.grid.checkValidateEditDG(App.grdPO_Price, e, keys);
 };
 
 var grdPO_Price_Reject = function (record) {
@@ -434,7 +434,7 @@ var grdPO_PriceCpny_Edit = function (item, e) {
 
 var grdPO_PriceCpny_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdPO_PriceCpny, e, keys1);
+    return HQ.grid.checkValidateEditDG(App.grdPO_PriceCpny, e, keys1);
 };
 
 var grdPO_PriceCpny_Reject = function (record) {
