@@ -88,7 +88,7 @@
                         })
                     )
            
-            , X.Column().ID("SlsperID").Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150).Renderer("renderSlsperID")
+            , X.Column().ID("SlsperID").Text(Util.GetLang("OM26600SlsperName")).DataIndex("SlsperID").Width(150).Renderer("renderSlsperID")
             .Editor(
                 HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("OM26600_pcSlsperID").HQAutoLoad(true).HQDBSys(false)
                 .HQColumnShow("SlsperID,Name").DisplayField("Name").ValueField("SlsperID").ForceSelection(true)
