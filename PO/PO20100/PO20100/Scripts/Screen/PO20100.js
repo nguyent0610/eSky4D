@@ -199,7 +199,7 @@ function btnFill_Click() {
 };
 
 var chkPublic_Change = function (checkbox, checked) {
-    if (checked) {
+    if (checked || HQ.hideChkPublic) {
         App.tabBot.closeTab(App.pnlPO_PriceCpny);
        
     }
@@ -255,6 +255,8 @@ var firstLoad = function () {
     if (HQ.hideChkPublic) {
         App.Public.setValue(true);
         App.Public.setVisible(false);
+        App.tabBot.closeTab(App.pnlPO_PriceCpny);
+     //   App.tabBot.child('#pnlPO_PriceCpny').tab.hide();
     }
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     loadSourceCombo();
