@@ -839,8 +839,12 @@ namespace IN10300.Controllers
             UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
             UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
             // Update IN_ItemLoc
-            UpdateINAllocWhseLoc(t.InvtID, t.SiteID,t.WhseLoc, oldQty, 0);
-            UpdateINAllocWhseLoc(s.InvtID, s.SiteID,s.WhseLoc, 0, newQty);
+            if (t.WhseLoc.PassNull() != "")
+            {
+                UpdateINAllocWhseLoc(t.InvtID, t.SiteID, t.WhseLoc, oldQty, 0);
+                UpdateINAllocWhseLoc(s.InvtID, s.SiteID, s.WhseLoc, 0, newQty);
+            }
+            
             if (isNew)
             {
                 t.ResetET();
