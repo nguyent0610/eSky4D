@@ -1,0 +1,146 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA20100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+         X.Panel().ID("PnlStatus")
+        .Layout(LayoutType.Border).Region(Region.Center)
+        .Items(
+
+          X.GridPanel().ID("grdStatus")
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .Flex(1).Region(Region.Center).AutoScroll(true)
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                .ID("stoStatus")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(SA20100_pgLoadStatus_Result), "mdlSA20100_CS_Status", ""))
+                .Parameters(ps =>
+                {
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetStatus")))
+                .Listeners(p =>
+                {
+                    p.Load.Fn = "stoLoadStatus";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdMapCustomer');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
+                X.CheckColumn().ID("chkIsDefault").Text(Util.GetLang("DftOlap")).DataIndex("IsDefault").Width(70)
+                , X.Column().ID("txtStatusID").Text(Util.GetLang("LangStatus")).DataIndex("StatusID").Width(100)
+                .Editor(
+                    X.TextField().MaxLength(2).EnforceMaxLength(true).SelectOnFocus(true)
+                )
+                , X.Column().Text(Util.GetLang("StatusName")).DataIndex("StatusName").Width(200)
+                .Editor(
+                    X.TextField().MaxLength(200).EnforceMaxLength(true).SelectOnFocus(true)
+                )
+                , X.Column().Text(Util.GetLang("SA20100LangID")).DataIndex("LangID").Width(200)
+                    .Editor(
+                        HQ.Combo().ID("cboLangID")
+                        .HQProcedure("SA20100_pcLangID")
+                        .HQColumnShow("LangID,Content")
+                        .HQHeightWidth(400, 300)
+                        .ValueField("LangID").DisplayField("LangID")
+                        .ForceSelection(true).SelectOnFocus(true)
+                        .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
+                        })
+                        .LoadData()
+                )
+                , X.Column().Text(Util.GetLang("SA20100Content")).DataIndex("Content").Width(200)
+                , X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdStatus_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmStatus")
+            .Listeners(lst => {
+                lst.Select.Fn = "grdStatus_Select";
+            })
+            .Mode(SelectionMode.Multi))
+            .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdStatus_BeforeEdit";
+                    ls.Edit.Fn = "grdStatus_Edit";
+                    ls.ValidateEdit.Fn = "grdStatus_ValidateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                                X.BooleanFilter().DataIndex("IsDefault"),
+                                X.StringFilter().DataIndex("StatusID"),
+                                X.StringFilter().DataIndex("StatusName"),
+                                X.StringFilter().DataIndex("LangID"),
+                                X.StringFilter().DataIndex("Content")
+                            )
+                    )
+            .Listeners(lst =>
+                    {
+                        lst.Activate.Handler = "HQ.focus = 'grdStatus';";
+                    })
+            )
+        )
+
+     )//pnlGrid
+ )
