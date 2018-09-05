@@ -189,6 +189,47 @@ namespace SA20100
     
             return base.ExecuteFunction<Nullable<global::System.Int32>>("SA20100_pdCheckbeforedelete", cpnyIDParameter, userNameParameter, langIDParameter, statusIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SA20100_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SA20100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -222,7 +263,8 @@ namespace SA20100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Status CreateSI_Status(global::System.String statusID, global::System.String statusName, global::System.String langID, global::System.Boolean isDefault, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="statusType">Initial value of the StatusType property.</param>
+        public static SI_Status CreateSI_Status(global::System.String statusID, global::System.String statusName, global::System.String langID, global::System.Boolean isDefault, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String statusType)
         {
             SI_Status sI_Status = new SI_Status();
             sI_Status.StatusID = statusID;
@@ -236,6 +278,7 @@ namespace SA20100
             sI_Status.LUpd_Prog = lUpd_Prog;
             sI_Status.LUpd_User = lUpd_User;
             sI_Status.tstamp = tstamp;
+            sI_Status.StatusType = statusType;
             return sI_Status;
         }
 
@@ -509,6 +552,33 @@ namespace SA20100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String StatusType
+        {
+            get
+            {
+                return _StatusType;
+            }
+            set
+            {
+                if (_StatusType != value)
+                {
+                    OnStatusTypeChanging(value);
+                    ReportPropertyChanging("StatusType");
+                    _StatusType = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("StatusType");
+                    OnStatusTypeChanged();
+                }
+            }
+        }
+        private global::System.String _StatusType;
+        partial void OnStatusTypeChanging(global::System.String value);
+        partial void OnStatusTypeChanged();
 
         #endregion
 
@@ -537,7 +607,8 @@ namespace SA20100
         /// <param name="langID">Initial value of the LangID property.</param>
         /// <param name="isDefault">Initial value of the IsDefault property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA20100_pgLoadStatus_Result CreateSA20100_pgLoadStatus_Result(global::System.String statusID, global::System.String statusName, global::System.String langID, global::System.Boolean isDefault, global::System.Byte[] tstamp)
+        /// <param name="statusType">Initial value of the StatusType property.</param>
+        public static SA20100_pgLoadStatus_Result CreateSA20100_pgLoadStatus_Result(global::System.String statusID, global::System.String statusName, global::System.String langID, global::System.Boolean isDefault, global::System.Byte[] tstamp, global::System.String statusType)
         {
             SA20100_pgLoadStatus_Result sA20100_pgLoadStatus_Result = new SA20100_pgLoadStatus_Result();
             sA20100_pgLoadStatus_Result.StatusID = statusID;
@@ -545,6 +616,7 @@ namespace SA20100
             sA20100_pgLoadStatus_Result.LangID = langID;
             sA20100_pgLoadStatus_Result.IsDefault = isDefault;
             sA20100_pgLoadStatus_Result.tstamp = tstamp;
+            sA20100_pgLoadStatus_Result.StatusType = statusType;
             return sA20100_pgLoadStatus_Result;
         }
 
@@ -695,6 +767,54 @@ namespace SA20100
         private global::System.String _Content;
         partial void OnContentChanging(global::System.String value);
         partial void OnContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String StatusType
+        {
+            get
+            {
+                return _StatusType;
+            }
+            set
+            {
+                OnStatusTypeChanging(value);
+                ReportPropertyChanging("StatusType");
+                _StatusType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("StatusType");
+                OnStatusTypeChanged();
+            }
+        }
+        private global::System.String _StatusType;
+        partial void OnStatusTypeChanging(global::System.String value);
+        partial void OnStatusTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ContentEng
+        {
+            get
+            {
+                return _ContentEng;
+            }
+            set
+            {
+                OnContentEngChanging(value);
+                ReportPropertyChanging("ContentEng");
+                _ContentEng = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ContentEng");
+                OnContentEngChanged();
+            }
+        }
+        private global::System.String _ContentEng;
+        partial void OnContentEngChanging(global::System.String value);
+        partial void OnContentEngChanged();
 
         #endregion
 

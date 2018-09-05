@@ -31,6 +31,13 @@ namespace SA20100.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            bool showContentEng = false;
+            var objConfig = _db.SA20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showContentEng = objConfig.Value;
+            }
+            ViewBag.showContentEng = showContentEng;
             return View();
         }
 
@@ -59,13 +66,13 @@ namespace SA20100.Controllers
                 foreach (SA20100_pgLoadStatus_Result del in lstSI_Status.Deleted)
                 {
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp upStatusID
-                    if (lstSI_Status.Created.Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper()).Count() > 0)
+                    if (lstSI_Status.Created.Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper() && p.StatusType.ToUpper() == del.StatusType.ToUpper()).Count() > 0)
                     {
-                        lstSI_Status.Created.Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+                        lstSI_Status.Created.Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper() && p.StatusType.ToUpper() == del.StatusType.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.SI_Status.ToList().Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper()).FirstOrDefault();
+                        var objDel = _db.SI_Status.ToList().Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper() && p.StatusType.ToUpper() == del.StatusType.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
                             _db.SI_Status.DeleteObject(objDel);
@@ -75,9 +82,9 @@ namespace SA20100.Controllers
 
                 foreach (SA20100_pgLoadStatus_Result curItem in lstSI_Status.Created)
                 {
-                    if (curItem.StatusID.PassNull() == "") continue;
+                    if (curItem.StatusID.PassNull() == "" || curItem.StatusType.PassNull() == "") continue;
 
-                    var item = _db.SI_Status.Where(p => p.StatusID.ToUpper() == curItem.StatusID.ToUpper()).FirstOrDefault();
+                    var item = _db.SI_Status.Where(p => p.StatusID.ToUpper() == curItem.StatusID.ToUpper() && p.StatusType.ToUpper() == curItem.StatusType.ToUpper()).FirstOrDefault();
 
                     if (item != null)
                     {
@@ -116,6 +123,7 @@ namespace SA20100.Controllers
             if (isNew)
             {
                 t.StatusID = s.StatusID.ToUpper();
+                t.StatusType = s.StatusType.ToUpper();
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;

@@ -8,6 +8,7 @@
         <EntityType Name="SI_Status">
           <Key>
             <PropertyRef Name="StatusID" />
+            <PropertyRef Name="StatusType" />
           </Key>
           <Property Name="StatusID" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="StatusName" Type="nvarchar" MaxLength="200" Nullable="false" />
@@ -20,12 +21,18 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="StatusType" Type="varchar" MaxLength="2" Nullable="false" />
         </EntityType>
         <Function Name="SA20100_pdCheckbeforedelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="StatusID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA20100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="SA20100_pgLoadStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -52,10 +59,16 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="StatusID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SA20100_pdConfig" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_Status">
           <Key>
             <PropertyRef Name="StatusID" />
+            <PropertyRef Name="StatusType" />
           </Key>
           <Property Name="StatusID" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="StatusName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -68,6 +81,7 @@
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="StatusType" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="SA20100_pgLoadStatus_Result">
           <Property Type="String" Name="StatusID" Nullable="false" MaxLength="2" />
@@ -76,6 +90,8 @@
           <Property Type="Boolean" Name="IsDefault" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="Content" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="StatusType" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="ContentEng" Nullable="true" MaxLength="100" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -86,6 +102,7 @@
           <EntitySetMapping Name="SI_Status">
             <EntityTypeMapping TypeName="SA20100Model.SI_Status">
               <MappingFragment StoreEntitySet="SI_Status">
+                <ScalarProperty Name="StatusType" ColumnName="StatusType" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -109,10 +126,13 @@
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="StatusType" ColumnName="StatusType" />
+                <ScalarProperty Name="ContentEng" ColumnName="ContentEng" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA20100_pdCheckbeforedelete" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdCheckbeforedelete" />
+          <FunctionImportMapping FunctionImportName="SA20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdConfig" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

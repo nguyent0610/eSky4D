@@ -52,6 +52,26 @@
             .ColumnModel(
                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
                 X.CheckColumn().ID("chkIsDefault").Text(Util.GetLang("DftOlap")).DataIndex("IsDefault").Width(70)
+                , X.Column().Text(Util.GetLang("StatusType")).DataIndex("StatusType").Width(150).Renderer("renderStatusType")
+                .Editor(
+                    HQ.Combo().ID("cboStatusType")
+                    .HQProcedure("SA20100_pcStatusType")
+                    .HQColumnShow("Code,Descr")
+                    .HQHeightWidth(400, 300)
+                    .ValueField("Code").DisplayField("Descr")
+                    .ForceSelection(true).SelectOnFocus(true)
+                    .HQParam(new StoreParameterCollection() { 
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
+                    })
+                    .LoadData()
+                )
                 , X.Column().ID("txtStatusID").Text(Util.GetLang("LangStatus")).DataIndex("StatusID").Width(100)
                 .Editor(
                     X.TextField().MaxLength(2).EnforceMaxLength(true).SelectOnFocus(true)
@@ -81,6 +101,7 @@
                         .LoadData()
                 )
                 , X.Column().Text(Util.GetLang("SA20100Content")).DataIndex("Content").Width(200)
+                , X.Column().Text(Util.GetLang("SA20100ContentEng")).DataIndex("ContentEng").Width(200)
                 , X.CommandColumn()
                 .Width(150)
                 .Commands(
@@ -129,10 +150,12 @@
                     .Local(true)
                     .Filters(
                                 X.BooleanFilter().DataIndex("IsDefault"),
+                                X.StringFilter().DataIndex("StatusType").ValidateRecord(p=>p.Fn = "stringFilter"),
                                 X.StringFilter().DataIndex("StatusID"),
                                 X.StringFilter().DataIndex("StatusName"),
                                 X.StringFilter().DataIndex("LangID"),
-                                X.StringFilter().DataIndex("Content")
+                                X.StringFilter().DataIndex("Content"),
+                                X.StringFilter().DataIndex("ContentEng")
                             )
                     )
             .Listeners(lst =>

@@ -1,13 +1,20 @@
 //// Declare ///////////////////////////////////////////////////////////
 var _Source = 0;
-var _maxSource = 1;
+var _maxSource = 2;
 var _isLoadMaster = false;
 var _statusID = '';
-var keys = ['StatusID'];
-var fieldsCheckRequire = ['StatusID', 'StatusName', 'LangID'];
-var fieldsLangCheckRequire = ['LangStatus', 'StatusName', 'SA20100LangID'];
+var keys = ['StatusID', 'StatusType'];
+var fieldsCheckRequire = ['StatusID', 'StatusType', 'StatusName', 'LangID'];
+var fieldsLangCheckRequire = ['LangStatus', 'StatusType', 'StatusName', 'SA20100LangID'];
 //// Store /////////////////////////////////////////////////////////////
-
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true
+        _Source = 0;
+        App.stoStatus.reload();
+    }
+};
 ////////////////////////////////////////////////////////////////////////
 //// First Load ////////////////////////////////////////////////////////
 //load lần đầu khi mở
@@ -16,13 +23,15 @@ var firstLoad = function () {
     App.frmMain.isValid();
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboStatusType.getStore().addListener('load', checkLoad);
+    App.cboLangID.getStore().addListener('load', checkLoad);
     if (HQ.isInsert) {
-        var record = HQ.store.findRecord(App.stoStatus, keys, ['']);
+        var record = HQ.store.findRecord(App.stoStatus, keys, ['', '']);
         if (!record) {
             HQ.store.insertBlank(App.stoStatus, keys);
         }
     }
-    App.stoStatus.reload();
+
 };
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoStatus);
@@ -100,12 +109,16 @@ var stoLoadStatus = function (sto) {
     HQ.isFirstLoad = false;
     HQ.common.showBusy(false);
     if (HQ.isInsert) {
-        var record = HQ.store.findRecord(App.stoStatus, keys, ['']);
+        var record = HQ.store.findRecord(App.stoStatus, keys, ['', '']);
         if (!record) {
             HQ.store.insertBlank(sto, keys);
         }
     }
     frmChange();
+    if(HQ.showContentEng)
+        HQ.grid.show(App.grdStatus, ['ContentEng']);
+    else
+        HQ.grid.hide(App.grdStatus, ['ContentEng']);
 };
 var grdStatus_BeforeEdit = function (item, e) {
     _statusID = e.record.data.StatusID;
@@ -119,10 +132,12 @@ var grdStatus_Edit = function (item, e) {
         if(objLangID != undefined)
         {
             e.record.set('Content', objLangID.Content);
+            e.record.set('ContentEng', objLangID.ContentEng);
         }
         else
         {
             e.record.set('Content', '');
+            e.record.set('ContentEng', '');
         }
     }
     HQ.grid.checkInsertKey(App.grdStatus, e, keys);
@@ -170,5 +185,18 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoStatus.reload();
+    }
+};
+function renderStatusType(value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboStatusType.store, ['Code'], [record.data.StatusType])
+    if (Ext.isEmpty(r)) {
+        return value;
+    }
+    return r.data.Descr;
+};
+function stringFilter(record) {
+    if (this.dataIndex == 'StatusType') {
+        App.cboStatusType.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboStatusType.store, "Code", "Descr");
     }
 };
