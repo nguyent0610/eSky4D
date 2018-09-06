@@ -1396,7 +1396,9 @@ namespace SA02900
         /// <param name="hideColumn">Initial value of the HideColumn property.</param>
         /// <param name="lang00">Initial value of the Lang00 property.</param>
         /// <param name="lang01">Initial value of the Lang01 property.</param>
-        public static SA02900_pgSI_ApprovalFlowHandle_Result CreateSA02900_pgSI_ApprovalFlowHandle_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.Byte[] tstamp, global::System.String branchID, global::System.String hideColumn, global::System.String lang00, global::System.String lang01)
+        /// <param name="content">Initial value of the Content property.</param>
+        /// <param name="contentEng">Initial value of the ContentEng property.</param>
+        public static SA02900_pgSI_ApprovalFlowHandle_Result CreateSA02900_pgSI_ApprovalFlowHandle_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.Byte[] tstamp, global::System.String branchID, global::System.String hideColumn, global::System.String lang00, global::System.String lang01, global::System.String content, global::System.String contentEng)
         {
             SA02900_pgSI_ApprovalFlowHandle_Result sA02900_pgSI_ApprovalFlowHandle_Result = new SA02900_pgSI_ApprovalFlowHandle_Result();
             sA02900_pgSI_ApprovalFlowHandle_Result.AppFolID = appFolID;
@@ -1408,6 +1410,8 @@ namespace SA02900
             sA02900_pgSI_ApprovalFlowHandle_Result.HideColumn = hideColumn;
             sA02900_pgSI_ApprovalFlowHandle_Result.Lang00 = lang00;
             sA02900_pgSI_ApprovalFlowHandle_Result.Lang01 = lang01;
+            sA02900_pgSI_ApprovalFlowHandle_Result.Content = content;
+            sA02900_pgSI_ApprovalFlowHandle_Result.ContentEng = contentEng;
             return sA02900_pgSI_ApprovalFlowHandle_Result;
         }
 
@@ -1990,6 +1994,54 @@ namespace SA02900
         private global::System.String _Lang01;
         partial void OnLang01Changing(global::System.String value);
         partial void OnLang01Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Content
+        {
+            get
+            {
+                return _Content;
+            }
+            set
+            {
+                OnContentChanging(value);
+                ReportPropertyChanging("Content");
+                _Content = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Content");
+                OnContentChanged();
+            }
+        }
+        private global::System.String _Content;
+        partial void OnContentChanging(global::System.String value);
+        partial void OnContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ContentEng
+        {
+            get
+            {
+                return _ContentEng;
+            }
+            set
+            {
+                OnContentEngChanging(value);
+                ReportPropertyChanging("ContentEng");
+                _ContentEng = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ContentEng");
+                OnContentEngChanged();
+            }
+        }
+        private global::System.String _ContentEng;
+        partial void OnContentEngChanging(global::System.String value);
+        partial void OnContentEngChanged();
 
         #endregion
 

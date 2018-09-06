@@ -46,6 +46,7 @@ var checkLoad = function (sto) {
         App.stoTop.reload();
         App.cboLangStatus.store.reload();
         App.cboLangHandle.store.reload();
+        App.cboToStatus.store.reload();
         if (HQ.isFlagBranchID==true) {
             keysTop = ['BranchID', 'AppFolID', 'RoleID', 'Status'];
             App.colBranchID.setVisible(true);
@@ -453,6 +454,15 @@ var grdBot_Edit = function (item, e) {
 
     if (e.field == 'ToStatus')
     {
+        var objToStatus = HQ.store.findInStore(App.cboToStatus.store, ['LangID'], [e.value]);
+        if (objToStatus != undefined) {
+            e.record.set('Content', objToStatus.Lang01);
+            e.record.set('ContentEng', objToStatus.Lang00);
+        }
+        else {
+            e.record.set('Content', '');
+            e.record.set('ContentEng', '');
+        }
         if (checkValidateEdit(App.grdBot, e, ['ToStatus']) == false)
         {
             e.record.set('ToStatus','')

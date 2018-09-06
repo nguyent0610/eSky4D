@@ -121,6 +121,8 @@
           <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="47" />
           <Property Type="String" Name="Lang00" Nullable="false" MaxLength="100" />
           <Property Type="String" Name="Lang01" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Content" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ContentEng" Nullable="false" MaxLength="100" />
         </ComplexType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -229,6 +231,8 @@
                 <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
                 <ScalarProperty Name="Lang00" ColumnName="Lang00" />
                 <ScalarProperty Name="Lang01" ColumnName="Lang01" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ContentEng" ColumnName="ContentEng" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

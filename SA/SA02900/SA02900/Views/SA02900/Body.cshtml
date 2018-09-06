@@ -162,9 +162,9 @@
                         })
                     ),
 
-                X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(70).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
-                X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(400).EnforceMaxLength(true)),
-                X.Column().Text(Util.GetLang("LangStatus")).DataIndex("LangStatus").Width(150)
+                X.Column().Text(Util.GetLang("SA02900Status")).DataIndex("Status").Width(70).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+                X.Column().Text(Util.GetLang("SA02900Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(400).EnforceMaxLength(true)),
+                X.Column().Text(Util.GetLang("SA02900LangStatus")).DataIndex("LangStatus").Width(150)
                 .Editor(
                        HQ.Combo().ID("cboLangStatus")
                         .Name("cboLangStatus").HQProcedure("SA02900_pcLangStatus").PageSize(20).HQisPaging(true)
@@ -185,8 +185,8 @@
                         })
                         .LoadData()
                 ),
-                X.Column().Text(Util.GetLang("DefineVi")).DataIndex("Lang01").Width(150),
-                X.Column().Text(Util.GetLang("DefineEn")).DataIndex("Lang00").Width(150),
+                X.Column().Text(Util.GetLang("SA02900DefineVi")).DataIndex("Lang01").Width(150),
+                X.Column().Text(Util.GetLang("SA02900DefineEn")).DataIndex("Lang00").Width(150),
                 X.CommandColumn()
                 .Width(150)
                 .Commands(
@@ -323,11 +323,30 @@
                         })
                         .LoadData()
                 ),
-                X.Column().Text(Util.GetLang("DefineVi")).DataIndex("Lang01").Width(150),
-                X.Column().Text(Util.GetLang("DefineEn")).DataIndex("Lang00").Width(150),
-                    X.Column().Text(Util.GetLang("ToStatus")).DataIndex("ToStatus").Width(100)
-                    .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
-
+                X.Column().Text(Util.GetLang("SA02900DefineVi")).DataIndex("Lang01").Width(150),
+                X.Column().Text(Util.GetLang("SA02900DefineEn")).DataIndex("Lang00").Width(150),
+                X.Column().Text(Util.GetLang("SA02900ToStatus")).DataIndex("ToStatus").Width(100)
+                .Editor(
+                    HQ.Combo().ID("cboToStatus")
+                    .Name("cboToStatus").HQProcedure("SA02900_pcToStatus").PageSize(20).HQisPaging(true)
+                    .HQColumnShow("LangID,Lang00,Lang01").DisplayField("LangID").ValueField("LangID")
+                    .Width(300).HQHeightWidth(500, 400)
+                    .AllowBlank(true).HQDBSys(false)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName" , Mode = ParameterMode.Value },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .LoadData()
+                    ),
+                    X.Column().Text(Util.GetLang("SA02900Content")).DataIndex("Content").Width(150),
+                    X.Column().Text(Util.GetLang("SA02900ContentEng")).DataIndex("ContentEng").Width(150),
                     X.Column().Text(Util.GetLang("ContentApprove")).DataIndex("ContentApprove").Width(220)
                     .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)),
 
@@ -514,7 +533,11 @@
                         X.ListFilter().DataIndex("BranchID"),
                         X.StringFilter().DataIndex("Handle"),
                         X.StringFilter().DataIndex("LangHandle"),
+                        X.StringFilter().DataIndex("Lang00"),
+                        X.StringFilter().DataIndex("Lang01"),
                         X.StringFilter().DataIndex("ToStatus"),
+                        X.StringFilter().DataIndex("Content"),
+                        X.StringFilter().DataIndex("ContentEng"),
                         X.StringFilter().DataIndex("ContentApprove"),
                         X.StringFilter().DataIndex("MailSubject"),
                         X.StringFilter().DataIndex("MailApprove"),
