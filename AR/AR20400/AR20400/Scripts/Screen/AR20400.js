@@ -540,6 +540,10 @@ var stoLoad = function (sto) {
             HQ.combo.expand(App.cboOunit, ',');
         }
     }
+    if (record.data.Status != 'I')
+        App.txtInActive.disable();
+    else
+        App.txtInActive.enable();
 };
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////
@@ -1650,11 +1654,13 @@ var cboHandle_Change = function (sender, value) {
         if (HQ.isUpdate) {
             App.txtInActive.setReadOnly(false);
         }
+        App.txtInActive.enable();
     }
     else {
         setAllowBank_InActive(true);
         if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus)
             App.txtInActive.setReadOnly(true);
+        App.txtInActive.disable();
     }
 };
 
