@@ -167,25 +167,6 @@ namespace PO20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="priceID">No Metadata Documentation available.</param>
-        public ObjectResult<PO20100_pgGetPOPriceCpny_Result> PO20100_pgGetPOPriceCpny(global::System.String priceID)
-        {
-            ObjectParameter priceIDParameter;
-            if (priceID != null)
-            {
-                priceIDParameter = new ObjectParameter("PriceID", priceID);
-            }
-            else
-            {
-                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<PO20100_pgGetPOPriceCpny_Result>("PO20100_pgGetPOPriceCpny", priceIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -222,6 +203,58 @@ namespace PO20100
             }
     
             return base.ExecuteFunction<PO20100_pdConfig_Result>("PO20100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="priceID">No Metadata Documentation available.</param>
+        public ObjectResult<PO20100_pgGetPOPriceCpny_Result> PO20100_pgGetPOPriceCpny(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String priceID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter priceIDParameter;
+            if (priceID != null)
+            {
+                priceIDParameter = new ObjectParameter("PriceID", priceID);
+            }
+            else
+            {
+                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<PO20100_pgGetPOPriceCpny_Result>("PO20100_pgGetPOPriceCpny", cpnyIDParameter, userNameParameter, langIDParameter, priceIDParameter);
         }
 
         #endregion
@@ -764,7 +797,9 @@ namespace PO20100
         /// <param name="effDate">Initial value of the EffDate property.</param>
         /// <param name="public">Initial value of the Public property.</param>
         /// <param name="hOCreate">Initial value of the HOCreate property.</param>
-        public static PO_PriceHeader CreatePO_PriceHeader(global::System.String priceID, global::System.Boolean status, global::System.DateTime effDate, global::System.Boolean @public, global::System.Boolean hOCreate)
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        public static PO_PriceHeader CreatePO_PriceHeader(global::System.String priceID, global::System.Boolean status, global::System.DateTime effDate, global::System.Boolean @public, global::System.Boolean hOCreate, global::System.String crtd_User, global::System.String lUpd_User)
         {
             PO_PriceHeader pO_PriceHeader = new PO_PriceHeader();
             pO_PriceHeader.PriceID = priceID;
@@ -772,6 +807,8 @@ namespace PO20100
             pO_PriceHeader.EffDate = effDate;
             pO_PriceHeader.Public = @public;
             pO_PriceHeader.HOCreate = hOCreate;
+            pO_PriceHeader.Crtd_User = crtd_User;
+            pO_PriceHeader.LUpd_User = lUpd_User;
             return pO_PriceHeader;
         }
 
@@ -977,7 +1014,7 @@ namespace PO20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -989,7 +1026,7 @@ namespace PO20100
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -1049,7 +1086,7 @@ namespace PO20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -1061,7 +1098,7 @@ namespace PO20100
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }

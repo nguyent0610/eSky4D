@@ -42,7 +42,7 @@ namespace PO20100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -55,7 +55,7 @@ namespace PO20100.Controllers
 
         public ActionResult GetPO_PriceCpny(string PriceID)
         {
-            return this.Store(_db.PO20100_pgGetPOPriceCpny(PriceID).ToList());
+            return this.Store(_db.PO20100_pgGetPOPriceCpny(Current.CpnyID, Current.UserName, Current.LangID, PriceID).ToList());
         }
 
         public ActionResult GetPOPriceHeader(string PriceID)
