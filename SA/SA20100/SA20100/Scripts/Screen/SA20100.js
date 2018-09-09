@@ -12,6 +12,7 @@ var checkLoad = function () {
     if (_Source == _maxSource) {
         _isLoadMaster = true
         _Source = 0;
+        App.cboLangID.store.reload();
         App.stoStatus.reload();
     }
 };
@@ -76,14 +77,16 @@ var menuClick = function (command) {
                 if (App.slmStatus.selected.items[0] != undefined) {
                     if (App.stocheckDelete.data.items[0].data.Delete == 0)
                     {
-                        if (App.slmStatus.selected.items[0].data.StatusID != "") {
+                        if (App.slmStatus.selected.items[0].data.StatusID != "" && App.slmStatus.selected.items[0].data.StatusType != "") {
                             HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdStatus)], 'deleteData', true);
                         }
                     }
                     else
                     {
                         var StatusID = App.grdStatus.selModel.selected.items[0].data.StatusID;
-                        HQ.message.show(2018081760, [App.grdStatus.columnManager.columns[2].text, StatusID], '', true);
+                        var StatusType = App.grdStatus.selModel.selected.items[0].data.StatusType;
+                        HQ.message.show(2018081760, [App.grdStatus.columnManager.columns[2].text, StatusType, App.grdStatus.columnManager.columns[3].text, StatusID], '', true);
+                        return;
                     }
                 }
             }
@@ -176,8 +179,16 @@ var save = function () {
 };
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdStatus.deleteSelected();
-        frmChange();
+        var indexcolum = '';
+        var check = '';
+        var lstSelete = App.grdStatus.selModel.selected;
+        for (var i = 0; i < lstSelete.length; i++) {
+            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+            check = check + lstSelete.items[i].data.BranchRouteID + ",";
+        }
+        checkDeleteData(indexcolum, check);
+        //App.grdStatus.deleteSelected();
+        //frmChange();
     }
 };
 function refresh(item) {

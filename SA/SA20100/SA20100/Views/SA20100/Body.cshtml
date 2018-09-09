@@ -85,7 +85,7 @@
                         HQ.Combo().ID("cboLangID")
                         .HQProcedure("SA20100_pcLangID")
                         .HQColumnShow("LangID,Content")
-                        .HQHeightWidth(400, 300)
+                        .HQHeightWidth(400, 300).PageSize(20).HQisPaging(true)
                         .ValueField("LangID").DisplayField("LangID")
                         .ForceSelection(true).SelectOnFocus(true)
                         .HQParam(new StoreParameterCollection() { 
