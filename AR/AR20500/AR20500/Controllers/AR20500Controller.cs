@@ -855,30 +855,55 @@ namespace AR20500.Controllers
                     if (item.ColCheck == true)
                     {
                         var objCust = _db.CS_Leads.Where(x => x.LeadID == item.NewConsumerID && x.BranchID == item.BranchID).FirstOrDefault();
-                        if (status == "H")
+                        var objAR_Consumer = _db.AR_Consumer.FirstOrDefault(p => p.ConsumerID == item.ConsumerID && p.Phone == item.Phone && p.SlsperID == item.SlsperID && p.BranchID == item.BranchID);
+
+                        if (handle != "D")
                         {
-                            if (objCust != null)
+                            if (status == "H")
                             {
-                                UpCS_Leads(objCust, item, false, handle);
-                                calUpdate = true;
-                            }
-                            else
-                            {
-                                if (item.ConsumerID.PassNull() != "")
+                                if (objCust != null)
                                 {
-                                    objCust = new CS_Leads();
-                                    objCust.ResetET();
-                                    objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
-                                    objCust.BranchID = item.BranchID;
-                                    UpCS_Leads(objCust, item, true, handle);
-                                    _db.CS_Leads.AddObject(objCust);
+                                    UpCS_Leads(objCust, item, false, handle);
                                     calUpdate = true;
                                 }
+                                else
+                                {
+                                    if (item.ConsumerID.PassNull() != "")
+                                    {
+                                        objCust = new CS_Leads();
+                                        objCust.ResetET();
+                                        objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
+                                        objCust.BranchID = item.BranchID;
+                                        UpCS_Leads(objCust, item, true, handle);
+                                        _db.CS_Leads.AddObject(objCust);
+                                        calUpdate = true;
+                                    }
+                                }
+                                if (objAR_Consumer != null)
+                                {
+                                    objAR_Consumer.ConsumerName = item.ConsumerName;
+                                    objAR_Consumer.Addr = item.Addr;
+                                    objAR_Consumer.Addr1 = item.NumberHouse;
+                                    objAR_Consumer.Addr2 = item.StreetNames;
+                                    objAR_Consumer.Ward = item.Ward;
+                                    objAR_Consumer.Territory = item.Territory;
+                                    objAR_Consumer.State = item.State;
+                                    objAR_Consumer.District = item.District;
+                                }
                             }
+                            _db.SaveChanges();
+                            if (calUpdate)
+                                _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
                         }
-                        _db.SaveChanges();
-                        if (calUpdate)
-                            _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                        else
+                        {
+                            if(objAR_Consumer != null)
+                            {
+                                objAR_Consumer.Status = "D";
+                            }
+                            _db.SaveChanges();
+                        }
+                        
                     }
                 }
 
@@ -915,7 +940,7 @@ namespace AR20500.Controllers
             t.LeadName = s.ConsumerName;
             t.Note = s.Note;
             t.PhoneNumber = s.Phone;
-            t.Status = handle;
+            t.Status = "C";
             t.State = s.State;
             t.Addr1 = s.NumberHouse;
             t.Addr2 = s.StreetNames;

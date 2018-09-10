@@ -829,21 +829,21 @@
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("ConsumerID").Width(100)
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("ConsumerName").Width(120).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("Addr")).DataIndex("Addr").Width(250).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
-                        , X.Column().Text(Util.GetLang("NumberHouse")).DataIndex("Addr1").Width(100).Editor(X.TextField())
-                        , X.Column().Text(Util.GetLang("StreetNames")).DataIndex("Addr2").Width(100).Editor(X.TextField())
+                        , X.Column().Text(Util.GetLang("NumberHouse")).DataIndex("NumberHouse").Width(100).Editor(X.TextField())
+                        , X.Column().Text(Util.GetLang("StreetNames")).DataIndex("StreetNames").Width(100).Editor(X.TextField())
                         , X.Column().Text(Util.GetLang("AR20500Ward")).DataIndex("Ward").Width(120).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
-                        , X.Column().Text(Util.GetLang("District")).DataIndex("District").Renderer("renderDistrict").Width(120)
+                        , X.Column().Text(Util.GetLang("AR20500Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
                         .Editor(
-                            HQ.Combo().ID("cboColDistrictPG").HQProcedure("AR20500_pcDistrict")
-                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                            .ForceSelection(true).HQHeightWidth(400, 300)
-                            .HQParam(new StoreParameterCollection()
-                            {
-                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                            })
-                            .LoadData()
+                        HQ.Combo().ID("cboColTerritoryPG").HQProcedure("AR20500_pcTerritory")
+                        .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory")
+                        .ForceSelection(true).HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
@@ -868,24 +868,25 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                         )
-                        , X.Column().Text(Util.GetLang("AR20500Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
+                        , X.Column().Text(Util.GetLang("District")).DataIndex("District").Renderer("renderDistrict").Width(120)
                         .Editor(
-                        HQ.Combo().ID("cboColTerritoryPG").HQProcedure("AR20500_pcTerritory")
-                        .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory")
-                        .ForceSelection(true).HQHeightWidth(400, 300)
-                        .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                        })
-                        .LoadData()
+                            HQ.Combo().ID("cboColDistrictPG").HQProcedure("AR20500_pcDistrict")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .ForceSelection(true).HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                         )
+                      
                         , X.Column().Text(Util.GetLang("ClassCust")).DataIndex("ClassID").Renderer("renderClassCust").Width(120)
                         .Editor(
                             HQ.Combo().ID("cboClassCustPG").HQProcedure("AR20500_pcClassCust")
@@ -945,7 +946,7 @@
                         , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(90)//.Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
-                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(100)
+                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewConsumerID").Width(100)
                         , X.Column().Text(Util.GetLang("Note")).DataIndex("Note").Width(100).Editor(X.TextField().MaxLength(500).EnforceMaxLength(true))
                         , X.CommandColumn().Width(200)
                         .Commands(
@@ -999,8 +1000,8 @@
                                , X.StringFilter().DataIndex("ConsumerID")
                                , X.StringFilter().DataIndex("ConsumerName")
                                , X.StringFilter().DataIndex("Addr")
-                               , X.StringFilter().DataIndex("Addr1")
-                               , X.StringFilter().DataIndex("Addr2")
+                               , X.StringFilter().DataIndex("NumberHouse")
+                               , X.StringFilter().DataIndex("StreetNames")
                                , X.StringFilter().DataIndex("Ward")
                                , X.StringFilter().DataIndex("District")
                                , X.StringFilter().DataIndex("State")
@@ -1011,7 +1012,7 @@
                                , X.StringFilter().DataIndex("Phone")
                                , X.StringFilter().DataIndex("SlsperID")
                                , X.StringFilter().DataIndex("Name")
-                               , X.StringFilter().DataIndex("NewCustID")
+                               , X.StringFilter().DataIndex("NewConsumerID")
                                , X.StringFilter().DataIndex("Note")
                             )
                     )// grid

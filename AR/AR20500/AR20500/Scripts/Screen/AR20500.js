@@ -398,22 +398,25 @@ var btnProcess_Click = function () {
             var erroChannel = "";
             var erroSourceID = "";
             var errorClassID = "";
-            for (var i = 0; i < allData.length ; i++) {
-                if (allData.items[i].data.ColCheck) {
-                    if (allData.items[i].data.State == "" || allData.items[i].data.State == null) {
-                        erroState = erroState + (allData.items[i].index + 1) + ",";
-                    }
-                    if (allData.items[i].data.Channel == "" || allData.items[i].data.Channel == null) {
-                        erroChannel = erroChannel + (allData.items[i].index + 1) + ",";
-                    }
-                    if (allData.items[i].data.SourceID == "" || allData.items[i].data.SourceID == null) {
-                        erroSourceID = erroSourceID + (allData.items[i].index + 1) + ",";
-                    }
-                    if (allData.items[i].data.ClassID == "" || allData.items[i].data.ClassID == null) {
-                        errorClassID = errorClassID + (allData.items[i].index + 1) + ",";
+            if (App.cboHandle.value != "D") {
+                for (var i = 0; i < allData.length ; i++) {
+                    if (allData.items[i].data.ColCheck) {
+                        if (allData.items[i].data.State == "" || allData.items[i].data.State == null) {
+                            erroState = erroState + (allData.items[i].index + 1) + ",";
+                        }
+                        if (allData.items[i].data.Channel == "" || allData.items[i].data.Channel == null) {
+                            erroChannel = erroChannel + (allData.items[i].index + 1) + ",";
+                        }
+                        if (allData.items[i].data.SourceID == "" || allData.items[i].data.SourceID == null) {
+                            erroSourceID = erroSourceID + (allData.items[i].index + 1) + ",";
+                        }
+                        if (allData.items[i].data.ClassID == "" || allData.items[i].data.ClassID == null) {
+                            errorClassID = errorClassID + (allData.items[i].index + 1) + ",";
+                        }
                     }
                 }
             }
+            
             if (erroState != "") {
                 HQ.message.show(2018041211, [HQ.common.getLang('State'), erroState], '', true);
                 return;
@@ -602,6 +605,10 @@ var menuClick = function (command) {
 };
 
 var grdCust_BeforeEdit = function (item, e) {
+    if (App.cboHandle.value == null) {
+        HQ.message.show(2018091001);//Phai chon xu ly trc khi edit du lieu
+        return false;
+    }
     if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
     if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
     if (!checkEditDet()) {
@@ -828,6 +835,11 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
 };
 
 var grdCustPG_BeforeEdit = function (item, e) {
+    if (App.cboHandle.value == null)
+    {
+        HQ.message.show(2018091001);//Phai chon xu ly trc khi edit du lieu
+        return false;
+    }
     if (e.field == 'State') {
         var territory = e.record.data.Territory;
         if (territory == '') {
