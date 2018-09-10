@@ -59,29 +59,29 @@ namespace SA00700.Controllers
 
                 lstSYS_AccessDetRights.Created.AddRange(lstSYS_AccessDetRights.Updated);
 
-                foreach (SA00700_pgAccessRightsScreen_Result curLang in lstSYS_AccessDetRights.Created)
+                foreach (SA00700_pgAccessRightsScreen_Result crrRight in lstSYS_AccessDetRights.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "" || userID.PassNull() == "" || recType.PassNull() == "")
+                    if (crrRight.ScreenNumber.PassNull() == "" || userID.PassNull() == "" || recType.PassNull() == "")
                     {
                         continue;
                     }
                     
-                    var lang = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() 
+                    var objRight = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == crrRight.ScreenNumber 
                                                                         && p.UserID.ToLower() == userID.ToLower()
                                                                         && p.CpnyID.ToLower() == cpnyID.ToLower()
                                                                         && p.RecType.ToLower() == recType.ToLower());
-                    if (curLang.InitRights == false && curLang.InsertRights == false && curLang.UpdateRights == false && curLang.DeleteRights == false && curLang.ViewRights == false && curLang.ReleaseRights == false)
+                    if (crrRight.InitRights == false && crrRight.InsertRights == false && crrRight.UpdateRights == false && crrRight.DeleteRights == false && crrRight.ViewRights == false && crrRight.ReleaseRights == false)
                     {
-                        if (curLang != null)
+                        if (objRight != null)
                         {
-                            _db.SYS_AccessDetRights.DeleteObject(lang);
+                            _db.SYS_AccessDetRights.DeleteObject(objRight);
                         }
                     }
-                    else if (lang != null)
+                    else if (objRight != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (objRight.tstamp.ToHex() == crrRight.tstamp.ToHex())
                         {
-                            Update_AccessDetRights(lang, curLang, false);
+                            Update_AccessDetRights(objRight, crrRight, false);
                         }
                         else
                         {
@@ -90,14 +90,14 @@ namespace SA00700.Controllers
                     }
                     else
                     {
-                        lang = new SYS_AccessDetRights();
-                        lang.ResetET();
-                        lang.ScreenNumber = curLang.ScreenNumber;
-                        lang.CpnyID = cpnyID;
-                        lang.UserID = userID;
-                        lang.RecType = recType;
-                        Update_AccessDetRights(lang, curLang, true);
-                        _db.SYS_AccessDetRights.AddObject(lang);
+                        objRight = new SYS_AccessDetRights();
+                        objRight.ResetET();
+                        objRight.ScreenNumber = crrRight.ScreenNumber;
+                        objRight.CpnyID = cpnyID;
+                        objRight.UserID = userID;
+                        objRight.RecType = recType;
+                        Update_AccessDetRights(objRight, crrRight, true);
+                        _db.SYS_AccessDetRights.AddObject(objRight);
                     }
                 }
 
