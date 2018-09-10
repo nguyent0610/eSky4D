@@ -28,6 +28,7 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="StatusID" Type="varchar" Mode="In" />
+          <Parameter Name="StatusType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="SA20100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -53,16 +54,17 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="SA20100_pdConfig" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
           <FunctionImport Name="SA20100_pdCheckbeforedelete" ReturnType="Collection(Int32)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="StatusID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SA20100_pdConfig" ReturnType="Collection(Boolean)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="StatusType" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_Status">
@@ -131,8 +133,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA20100_pdCheckbeforedelete" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdCheckbeforedelete" />
           <FunctionImportMapping FunctionImportName="SA20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdConfig" />
+          <FunctionImportMapping FunctionImportName="SA20100_pdCheckbeforedelete" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdCheckbeforedelete" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

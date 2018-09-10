@@ -141,11 +141,53 @@ namespace SA20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SA20100_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SA20100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="statusID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int32>> SA20100_pdCheckbeforedelete(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String statusID)
+        /// <param name="statusType">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Int32>> SA20100_pdCheckbeforedelete(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String statusID, global::System.String statusType)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -187,48 +229,17 @@ namespace SA20100
                 statusIDParameter = new ObjectParameter("StatusID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<Nullable<global::System.Int32>>("SA20100_pdCheckbeforedelete", cpnyIDParameter, userNameParameter, langIDParameter, statusIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Boolean>> SA20100_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
+            ObjectParameter statusTypeParameter;
+            if (statusType != null)
             {
-                userNameParameter = new ObjectParameter("UserName", userName);
+                statusTypeParameter = new ObjectParameter("StatusType", statusType);
             }
             else
             {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+                statusTypeParameter = new ObjectParameter("StatusType", typeof(global::System.String));
             }
     
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SA20100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<Nullable<global::System.Int32>>("SA20100_pdCheckbeforedelete", cpnyIDParameter, userNameParameter, langIDParameter, statusIDParameter, statusTypeParameter);
         }
 
         #endregion

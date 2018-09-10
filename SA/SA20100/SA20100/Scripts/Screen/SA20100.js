@@ -3,6 +3,9 @@ var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
 var _statusID = '';
+var _statusType = '';
+var _record = '';
+var lstDelete = [];
 var keys = ['StatusID', 'StatusType'];
 var fieldsCheckRequire = ['StatusID', 'StatusType', 'StatusName', 'LangID'];
 var fieldsLangCheckRequire = ['LangStatus', 'StatusType', 'StatusName', 'SA20100LangID'];
@@ -75,7 +78,9 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 
                 if (App.slmStatus.selected.items[0] != undefined) {
-                    if (App.stocheckDelete.data.items[0].data.Delete == 0)
+                    var sls = HQ.grid.indexSelect(App.grdStatus);
+                    var slsTmp = sls.split(',');
+                    if (App.stocheckDelete.data.items[0].data.Delete == 0 && slsTmp.length == 1)
                     {
                         if (App.slmStatus.selected.items[0].data.StatusID != "" && App.slmStatus.selected.items[0].data.StatusType != "") {
                             HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdStatus)], 'deleteData', true);
@@ -83,8 +88,14 @@ var menuClick = function (command) {
                     }
                     else
                     {
+                      
                         var StatusID = App.grdStatus.selModel.selected.items[0].data.StatusID;
                         var StatusType = App.grdStatus.selModel.selected.items[0].data.StatusType;
+                        if (App.grdStatus.selModel.selected.items[lstDelete[0]] != undefined && slsTmp.length > 1)
+                        {
+                             StatusID = App.grdStatus.selModel.selected.items[lstDelete[0]].data.StatusID;
+                             StatusType = App.grdStatus.selModel.selected.items[lstDelete[0]].data.StatusType;
+                        }
                         HQ.message.show(2018081760, [App.grdStatus.columnManager.columns[2].text, StatusType, App.grdStatus.columnManager.columns[3].text, StatusID], '', true);
                         return;
                     }
@@ -123,8 +134,15 @@ var stoLoadStatus = function (sto) {
     else
         HQ.grid.hide(App.grdStatus, ['ContentEng']);
 };
+var stocheckDelete_Load = function (sto) {
+    var index = 0;
+    index = _record.index;
+    if (App.stocheckDelete.data.items[0].data.Delete && lstDelete.length == 0)
+        lstDelete.push(index);
+};
 var grdStatus_BeforeEdit = function (item, e) {
     _statusID = e.record.data.StatusID;
+    _statusType = e.record.data.StatusType;
     if (!HQ.grid.checkBeforeEdit(e, keys))
         return false;
 };
@@ -155,6 +173,8 @@ var grdStatus_Reject = function (record) {
 };
 var grdStatus_Select = function (item, record) {
     _statusID = record.data.StatusID;
+    _statusType = record.data.StatusType;
+    _record = record;
     App.stocheckDelete.reload();
 }
 var save = function () {
@@ -179,16 +199,8 @@ var save = function () {
 };
 var deleteData = function (item) {
     if (item == "yes") {
-        var indexcolum = '';
-        var check = '';
-        var lstSelete = App.grdStatus.selModel.selected;
-        for (var i = 0; i < lstSelete.length; i++) {
-            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
-            check = check + lstSelete.items[i].data.BranchRouteID + ",";
-        }
-        checkDeleteData(indexcolum, check);
-        //App.grdStatus.deleteSelected();
-        //frmChange();
+        App.grdStatus.deleteSelected();
+        frmChange();
     }
 };
 function refresh(item) {
