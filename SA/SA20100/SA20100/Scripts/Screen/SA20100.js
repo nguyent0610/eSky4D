@@ -104,7 +104,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoStatus, keys, fieldsCheckRequire, fieldsLangCheckRequire)
+                if (checkRequirePass(App.stoStatus, keys, fieldsCheckRequire, fieldsLangCheckRequire)
                     ) {
                     save();
                 }
@@ -222,4 +222,50 @@ function stringFilter(record) {
         App.cboStatusType.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboStatusType.store, "Code", "Descr");
     }
+};
+var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {
+    var sto = App.stoStatus.data || App.stoStatus.allData;
+    items = store.getChangedData().Created;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
+                            for (var j = 0; j < sto.length; j++) {
+                                if(sto.items[j].data.StatusType == items[i].StatusType && sto.items[j].data.StatusID == items[i].StatusID)
+                                {
+                                    HQ.message.show(2018091002, [j+1,HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k])], '', true);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    break; // Check data one time
+                }
+            }
+        }
+    }
+
+    items = store.getChangedData().Updated;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
+                            for (var j = 0; j < sto.length; j++) {
+                                if (sto.items[j].data.StatusType == items[i].StatusType && sto.items[j].data.StatusID == items[i].StatusID) {
+                                    HQ.message.show(2018091002, [j + 1, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k])], '', true);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    break; // Check data one time
+                }
+            }
+        }
+    }
+    return true;
 };
