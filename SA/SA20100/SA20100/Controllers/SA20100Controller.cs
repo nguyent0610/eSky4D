@@ -75,7 +75,14 @@ namespace SA20100.Controllers
                         var objDel = _db.SI_Status.ToList().Where(p => p.StatusID.ToUpper() == del.StatusID.ToUpper() && p.StatusType.ToUpper() == del.StatusType.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
-                            _db.SI_Status.DeleteObject(objDel);
+                            if (_db.SA20100_pdCheckbeforedelete(Current.CpnyID, Current.UserName, Current.LangID, objDel.StatusID, objDel.StatusType).FirstOrDefault().Value == 1){
+                                var objStatusType = _db.SA20100_pcStatusType(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                                var objStatusTypeDescr = objStatusType != null ? objStatusType.Descr : "";
+
+                                throw new MessageException(MessageType.Message, "2018081760", "", new string[] { Util.GetLang("StatusType"), objStatusTypeDescr, Util.GetLang("LangStatus"), objDel.StatusID });
+                            }
+                            else
+                                _db.SI_Status.DeleteObject(objDel);
                         }
                     }
                 }

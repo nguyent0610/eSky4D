@@ -23,6 +23,11 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="StatusType" Type="varchar" MaxLength="2" Nullable="false" />
         </EntityType>
+        <Function Name="SA20100_pcStatusType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA20100_pdCheckbeforedelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -66,6 +71,11 @@
             <Parameter Name="StatusID" Mode="In" Type="String" />
             <Parameter Name="StatusType" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SA20100_pcStatusType" ReturnType="Collection(SA20100Model.SA20100_pcStatusType_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_Status">
           <Key>
@@ -94,6 +104,10 @@
           <Property Type="String" Name="Content" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="StatusType" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="ContentEng" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SA20100_pcStatusType_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -135,6 +149,14 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdConfig" />
           <FunctionImportMapping FunctionImportName="SA20100_pdCheckbeforedelete" FunctionName="eBiz4DWebSysModel.Store.SA20100_pdCheckbeforedelete" />
+          <FunctionImportMapping FunctionImportName="SA20100_pcStatusType" FunctionName="eBiz4DWebSysModel.Store.SA20100_pcStatusType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA20100Model.SA20100_pcStatusType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -78,27 +78,8 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 
                 if (App.slmStatus.selected.items[0] != undefined) {
-                    var sls = HQ.grid.indexSelect(App.grdStatus);
-                    var slsTmp = sls.split(',');
-                    if (App.stocheckDelete.data.items[0].data.Delete == 0 && App.grdStatus.selModel.selected.items[lstDelete[0]] == undefined)
-                    {
-                        if (App.slmStatus.selected.items[0].data.StatusID != "" && App.slmStatus.selected.items[0].data.StatusType != "") {
-                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdStatus)], 'deleteData', true);
-                        }
-                    }
-                    else
-                    {
-                      
-                        var StatusID = App.grdStatus.selModel.selected.items[0].data.StatusID;
-                        var StatusType = App.grdStatus.selModel.selected.items[0].data.StatusType;
-                        if (App.grdStatus.selModel.selected.items[lstDelete[0]] != undefined && slsTmp.length > 1)
-                        {
-                             StatusID = App.grdStatus.selModel.selected.items[lstDelete[0]].data.StatusID;
-                             StatusType = App.grdStatus.selModel.selected.items[lstDelete[0]].data.StatusType;
-                        }
-                        var objStatusType = HQ.store.findInStore(App.cboStatusType.store, ['Code'], [StatusType]);
-                        HQ.message.show(2018081760, [App.grdStatus.columnManager.columns[2].text, objStatusType.Descr, App.grdStatus.columnManager.columns[3].text, StatusID], '', true);
-                        return;
+                    if (App.slmStatus.selected.items[0].data.StatusID != "" && App.slmStatus.selected.items[0].data.StatusType != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdStatus)], 'deleteData', true);
                     }
                 }
             }
