@@ -4,8 +4,8 @@ var keysTop = ['AppFolID', 'RoleID', 'Status'];
 var fieldsCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
 var fieldsLangCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
 var keysBot = ['Handle'];
-var fieldsCheckRequireBot = ["Handle", "LangHandle", "ToStatus"];
-var fieldsLangCheckRequireBot = ["Handle", "LangHandle", "ToStatus"];
+var fieldsCheckRequireBot = ["Handle", "LangHandle"];
+var fieldsLangCheckRequireBot = ["Handle", "LangHandle"];
 
 //var _listFilter = [];
 //var _totalCount = 0;
@@ -368,27 +368,31 @@ var grdTop_Edit = function (item, e) {
     _RoleID = e.record.data.RoleID;
     _Status = e.record.data.Status;
     _BranchID = e.record.data.BranchID;
-    if (e.field == 'LangStatus')
+    if (e.field == 'Status')
     {
-        var objLangStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [e.value]);
-        if (objLangStatus != undefined) {
-            e.record.set('Lang00', objLangStatus.Lang00);
-            e.record.set('Lang01', objLangStatus.Lang01);
-        }
-        else
-        {
-            e.record.set('Lang00', '');
-            e.record.set('Lang01', '');
-        }
+            var objStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [e.value]);
+            if (objStatus != undefined) {
+                e.record.set('Descr', objStatus.StatusName);
+                e.record.set('LangStatus', objStatus.LangID);
+                e.record.set('Lang00', objStatus.Lang00);
+                e.record.set('Lang01', objStatus.Lang01);
+            }
+            else
+            {
+                e.record.set('Descr', '');
+                e.record.set('LangStatus', '');
+                e.record.set('Lang00', '');
+                e.record.set('Lang01', '');
+            }
     }
-    if (e.field == "LangStatus") {
-        _langStatus = e.record.data.LangStatus;
-        var objLangStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [_langStatus]);
-        if (objLangStatus == undefined) {
-            HQ.message.show(2018062164, [HQ.common.getLang("LangStatus"), _langStatus], '', true);
-            e.record.set("LangStatus", '');
-        }
-    }
+    //if (e.field == "LangStatus") {
+    //    _langStatus = e.record.data.LangStatus;
+    //    var objLangStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [_langStatus]);
+    //    if (objLangStatus == undefined) {
+    //        HQ.message.show(2018062164, [HQ.common.getLang("LangStatus"), _langStatus], '', true);
+    //        e.record.set("LangStatus", '');
+    //    }
+    //}
 
     frmChange();
 };
@@ -424,34 +428,20 @@ var grdBot_Edit = function (item, e) {
             e.record.set('BranchID', _BranchID);
         }
     }
-    if (e.field == 'LangHandle')
+    if (e.field == 'Handle')
     {
-
-        if (checkValidateEdit(App.grdBot, e, ['LangHandle']) == false)
-        {
-            e.record.set("LangHandle", '');
-        }
         var objLangHandle = HQ.store.findInStore(App.cboLangHandle.store, ['Code'], [e.value]);
         if (objLangHandle != undefined) {
+            e.record.set('LangHandle', objLangHandle.LangID);
             e.record.set('Lang00', objLangHandle.Lang00);
             e.record.set('Lang01', objLangHandle.Lang01);
         }
         else {
+            e.record.set('LangHandle','');
             e.record.set('Lang00', '');
             e.record.set('Lang01', '');
         }
-        if (e.field == "LangHandle") {
-            _langHandle = e.record.data.LangHandle;
-            var objLangHandle = HQ.store.findInStore(App.cboLangHandle.store, ['Code'], [_langHandle]);
-            if (objLangHandle == undefined) {
-                HQ.message.show(2018062164, [HQ.common.getLang("LangHandle"), _langHandle], '', true);
-                e.record.set("LangHandle", '');
-            }
-        }
-        return checkValidateEdit(App.grdBot, e, ['LangHandle']);
-       
     }
-
     if (e.field == 'ToStatus')
     {
         var objToStatus = HQ.store.findInStore(App.cboToStatus.store, ['LangID'], [e.value]);
