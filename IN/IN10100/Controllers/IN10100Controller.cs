@@ -1282,6 +1282,7 @@ namespace IN10100.Controllers
                             var lstInvtID = new List<IN10100_pdInventory_Result>();
 
                             Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                                                       
                             int lineRef = data["lineRef"].ToInt();
                             string whseLoc = data["cboWhseLoc"].PassNull();
                             if (workbook.Worksheets.Count > 0)
@@ -1289,10 +1290,30 @@ namespace IN10100.Controllers
                                 Worksheet workSheet = workbook.Worksheets[0];
                                 string invtID = string.Empty;
 
+                                var colTextsHeader = GetHeader(showWhseLoc);
+                                bool checkHeader = false;
+                                for (int i = 0; i < colTextsHeader.Count; i++)
+                                {
+                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != colTextsHeader[i].ToUpper().Trim())
+                                    {
+                                        checkHeader = true;
+                                        break;
+                                    }
+                                }
+                                if (checkHeader)
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+
+
                                 for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                                 {
                                     invtID = workSheet.Cells[i, 0].StringValue;
-                                    if (invtID == string.Empty) break;
+                                    if (invtID == string.Empty)
+                                    {
+                                        continue;
+                                    }
                                     string unitDesc="";
                                     var objInvt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                                     if (objInvt == null)
@@ -1444,7 +1465,7 @@ namespace IN10100.Controllers
                                     }
 
 
-                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr == workSheet.Cells[i, 8].StringValue))
+                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr.ToUpper() == workSheet.Cells[i, 8].StringValue.ToUpper() && p.SiteID==siteID && p.WhseLoc==siteLocation))
                                     {
                                         message += string.Format("Dòng {0} mặt hàng {1} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 8].StringValue);
                                         continue;
@@ -1510,8 +1531,17 @@ namespace IN10100.Controllers
                                 }
                             }
 
-                            var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
-                            foreach (var item in lstInvt)
+                            var lst = new List<IN_LotTransExt>();
+                            foreach (var item in lstLot)
+                            {
+                                if (!lst.Any(x => x.InvtID == item.InvtID && x.SiteID == item.SiteID && x.WhseLoc == item.WhseLoc))
+                                {
+                                    lst.Add(item);
+                                }
+                            }
+
+                            //var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
+                            foreach (var item in lst)
                             {
                                 var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
 
@@ -1529,7 +1559,7 @@ namespace IN10100.Controllers
                                 newTrans.TranDesc = objInvt.Descr;
                                 newTrans.WhseLoc = item.WhseLoc;// whseLoc;
 
-                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
+                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID && p.SiteID==item.SiteID && p.WhseLoc == item.WhseLoc).ToList();
                                 foreach (var lot in tmp)
                                 {
                                     newTrans.Qty += lot.Qty;
@@ -1555,6 +1585,12 @@ namespace IN10100.Controllers
                                 lineRef++;
 
                             }
+
+                            if (lstTrans.Count == 0)
+                            {
+                                message += string.Format("File import không có nội dung<br/>");
+                            }
+
                             //if (check)
                             //{
                             //    Util.AppendLog(ref _logMessage, "123", "", data: new { message, lstTrans, lstLot });
@@ -1591,6 +1627,21 @@ namespace IN10100.Controllers
                             {
                                 Worksheet workSheet = workbook.Worksheets[0];
                                 string invtID = string.Empty;
+
+                                var colTextsHeader = GetHeader(showWhseLoc);
+                                bool checkHeader = false;
+                                for (int i = 0; i < colTextsHeader.Count; i++)
+                                {
+                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != colTextsHeader[i].ToUpper().Trim())
+                                    {
+                                        checkHeader = true;
+                                        break;
+                                    }
+                                }
+                                if (checkHeader)
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
 
                                 for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                                 {
@@ -1735,7 +1786,7 @@ namespace IN10100.Controllers
                                     }
 
 
-                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr == workSheet.Cells[i, 8].StringValue))
+                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr.ToUpper() == workSheet.Cells[i, 8].StringValue.ToUpper() && p.SiteID==siteID))
                                     {
                                         message += string.Format("Dòng {0} mặt hàng {1} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 8].StringValue);
                                         continue;
@@ -1800,8 +1851,16 @@ namespace IN10100.Controllers
                                 }
                             }
 
-                            var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
-                            foreach (var item in lstInvt)
+                            var lst = new List<IN_LotTransExt>();
+                            foreach (var item in lstLot)
+                            {
+                                if (!lst.Any(x => x.InvtID == item.InvtID && x.SiteID == item.SiteID ))
+                                {
+                                    lst.Add(item);
+                                }
+                            }
+                            //var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
+                            foreach (var item in lst)
                             {
                                 var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
 
@@ -1819,7 +1878,7 @@ namespace IN10100.Controllers
                                 newTrans.TranDesc = objInvt.Descr;
                                 newTrans.WhseLoc = item.WhseLoc;// whseLoc;
 
-                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
+                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID && p.SiteID==item.SiteID).ToList();
                                 foreach (var lot in tmp)
                                 {
                                     newTrans.Qty += lot.Qty;
@@ -1951,5 +2010,23 @@ namespace IN10100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
+        private List<string> GetHeader(int showWhseLoc)
+        {
+            var colTextsHeader = new List<string>() { "Mã Mặt Hàng", "Diễn Giải", "Kho", "Vị Trí Kho", "Đơn Vị Tính", "Số Lượng", "Giá Bán", "Tổng Tiền", "Số LOT", "Ngày Hết Hạn(yyyy/mm/dd)"};
+
+            if (showWhseLoc == 0)
+            {
+                colTextsHeader.Remove("Vị Trí Kho");
+            }
+
+            //if (!showPackageID)
+            //{
+            //    colTextsHeader.Remove("IN10100PackageID");
+            //}
+            return colTextsHeader;
+
+        }
+
     }
 }

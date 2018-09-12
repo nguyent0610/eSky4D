@@ -513,7 +513,7 @@ var btnImport_Click = function (c, e) {
                 if (this.result.data.lstTrans != undefined) {
                     App.stoTrans.suspendEvents();
                     this.result.data.lstTrans.forEach(function (item) {
-                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID','SiteID','WhseLoc'], [item.InvtID,item.SiteID,item.WhseLoc]);
                         if (!objTrans) {
                             HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
                             var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
@@ -542,6 +542,7 @@ var btnImport_Click = function (c, e) {
                             objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
                         }
                     });
+                    HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
                     App.stoTrans.resumeEvents();
                     App.grdTrans.view.refresh();
 
@@ -549,8 +550,8 @@ var btnImport_Click = function (c, e) {
                     App.stoLotTrans.suspendEvents();
                     var date = new Date(1900, 0, 1);
                     this.result.data.lstLot.forEach(function (item) {
-                        var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
-                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr','SiteID','WhseLoc'], [item.InvtID, item.LotSerNbr,item.SiteID,item.WhseLoc]);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID', 'SiteID', 'WhseLoc'], [item.InvtID, item.SiteID, item.WhseLoc]);
                         if (!objLot) {
                             HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), false);
                             var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
