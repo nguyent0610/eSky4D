@@ -49,7 +49,7 @@
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
             .AutoScroll(true)
             .Items(
-                // First Column
+        // First Column
                 X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
                .MinWidth(400)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
@@ -110,7 +110,7 @@
                             .Listeners(l =>
                             {
                                 l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                            })      
+                            })
                         )
 
                         , X.Container().Layout(LayoutType.VBox)
@@ -145,7 +145,7 @@
                             .Listeners(l =>
                             {
                                 l.Change.Fn = "Event.Form.dtpRegisForm_change";
-                            })                          
+                            })
                         )
                     )
 
@@ -161,6 +161,10 @@
                 .Items(
                     HQ.DateField().ID("dtpToDate")
                     .HQLangCode("ToDate").DataIndex("ToDate").AllowBlank(false)
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "Event.Form.dtpToDate_Change";
+                    })
 
                     , HQ.Combo().ID("cboObjApply")
                     .HQLangCode("OM27700ObjApply").HQProcedure("OM27700_pcObjectApply")
@@ -171,7 +175,7 @@
                     .Listeners(l =>
                     {
                         l.Change.Fn = "Event.Form.cboObjApply_change";
-                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";                   
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() {                        
@@ -179,11 +183,11 @@
                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     })
-                    
+
                     .LoadData()
                     , HQ.DateField().ID("dtpRegisTo")
                     .HQLangCode("RegisTo").DataIndex("RegisTo")
-                   
+
                 ) // Second Column  
 
                 // Second Column
@@ -214,8 +218,8 @@
                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     }).LoadData()
-                    
-                   
+
+
                 ) // Second Column  
             )
             .Listeners(x =>
@@ -239,7 +243,7 @@
                     X.Panel().ID("treeBranch")
                     .Region(Region.West).Flex(4)
                     .MinWidth(150).Split(true).AutoScroll(true)
-                     
+
                     .DirectEvents(de =>
                     {
                         de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
@@ -320,7 +324,7 @@
                             .Model(Util.GenerateModel(typeof(OM27700_pgCompany_Result), "mdlCompany", ""))
                             .Parameters(ps =>
                             {
-                                 ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
 
                             })
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompany"))).AutoLoad(false)
@@ -328,12 +332,12 @@
                             {
                                 l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID'];";
                                 l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
-                                l.Load.Fn = "Store.stoGrid_load"; 
+                                l.Load.Fn = "Store.stoGrid_load";
                             })
                         )
                         .ColumnModel(
                             X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                        
+
                             , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
                             .Editor(
                                 HQ.Combo().ID("cboGCpnyID")
@@ -350,7 +354,7 @@
                             )
                             , X.Column().MinWidth(100).Flex(1)
                             .Text(Util.GetLang("CpnyName")).DataIndex("CpnyName")
-                            //.Renderer("Process.renderCpnyName")
+        //.Renderer("Process.renderCpnyName")
 
                             , X.CommandColumn()
                             .Commands(
@@ -379,7 +383,7 @@
                                     })
                             )
                             .Plugins(X.ProgressBarPager().ID("paggrdCompany"))
-                        )              
+                        )
                         .Plugins(
                             X.CellEditing()
                             .ClicksToEdit(1)
@@ -405,9 +409,9 @@
                     x.Activate.Handler = "HQ.focus = 'cpny'";
                     x.Render.Handler = "HQ.common.control_render(this,'cpny')";
                 }) // tabCompany
-            
+
                 // Tab Level
-                //////////
+        //////////
                 , X.Panel().ID("tabLevel")
                 .Title(Util.GetLang("LevelID"))
                 .Region(Region.Center)
@@ -527,7 +531,7 @@
                     .Items(
                         X.Panel().ID("treeInvtID")
                         .Region(Region.West)
-                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)                    
+                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)
                         .DirectEvents(de =>
                         {
                             de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInvtID"));
@@ -565,10 +569,10 @@
                                 , X.ToolbarFill()
                             )
                         )
-                        // treeInvt 
-                        
-                        
-                        ,X.Panel()
+        // treeInvt 
+
+
+                        , X.Panel()
                         .Region(Region.Center).Flex(1)
                         .Layout(LayoutType.VBox)
                         .MinWidth(50)
@@ -594,12 +598,12 @@
                             .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
                             .Handler("btnDelAllInvt_click")
                         ) // Panel
-                    
+
                         ,
                         X.Panel().ID("pnlControl").Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
                         .Items
                         (
-                            X.GridPanel().ID("grdInvt")                  
+                            X.GridPanel().ID("grdInvt")
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
                             .SortableColumns(false)
@@ -678,8 +682,8 @@
                                         })
                                 )
                                 .Plugins(X.ProgressBarPager().ID("paggrdInvt"))
-                            ) 
-                            
+                            )
+
                             .Plugins(
                                 X.CellEditing()
                                 .ClicksToEdit(1)
@@ -708,9 +712,9 @@
                         x.Render.Handler = "HQ.common.control_render(this,'invt')";
                     })// pnlInvt
                 )// tabLevel 
-                                                                                              
+
                 //////Customer
-              ,  X.Panel().ID("tabCustomer")
+              , X.Panel().ID("tabCustomer")
                 .Title(Util.GetLang("Customer"))
                 .Region(Region.Center)
                 .Disable(true)
@@ -723,20 +727,20 @@
                         {
 
                         })
-                        //.DirectEvents(de =>
-                        //{
-                        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
-                        //    de.AfterRender.Url = Url.Action("OM27700GetTreeCustomer");
-                        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                        //    de.AfterRender.CleanRequest = true;
-                        //    de.AfterRender.Method = HttpMethod.POST;
-                        //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand();";
-                        //    de.AfterRender.Timeout = 60000;
-                        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                        //    de.AfterRender.EventMask.ShowMask = true;
-                        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                        //    de.AfterRender.EventMask.MinDelay = 500;
-                        //})
+        //.DirectEvents(de =>
+        //{
+        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
+        //    de.AfterRender.Url = Url.Action("OM27700GetTreeCustomer");
+        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+        //    de.AfterRender.CleanRequest = true;
+        //    de.AfterRender.Method = HttpMethod.POST;
+        //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand();";
+        //    de.AfterRender.Timeout = 60000;
+        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+        //    de.AfterRender.EventMask.ShowMask = true;
+        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+        //    de.AfterRender.EventMask.MinDelay = 500;
+        //})
                         .BottomBar(
                             X.Toolbar()
                             .Items(
@@ -785,7 +789,7 @@
                         ,
                          X.Panel().Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
                         .Items
-                        (                        
+                        (
                             X.GridPanel().ID("grdCustomer")
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
@@ -810,7 +814,7 @@
                             )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                                
+
                                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                                 .Editor(
                                      X.ComboBox()
@@ -864,28 +868,28 @@
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{CustID}.focus();")); }))
                                     .StoreID("stoCustomerCombo")
-                                
+
                                 //    HQ.Combo().ID("cboCustID")
-                                //    .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,BranchID")
-                                //    .HQHeightWidth(400, 450)
-                                //    .ValueField("CustID").DisplayField("CustID")
-                                //    .ForceSelection(true)
-                                //    .HQParam(new StoreParameterCollection() { 
-                                //    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                //    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                //    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
-                                //})
-                                //    .LoadData()
+        //    .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,BranchID")
+        //    .HQHeightWidth(400, 450)
+        //    .ValueField("CustID").DisplayField("CustID")
+        //    .ForceSelection(true)
+        //    .HQParam(new StoreParameterCollection() { 
+        //    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+        //    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+        //    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+        //})
+        //    .LoadData()
                                 )
 
 
                                 , X.Column().MinWidth(100).Flex(1)
                                 .Text(Util.GetLang("CustName")).DataIndex("CustName")
-                                //.Renderer("Process.renderCpnyName")
-                                
+        //.Renderer("Process.renderCpnyName")
+
                                 , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
-                                //.Renderer("Process.renderCustCpnyID")
-                                
+        //.Renderer("Process.renderCustCpnyID")
+
                                 , X.NumberColumn().Text(Util.GetLang("NumRegLot")).DataIndex("NumRegLot")
                                 .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
                                 .Editor(
@@ -946,9 +950,9 @@
                     x.Activate.Handler = "HQ.focus = 'customer'";
                     x.Render.Handler = "HQ.common.control_render(this,'customer')";
                 }) // tabCustomer    
-                
+
                  /////// Tab Sales           
-                 ,  X.Panel().ID("tabSales")
+                 , X.Panel().ID("tabSales")
                     .Title(Util.GetLang("Employees"))//.Disable(true)
                 .Region(Region.Center)
                 .Layout(LayoutType.Border)
@@ -1005,11 +1009,11 @@
                             .Handler("btnSalesDelAll_click")
                         ) // Panel
 
-                        , 
+                        ,
                          X.Panel().Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
                         .Items
                         (
-                        
+
                             X.GridPanel().ID("grdSales")
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
@@ -1055,10 +1059,10 @@
 
                                 , X.Column().MinWidth(100).Flex(1)
                                 .Text(Util.GetLang("SlsName")).DataIndex("SlsName")
-                                //.Renderer("Process.renderSlsperName")
-                                
+        //.Renderer("Process.renderSlsperName")
+
                                 , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
-                                //.Renderer("Process.renderCpnyID")
+        //.Renderer("Process.renderCpnyID")
                                 , X.CommandColumn()
                                 .Commands(
                                     X.GridCommand()
@@ -1113,7 +1117,7 @@
                     x.Activate.Handler = "App.cboSlsperID.store.reload(); HQ.focus = 'sales'";
                     x.Render.Handler = "HQ.common.control_render(this,'sales')";
                 }) // tabSales
-                
+
                 , X.Panel().ID("tabSaleProduct")
                 .Title(Util.GetLang("SaleProduct"))
                 .Region(Region.Center)
@@ -1124,7 +1128,7 @@
                         X.Panel().ID("treeSaleInvt")
                         .Flex(4)
                         .Region(Region.West)
-                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)                    
+                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)
                         .DirectEvents(de =>
                         {
                             de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeSaleInvt"));
@@ -1161,10 +1165,10 @@
                                 , X.ToolbarFill()
                             )
                         )
-                        // treeInvt 
-                        
-                        
-                        ,X.Panel().ID("pnlControlAddSale")
+        // treeInvt 
+
+
+                        , X.Panel().ID("pnlControlAddSale")
                         .Region(Region.Center).Flex(1)
                         .Layout(LayoutType.VBox)
                         .MinWidth(50)
@@ -1190,12 +1194,12 @@
                             .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
                             .Handler("btnDelAllSale_click")
                         ) // Panel
-                    
+
                         ,
                         X.Panel().ID("pnlControlSale").Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
                         .Items
                         (
-                            X.GridPanel().ID("grdSale")                  
+                            X.GridPanel().ID("grdSale")
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
                             .SortableColumns(false)
@@ -1252,6 +1256,10 @@
                                 .Editor(
                                     HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0).AllowExponential(false)
                                 )
+                                , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDateInvt").Format(Current.FormatDate).ID("clStartDate")
+                                .Editor(HQ.DateField().ID("dtpStartDateInvt"))
+                                , X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDateInvt").Format(Current.FormatDate).ID("clEndDate")
+                                .Editor(HQ.DateField().ID("dtpEndDateInvt"))
                                 , X.CommandColumn().Width(150)
                                 .Commands(
                                     X.GridCommand()
@@ -1276,12 +1284,12 @@
                                 .Listeners(l =>
                                     {
                                         l.Select.Fn = "HQ.grid.onPageSelect";
-                                        
+
                                     })
                             ).HideRefresh(true)
                             .Plugins(X.ProgressBarPager())
-                            )  
-                            
+                            )
+
                             .Plugins(
                                 X.CellEditing()
                                 .ClicksToEdit(1)
@@ -1302,16 +1310,18 @@
                                     X.StringFilter().DataIndex("StkUnit")
                                 )
                             )
+                            
                         )
                     )
-                    //.Listeners(x =>
-                    //{
-                    //    x.Render.Handler = "HQ.common.control_render(this,'saleProduct')";
-                    //})// pnlInvt
+        //.Listeners(x =>
+        //{
+        //    x.Render.Handler = "HQ.common.control_render(this,'saleProduct')";
+        //})// pnlInvt
                 )
                 .Listeners(x =>
                 {
-                    x.Activate.Handler = "HQ.focus = 'SaleProduct'";
+                    x.Activate.Fn = "tabSaleProduct_Active";
+                    
                     x.Render.Handler = "HQ.common.control_render(this,'SaleProduct')";
                 }) // tabCustomer  
             )

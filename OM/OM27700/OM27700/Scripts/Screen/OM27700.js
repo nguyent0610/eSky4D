@@ -16,6 +16,7 @@ var _applyType = {
 var ListCpnyID;
 var _source = 0;
 var _muc = 0;
+var _invt = '';
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboCustID.store.findRecord("CustID", value);
@@ -623,6 +624,12 @@ var Store = {
             App.txtDescr.setReadOnly(false);
         }
         Event.Form.frmMain_fieldChange();
+        App.dtpStartDateInvt.setMinValue(App.dtpFromDate.getValue());
+        App.dtpStartDateInvt.setMaxValue(App.dtpToDate.getValue());
+
+        App.dtpEndDateInvt.setMinValue(App.dtpFromDate.getValue());
+        App.dtpEndDateInvt.setMaxValue(App.dtpToDate.getValue());
+
     },
 
     stoGrid_load: function (sto, records, successful, eOpts) {
@@ -743,6 +750,8 @@ var Event = {
                 ListCpnyID += App.stoCompany.data.items[i].data.CpnyID;
             }
             HQ.common.setRequire(frm);
+
+            
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -796,6 +805,7 @@ var Event = {
                 App.cboApplyFor.setReadOnly(check);
                 App.cboApplyType.setReadOnly(check);
                 App.cboObjApply.setReadOnly(check);
+                App.cboLevelCondition.setReadOnly(check);
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
                     if (HQ.isChange
@@ -826,8 +836,13 @@ var Event = {
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
+            App.dtpStartDateInvt.setMinValue(App.dtpFromDate.getValue());
+            
         },
-
+        dtpToDate_Change: function (dtp, newValue, oldValue, eOpts) {
+            App.dtpStartDateInvt.setMaxValue(App.dtpToDate.getValue());
+            App.dtpEndDateInvt.setMaxValue(App.dtpToDate.getValue());
+        },
         dtpRegisForm_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpRegisTo.setMinValue(newValue);
             App.dtpRegisTo.validate();
@@ -1389,6 +1404,9 @@ var Event = {
 
         grdSale_beforeEdit: function (editor, e) {
             if (HQ.isUpdate) {
+                if (e.field == "EndDateInvt") {
+                    App.dtpEndDateInvt.setMinValue(e.record.data.StartDateInvt);
+                }
                 if (App.frmMain.isValid()) {
                     var status = App.cboStatus.getValue();
                     if (status == _beginStatus) {
@@ -1417,6 +1435,12 @@ var Event = {
                 e.record.set("Qty", "1");
             }
             AddRowDefaultOne(App.grdSale, e, keys);
+            if (e.field == "InvtID" && e.record.data.InvtID != _invt) {
+                if (HQ.dateInvt == true) {
+                    e.record.set("StartDateInvt", App.dtpFromDate.getValue());
+                    e.record.set("EndDateInvt", App.dtpToDate.getValue());
+                }
+            }
         },
 
         grdCpnyID_edit: function (item, e) {
@@ -2710,6 +2734,11 @@ var btnAddAllSale_click = function (btn, e, eOpts) {
                                     record.set('Descr', node.data.Descr);
                                     record.set('Unit', node.data.Unit);
                                     record.set('Qty', '1');
+                                    if (HQ.dateInvt) {
+                                        record.set("StartDateInvt", App.dtpFromDate.getValue());
+                                        record.set("EndDateInvt", App.dtpToDate.getValue());
+                                    }
+                                    
                                 }
                             }
                         });
@@ -2760,6 +2789,10 @@ var btnAddSale_click = function (btn, e, eOpts) {
                                 record.set('Descr', node.attributes.Descr);
                                 record.set('Unit', node.attributes.Unit);
                                 record.set('Qty', '1');
+                                if (HQ.dateInvt == true) {
+                                    record.set("StartDateInvt", App.dtpFromDate.getValue());
+                                    record.set("EndDateInvt", App.dtpToDate.getValue());
+                                }
                             }
                         }
                     });
@@ -2971,4 +3004,9 @@ var collapseNode = function (node) {
             }
         }
     }
+}
+var tabSaleProduct_Active = function () {
+    HQ.focus = 'SaleProduct';
+    App.clStartDate.setVisible(HQ.dateInvt);
+    App.clEndDate.setVisible(HQ.dateInvt);
 }

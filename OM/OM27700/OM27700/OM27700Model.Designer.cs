@@ -84,22 +84,6 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SI_ApprovalFlowHandle> SI_ApprovalFlowHandle
-        {
-            get
-            {
-                if ((_SI_ApprovalFlowHandle == null))
-                {
-                    _SI_ApprovalFlowHandle = base.CreateObjectSet<SI_ApprovalFlowHandle>("SI_ApprovalFlowHandle");
-                }
-                return _SI_ApprovalFlowHandle;
-            }
-        }
-        private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SI_Hierarchy> SI_Hierarchy
         {
             get
@@ -256,6 +240,22 @@ namespace OM27700
             }
         }
         private ObjectSet<IN_Inventory> _IN_Inventory;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SI_ApprovalFlowHandle> SI_ApprovalFlowHandle
+        {
+            get
+            {
+                if ((_SI_ApprovalFlowHandle == null))
+                {
+                    _SI_ApprovalFlowHandle = base.CreateObjectSet<SI_ApprovalFlowHandle>("SI_ApprovalFlowHandle");
+                }
+                return _SI_ApprovalFlowHandle;
+            }
+        }
+        private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
 
         #endregion
 
@@ -267,14 +267,6 @@ namespace OM27700
         public void AddToHO_PendingTasks(HO_PendingTasks hO_PendingTasks)
         {
             base.AddObject("HO_PendingTasks", hO_PendingTasks);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the SI_ApprovalFlowHandle EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
-        {
-            base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
         }
     
         /// <summary>
@@ -355,6 +347,14 @@ namespace OM27700
         public void AddToIN_Inventory(IN_Inventory iN_Inventory)
         {
             base.AddObject("IN_Inventory", iN_Inventory);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SI_ApprovalFlowHandle EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
+        {
+            base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
         }
 
         #endregion
@@ -1620,7 +1620,8 @@ namespace OM27700
         /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
         /// <param name="kitType">Initial value of the KitType property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Boolean kitType)
+        /// <param name="giftPoint">Initial value of the GiftPoint property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Boolean kitType, global::System.Double giftPoint)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -1657,6 +1658,7 @@ namespace OM27700
             iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
             iN_Inventory.KitType = kitType;
+            iN_Inventory.GiftPoint = giftPoint;
             return iN_Inventory;
         }
 
@@ -3442,6 +3444,30 @@ namespace OM27700
         private global::System.Boolean _KitType;
         partial void OnKitTypeChanging(global::System.Boolean value);
         partial void OnKitTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double GiftPoint
+        {
+            get
+            {
+                return _GiftPoint;
+            }
+            set
+            {
+                OnGiftPointChanging(value);
+                ReportPropertyChanging("GiftPoint");
+                _GiftPoint = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GiftPoint");
+                OnGiftPointChanged();
+            }
+        }
+        private global::System.Double _GiftPoint;
+        partial void OnGiftPointChanging(global::System.Double value);
+        partial void OnGiftPointChanged();
 
         #endregion
 
@@ -5500,6 +5526,54 @@ namespace OM27700
         private global::System.Double _Point;
         partial void OnPointChanging(global::System.Double value);
         partial void OnPointChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> StartDateInvt
+        {
+            get
+            {
+                return _StartDateInvt;
+            }
+            set
+            {
+                OnStartDateInvtChanging(value);
+                ReportPropertyChanging("StartDateInvt");
+                _StartDateInvt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartDateInvt");
+                OnStartDateInvtChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _StartDateInvt;
+        partial void OnStartDateInvtChanging(Nullable<global::System.DateTime> value);
+        partial void OnStartDateInvtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> EndDateInvt
+        {
+            get
+            {
+                return _EndDateInvt;
+            }
+            set
+            {
+                OnEndDateInvtChanging(value);
+                ReportPropertyChanging("EndDateInvt");
+                _EndDateInvt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndDateInvt");
+                OnEndDateInvtChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _EndDateInvt;
+        partial void OnEndDateInvtChanging(Nullable<global::System.DateTime> value);
+        partial void OnEndDateInvtChanged();
 
         #endregion
 
@@ -7822,6 +7896,30 @@ namespace OM27700
         private global::System.Int32 _ShowPoint;
         partial void OnShowPointChanging(global::System.Int32 value);
         partial void OnShowPointChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> DateInvt
+        {
+            get
+            {
+                return _DateInvt;
+            }
+            set
+            {
+                OnDateInvtChanging(value);
+                ReportPropertyChanging("DateInvt");
+                _DateInvt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateInvt");
+                OnDateInvtChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _DateInvt;
+        partial void OnDateInvtChanging(Nullable<global::System.Boolean> value);
+        partial void OnDateInvtChanged();
 
         #endregion
 
@@ -8930,6 +9028,54 @@ namespace OM27700
         private global::System.Double _Point;
         partial void OnPointChanging(global::System.Double value);
         partial void OnPointChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> StartDateInvt
+        {
+            get
+            {
+                return _StartDateInvt;
+            }
+            set
+            {
+                OnStartDateInvtChanging(value);
+                ReportPropertyChanging("StartDateInvt");
+                _StartDateInvt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartDateInvt");
+                OnStartDateInvtChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _StartDateInvt;
+        partial void OnStartDateInvtChanging(Nullable<global::System.DateTime> value);
+        partial void OnStartDateInvtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> EndDateInvt
+        {
+            get
+            {
+                return _EndDateInvt;
+            }
+            set
+            {
+                OnEndDateInvtChanging(value);
+                ReportPropertyChanging("EndDateInvt");
+                _EndDateInvt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndDateInvt");
+                OnEndDateInvtChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _EndDateInvt;
+        partial void OnEndDateInvtChanging(Nullable<global::System.DateTime> value);
+        partial void OnEndDateInvtChanged();
 
         #endregion
 

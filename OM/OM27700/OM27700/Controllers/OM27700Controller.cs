@@ -49,13 +49,16 @@ namespace OM27700.Controllers
             if (objConfigurations != null)
                 ViewBag.TreeCompany = objConfigurations.IntVal;
             var showPoint = 0;
+            var dateInvt = false;
             var objConfig = _db.OM27700_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 showPoint = objConfig.ShowPoint;
+                dateInvt = objConfig.DateInvt.Value && objConfig.DateInvt.HasValue;
             }
             ViewBag.showPoint = showPoint;
             ViewBag.dateNow = DateTime.Now.ToDateShort();
+            ViewBag.dateInvt = dateInvt;
             return View();
         }
         public ActionResult GetAllocation(string AccumulateID, string Muc)
@@ -1343,6 +1346,8 @@ namespace OM27700.Controllers
                     {
                         lang.Qty = curBranch.Qty;
                         lang.Point = curBranch.Point;
+                        lang.StartDateInvt = curBranch.StartDateInvt;
+                        lang.EndDateInvt = curBranch.EndDateInvt;
                         lang.LUpd_DateTime = DateTime.Now;
                         lang.LUpd_Prog = _screenNbr;
                         lang.LUpd_User = Current.UserName;
@@ -1357,6 +1362,8 @@ namespace OM27700.Controllers
                     lang.InvtID = curBranch.InvtID;
                     lang.Qty = curBranch.Qty;
                     lang.Point = curBranch.Point;
+                    lang.StartDateInvt = curBranch.StartDateInvt;
+                    lang.EndDateInvt = curBranch.EndDateInvt;
                     lang.LUpd_DateTime = DateTime.Now;
                     lang.LUpd_Prog = _screenNbr;
                     lang.LUpd_User = Current.UserName;
