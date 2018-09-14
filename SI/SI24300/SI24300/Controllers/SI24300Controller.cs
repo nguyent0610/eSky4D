@@ -31,7 +31,7 @@ namespace SI24300.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -155,6 +155,7 @@ namespace SI24300.Controllers
                             string district = string.Empty;
                             string ward = string.Empty;
                             string wardName = string.Empty;
+                            bool flagCheck = false;
                             Worksheet workSheet = workbook.Worksheets[0];
                             var ColTexts = new List<string>() { 
                                   "State", "District", "Ward", "WardName"
@@ -166,8 +167,7 @@ namespace SI24300.Controllers
                                 district = workSheet.Cells[i, ColTexts.IndexOf("District")].StringValue.PassNull();
                                 ward = workSheet.Cells[i, ColTexts.IndexOf("Ward")].StringValue.PassNull();
                                 wardName = workSheet.Cells[i, ColTexts.IndexOf("WardName")].StringValue.PassNull();
-
-                                bool flagCheck = false;
+                                
                                 if (state == "")
                                 {
                                     errorState += (i + 1).ToString() + ",";
@@ -354,9 +354,9 @@ namespace SI24300.Controllers
                  
                 }
                 SheetData.Cells.Columns[allColumns.IndexOf("State")].Width = 20;
-                SheetData.Cells.Columns[allColumns.IndexOf("District")].Width = 20;
+                SheetData.Cells.Columns[allColumns.IndexOf("District")].Width = 30;
                 SheetData.Cells.Columns[allColumns.IndexOf("Ward")].Width = 20;
-                SheetData.Cells.Columns[allColumns.IndexOf("WardName")].Width = 30;
+                SheetData.Cells.Columns[allColumns.IndexOf("WardName")].Width = 40;
 
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();

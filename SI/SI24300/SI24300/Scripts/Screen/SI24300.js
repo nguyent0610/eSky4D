@@ -7,7 +7,7 @@ var fieldsLangCheckRequire = ["ProvinceCode", "SI24300DistrictCode", "SI24300War
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
-
+var state = '';
 
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
@@ -109,8 +109,14 @@ var stoSI_Ward_Load = function (sto) {
         HQ.common.showBusy(false);
     }
 };
-
+var cboState_Change = function () {
+    App.cboDistrict.store.reload();
+};
 var grdSI_Ward_BeforeEdit = function (editor, e) {
+    state = e.record.data.State;
+    if (e.field == 'District') {
+        App.cboDistrict.store.reload();
+    }
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
@@ -119,12 +125,15 @@ var grdSI_Ward_Edit = function (item, e) {
     {
         var objState = App.cboState.valueModels[0];
         if (objState != undefined) {
+            state = objState.data.State;
             e.record.set('StateName', objState.data.Descr);
             e.record.set('Country', objState.data.Country);
         }
         else {
             e.record.set('StateName', '');
             e.record.set('Country', '');
+            e.record.set('District', '');
+            e.record.set('DistrictName', '');
         }
     }
     if (e.field == 'District') {
@@ -141,12 +150,17 @@ var grdSI_Ward_Edit = function (item, e) {
 };
 
 var grdSI_Ward_ValidateEdit = function (item, e) {
+    if (e.field == 'State') {
+        state = e.value;
+        App.cboDistrict.store.reload();
+    }
     return HQ.grid.checkValidateEdit(App.grdSI_Ward, e, keys);
 };
 
 var grdSI_Ward_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSI_Ward);
     frmChange();
+    state = '';
 };
 
 //////////////////////////////////////////////////////////
