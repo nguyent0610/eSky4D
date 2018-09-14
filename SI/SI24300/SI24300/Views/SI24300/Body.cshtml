@@ -1,0 +1,167 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI24300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+    X.Viewport()
+    .Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .ID("frmMain")
+        .BodyPadding(0)
+        .KeyMap(Util.SetupKeyMap())
+         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })  
+           , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })        
+        }, "Print", true, "menuClick"))
+        //.TopBar(Util.SetupToolbar("Print", true, ""))
+        .Layout(LayoutType.Fit)
+        .Items(
+        
+            ////Thiet ke giao dien o day
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdSI_Ward")
+            .Store(
+                X.Store()
+                .ID("stoSI_Ward")
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(SI24300_pgSI_Ward_Result), "mdSI_Ward", "Country,State,District,Ward"))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_Ward"))).AutoLoad(false)
+                .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoSI_Ward_Load";
+                    l.Update.Fn = "frmChange"; 
+                }) // stoSI_Ward
+            )
+            .Listeners(p => p.BoxReady.Handler = "firstLoad();")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                ,X.Column().Text(Util.GetLang("ProvinceCode")).DataIndex("State").Width(150)
+                .Editor(
+                     HQ.Combo().ID("cboState").HQProcedure("SI24300_pcState")
+                    .HQColumnShow("State,Descr,Country").HQHeightWidth(300, 400).ForceSelection(true)
+                    .ValueField("State").DisplayField("State").HQAutoLoad(false).HQisPaging(true).PageSize(10)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()  { 
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        ,new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                        ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                    })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Handler = "App.cboDistrict.store.reload();";
+                    })
+                    .LoadData()
+                ) 
+                 , X.Column().Text(Util.GetLang("ProvinceName")).DataIndex("StateName").Width(150)
+               
+                ,X.Column().Text(Util.GetLang("SI24300DistrictCode")).DataIndex("District").Width(150)
+                .Editor(
+                     HQ.Combo().ID("cboDistrict").HQProcedure("SI24300_pcDistrict")
+                    .HQColumnShow("District,Name").HQHeightWidth(300, 400).ForceSelection(true)
+                    .ValueField("District").DisplayField("District").HQAutoLoad(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()  { 
+                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        ,new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                        ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                        ,new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .LoadData()
+                )
+                , X.Column().Text(Util.GetLang("DistrictName")).DataIndex("DistrictName").Width(150)
+                
+                , X.Column().Text(Util.GetLang("SI24300Ward")).DataIndex("Ward").Width(150)
+                .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
+                
+                , X.Column().Text(Util.GetLang("WardName")).DataIndex("WardName").Width(150)
+                .Editor(Html.X().TextField().MaxLength(100).EnforceMaxLength(true))
+               
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    Html.X().GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t =>
+                    {
+                        t.Text = Util.GetLang("Rejectrowchanges");
+                    })
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t =>
+                {
+                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                })
+                .Listeners(l =>
+                {
+                    l.Command.Handler = "grdSI_Ward_Reject(record);";
+                })
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmSI_Ward").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdSI_Ward_BeforeEdit";
+                    ls.Edit.Fn = "grdSI_Ward_Edit";
+                    ls.ValidateEdit.Fn = "grdSI_Ward_ValidateEdit";                  
+                })
+            )
+            .Features(
+                X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("State"),
+                    X.StringFilter().DataIndex("StateName"),
+                    X.StringFilter().DataIndex("District"),
+                    X.StringFilter().DataIndex("DistrictName"),
+                    X.StringFilter().DataIndex("Ward"),
+                    X.StringFilter().DataIndex("WardName")
+                )
+            ) // grdSI_Ward
+        ) // frmMain
+    ) // Viewport
+)
