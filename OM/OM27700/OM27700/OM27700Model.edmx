@@ -257,6 +257,34 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="OM_BudgetTrade">
+          <Key>
+            <PropertyRef Name="BugetID" />
+            <PropertyRef Name="TradeID" />
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="BugetID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TypeTrade" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="TradeID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LevelID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="1000" />
+          <Property Name="FromDate" Type="date" Nullable="false" />
+          <Property Name="ToDate" Type="date" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="AllocType" Type="varchar" MaxLength="5" />
+          <Property Name="ApplyTo" Type="varchar" MaxLength="1" />
+          <Property Name="QtyFree" Type="float" Nullable="false" />
+          <Property Name="QtyTotal" Type="float" Nullable="false" />
+          <Property Name="QtyAlloc" Type="float" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
             <PropertyRef Name="AppFolID" />
@@ -410,6 +438,7 @@
           <EntitySet Name="OM_AccumulatedInvtSetup" EntityType="Self.OM_AccumulatedInvtSetup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_AccumulatedLevel" EntityType="Self.OM_AccumulatedLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="Self.OM_AccumulatedSalesPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_BudgetTrade" EntityType="Self.OM_BudgetTrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SI_Hierarchy" EntityType="Self.SI_Hierarchy" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -515,6 +544,7 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM27700Model.SI_ApprovalFlowHandle" />
+          <EntitySet Name="OM_BudgetTrade" EntityType="OM27700Model.OM_BudgetTrade" />
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -922,6 +952,34 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="MailApprove" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ProcContent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="OM_BudgetTrade">
+          <Key>
+            <PropertyRef Name="BugetID" />
+            <PropertyRef Name="TradeID" />
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="BugetID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TypeTrade" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="TradeID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="AllocType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyTo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="QtyFree" Type="Double" Nullable="false" />
+          <Property Name="QtyTotal" Type="Double" Nullable="false" />
+          <Property Name="QtyAlloc" Type="Double" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1387,6 +1445,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OM_BudgetTrade">
+            <EntityTypeMapping TypeName="OM27700Model.OM_BudgetTrade">
+              <MappingFragment StoreEntitySet="OM_BudgetTrade">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="QtyTotal" ColumnName="QtyTotal" />
+                <ScalarProperty Name="QtyFree" ColumnName="QtyFree" />
+                <ScalarProperty Name="ApplyTo" ColumnName="ApplyTo" />
+                <ScalarProperty Name="AllocType" ColumnName="AllocType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="TradeID" ColumnName="TradeID" />
+                <ScalarProperty Name="TypeTrade" ColumnName="TypeTrade" />
+                <ScalarProperty Name="BugetID" ColumnName="BugetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1422,6 +1507,7 @@
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCpnyAlloctionLimit" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="OM27700Model.IN_Inventory" Width="1.5" PointX="10.375" PointY="4.75" />
         <EntityTypeShape EntityType="OM27700Model.SI_ApprovalFlowHandle" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="OM27700Model.OM_BudgetTrade" Width="1.5" PointX="12.375" PointY="7.75" />
       </Diagram>
     </Diagrams>
   </Designer>

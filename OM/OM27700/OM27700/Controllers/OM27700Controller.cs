@@ -587,8 +587,8 @@ namespace OM27700.Controllers
 
             var treeBranch = X.GetCmp<Panel>(panelID);
             tree.Listeners.CheckChange.Fn = "treePanelInvt_checkChange";
-            tree.Listeners.BeforeItemExpand.Handler = "if (App.treePanelInvt) { App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts(); }";
-            tree.Listeners.AfterItemExpand.Handler = "if (App.treePanelInvt) {App.treePanelInvt.view.refresh(); App.treePanelInvt.el.unmask();Ext.resumeLayouts(true); } ";
+            //tree.Listeners.BeforeItemExpand.Handler = "if (App.treePanelInvt) { App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts(); }";
+            //tree.Listeners.AfterItemExpand.Handler = "if (App.treePanelInvt) {App.treePanelInvt.view.refresh(); App.treePanelInvt.el.unmask();Ext.resumeLayouts(true); } ";
             tree.AddTo(treeBranch);
             return this.Direct();
         }
@@ -675,8 +675,14 @@ namespace OM27700.Controllers
                         {
                             throw new MessageException(MessageType.Message, "8001", "", new string[] { Util.GetLang("ProcID") });
                         }
+                        
                         if (accumulate.tstamp.ToHex() == inputAccumulate.tstamp.ToHex())
                         {
+                            var recordCheck = _db.OM_BudgetTrade.Where(p => p.TradeID == accumulate.AccumulateID).Count();
+                            if (recordCheck >= 1)
+                            {
+                                throw new MessageException(MessageType.Message, "2018091760", "", new string[] { accumulate.AccumulateID });
+                            }
                             Update_Header(ref accumulate, inputAccumulate, false);
                         }
                         else

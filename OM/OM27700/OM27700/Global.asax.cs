@@ -32,6 +32,7 @@ namespace OM27700
             Current.Server = "HOANGSAD";
             Current.DBSys = "KidoTraining_eSky4DSys";
             Current.FormatDate = "MM-dd-yyyy";
+            Current.FormatDateJS = "m/d/Y";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;

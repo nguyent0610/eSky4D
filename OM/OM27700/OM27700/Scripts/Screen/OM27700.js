@@ -17,6 +17,7 @@ var ListCpnyID;
 var _source = 0;
 var _muc = 0;
 var _invt = '';
+var odlValueDate = new Date();
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboCustID.store.findRecord("CustID", value);
@@ -763,7 +764,7 @@ var Event = {
                         HQ.store.isChange(App.grdLevel.store) ||
                         HQ.store.isChange(App.grdInvt.store) ||
                         HQ.store.isChange(App.grdCustomer.store)
-                        || HQ.store.isChange(App.grdSales.store)
+                        || HQ.store.isChange(App.grdSales.store) || HQ.store.isChange(App.grdSale.store)
                 HQ.common.changeData(HQ.isChange, 'OM27700');//co thay doi du lieu gan * tren tab title header
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
                 App.cboAccumulateID.setReadOnly(HQ.isChange && App.cboAccumulateID.getValue());
@@ -837,11 +838,94 @@ var Event = {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
             App.dtpStartDateInvt.setMinValue(App.dtpFromDate.getValue());
-            
+            odlValueDate = oldValue;
+        },
+        dtpFromDate_Select :function (dtp, newValue, oldValue, eOpts) {
+
+            var minDate = new Date();
+            var maxDate = new Date();
+            var line = '';
+            if (oldValue != HQ.dateNow) {
+                if (oldValue != undefined) {
+                    var lst = App.grdSale.store.snapshot || App.grdSale.store.allData || App.grdSale.data;
+                    if (lst != undefined) {
+                        minDate = lst.items[0].data.StartDateInvt;
+                        maxDate = lst.items[0].data.EndDateInvt;
+                        for (var i = 0 ; i < lst.length; i++) {
+                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
+                                if (lst.items[i].data.StartDateInvt < minDate) {
+                                    minDate = lst.items[i].data.StartDateInvt;
+                                }
+                            }
+                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
+                                if (lst.items[i].data.EndDateInvt > maxDate) {
+                                    maxDate = lst.items[i].data.EndDateInvt;
+                                }
+                            }
+
+                        }
+                    }
+                    for (var i = 0 ; i < lst.length; i++) {
+                        if (dtp.value > lst.items[i].data.StartDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt)) {
+                            line += Number(i + 1) + ", ";
+                        }
+                    }
+                    if (dtp.value > minDate) {
+                        HQ.message.show(2018091761, [line, Ext.Date.format(dtp.value, HQ.formatDate), Ext.Date.format(App.dtpToDate.getValue(), HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
+                        App.dtpFromDate.setValue(odlValueDate);
+                        App.dtpToDate.setMinValue(odlValueDate);
+                    }
+                    else {
+                        App.dtpToDate.setMinValue(dtp.value);
+                    }
+                }
+            }
+            else {
+                App.dtpToDate.setMinValue(dtp.value);
+            }
+
+        },
+        dtpToDate_Select: function (dtp, newValue, oldValue, eOpts) {
+
+            var minDate = new Date();
+            var maxDate = new Date();
+            var line = '';
+            if (oldValue != HQ.dateNow) {
+                if (oldValue != undefined) {
+                    var lst = App.grdSale.store.snapshot || App.grdSale.store.allData || App.grdSale.data;
+                    if (lst != undefined) {
+                        minDate = lst.items[0].data.StartDateInvt;
+                        maxDate = lst.items[0].data.EndDateInvt;
+                        for (var i = 0 ; i < lst.length; i++) {
+                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
+                                if (lst.items[i].data.StartDateInvt < minDate) {
+                                    minDate = lst.items[i].data.StartDateInvt;
+                                }
+                            }
+                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
+                                if (lst.items[i].data.EndDateInvt > maxDate) {
+                                    maxDate = lst.items[i].data.EndDateInvt;
+                                }
+                            }
+
+                        }
+                    }
+                    for (var i = 0 ; i < lst.length; i++) {
+                        if (dtp.value < lst.items[i].data.EndDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt)) {
+                            line += Number(i + 1) + ", ";
+                        }
+                    }
+                    if (dtp.value < maxDate) {
+                        HQ.message.show(2018091761, [line, Ext.Date.format(App.dtpFromDate.getValue(), HQ.formatDate), Ext.Date.format(dtp.value, HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
+                        App.dtpToDate.setValue(odlValueDate);
+                    }
+                }
+            }
         },
         dtpToDate_Change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpStartDateInvt.setMaxValue(App.dtpToDate.getValue());
             App.dtpEndDateInvt.setMaxValue(App.dtpToDate.getValue());
+            odlValueDate = oldValue;
         },
         dtpRegisForm_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpRegisTo.setMinValue(newValue);
@@ -1105,6 +1189,7 @@ var Event = {
                             App.grdInvt.store.reload();
                             App.grdCustomer.store.reload();
                             App.grdSales.store.reload();
+                            App.grdSale.store.reload();
                         }
                     }
                     break;
@@ -1809,22 +1894,33 @@ var Event = {
                     var status = App.cboStatus.value;
 
                     if (accumulateID && status == _beginStatus) {
+                       
                         var allNodes = App.treePanelBranch.getCheckedNodes();
                         if (allNodes && allNodes.length > 0) {
                             App.stoCompany.suspendEvents();
                             allNodes.forEach(function (node) {
                                 if (HQ.TreeCompany == 1) {
                                     if (node.attributes.Type == "CpnyRoute") {
-                                        var idx = App.grdCompany.store.getCount();
+                                        //var idx = App.grdCompany.store.getCount();
+                                        
                                         var record = HQ.store.findInStore(App.grdCompany.store,
                                             ['CpnyID'],
                                             [node.attributes.RecID]);
+                                        //if (!record) {
+                                        //    App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
+                                        //        AccumulateID: App.cboAccumulateID.getValue(),
+                                        //        CpnyID: node.attributes.RecID,
+                                        //        CpnyName: node.text
+                                        //    }));
+                                        //}
+                                        //var record = HQ.store.findInStore(App.stoCompany, ['CpnyID'], [node.attributes.CpnyID]);
+                                        HQ.store.insertBlank(App.stoCompany, ['CpnyID']);
                                         if (!record) {
-                                            App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
-                                                AccumulateID: App.cboAccumulateID.getValue(),
-                                                CpnyID: node.attributes.RecID,
-                                                CpnyName: node.text
-                                            }));
+                                            HQ.store.insertBlank(App.stoCompany, ['CpnyID']);
+                                            record = App.stoCompany.getAt(App.stoCompany.getCount() - 1);
+                                            record.set('AccumulateID', App.cboAccumulateID.getValue());
+                                            record.set('CpnyID', node.attributes.RecID);
+                                            record.set('CpnyName', node.text);
                                         }
                                     }
                                 }
@@ -1835,12 +1931,19 @@ var Event = {
                                         var record = HQ.store.findInStore(App.grdCompany.store,
                                             ['CpnyID'],
                                             [node.attributes.RecID]);
+                                        //if (!record) {
+                                        //    App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
+                                        //        AccumulateID: App.cboAccumulateID.getValue(),
+                                        //        CpnyID: node.attributes.RecID,
+                                        //        CpnyName: node.text
+                                        //    }));
+                                        //}
                                         if (!record) {
-                                            App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
-                                                AccumulateID: App.cboAccumulateID.getValue(),
-                                                CpnyID: node.attributes.RecID,
-                                                CpnyName: node.text
-                                            }));
+                                            HQ.store.insertBlank(App.stoCompany, ['CpnyID']);
+                                            record = App.stoCompany.getAt(App.stoCompany.getCount() - 1);
+                                            record.set('AccumulateID', App.cboAccumulateID.getValue());
+                                            record.set('CpnyID', node.attributes.RecID);
+                                            record.set('CpnyName', node.text);
                                         }
                                     }
                                 }
@@ -1850,6 +1953,11 @@ var Event = {
                             App.grdCompany.view.refresh();
                             //App.grdCompany.store.loadPage(1);
                             App.treePanelBranch.clearChecked();
+                            var record = HQ.store.findRecord(App.stoCompany, ["CpnyID"], ['']);
+                            if (!record) {
+                                HQ.store.insertBlank(App.stoCompany, ["CpnyID"]);
+                            }
+
                             Event.Form.frmMain_fieldChange();
                         }
                     }
@@ -2797,9 +2905,15 @@ var btnAddSale_click = function (btn, e, eOpts) {
                         }
                     });
                     App.stoSale.resumeEvents();
+                    // App.stoSetup.loadPage(1);
                     App.grdSale.view.refresh();
 
+                    var record = App.stoSale.getAt(App.stoSale.getCount() - 1);
                     App.treeInvt.clearChecked();
+
+                    App.stoSale.pageSize = parseInt(50, 10);
+                    App.stoSale.loadPage(1);
+                    Event.Form.frmMain_fieldChange();
                 }
                 Event.Form.frmMain_fieldChange();
             }

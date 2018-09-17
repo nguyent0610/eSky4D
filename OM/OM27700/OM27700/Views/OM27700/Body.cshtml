@@ -121,6 +121,7 @@
                             .Listeners(l =>
                             {
                                 l.Change.Fn = "Event.Form.dtpFromDate_change";
+                                l.Select.Fn = "Event.Form.dtpFromDate_Select";
                             })
                             , HQ.Combo().ID("cboApplyType")
                             .HQLangCode("DisplayApplyType").HQProcedure("OM27700_pcApplyType")
@@ -164,6 +165,7 @@
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "Event.Form.dtpToDate_Change";
+                        lst.Select.Fn = "Event.Form.dtpToDate_Select";
                     })
 
                     , HQ.Combo().ID("cboObjApply")
@@ -316,7 +318,6 @@
                         .Scroll(ScrollMode.Both)
                         .View(X.GridView().TrackOver(false))
                         .SortableColumns(false)
-
                         .Store(
                             X.Store()
                             .ID("stoCompany")
@@ -1206,14 +1207,14 @@
                             .Store(
                                 X.Store()
                                 .ID("stoSale")
-                                .PageSize(50)
+                                //.PageSize(50)
                                 .Model(Util.GenerateModel(typeof(OM27700_pgSalesInvt_Result), "mdlSalesInvt", ""))
                                 .Parameters(ps =>
                                 {
                                     ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
 
                                 })
-                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSaleInvt"))).AutoLoad(false)
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSaleInvt")))//.AutoLoad(false)
                                 .Listeners(l =>
                                 {
                                     l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
@@ -1272,23 +1273,23 @@
                                 .Listeners(l => l.Command.Handler = "Event.Grid.grd_Salereject(this, record);")
                             )
                             .SelectionModel(X.RowSelectionModel().ID("slmSale").Mode(SelectionMode.Multi))
-                            .BottomBar(
-                            X.PagingToolbar()
-                            .Items(
-                                X.Label("Page size:"),
-                                X.ToolbarSpacer(10),
-                                X.ComboBox()
-                                .Width(80)
-                                .Items("1", "2", "10", "20", "30", "50")
-                                .SelectedItems("50")
-                                .Listeners(l =>
-                                    {
-                                        l.Select.Fn = "HQ.grid.onPageSelect";
-
-                                    })
-                            ).HideRefresh(true)
-                            .Plugins(X.ProgressBarPager())
-                            )
+                                   .BottomBar(
+                                    X.PagingToolbar()
+                                    //.HideRefresh(true)
+                                    .Items(
+                                        X.Label("Page size:"),
+                                        X.ToolbarSpacer(10),
+                                        X.ComboBox()
+                                        .Width(80)
+                                        .Items("1", "2", "10", "20", "30", "50")
+                                        .SelectedItems("50")//.ForceSelection(true)
+                                        .Listeners(l =>
+                                            {
+                                                l.Select.Fn = "HQ.grid.onPageSelect";
+                                            })
+                                    )
+                                    .Plugins(X.ProgressBarPager())
+                                )
 
                             .Plugins(
                                 X.CellEditing()
