@@ -540,6 +540,8 @@ var btnImport_Click = function (c, e) {
                         }
                         else {
                             objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
+                            objTrans.set('TranAmt', (objTrans.data.Qty * objTrans.data.UnitPrice));
+                            objTrans.set('ExtCost', (objTrans.data.Qty + objTrans.data.TranAmt));
                         }
                     });
                     HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
@@ -922,7 +924,14 @@ var grdTrans_Edit = function (item, e) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
         if (e.field === 'SiteID') {
-            e.record.set('WhseLoc', '');
+            var objWhseLoc = HQ.store.findInStore(App.stoGetWhseLocMin, ['InvtID', 'SiteID'], [e.record.data.InvtID, e.record.data.SiteID]);
+            if (objWhseLoc == undefined || HQ.showWhseLoc == 0) {
+                e.record.set('WhseLoc', '');
+            }
+            else {
+                e.record.set('WhseLoc', objWhseLoc.WhseLoc);
+            }
+            
             e.record.set('Qty', 0);
             deleteLotExit(e.record);
         }
@@ -1478,6 +1487,7 @@ var save = function () {
                 }
 
                 HQ.message.process(msg, data, true);
+                App.stoGetWhseLocMin.reload();
                 if (!Ext.isEmpty(App.BatNbr.getValue())) {
                     App.stoBatch.reload();
                 } else {
@@ -1506,6 +1516,7 @@ var deleteHeader = function (item) {
                     if (!Ext.isEmpty(record)) {
                         App.stoBatch.remove(record);
                     }
+                    App.stoGetWhseLocMin.reload();
                     setChange(false);
                     HQ.message.process(msg, data, true);
                     menuClick('new');

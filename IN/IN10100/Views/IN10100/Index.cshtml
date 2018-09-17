@@ -224,6 +224,20 @@
         .Reader(X.JsonReader().Root("data"))
     )
 )
+
+@(
+ X.Store()
+    .ID("stoGetWhseLocMin")
+    .AutoLoad(true)
+    .Model(Util.GenerateModel(typeof(IN10100_pdGetWhseLocMin_Result), "mdlGetWhseLocMin", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetGetWhseLocMin", "IN10100"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
 @(
     X.Store()
     .ID("stoCalcLot")

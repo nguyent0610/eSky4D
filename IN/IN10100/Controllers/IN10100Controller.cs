@@ -177,6 +177,13 @@ namespace IN10100.Controllers
             var objSetup = _app.IN_Setup.FirstOrDefault(p => p.SetupID == "IN" && p.BranchID == cpnyID);
             return this.Store(objSetup);
         }
+
+        public ActionResult GetGetWhseLocMin()
+        {
+            var objSetup = _app.IN10100_pdGetWhseLocMin(Current.CpnyID,Current.UserName,Current.LangID).ToList();
+            return this.Store(objSetup);
+        }        
+
         public ActionResult GetLot(string siteID, string whseLoc, string invtID, string batNbr, string branchID)
         {
             var lstLot = _app.IN10100_pgIN_ItemLot(siteID, invtID, batNbr, branchID, whseLoc, Current.UserName, Current.CpnyID, Current.LangID).ToList();
@@ -1442,6 +1449,14 @@ namespace IN10100.Controllers
                                         message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
                                         continue;
                                     }
+                                    else
+                                    {
+                                        if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].StringValue.PassNull().Length > 25)
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} có số Lot vượt quá 25 ký tự!<br/>", (i + 1).ToString(), invtID);
+                                            continue;
+                                        }
+                                    }
 
                                     if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 9].Value.PassNull() == string.Empty)
                                     {
@@ -1762,6 +1777,14 @@ namespace IN10100.Controllers
                                     {
                                         message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
                                         continue;
+                                    }
+                                    else
+                                    {
+                                        if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].StringValue.PassNull().Length > 25)
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} có số LOT vượt quá 25 ký tự !<br/>", (i + 1).ToString(), invtID);
+                                            continue;
+                                        }
                                     }
 
                                     if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].Value.PassNull() == string.Empty)
