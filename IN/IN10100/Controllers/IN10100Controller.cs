@@ -963,28 +963,11 @@ namespace IN10100.Controllers
                 style = sheetTrans.Cells["A4"].GetStyle();
                 style.Font.IsBold = true;
 
-                sheetTrans.Cells["A4"].PutValue("Mã Mặt Hàng");
-                sheetTrans.Cells["B4"].PutValue("Diễn Giải");
+                var colTextsHeader = GetHeader(showWhseLoc);
 
-                sheetTrans.Cells["C4"].PutValue("Kho");
-                if (showWhseLoc == 0)
+                for (int i = 0; i < colTextsHeader.Count; i++)
                 {
-                    sheetTrans.Cells["D4"].PutValue("Đơn Vị Tính");
-                    sheetTrans.Cells["E4"].PutValue("Số Lượng");
-                    sheetTrans.Cells["F4"].PutValue("Giá Bán");
-                    sheetTrans.Cells["G4"].PutValue("Tổng Tiền");
-                    sheetTrans.Cells["H4"].PutValue("Số LOT");
-                    sheetTrans.Cells["I4"].PutValue("Ngày Hết Hạn(yyyy/mm/dd)");
-                }
-                else
-                {
-                    sheetTrans.Cells["D4"].PutValue("Vị Trí Kho");
-                    sheetTrans.Cells["E4"].PutValue("Đơn Vị Tính");
-                    sheetTrans.Cells["F4"].PutValue("Số Lượng");
-                    sheetTrans.Cells["G4"].PutValue("Giá Bán");
-                    sheetTrans.Cells["H4"].PutValue("Tổng Tiền");
-                    sheetTrans.Cells["I4"].PutValue("Số LOT");
-                    sheetTrans.Cells["J4"].PutValue("Ngày Hết Hạn(yyyy/mm/dd)");
+                    SetCellValue(sheetTrans.Cells[3, i], Util.GetLang(colTextsHeader[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10, false);
                 }
 
                 sheetTrans.Cells["A4"].SetStyle(style);
@@ -1008,7 +991,7 @@ namespace IN10100.Controllers
                 validation.Type = Aspose.Cells.ValidationType.List;
                 validation.Operator = OperatorType.Between;
                 validation.InCellDropDown = true;
-                validation.Formula1 = "=MasterData!$AA$2:$AA$" + dt.Rows.Count;
+                validation.Formula1 = "=MasterData!$AA$3:$AA$" + dt.Rows.Count;
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
@@ -1056,7 +1039,7 @@ namespace IN10100.Controllers
                     //Site
                     string formulaSiteID = "=MasterData!$T$2:$T$" + (dtSite.Rows.Count);
                     validation = GetValidation(ref sheetTrans, formulaSiteID, "Chọn kho", "Mã kho không tồn tại");
-                    validation.AddArea(GetCellArea(1, dtSite.Rows.Count + 100, 2));  
+                    validation.AddArea(GetCellArea(2, dtSite.Rows.Count + 100, 2));  
                     
                     //SiteLocation
                     //string formulaSiteLocationID = "=Details!$AJ$2:$AJ$" + (dtSiteLocation.Rows.Count + 2);
@@ -1301,7 +1284,7 @@ namespace IN10100.Controllers
                                 bool checkHeader = false;
                                 for (int i = 0; i < colTextsHeader.Count; i++)
                                 {
-                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != colTextsHeader[i].ToUpper().Trim())
+                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != Util.GetLang(colTextsHeader[i]).ToUpper())
                                     {
                                         checkHeader = true;
                                         break;
@@ -1312,6 +1295,13 @@ namespace IN10100.Controllers
                                     throw new MessageException(MessageType.Message, "148");
                                 }
 
+                                if (showWhseLoc == 0)
+                                {
+                                    if (workSheet.Cells[3, 9].StringValue.ToUpper().Trim().PassNull() != "")
+                                    {
+                                        throw new MessageException(MessageType.Message, "148");
+                                    }
+                                }
 
 
                                 for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
@@ -1601,7 +1591,7 @@ namespace IN10100.Controllers
 
                             }
 
-                            if (lstTrans.Count == 0)
+                            if (lstTrans.Count == 0 && message.PassNull()=="")
                             {
                                 message += string.Format("File import không có nội dung<br/>");
                             }
@@ -1647,7 +1637,7 @@ namespace IN10100.Controllers
                                 bool checkHeader = false;
                                 for (int i = 0; i < colTextsHeader.Count; i++)
                                 {
-                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != colTextsHeader[i].ToUpper().Trim())
+                                    if (workSheet.Cells[3, i].StringValue.ToUpper().Trim() != Util.GetLang(colTextsHeader[i]).ToUpper())
                                     {
                                         checkHeader = true;
                                         break;
@@ -1963,6 +1953,29 @@ namespace IN10100.Controllers
             }
         }
 
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle, bool isBackground = false)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            style.IsTextWrapped = true;
+            //style.ForegroundColor = Color.Red;
+            if (isTitle)
+            {
+                style.Font.Color = Color.Red;
+            }
+            if (isBackground)
+            {
+                style.Font.Color = Color.Red;
+                style.Pattern = BackgroundType.Solid;
+                style.ForegroundColor = Color.Yellow;
+            }
+            c.SetStyle(style);
+        }
+
 
         private Validation GetValidation(ref Worksheet SheetMCP, string formular1, string inputMess, string errMess)
         {
@@ -2036,7 +2049,7 @@ namespace IN10100.Controllers
 
         private List<string> GetHeader(int showWhseLoc)
         {
-            var colTextsHeader = new List<string>() { "Mã Mặt Hàng", "Diễn Giải", "Kho", "Vị Trí Kho", "Đơn Vị Tính", "Số Lượng", "Giá Bán", "Tổng Tiền", "Số LOT", "Ngày Hết Hạn(yyyy/mm/dd)"};
+            var colTextsHeader = new List<string>() { "IN10100InvtID", "Descr", "SiteID", "WhseLoc", "IN10100Unit", "Qty", "Price", "IN10100TranAmt", "LotSerNbr", "IN10100DateEnt" };
 
             if (showWhseLoc == 0)
             {
