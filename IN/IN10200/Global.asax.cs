@@ -50,7 +50,7 @@ namespace IN10200
             Session["IN10200"] = acc;
             Session["DBApp"] = Current.DBApp = "PhuThai_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["CpnyID"] = Current.CpnyID = "DC05";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

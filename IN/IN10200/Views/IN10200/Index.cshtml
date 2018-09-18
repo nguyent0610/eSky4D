@@ -251,6 +251,20 @@
         .Reader(X.JsonReader().Root("data")))
 )
 
+
+@(
+ X.Store()
+    .ID("stoGetWhseLocMax")
+    .AutoLoad(true)
+    .Model(Util.GenerateModel(typeof(IN10200_pdGetWhseLocMax_Result), "mdlGetWhseLocMax", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetGetWhseLocMax", "IN10200"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
 @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
 </body>
 </html>

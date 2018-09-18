@@ -735,120 +735,127 @@ var btnImport_Click = function (c, e) {
                     cboWhseLoc: App.cboWhseLoc.getValue()
                 },
                 success: function (msg, data) {
-                    if (this.result.data.lstTrans != undefined) {
-                        var errorInvtID = [];
-                        this.result.data.lstTrans.forEach(function (item) {
-                            var obj = HQ.store.findRecord(App.stoTrans, ["InvtID"], [item.InvtID]);
-                            if (!obj) {
-                                var newTrans = Ext.create('App.mdlTrans');
-                                newTrans.data.JrnlType = 'IN';
-                                newTrans.data.ReasonCD = App.cboReasonCD.getValue();
-                                newTrans.data.TranAmt = newTrans.data.ExtCost = item.TranAmt;
-                                newTrans.data.BranchID = HQ.cpnyID;
-                                newTrans.data.CnvFact = item.CnvFact;
-                                newTrans.data.ExtCost = item.TranAmt;
-                                newTrans.data.InvtID = item.InvtID;
-                                newTrans.data.InvtMult = -1;
-                                newTrans.data.LineRef = item.LineRef;
-                                newTrans.data.Qty = item.Qty;
-                                newTrans.data.QtyOnHand = item.QtyOnHand;
-                                newTrans.data.SiteID = item.SiteID;
-                                newTrans.data.WhseLoc = item.WhseLoc;
-                                newTrans.data.TranDate = App.txtDateEnt.getValue();
-                                newTrans.data.TranDesc = item.TranDesc;
-                                newTrans.data.TranType = 'II';
-                                newTrans.data.UnitDesc = item.UnitDesc;
-                                newTrans.data.UnitMultDiv = item.UnitMultDiv;
-                                newTrans.data.UnitPrice = newTrans.data.UnitCost = item.UnitPrice;
-                                newTrans.commit();
-                                App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
+                    if (!Ext.isEmpty(this.result.data.message)) {
+                        var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
+                        HQ.message.show('2013103001', [result], '', true);
+                        return false;
+                    }
+                    else {
+                        if (this.result.data.lstTrans != undefined) {
+                            var errorInvtID = [];
+                            this.result.data.lstTrans.forEach(function (item) {
+                                var obj = HQ.store.findRecord(App.stoTrans, ["InvtID", "SiteID", "WhseLoc"], [item.InvtID, item.SiteID, item.WhseLoc]);
+                                if (!obj) {
+                                    var newTrans = Ext.create('App.mdlTrans');
+                                    newTrans.data.JrnlType = 'IN';
+                                    newTrans.data.ReasonCD = App.cboReasonCD.getValue();
+                                    newTrans.data.TranAmt = newTrans.data.ExtCost = item.TranAmt;
+                                    newTrans.data.BranchID = HQ.cpnyID;
+                                    newTrans.data.CnvFact = item.CnvFact;
+                                    newTrans.data.ExtCost = item.TranAmt;
+                                    newTrans.data.InvtID = item.InvtID;
+                                    newTrans.data.InvtMult = -1;
+                                    newTrans.data.LineRef = item.LineRef;
+                                    newTrans.data.Qty = item.Qty;
+                                    newTrans.data.QtyOnHand = item.QtyOnHand;
+                                    newTrans.data.SiteID = item.SiteID;
+                                    newTrans.data.WhseLoc = item.WhseLoc;
+                                    newTrans.data.TranDate = App.txtDateEnt.getValue();
+                                    newTrans.data.TranDesc = item.TranDesc;
+                                    newTrans.data.TranType = 'II';
+                                    newTrans.data.UnitDesc = item.UnitDesc;
+                                    newTrans.data.UnitMultDiv = item.UnitMultDiv;
+                                    newTrans.data.UnitPrice = newTrans.data.UnitCost = item.UnitPrice;
+                                    newTrans.commit();
+                                    App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
+                                }
+                                else {
+                                    errorInvtID.push(item.InvtID);
+                                    //if (item.CnvFact == obj.data.CnvFact) {
+                                    //    obj.set("Qty", obj.data.Qty + item.Qty);
+                                    //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
+                                    //    obj.set("ExtCost", obj.data.TranAmt);
+                                    //}
+                                    //else if (item.CnvFact == 1) {
+
+                                    //    obj.set("Qty", obj.data.Qty * obj.data.CnvFact + item.Qty);
+                                    //    obj.set("CnvFact", 1);
+                                    //    obj.set("UnitDesc", item.UnitDesc);
+                                    //    obj.set("UnitPrice", item.UnitPrice);
+                                    //    obj.set("UnitCost", item.UnitPrice);
+                                    //    obj.set("TranAmt", item.UnitPrice * obj.data.Qty);
+                                    //    obj.set("ExtCost", obj.data.TranAmt);
+
+                                    //}
+                                    //else if (obj.data.CnvFact == 1) {
+                                    //    obj.set("Qty", obj.data.Qty + item.Qty * item.CnvFact);
+                                    //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
+                                    //    obj.set("ExtCost", obj.data.TranAmt);
+                                    //}
+                                }
+                            });
+
+                            App.stoLotTrans.clearFilter();
+                            App.stoLotTrans.suspendEvents();
+                            this.result.data.lstLot.forEach(function (item) {
+                                var objLot = HQ.store.findRecord(App.stoLotTrans, ["InvtID", "LotSerNbr", "SiteID", "WhseLoc"], [item.InvtID, item.LotSerNbr, item.SiteID, item.WhseLoc]);
+                                if (!objLot) {
+                                    var newLot = Ext.create('App.mdlLotTrans');
+                                    newLot.data.LotSerNbr = item.LotSerNbr;
+                                    newLot.data.BranchID = HQ.cpnyID;
+                                    newLot.data.INTranLineRef = item.INTranLineRef;
+                                    newLot.data.ExpDate = new Date(parseInt(item.ExpDate.substr(6)));
+                                    newLot.data.InvtID = item.InvtID;
+                                    newLot.data.InvtMult = -1;
+                                    newLot.data.MfgrLotSerNbr = '';
+                                    newLot.data.Qty = item.Qty;
+                                    newLot.data.QtyOnHand = item.QtyOnHand;
+                                    newLot.data.SiteID = item.SiteID;
+                                    newLot.data.WhseLoc = item.WhseLoc;
+                                    newLot.data.SlsperID = '';
+                                    newLot.data.TranDate = App.txtDateEnt.getValue();
+                                    newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
+                                    newLot.data.TranType = 'II';
+                                    newLot.data.UnitDesc = item.UnitDesc;
+                                    newLot.data.UnitMultDiv = item.UnitMultDiv;
+                                    newLot.data.UnitPrice = newLot.data.UnitCost = item.UnitPrice;
+                                    newLot.data.CnvFact = item.CnvFact;
+                                    newLot.commit();
+                                    App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
+                                }
+                                else {
+                                    //if (item.CnvFact == objLot.data.CnvFact) {
+                                    //    objLot.set("Qty", objLot.data.Qty + item.Qty);
+                                    //}
+                                    //else if (item.CnvFact == 1) {
+
+                                    //    objLot.set("Qty", objLot.data.Qty * objLot.data.CnvFact + item.Qty);
+                                    //    objLot.set("CnvFact", 1);
+                                    //    objLot.set("UnitDesc", item.UnitDesc);
+                                    //    objLot.set("UnitPrice", item.UnitPrice);
+                                    //    objLot.set("UnitCost", item.UnitPrice);
+
+                                    //}
+                                    //else if (objLot.data.CnvFact == 1) {
+                                    //    objLot.set("Qty", objLot.data.Qty + item.Qty * item.CnvFact);
+                                    //}
+                                }
+                            });
+                            App.stoLotTrans.resumeEvents();
+                            calculate();
+                            checkTransAdd();
+                            if (errorInvtID.length > 0) {
+                                HQ.message.show('201512241', [errorInvtID.join(',')], '', true);
                             }
-                            else {
-                                errorInvtID.push(item.InvtID);
-                                //if (item.CnvFact == obj.data.CnvFact) {
-                                //    obj.set("Qty", obj.data.Qty + item.Qty);
-                                //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
-                                //    obj.set("ExtCost", obj.data.TranAmt);
-                                //}
-                                //else if (item.CnvFact == 1) {
-
-                                //    obj.set("Qty", obj.data.Qty * obj.data.CnvFact + item.Qty);
-                                //    obj.set("CnvFact", 1);
-                                //    obj.set("UnitDesc", item.UnitDesc);
-                                //    obj.set("UnitPrice", item.UnitPrice);
-                                //    obj.set("UnitCost", item.UnitPrice);
-                                //    obj.set("TranAmt", item.UnitPrice * obj.data.Qty);
-                                //    obj.set("ExtCost", obj.data.TranAmt);
-
-                                //}
-                                //else if (obj.data.CnvFact == 1) {
-                                //    obj.set("Qty", obj.data.Qty + item.Qty * item.CnvFact);
-                                //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
-                                //    obj.set("ExtCost", obj.data.TranAmt);
-                                //}
+                            else if (!Ext.isEmpty(this.result.data.message)) {
+                                HQ.message.show('2013103001', [this.result.data.message], '', true);
+                            } else {
+                                HQ.message.process(msg, data, true);
                             }
-                        });
-
-                        App.stoLotTrans.clearFilter();
-                        App.stoLotTrans.suspendEvents();
-                        this.result.data.lstLot.forEach(function (item) {
-                            var objLot = HQ.store.findRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], [item.InvtID, item.LotSerNbr]);
-                            if (!objLot) {
-                                var newLot = Ext.create('App.mdlLotTrans');
-                                newLot.data.LotSerNbr = item.LotSerNbr;
-                                newLot.data.BranchID = HQ.cpnyID;
-                                newLot.data.INTranLineRef = item.INTranLineRef;
-                                newLot.data.ExpDate = new Date(parseInt(item.ExpDate.substr(6)));
-                                newLot.data.InvtID = item.InvtID;
-                                newLot.data.InvtMult = -1;
-                                newLot.data.MfgrLotSerNbr = '';
-                                newLot.data.Qty = item.Qty;
-                                newLot.data.QtyOnHand = item.QtyOnHand;
-                                newLot.data.SiteID = item.SiteID;
-                                newLot.data.WhseLoc = item.WhseLoc;
-                                newLot.data.SlsperID = '';
-                                newLot.data.TranDate = App.txtDateEnt.getValue();
-                                newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
-                                newLot.data.TranType = 'II';
-                                newLot.data.UnitDesc = item.UnitDesc;
-                                newLot.data.UnitMultDiv = item.UnitMultDiv;
-                                newLot.data.UnitPrice = newLot.data.UnitCost = item.UnitPrice;
-                                newLot.data.CnvFact = item.CnvFact;
-                                newLot.commit();
-                                App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
-                            }
-                            else {
-                                //if (item.CnvFact == objLot.data.CnvFact) {
-                                //    objLot.set("Qty", objLot.data.Qty + item.Qty);
-                                //}
-                                //else if (item.CnvFact == 1) {
-
-                                //    objLot.set("Qty", objLot.data.Qty * objLot.data.CnvFact + item.Qty);
-                                //    objLot.set("CnvFact", 1);
-                                //    objLot.set("UnitDesc", item.UnitDesc);
-                                //    objLot.set("UnitPrice", item.UnitPrice);
-                                //    objLot.set("UnitCost", item.UnitPrice);
-
-                                //}
-                                //else if (objLot.data.CnvFact == 1) {
-                                //    objLot.set("Qty", objLot.data.Qty + item.Qty * item.CnvFact);
-                                //}
-                            }
-                        });
-                        App.stoLotTrans.resumeEvents();
-                        calculate();
-                        checkTransAdd();
-                        if (errorInvtID.length > 0) {
-                            HQ.message.show('201512241', [errorInvtID.join(',')], '', true);
-                        }
-                        else if (!Ext.isEmpty(this.result.data.message)) {
-                            HQ.message.show('2013103001', [this.result.data.message], '', true);
                         } else {
                             HQ.message.process(msg, data, true);
                         }
-                    } else {
-                        HQ.message.process(msg, data, true);
-                    }
+                    }                   
 
                     //App.winCopy.unmask();
                     //App.winCopy.hide();
@@ -960,7 +967,14 @@ var grdTrans_Edit = function (item, e) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
         if (e.field === 'SiteID') {
-            e.record.set('WhseLoc', '');
+            var objWhseLoc = HQ.store.findInStore(App.stoGetWhseLocMax, ['InvtID', 'SiteID'], [e.record.data.InvtID, e.record.data.SiteID]);
+            if (objWhseLoc == undefined || HQ.showWhseLoc == 0) {
+                e.record.set('WhseLoc', '');
+            }
+            else {
+                e.record.set('WhseLoc', objWhseLoc.WhseLoc);
+            }
+           
             e.record.set('Qty', 0);
             e.record.set('TranAmt',0);
             deleteLotExit(e.record);
@@ -1335,6 +1349,7 @@ var save = function () {
                    
                 }
                 App.stoBatch.reload();
+                App.stoGetWhseLocMax.reload();
                 setChange(false);                
                 HQ.message.process(msg, data, true);
                 
@@ -1359,6 +1374,7 @@ var deleteHeader = function (item) {
                 url: 'IN10200/Delete',
                 timeout: 180000,
                 success: function (msg, data) {
+                    App.stoGetWhseLocMax.reload();
                     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
                     if (!Ext.isEmpty(record)) {
                         App.stoBatch.remove(record);
@@ -1409,6 +1425,7 @@ var deleteTrans = function (item) {
                     if (!Ext.isEmpty(data.result.data.tstamp)) {
                         App.tstamp.setValue(data.result.data.tstamp);
                     }
+                    App.stoGetWhseLocMax.reload();
                     App.grdTrans.deleteSelected();
                     calculate();
                     HQ.message.process(msg, data, true);
@@ -1519,6 +1536,7 @@ var calcLot = function (record) {
                             newLot.data.PercentExpDate = item.data.PercentExpDate;
                             newLot.data.INTranLineRef = det.LineRef;
                             newLot.data.SiteID = det.SiteID;
+                            newLot.data.WhseLoc = det.WhseLoc;
                             newLot.data.InvtID = det.InvtID;
                             newLot.data.InvtMult = -1;
                             if ((det.UnitMultDiv == "M" ? newQty / det.CnvFact : newQty * det.CnvFact) % 1 > 0) {
