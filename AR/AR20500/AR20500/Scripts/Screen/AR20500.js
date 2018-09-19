@@ -81,6 +81,13 @@ var frmMain_BoxReady = function () {
     App.ToDate.setMaxValue(date);
     App.dtpDate1.setVisible(HQ.HideTime);
     App.dtpDate2.setVisible(HQ.HideTime);
+
+    App.cboTerritory.setVisible(HQ.isShowTerritory);
+    if (HQ.isShowTerritory === false) {
+        App.cboTerritory.allowBlank = true;
+        App.cboCpnyID.multiSelect = true;
+        App.cboCpnyID.store.reload();
+    }
 };
 
 var cboTerritory_Change = function (sender, e) {
@@ -461,6 +468,34 @@ var btnProcess_Click = function () {
         }
     }
 
+};
+
+var askApprovePG = function (item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            clientValidation: false,
+            waitMsg: HQ.common.getLang("Handle"),
+            method: 'POST',
+            url: 'AR20500/ProcessPG',
+            timeout: 1800000,
+            params: {
+                lstCustPG: HQ.store.getAllData(App.grdCustPG.store, ['ColCheck'], [true]),
+                fromDate: HQ.bussinessDate,
+                toDate: HQ.bussinessDate,
+                askApprove: 1
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                App.stoCustPG.reload();
+            },
+            failure: function (msg, data) {
+                if (data && data.response && data.response.status == 0) {
+                    btnProcess_Click();
+                } else
+                    HQ.message.process(msg, data, true);
+            }
+        });
+    }
 };
 
 var btnOKMCP_Click = function () {
@@ -1976,3 +2011,20 @@ var renderOUnit = function (value, metaData, record, rowIndex, colIndex, store) 
 }
 
 
+var getParams = function (combo) {
+    var returnValue = "";
+    if (HQ.isShowTerritory === false) {
+         if (combo.value && combo.value.length) {
+        returnValue = combo.value.join();
+        }
+        else {
+            if (combo.getValue()) {
+                returnValue = combo.rawValue;
+            }
+        }   
+    } else {
+        returnValue = combo.rawValue;
+    }
+
+    return returnValue;
+}

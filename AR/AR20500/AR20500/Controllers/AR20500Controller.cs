@@ -116,6 +116,7 @@ namespace AR20500.Controllers
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
             var showClassCust = false;
+            var isShowTerritory = false;
             var allowEditContactName = string.Empty;
             var showOUnit = 0;
             var showMobile = 0;
@@ -145,6 +146,7 @@ namespace AR20500.Controllers
                 editPhone = objConfig.EditPhone.HasValue && objConfig.EditPhone.Value;
                 showOUnit = objConfig.ShowOUnit;
                 showMobile = objConfig.ShowMobile;
+                isShowTerritory = objConfig.IsShowTerritory ?? false;
             }
             else
             {
@@ -173,6 +175,7 @@ namespace AR20500.Controllers
             ViewBag.config = objConfig;
             ViewBag.showOUnit = showOUnit;
             ViewBag.showMobile = showMobile;
+            ViewBag.IsShowTerritory = isShowTerritory;
             #endregion
             var obj = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (obj != null)
@@ -270,7 +273,7 @@ namespace AR20500.Controllers
                                          {
                                              throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
                                          }
-                                         if (!lstCustHT.Any(x => x == key))
+                                         if (lstCustHT.All(x => x != key))
                                          {
                                              lstCustHT.Add(key);
                                          }
@@ -304,11 +307,7 @@ namespace AR20500.Controllers
                     List<string> lstCustID = new List<string>();
                     foreach (var item in lstCust)
                     {
-                        bool isDupliApprove = false;
-                        if (askApprove == 1)
-                        {
-                            isDupliApprove = true;
-                        }
+                        bool isDupliApprove = askApprove == 1;
                         if (item.ColCheck == true)
                         {
                             _db = Util.CreateObjectContext<AR20500Entities>(false);
@@ -838,7 +837,7 @@ namespace AR20500.Controllers
             objAR_SOAddress.Zip = objCust.Zip;
         }
         #endregion
-        public ActionResult ProcessPG(FormCollection data, DateTime fromDate, DateTime toDate, int askApprove)
+        public ActionResult ProcessPG(FormCollection data, DateTime fromDate, DateTime toDate, int askApprove )
         {
             try
             {
@@ -848,37 +847,49 @@ namespace AR20500.Controllers
                 var calUpdate = false;
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
+
                 handle = data["cboHandle"];
                 status = data["cboStatus"];
                 foreach (var item in lstCustPG)
                 {
                     if (item.ColCheck == true)
                     {
-                        var objCust = _db.CS_Leads.Where(x => x.LeadID == item.NewConsumerID && x.BranchID == item.BranchID).FirstOrDefault();
+                        var objCheck = _db.CS_Leads.Any(x => x.PhoneNumber == item.Phone); // check tồn tại SĐT trong CS_Leads
+                        if (objCheck && askApprove == 0)
+                        {
+                            throw new MessageException(MessageType.Message, "2018091951", "askApprovePG", parm: new string[] { });
+                        }
+
+                        var objCust = _db.CS_Leads.FirstOrDefault(x => x.LeadID == item.NewConsumerID && x.BranchID == item.BranchID);
                         var objAR_Consumer = _db.AR_Consumer.FirstOrDefault(p => p.ConsumerID == item.ConsumerID && p.Phone == item.Phone && p.SlsperID == item.SlsperID && p.BranchID == item.BranchID);
 
                         if (handle != "D")
                         {
                             if (status == "H")
                             {
-                                if (objCust != null)
+                                if (!objCheck)
                                 {
-                                    UpCS_Leads(objCust, item, false, handle);
-                                    calUpdate = true;
-                                }
-                                else
-                                {
-                                    if (item.ConsumerID.PassNull() != "")
+                                    if (objCust != null)
                                     {
-                                        objCust = new CS_Leads();
-                                        objCust.ResetET();
-                                        objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
-                                        objCust.BranchID = item.BranchID;
-                                        UpCS_Leads(objCust, item, true, handle);
-                                        _db.CS_Leads.AddObject(objCust);
-                                        calUpdate = true;
+                                        UpCS_Leads(objCust, item, false, handle);
+                                    }
+                                    else
+                                    {
+                                        if (item.ConsumerID.PassNull() != "")
+                                        {
+                                            objCust = new CS_Leads();
+                                            objCust.ResetET();
+                                            objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
+                                            objCust.BranchID = item.BranchID;
+                                            UpCS_Leads(objCust, item, true, handle);
+                                            _db.CS_Leads.AddObject(objCust);
+                                          
+                                        }
                                     }
                                 }
+
+                                calUpdate = true;
+
                                 if (objAR_Consumer != null)
                                 {
                                     objAR_Consumer.ConsumerName = item.ConsumerName;
@@ -890,10 +901,29 @@ namespace AR20500.Controllers
                                     objAR_Consumer.State = item.State;
                                     objAR_Consumer.District = item.District;
                                 }
+
+
                             }
                             _db.SaveChanges();
                             if (calUpdate)
-                                _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                            {
+                                if (!objCheck)
+                                {
+                                    if (objCust != null)
+                                    {
+                                        _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID,
+                                            Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                                    }
+                                }
+                                else
+                                {
+                                    objCust = _db.CS_Leads.FirstOrDefault(x => x.PhoneNumber == item.Phone);
+                                    if (objCust != null)
+                                    {
+                                        _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -901,18 +931,14 @@ namespace AR20500.Controllers
                             {
                                 objAR_Consumer.Status = "D";
                             }
+                       
                             _db.SaveChanges();
                         }
                         
                     }
                 }
 
-                if (mLogMessage != null)
-                {
-                    return mLogMessage;
-                }
-                else
-                    return Json(new { success = true, type = "message", code = "8009" });
+                return mLogMessage ?? Json(new { success = true, type = "message", code = "8009" });
             }
             catch(Exception ex){
                 if (ex is System.Data.SqlClient.SqlException)

@@ -12564,6 +12564,30 @@ namespace AR20500
         private Nullable<global::System.Boolean> _HideTime;
         partial void OnHideTimeChanging(Nullable<global::System.Boolean> value);
         partial void OnHideTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowTerritory
+        {
+            get
+            {
+                return _IsShowTerritory;
+            }
+            set
+            {
+                OnIsShowTerritoryChanging(value);
+                ReportPropertyChanging("IsShowTerritory");
+                _IsShowTerritory = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowTerritory");
+                OnIsShowTerritoryChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowTerritory;
+        partial void OnIsShowTerritoryChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowTerritoryChanged();
 
         #endregion
 

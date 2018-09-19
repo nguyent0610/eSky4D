@@ -1068,6 +1068,7 @@
           <Property Type="Boolean" Name="ShowClassCust" Nullable="true" />
           <Property Type="String" Name="LimitedYear" Nullable="false" MaxLength="4" />
           <Property Type="Boolean" Name="HideTime" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowTerritory" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -1726,6 +1727,7 @@
                 <ScalarProperty Name="ShowClassCust" ColumnName="ShowClassCust" />
                 <ScalarProperty Name="LimitedYear" ColumnName="LimitedYear" />
                 <ScalarProperty Name="HideTime" ColumnName="HideTime" />
+                <ScalarProperty Name="IsShowTerritory" ColumnName="IsShowTerritory" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2031,7 +2033,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.875" PointX="2.75" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.875" PointX="0.5" PointY="6.875" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.875" PointX="2.75" PointY="3.75" />

@@ -36,11 +36,11 @@
         .Items(
            X.Panel().ID("pnlHeader")
             .Region(Region.North).Border(false)
-            .Layout(LayoutType.VBox)
+            .Layout(LayoutType.HBox)
             .AutoScroll(true)
             .Items(
                //row1
-               X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
+               X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                     .Items(
                         HQ.Combo().ID("cboTerritory").MultiSelect(true)
                         .Name("cboTerritory").HQLangCode("AR20500Territory").HQProcedure("AR20500_pcTerritory")
@@ -60,10 +60,84 @@
                             lst.Change.Fn = "cboTerritory_Change";
                             lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
                         })
+                        
+                        ,HQ.Combo().ID("cboCpnyID")
+                            .Name("cboCpnyID").HQLangCode("CpnyID").HQProcedure("AR20500_pcBranchAllByUser")
+                            .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                            .Width(250).HQHeightWidth(400, 300).MultiSelect(false)
+                            .ForceSelection(true).HQAutoLoad(false).AllowBlank(false)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "cboCpnyID_Change";
+                                lst.Select.Fn = "cboCpnyID_Select";
+                                lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
 
+                            }),
+                            
+                               HQ.Combo().ID("cboSlsperId")
+                        .Name("cboSlsperId").HQLangCode("SlsperId").HQProcedure("AR20500_pcSlsperIdByBranch")
+                        .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")
+                        .Width(250).HQHeightWidth(400, 300)
+                        .ForceSelection(true).MultiSelect(true).HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
+                            lst.Expand.Handler = "HQ.combo.expand(this,',');";
+                        })
+
+                    
+
+                 
+
+                    )
+
+                    //row 2
+                    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                        .Items(
+                            HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
+                      
                        , HQ.DateField().ID("FromDate").HQLangCode("FromDate").Width(250)
 
-                       , HQ.Combo().ID("cboStatus")
+                            , HQ.Combo().ID("cboUpdateType")
+                            .Name("cboUpdateType").HQLangCode("AR2050UpdateType").HQProcedure("AR20500_pcUpdateType")
+                            .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                            .Width(250).HQHeightWidth(400, 300)
+                            .ForceSelection(true).HQAutoLoad(true)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                            .HQFirstDefault(true)
+                            .LoadData()
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "cboUpdateType_Change";
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+
+                    
+                        )
+                ,X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                    .Items(
+                     
+                        HQ.Combo().ID("cboStatus")
                             .Name("cboStatus").HQLangCode("Status").HQProcedure("AR20500_pcStatus")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(250).HQHeightWidth(400, 300)
@@ -82,107 +156,42 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
 
-                        , HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("0 0 0 5").Icon(Icon.ArrowRefresh)
-                            .Listeners(lst =>
-                            {
-                                lst.Click.Fn = "btnLoad_Click";
-                            })
-
-
-                    )
-
-                    //row 2
-                    , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
-                        .Items(
-                            HQ.Combo().ID("cboCpnyID")
-                            .Name("cboCpnyID").HQLangCode("CpnyID").HQProcedure("AR20500_pcBranchAllByUser")
-                            .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                            .Width(250).HQHeightWidth(400, 300)
-                            .ForceSelection(true).HQAutoLoad(false).AllowBlank(false)
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection()
-                            {
-                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
-                            })
-                            .LoadData()
-                            .Listeners(lst =>
-                            {
-                                lst.Change.Fn = "cboCpnyID_Change";
-                                lst.Select.Fn = "cboCpnyID_Select";
-                                lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
-
-                            }),
-                            HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
-
-                            , HQ.Combo().ID("cboHandle")
-                            .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
-                            .HQColumnShow("Descr").DisplayField("Descr").ValueField("ToStatus")
-                            .Width(250).HQHeightWidth(400, 300)
-                            .ForceSelection(true).HQAutoLoad(false)
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection()
+                                , HQ.Combo().ID("cboHandle")
+                                .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
+                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("ToStatus")
+                                .Width(250).HQHeightWidth(400, 300)
+                                .ForceSelection(true).HQAutoLoad(false)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .HQParam(new StoreParameterCollection()
                             {
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw }
                             })
-                            .LoadData()
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.BeforeSelect.Fn = "cboHandle_BeforeChange";
+                                    lst.Change.Fn = "cboHandle_Change";
+                                    //  lst.Select.Fn = "cboHandle_Select";
+                                })
+                    )
+
+                    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                    .Items(
+                            HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("0 0 5 5").Icon(Icon.ArrowRefresh)
                             .Listeners(lst =>
                             {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.BeforeSelect.Fn = "cboHandle_BeforeChange";
-                                lst.Change.Fn = "cboHandle_Change";
-                                //  lst.Select.Fn = "cboHandle_Select";
+                                lst.Click.Fn = "btnLoad_Click";
                             })
-
                             , HQ.Button().ID("btnProcess").HQLangCode("Handle").Width(150).MarginSpec("0 0 0 5")
-                            .Icon(Icon.ShapeHandles)
-                            .Listeners(p =>
-                            {
-                                p.Click.Fn = "btnProcess_Click";
-                            })
-                        )
-                ,X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
-                    .Items(
-                        HQ.Combo().ID("cboSlsperId")
-                        .Name("cboSlsperId").HQLangCode("SlsperId").HQProcedure("AR20500_pcSlsperIdByBranch")
-                        .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")
-                        .Width(250).HQHeightWidth(400, 300)
-                        .ForceSelection(true).MultiSelect(true).HQAutoLoad(false)
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
-                        })
-                        .LoadData()
-                        .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
-                            lst.Expand.Handler = "HQ.combo.expand(this,',');";
-                        })
-
-                        , HQ.Combo().ID("cboUpdateType")
-                        .Name("cboUpdateType").HQLangCode("AR2050UpdateType").HQProcedure("AR20500_pcUpdateType")
-                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                        .Width(250).HQHeightWidth(400, 300)
-                        .ForceSelection(true).HQAutoLoad(true)
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                        })
-                        .HQFirstDefault(true)
-                        .LoadData()
-                        .Listeners(lst =>
-                        {
-                            lst.Change.Fn = "cboUpdateType_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        })
-                        , X.Button().ID("btnSave")
+                                .Icon(Icon.ShapeHandles)
+                                .Listeners(p =>
+                                {
+                                    p.Click.Fn = "btnProcess_Click";
+                                })
+                            , X.Button().ID("btnSave")
                             .MarginSpec("0 0 0 255")
                                 .Width(150)
                                 .Text(Util.GetLang("AR20500Save"))
@@ -191,7 +200,7 @@
                                 {
                                     p.Click.Fn = "btnSave_Click";
                                 })
-                    )
+                     )
             )//pnl header
             , X.GridPanel().ID("grdCust")
                     //.Hidden(true)
@@ -210,7 +219,7 @@
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustList")).Timeout(int.MaxValue)).AutoLoad(false)
                         .Parameters(ps =>
                         {
-                            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "getParams(App.cboCpnyID)", ParameterMode.Raw));
                             ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("updateType", "App.cboUpdateType.getValue()", ParameterMode.Raw));
@@ -531,7 +540,7 @@
                                 .HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection()
                             {
-                                new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@BranchID", Value = "getParams(App.cboCpnyID)", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@SlsperID", Value = "_slsperID", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -564,7 +573,7 @@
                                 .ForceSelection(true).HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection()
                                 {
-                                    new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@BranchID", Value = "getParams(App.cboCpnyID)", Mode = ParameterMode.Raw },
                                      new StoreParameter() { Name = "@SlsperID", Value = "_slsperID", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -798,7 +807,7 @@
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustListPG")).Timeout(int.MaxValue)).AutoLoad(false)
                         .Parameters(ps =>
                         {
-                            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "getParams(App.cboCpnyID)", ParameterMode.Raw));
                             ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("fromDate", "App.FromDate.getValue()", ParameterMode.Raw));
@@ -946,7 +955,7 @@
                         , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(90)//.Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
-                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewConsumerID").Width(100)
+                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewConsumerID").Width(150)
                         , X.Column().Text(Util.GetLang("Note")).DataIndex("Note").Width(100).Editor(X.TextField().MaxLength(500).EnforceMaxLength(true))
                         , X.CommandColumn().Width(200)
                         .Commands(
