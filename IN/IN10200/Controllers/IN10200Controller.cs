@@ -519,7 +519,7 @@ namespace IN10200.Controllers
 
 
                 var cell = sheetTrans.Cells["B1"];
-                cell.PutValue("CHI TIẾT NHẬP KHO");
+                cell.PutValue(Util.GetLang("IN10200Header"));
                 style = cell.GetStyle();
                 style.Font.IsBold = true;
                 style.Font.Size = 16;
@@ -531,7 +531,7 @@ namespace IN10200.Controllers
 
 
                 cell = sheetTrans.Cells["B2"];
-                cell.PutValue("Tổng Tiền");
+                cell.PutValue(Util.GetLang("IN10200TotalAmount"));
                 style = cell.GetStyle();
                 style.Font.IsBold = true;
                 style.VerticalAlignment = TextAlignmentType.Center;
@@ -574,8 +574,8 @@ namespace IN10200.Controllers
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
-                validation.InputMessage = "Chọn mã mặt hàng";
-                validation.ErrorMessage = "Mã mặt hàng này không tồn tại";
+                validation.InputMessage = Util.GetLang("IN10200ChooseInvt");
+                validation.ErrorMessage = Util.GetLang("IN10200NotExistsInvt");
 
                 CellArea area;
                 area.StartRow = 4;
@@ -600,8 +600,8 @@ namespace IN10200.Controllers
                     sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10200TranAmt")) + "5"].SetSharedFormula(formulaTranAmt, dt.Rows.Count * 2, 1);
 
                     //Site
-                    string formulaSiteID = string.Format("=MasterData!$T${0}:$T$" + (dtSite.Rows.Count), colTextsHeader.IndexOf("SiteID"));
-                    validation = GetValidation(ref sheetTrans, formulaSiteID, "Chọn kho", "Mã kho không tồn tại");
+                    string formulaSiteID = string.Format("=MasterData!$T${0}:$T$" + (dtSite.Rows.Count), colTextsHeader.IndexOf("IN10200SiteID"));
+                    validation = GetValidation(ref sheetTrans, formulaSiteID, Util.GetLang("IN10200ChooseSite"), Util.GetLang("IN10200NotExistsSite"));
                     validation.AddArea(GetCellArea(4, dtSite.Rows.Count + 100, 2));
 
                     //SiteLocation
@@ -610,10 +610,10 @@ namespace IN10200.Controllers
                     if (showWhseLoc != 0)
                     {
                         string formulaSiteLocationID = string.Format("=OFFSET(MasterData!$AJ$1,IFERROR(MATCH(C{0},MasterData!$AK${3}:$AK${1},0),{2}),0, IF(COUNTIF(MasterData!$AK${3}:$AK${1},C{0})=0,1,COUNTIF(MasterData!$AK${3}:$AK${1},C{0})),1)",
-                        new string[] { "2", (dtSiteLocation.Rows.Count + 100).ToString(), (dtSiteLocation.Rows.Count + 64).ToString(), colTextsHeader.IndexOf("SiteID").ToString() });
+                        new string[] { "2", (dtSiteLocation.Rows.Count + 100).ToString(), (dtSiteLocation.Rows.Count + 64).ToString(), colTextsHeader.IndexOf("IN10200SiteID").ToString() });
 
-                        validation = GetValidation(ref sheetTrans, formulaSiteLocationID, "Chọn vị trí kho", "Mã vị trí kho Không tồn tại");
-                        validation.AddArea(GetCellArea(1, dtSiteLocation.Rows.Count + 100, 3));
+                        validation = GetValidation(ref sheetTrans, formulaSiteLocationID, Util.GetLang("IN10200ChooseWhseLoc"), Util.GetLang("IN10200NotExtWhseLoc"));
+                        validation.AddArea(GetCellArea(1, dtSiteLocation.Rows.Count + 100, colTextsHeader.IndexOf("WhseLoc")));
 
                         formulaCustomer3 = string.Format("=OFFSET(MasterData!$AO$1,IFERROR(MATCH(A{0}&C{0}&D{0},MasterData!$AR$2:$AR${1},0),{2}),0, IF(COUNTIF(MasterData!$AR$2:$AR${1},A{0}&C{0}&D{0})=0,1,COUNTIF(MasterData!$AR$2:$AR${1},A{0}&C{0}&D{0})),1)",
                         new string[] { "2", (dtLotSerNbr.Rows.Count + 1).ToString(), (dtLotSerNbr.Rows.Count + 1).ToString(), Getcell(colTextsHeader.IndexOf("WhseLoc")) });
@@ -624,7 +624,7 @@ namespace IN10200.Controllers
                        new string[] { "2", (dtLotSerNbr.Rows.Count + 100).ToString(), (dtLotSerNbr.Rows.Count + 195).ToString() });
                     }
 
-                    validation = GetValidation(ref sheetTrans, formulaCustomer3, " Chọn Mã Cuộn/Lô ", "LotSerNbr không tồn tại");
+                    validation = GetValidation(ref sheetTrans, formulaCustomer3, Util.GetLang("IN10200ChooseLot"), Util.GetLang("IN10200NotExtLot"));
                     validation.AddArea(GetCellArea(1, dtLotSerNbr.Rows.Count + 100, colTextsHeader.IndexOf("LotSerNbr")));
 
                     if (showPackageID)
@@ -655,10 +655,10 @@ namespace IN10200.Controllers
                 range.ApplyStyle(style, flag);
 
 
-                style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("SiteID")) + "5"].GetStyle();
+                style = sheetTrans.Cells[Getcell(colTextsHeader.IndexOf("IN10200SiteID")) + "5"].GetStyle();
                 style.IsLocked = false;
 
-                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("SiteID")) + "5", Getcell(colTextsHeader.IndexOf("SiteID")) + (dtSite.Rows.Count * 2 + 5));
+                range = sheetTrans.Cells.CreateRange(Getcell(colTextsHeader.IndexOf("IN10200SiteID")) + "5", Getcell(colTextsHeader.IndexOf("IN10200SiteID")) + (dtSite.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
 
                 if (showWhseLoc != 0)
@@ -790,620 +790,6 @@ namespace IN10200.Controllers
             }
         }
 
-        
-        [HttpPost]
-        public ActionResult Import1(FormCollection data, string branchID)
-        {
-            try
-            {
-                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
-                HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
-                FileInfo fileInfo = new FileInfo(file.FileName);
-                string message = string.Empty;
-                List<object> lstTrans = new List<object>();
-                List<IN_LotTransExt> lstLot = new List<IN_LotTransExt>();
-
-                bool isChangeSite = false;
-                int showWhseLoc = 0;
-                var config = _app.IN10200_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                if (config != null)
-                {
-                    isChangeSite = config.IsChangeSite ?? false;
-                    showWhseLoc = config.ShowWhseLoc.ToInt();
-                }
-                var lstSite = _app.IN10200_peSiteID(branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-                var lstSiteLocation = _app.IN10200_peSiteLocation(branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-
-                if (showWhseLoc != 0)
-                {
-                    if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
-                    {
-                        try
-                        {
-                            bool check = false;
-                            var lstInvtID = new List<IN_Inventory>();
-
-                            Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
-                            int lineRef = data["lineRef"].ToInt();
-                            string whseLoc = data["cboWhseLoc"].PassNull();
-                            if (workbook.Worksheets.Count > 0)
-                            {
-                                Worksheet workSheet = workbook.Worksheets[0];
-                                string invtID = string.Empty;
-
-                                for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
-                                {
-                                    invtID = workSheet.Cells[i, 0].StringValue;
-                                    if (invtID == string.Empty) continue;
-                                    var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                                    if (objInvt == null)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (lstInvtID.All(x => x.InvtID != invtID))
-                                    {
-                                        lstInvtID.Add(objInvt);
-                                    }
-                                    var siteID = workSheet.Cells[i, 2].StringValue.PassNull();
-                                    if (string.IsNullOrEmpty(siteID))
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có kho <br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-
-                                    if (isChangeSite)
-                                    {
-                                        if (lstSite.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower()) == null)
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho không tồn tại <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (siteID.ToLower() != data["SiteID"].PassNull().ToLower())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-
-                                    var siteLocation = workSheet.Cells[i, 3].StringValue.PassNull();
-                                    if (string.IsNullOrEmpty(siteLocation))
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có vị trí kho <br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (isChangeSite)
-                                    {
-                                        if (lstSiteLocation.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower() && x.WhseLoc == siteLocation) == null)
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho không tồn tại <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (siteLocation.ToLower() != whseLoc.ToLower())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-
-                                    if (workSheet.Cells[i, 4].StringValue.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (workSheet.Cells[i, 5].StringValue.PassNull() == "")
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        float n;
-                                        bool isNumeric = float.TryParse(workSheet.Cells[i, 5].StringValue, out n);
-                                        if (isNumeric == true)
-                                        {
-                                            if (workSheet.Cells[i, 5].StringValue.ToDouble() == 0)
-                                            {
-                                                message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
-                                                continue;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            message += string.Format("Dòng {0} sai định dạng Số Lượng<br/>", (i + 1).ToString());
-                                            continue;
-                                        }
-                                    }
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].StringValue.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 9].Value.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 9].Value.PassNull() != string.Empty)
-                                    {
-
-                                        DateTime parsed;
-                                        bool valid = DateTime.TryParseExact(workSheet.Cells[i, 9].StringValue, "yyyy/MM/dd",
-                                                                            CultureInfo.InvariantCulture,
-                                                                            DateTimeStyles.None,
-                                                                            out parsed);
-
-                                        if (valid == false)
-                                        {
-                                            message += string.Format("Dòng {0} sai định dạng Ngày Hết Hạn. Ngày Hết Hạn phải có dạng ({1})<br/>", (i + 1).ToString(), "yyyy/MM/dd");
-                                            continue;
-                                        }
-                                    }
-
-
-                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr.ToUpper() == workSheet.Cells[i, 8].StringValue.ToUpper() && p.SiteID==siteID && p.WhseLoc == whseLoc))
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} ở kho {3} ở vị trí kho {4} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 8].StringValue, siteID, whseLoc);
-                                        continue;
-                                    }
-
-                                    if (objInvt.LotSerTrack != "L" && workSheet.Cells[i, 8].Value.PassNull() != string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} Không được nhập số lot<br/>", (i + 1), invtID);
-                                        continue;
-                                    }
-
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].Value.PassNull() != string.Empty)
-                                    {
-                                        var lstLotCheck = _app.IN10200_pdGetLot(1, siteID, invtID, siteLocation, "", Current.UserName, Current.CpnyID, Current.LangID).ToList();
-                                        if (lstLotCheck.All(x => x.LotSerNbr.Trim() != workSheet.Cells[i, 8].StringValue.Trim()) || !lstLotCheck.Any())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} Nhập sai lot<br/>", (i + 1), invtID);
-                                            continue;
-                                        }
-
-                                    }
-                                    var newLot = new IN_LotTransExt();
-
-                                    workSheet.Cells[i, 4].Calculate(true, null);
-                                    workSheet.Cells[i, 6].Calculate(true, null);
-
-                                    newLot.CnvFact = 1;
-                                    if (objInvt.LotSerTrack == "L")
-                                    {
-                                        string[] strExpDate = workSheet.Cells[i, 9].StringValue.PassNull().Split('/');
-                                        DateTime dExpDate = new DateTime(int.Parse(strExpDate[0]), int.Parse(strExpDate[1]), int.Parse(strExpDate[2]));
-                                        newLot.LotSerNbr = workSheet.Cells[i, 8].StringValue.PassNull();
-                                        var item = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.LotSerNbr == newLot.LotSerNbr);
-                                        if (item != null)
-                                        {
-                                            newLot.ExpDate = item.ExpDate;
-                                            check = true;
-                                        }
-                                        else
-                                        {
-                                            newLot.ExpDate = dExpDate;
-                                        }
-
-                                    }
-
-                                    newLot.InvtID = invtID.ToUpper();
-                                    newLot.InvtMult = 1;
-                                    newLot.Qty = workSheet.Cells[i, 5].StringValue.PassNull() == "" ? 0 : workSheet.Cells[i, 5].StringValue.ToDouble();
-
-                                    newLot.SiteID = siteID; //data["SiteID"].PassNull();
-                                    newLot.WhseLoc = siteLocation;//whseLoc;
-                                    newLot.TranDate = data["DateEnt"].ToDateShort();
-                                    newLot.TranType = "RC";
-                                    newLot.UnitDesc = workSheet.Cells[i, 4].StringValue;
-                                    newLot.UnitMultDiv = "M";
-                                    newLot.WarrantyDate = ("1-1-1900").ToDateShort();
-                                    //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
-                                    //{
-                                    //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
-                                    //    if (item != null)
-                                    //    {
-                                    //        newLot.UnitCost = newLot.UnitPrice = item.AvgCost;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10200_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate, objInvt.ValMthd, newLot.SiteID).FirstOrDefault().Price.Value;
-                                    //}
-
-                                    var qtyLotOnHand = _app.IN_ItemLot.FirstOrDefault(x => x.InvtID == newLot.InvtID && x.SiteID == newLot.SiteID && x.LotSerNbr == newLot.LotSerNbr && x.WhseLoc == x.WhseLoc);
-                                    if (qtyLotOnHand != null)
-                                    {
-                                        newLot.QtyOnHand = qtyLotOnHand.QtyOnHand;
-                                    }
-
-                                    lstLot.Add(newLot);
-                                }
-                            }
-
-                            var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
-
-                            var lst = new List<IN_LotTransExt>();
-                            foreach (var item in lstLot)
-                            {
-                                if (!lst.Any(x => x.InvtID == item.InvtID && x.SiteID == item.SiteID && x.WhseLoc == item.WhseLoc))
-                                {
-                                    lst.Add(item);
-                                }
-                            }
-
-
-                            foreach (var item in lst)
-                            {
-                                var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
-
-                                var newTrans = new IN10200_pgIssueLoad_Result();
-                                newTrans.InvtID = item.InvtID.ToUpper();
-                                newTrans.LineRef = LastLineRef(lineRef);
-                                newTrans.ReasonCD = data["ReasonCD"].PassNull();
-                                newTrans.TranDate = item.TranDate;
-                                newTrans.UnitDesc = item.UnitDesc;
-                                newTrans.CnvFact = 1;
-                                newTrans.UnitMultDiv = "M";
-                                newTrans.InvtMult = 1;
-                                newTrans.TranType = "RC";
-                                newTrans.JrnlType = "IN";
-                                newTrans.TranDesc = objInvt.Descr;
-                                newTrans.WhseLoc = item.WhseLoc;// whseLoc;
-
-                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID && p.SiteID == item.SiteID && p.WhseLoc == item.WhseLoc).ToList();
-                                foreach (var lot in tmp)
-                                {
-                                    newTrans.Qty += lot.Qty;
-                                    lot.INTranLineRef = newTrans.LineRef;
-                                    if (objInvt.LotSerTrack != "L")
-                                    {
-                                        lstLot.Remove(lot);
-                                    }
-                                }
-
-
-                                newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
-                                newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
-                                newTrans.SiteID = item.SiteID;
-                                var qtyOnHand = _app.IN_ItemSite.FirstOrDefault(x => x.InvtID == newTrans.InvtID && x.SiteID == newTrans.SiteID);
-                                if (qtyOnHand != null)
-                                {
-                                    newTrans.QtyOnHand = qtyOnHand.QtyOnHand;
-                                }
-
-                                lstTrans.Add(newTrans);
-
-                                lineRef++;
-
-                            }
-                            //if (check)
-                            //{
-                            //    Util.AppendLog(ref _logMessage, "123", "", data: new { message, lstTrans, lstLot });
-                            //}
-                            //else
-                            //{
-                            Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
-                            //}
-
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
-                    }
-                    else
-                    {
-                        Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
-                    }
-                }
-                else
-                {
-                    if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
-                    {
-                        try
-                        {
-                            bool check = false;
-                            var lstInvtID = new List<IN_Inventory>();
-
-                            Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
-                            int lineRef = data["lineRef"].ToInt();
-                            string whseLoc = data["cboWhseLoc"].PassNull();
-                            if (workbook.Worksheets.Count > 0)
-                            {
-                                Worksheet workSheet = workbook.Worksheets[0];
-                                string invtID = string.Empty;
-
-                                for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
-                                {
-                                    invtID = workSheet.Cells[i, 0].StringValue;
-                                    if (invtID == string.Empty) break;
-                                    var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                                    if (objInvt == null)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (lstInvtID.All(x => x.InvtID != invtID))
-                                    {
-                                        lstInvtID.Add(objInvt);
-                                    }
-                                    var siteID = workSheet.Cells[i, 2].StringValue.PassNull();
-                                    if (string.IsNullOrEmpty(siteID))
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có kho <br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-
-                                    if (isChangeSite)
-                                    {
-                                        if (lstSite.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower()) == null)
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho không tồn tại <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (siteID.ToLower() != data["SiteID"].PassNull().ToLower())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
-                                            continue;
-                                        }
-                                    }
-
-                                    //var siteLocation = workSheet.Cells[i, 3].StringValue.PassNull();
-                                    //if (string.IsNullOrEmpty(siteLocation))
-                                    //{
-                                    //    message += string.Format("Dòng {0} mặt hàng {1} không có vị trí kho <br/>", (i + 1).ToString(), invtID);
-                                    //    continue;
-                                    //}
-                                    //if (isChangeSite)
-                                    //{
-                                    //    if (lstSiteLocation.FirstOrDefault(x => x.SiteID.ToLower() == siteID.ToLower() && x.WhseLoc == siteLocation) == null)
-                                    //    {
-                                    //        message += string.Format("Dòng {0} mặt hàng {1} vị trí kho không tồn tại <br/>", (i + 1).ToString(), invtID);
-                                    //        continue;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    //    if (siteLocation.ToLower() != whseLoc.ToLower())
-                                    //    {
-                                    //        message += string.Format("Dòng {0} mặt hàng {1} vị trí kho sai dữ liệu <br/>", (i + 1).ToString(), invtID);
-                                    //        continue;
-                                    //    }
-                                    //}
-
-                                    if (workSheet.Cells[i, 3].StringValue.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (workSheet.Cells[i, 4].StringValue.PassNull() == "")
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        float n;
-                                        bool isNumeric = float.TryParse(workSheet.Cells[i, 4].StringValue, out n);
-                                        if (isNumeric == true)
-                                        {
-                                            if (workSheet.Cells[i, 4].StringValue.ToDouble() == 0)
-                                            {
-                                                message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
-                                                continue;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            message += string.Format("Dòng {0} sai định dạng Số Lượng<br/>", (i + 1).ToString());
-                                            continue;
-                                        }
-                                    }
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].StringValue.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].Value.PassNull() == string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtID);
-                                        continue;
-                                    }
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 8].Value.PassNull() != string.Empty)
-                                    {
-                                        DateTime parsed;
-                                        bool valid = DateTime.TryParseExact(workSheet.Cells[i, 8].StringValue, "yyyy/MM/dd",
-                                                                            CultureInfo.InvariantCulture,
-                                                                            DateTimeStyles.None,
-                                                                            out parsed);
-
-                                        if (valid == false)
-                                        {
-                                            message += string.Format("Dòng {0} sai định dạng Ngày Hết Hạn. Ngày Hết Hạn phải có dạng ({1})<br/>", (i + 1).ToString(), "yyyy/MM/dd");
-                                            continue;
-                                        }
-                                    }
-                                    
-                                    if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr.ToUpper() == workSheet.Cells[i, 7].StringValue.ToUpper() && p.SiteID == siteID))
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} kho {3} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 7].StringValue, siteID);
-                                        continue;
-                                    }
-
-                                    if (objInvt.LotSerTrack != "L" && workSheet.Cells[i, 7].Value.PassNull() != string.Empty)
-                                    {
-                                        message += string.Format("Dòng {0} mặt hàng {1} Không được nhập số lot<br/>", (i + 1), invtID);
-                                        continue;
-                                    }
-
-                                    if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].Value.PassNull() != string.Empty)
-                                    {
-                                        var lstLotCheck = _app.IN10200_pdGetLot(1, siteID, invtID, whseLoc, "", Current.UserName, Current.CpnyID, Current.LangID).ToList();
-                                        if (lstLotCheck.All(x => x.LotSerNbr.Trim() != workSheet.Cells[i, 7].StringValue.Trim()) || !lstLotCheck.Any())
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} Nhập sai lot<br/>", (i + 1), invtID);
-                                            continue;
-                                        }
-                                    }
-                                    var newLot = new IN_LotTransExt();
-
-                                    workSheet.Cells[i, 3].Calculate(true, null);
-                                    workSheet.Cells[i, 5].Calculate(true, null);
-
-                                    newLot.CnvFact = 1;
-                                    if (objInvt.LotSerTrack == "L")
-                                    {
-                                        string[] strExpDate = workSheet.Cells[i, 8].StringValue.PassNull().Split('/');
-                                        DateTime dExpDate = new DateTime(int.Parse(strExpDate[0]), int.Parse(strExpDate[1]), int.Parse(strExpDate[2]));
-                                        newLot.LotSerNbr = workSheet.Cells[i, 7].StringValue.PassNull();
-                                        var item = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.LotSerNbr == newLot.LotSerNbr);
-                                        if (item != null)
-                                        {
-                                            newLot.ExpDate = item.ExpDate;
-                                            check = true;
-                                        }
-                                        else
-                                        {
-                                            newLot.ExpDate = dExpDate;
-                                        }
-
-                                    }
-
-                                    newLot.InvtID = invtID.ToUpper();
-                                    newLot.InvtMult = 1;
-                                    newLot.Qty = workSheet.Cells[i, 4].StringValue.PassNull() == "" ? 0 : workSheet.Cells[i, 4].StringValue.ToDouble();
-
-                                    newLot.SiteID = siteID; //data["SiteID"].PassNull();
-                                    newLot.WhseLoc = whseLoc;//whseLoc;
-                                    newLot.TranDate = data["DateEnt"].ToDateShort();
-                                    newLot.TranType = "RC";
-                                    newLot.UnitDesc = workSheet.Cells[i, 3].StringValue;
-                                    newLot.UnitMultDiv = "M";
-                                    newLot.WarrantyDate = ("1-1-1900").ToDateShort();
-                                    //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
-                                    //{
-                                    //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
-                                    //    if (item != null)
-                                    //    {
-                                    //        newLot.UnitCost = newLot.UnitPrice = item.AvgCost;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10200_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate, objInvt.ValMthd, newLot.SiteID).FirstOrDefault().Price.Value;
-                                    //}
-
-                                    var qtyLotOnHand = _app.IN_ItemLot.FirstOrDefault(x => x.InvtID == newLot.InvtID && x.SiteID == newLot.SiteID && x.LotSerNbr == newLot.LotSerNbr);
-                                    if (qtyLotOnHand != null)
-                                    {
-                                        newLot.QtyOnHand = qtyLotOnHand.QtyOnHand;
-                                    }
-
-                                    lstLot.Add(newLot);
-                                }
-                            }
-
-                            var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
-                            var lst = new List<IN_LotTransExt>();
-                            foreach (var item in lstLot)
-                            {
-                                if (!lst.Any(x => x.InvtID == item.InvtID && x.SiteID == item.SiteID))
-                                {
-                                    lst.Add(item);
-                                }
-                            }
-                            foreach (var item in lst)
-                            {
-                                var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID.ToUpper() == item.InvtID.ToUpper());// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
-
-                                var newTrans = new IN10200_pgIssueLoad_Result();
-                                newTrans.InvtID = item.InvtID.ToUpper();
-                                newTrans.LineRef = LastLineRef(lineRef);
-                                newTrans.ReasonCD = data["ReasonCD"].PassNull();
-                                newTrans.TranDate = item.TranDate;
-                                newTrans.UnitDesc = item.UnitDesc;
-                                newTrans.CnvFact = 1;
-                                newTrans.UnitMultDiv = "M";
-                                newTrans.InvtMult = 1;
-                                newTrans.TranType = "RC";
-                                newTrans.JrnlType = "IN";
-                                newTrans.TranDesc = objInvt.Descr;
-                                newTrans.WhseLoc = item.WhseLoc;// whseLoc;
-
-                                var tmp = lstLot.Where(p => p.InvtID == item.InvtID && p.SiteID ==item.SiteID).ToList();
-                                foreach (var lot in tmp)
-                                {
-                                    newTrans.Qty += lot.Qty;
-                                    lot.INTranLineRef = newTrans.LineRef;
-                                    if (objInvt.LotSerTrack != "L")
-                                    {
-                                        lstLot.Remove(lot);
-                                    }
-                                }
-
-                                newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
-                                newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
-                                newTrans.SiteID = item.SiteID;
-                                var qtyOnHand = _app.IN_ItemSite.FirstOrDefault(x => x.InvtID == newTrans.InvtID && x.SiteID == newTrans.SiteID);
-                                if (qtyOnHand != null)
-                                {
-                                    newTrans.QtyOnHand = qtyOnHand.QtyOnHand;
-                                }
-
-                                lstTrans.Add(newTrans);
-                                lineRef++;
-
-                            }
-                            //if (check)
-                            //{
-                            //    Util.AppendLog(ref _logMessage, "123", "", data: new { message, lstTrans, lstLot });
-                            //}
-                            //else
-                            //{
-                            Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
-                            //}
-
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
-                    }
-                    else
-                    {
-                        Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
-                    }
-                }
-                return _logMessage;
-            }
-            catch (Exception ex)
-            {
-                if (ex is MessageException)
-                {
-                    return (ex as MessageException).ToMessage();
-                }
-                else
-                {
-                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-                }
-            }
-        }
-
         [HttpPost]
         public ActionResult Import(FormCollection data, string branchID)
         {
@@ -1473,7 +859,7 @@ namespace IN10200.Controllers
                                     continue;
                                 }
                                 string descrImport = workSheet.Cells[i, colTextsHeader.IndexOf("Descr")].StringValue.PassNull();
-                                string siteIDImport = workSheet.Cells[i, colTextsHeader.IndexOf("SiteID")].StringValue.PassNull();
+                                string siteIDImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10200SiteID")].StringValue.PassNull();
                                 string whseLocImport = colTextsHeader.IndexOf("WhseLoc") != -1 ? workSheet.Cells[i, colTextsHeader.IndexOf("WhseLoc")].StringValue.PassNull() : "";
                                 string unitDescImport = workSheet.Cells[i, colTextsHeader.IndexOf("IN10200Unit")].StringValue.PassNull();
                                 string qtyImport = workSheet.Cells[i, colTextsHeader.IndexOf("Qty")].StringValue.PassNull();
@@ -1485,7 +871,7 @@ namespace IN10200.Controllers
                                 var objInvt = lstInventory.FirstOrDefault(p => p.InvtID.ToUpper() == invtIDImport.ToUpper());
                                 if (objInvt == null)
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018091913", null), (i + 1).ToString(), invtIDImport);                                    
                                     continue;
                                 }
                                 else
@@ -1500,7 +886,7 @@ namespace IN10200.Controllers
 
                                 if (string.IsNullOrEmpty(siteIDImport))
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} không có kho! <br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018091914", null), (i + 1).ToString(), invtIDImport);
                                     continue;
                                 }
                                 else if (isChangeSite)
@@ -1508,7 +894,7 @@ namespace IN10200.Controllers
                                     var objSiteID = lstSite.FirstOrDefault(x => x.SiteID.ToLower() == siteIDImport.ToLower());
                                     if (objSiteID == null)
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} kho không tồn tại <br/>", (i + 1).ToString(), invtIDImport);
+                                        message += string.Format(Message.GetString("2018091915", null), (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else
@@ -1520,7 +906,7 @@ namespace IN10200.Controllers
                                 {
                                     if (siteIDImport.ToLower() != data["SiteID"].PassNull().ToLower())
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} kho sai dữ liệu <br/>", (i + 1).ToString(), invtIDImport);
+                                        message += string.Format(Message.GetString("2018091916", null), (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else
@@ -1533,7 +919,7 @@ namespace IN10200.Controllers
                                 {
                                     if (string.IsNullOrEmpty(whseLocImport))
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} không có vị trí kho <br/>", (i + 1).ToString(), invtIDImport);
+                                        message += string.Format(Message.GetString("2018091917", null), (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else if (isChangeSite)
@@ -1541,7 +927,7 @@ namespace IN10200.Controllers
                                         var objWhseLoc = lstSiteLocation.FirstOrDefault(x => x.SiteID.ToLower() == siteIDImport.ToLower() && x.WhseLoc.ToLower() == whseLocImport.ToLower());
                                         if (objWhseLoc == null)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho không tồn tại <br/>", (i + 1).ToString(), invtIDImport);
+                                            message += string.Format(Message.GetString("2018091918", null), (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                         else
@@ -1553,7 +939,7 @@ namespace IN10200.Controllers
                                     {
                                         if (whseLocImport.ToLower() != whseLoc.ToLower())
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} vị trí kho sai dữ liệu <br/>", (i + 1).ToString(), invtIDImport);
+                                            message += string.Format(Message.GetString("2018091919", null), (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                         else
@@ -1565,7 +951,7 @@ namespace IN10200.Controllers
 
                                 if (string.IsNullOrEmpty(unitDescImport))
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018091920", null), (i + 1).ToString(), invtIDImport);
                                     continue;
                                 }
 
@@ -1574,7 +960,7 @@ namespace IN10200.Controllers
                                     var objUnit = lstUnit.FirstOrDefault(p => p.InvtID == invtIDImport && p.Unit.ToUpper() == unitDescImport.ToUpper());
                                     if (objUnit == null)
                                     {
-                                        message += string.Format("Dòng {0} mặt hàng {1} có đơn vị không tồn tại<br/>", (i + 1).ToString(), invtIDImport);
+                                        message += string.Format(Message.GetString("2018091921", null), (i + 1).ToString(), invtIDImport);
                                         continue;
                                     }
                                     else
@@ -1585,7 +971,7 @@ namespace IN10200.Controllers
 
                                 if (string.IsNullOrEmpty(qtyImport))
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018091922", null), (i + 1).ToString(), invtIDImport);
                                     continue;
                                 }
                                 else
@@ -1596,26 +982,26 @@ namespace IN10200.Controllers
                                     {
                                         if (qtyImport.ToDouble() == 0)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtIDImport);
+                                            message += string.Format(Message.GetString("2018092011", null), (i + 1).ToString(), invtIDImport);
                                             continue;
                                         }
                                     }
                                     else
                                     {
-                                        message += string.Format("Dòng {0} sai định dạng Số Lượng<br/>", (i + 1).ToString());
+                                        message += string.Format(Message.GetString("2018092012", null), (i + 1).ToString());
                                         continue;
                                     }
                                 }
 
                                 if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && lotSerNbrImport == "")
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018092013", null), (i + 1).ToString(), invtIDImport);                                    
                                     continue;
                                 }
 
                                 if ((objInvt.LotSerTrack == "L" || objInvt.LotSerTrack == "Q") && lotSerNbrImport.Length > 50)
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} có số LOT vượt quá độ dài cho phép! <br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018092014", null), (i + 1).ToString(), invtIDImport);
                                     continue;
                                 }
 
@@ -1623,7 +1009,7 @@ namespace IN10200.Controllers
 
                                 if ((objInvt.LotSerTrack != "N") && objLot == null)
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} có số LOT không tồn tại trông hệ thống! <br/>", (i + 1).ToString(), invtIDImport);
+                                    message += string.Format(Message.GetString("2018092015", null), (i + 1).ToString(), invtIDImport);
                                     continue;
                                 }
 
@@ -1637,16 +1023,14 @@ namespace IN10200.Controllers
                                 {
                                     if (lstLot.Any(p => p.InvtID == invtIDImport && p.LotSerNbr == lotSerNbrImport && p.SiteID == siteIDImport && p.WhseLoc == whseLocImport) && showWhseLoc!=0)
                                     {
-
-                                        message += string.Format("Dòng {0} mặt hàng {1} kho {2} vị trí kho {3} có số LOT {4} bị trùng! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport, lotSerNbrImport);
+                                        message += string.Format(Message.GetString("2018092016", null), (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport, lotSerNbrImport);
                                         continue;
                                     }
                                     else
                                     {
                                         if (lstLot.Any(p => p.InvtID == invtIDImport && p.LotSerNbr == lotSerNbrImport && p.SiteID == siteIDImport ) && showWhseLoc == 0)
                                         {
-
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho {2} có số LOT {3} bị trùng! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport,lotSerNbrImport);
+                                            message += string.Format(Message.GetString("2018092017", null), (i + 1).ToString(), invtIDImport, siteIDImport, lotSerNbrImport);
                                             continue;
                                         }
                                     }
@@ -1677,11 +1061,13 @@ namespace IN10200.Controllers
                                         {                                           
                                             if (showWhseLoc != 0)
                                             {
-                                                message += string.Format("Dòng {0} mặt hàng {1} kho {2}  vị trí kho {3}  số LOT {4} vượt số lượng trong kho! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport, lotSerNbrImport);
+                                                message += string.Format(Message.GetString("2018092018", null), (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport, lotSerNbrImport);
+                                                continue;
                                             }
                                             else
                                             {
-                                                message += string.Format("Dòng {0} mặt hàng {1} kho {2} số LOT {3} vượt số lượng trong kho! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport, lotSerNbrImport);
+                                                message += string.Format(Message.GetString("2018092019", null), (i + 1).ToString(), invtIDImport, siteIDImport, lotSerNbrImport);
+                                                continue;
                                             }
                                         }
                                     }
@@ -1696,21 +1082,38 @@ namespace IN10200.Controllers
                                     if (showWhseLoc != 0)
                                     {
                                         var objLoc = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtIDImport && p.SiteID == siteIDImport && p.WhseLoc == whseLocImport);
-                                        if (objLoc.QtyAvail < qty)
+                                        if (objLoc == null)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho {2}  vị trí kho {3} có số lượng trong kho! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport, lotSerNbrImport);
-                                        }                                        
+                                            message += string.Format(Message.GetString("2018092024", null), (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport);
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            if (objLoc.QtyAvail < qty)
+                                            {
+                                                message += string.Format(Message.GetString("2018092020", null), (i + 1).ToString(), invtIDImport, siteIDImport, whseLocImport);
+                                                continue;
+                                            } 
+                                        }                                                                               
                                     }
                                     else
                                     {
                                         var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtIDImport && p.SiteID == siteIDImport );
-                                        if (objSite.QtyAvail < qty)
+                                        if(objSite==null)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} kho {2} vượt số lượng trong kho! <br/>", (i + 1).ToString(), invtIDImport, siteIDImport);
-                                        }
+                                            message += string.Format(Message.GetString("2018092023", null), (i + 1).ToString(), invtIDImport, siteIDImport);
+                                            continue;
+                                        }                                        
+                                        else{
+                                            if (objSite.QtyAvail < qty)
+                                            {
+                                                message += string.Format(Message.GetString("2018092021", null), (i + 1).ToString(), invtIDImport, siteIDImport);
+                                                continue;
+                                            }
+                                        }                                        
                                     }                                    
                                 }
-
+                                
                                 newLot.InvtID = invtIDImport;
                                 newLot.InvtMult = 1;
                                 newLot.Qty = qtyImport == "" ? 0 : Math.Round(qtyImport.ToDouble(), 0);
@@ -1799,10 +1202,10 @@ namespace IN10200.Controllers
 
                             lineRef++;
                         }
-
+                        
                         if (lstTrans.Count == 0 && message.PassNull()=="")
                         {
-                            message += string.Format("File import không có dữ liệu !");
+                            message += string.Format(Message.GetString("2018092022", null));
                         }
                         //if (check)
                         //{
@@ -2647,7 +2050,7 @@ namespace IN10200.Controllers
 
         private List<string> GetHeader(bool showPackageID, int showWhseLoc)
         {
-            var colTextsHeader = new List<string>() { "IN10200InvtID", "Descr", "SiteID", "WhseLoc", "IN10200Unit", "Qty", "Price", "IN10200TranAmt", "LotSerNbr", "IN10200DateEnt", "IN10200PackageID" };
+            var colTextsHeader = new List<string>() { "IN10200InvtID", "Descr", "IN10200SiteID", "WhseLoc", "IN10200Unit", "Qty", "Price", "IN10200TranAmt", "LotSerNbr", "IN10200DateEnt", "IN10200PackageID" };
 
             if (showWhseLoc == 0)
             {
