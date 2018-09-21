@@ -121,7 +121,8 @@
           <Property Name="ImageModifiedDate" Type="datetime" />
           <Property Name="VideoModifiedDate" Type="datetime" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
-          <Property Name="KitType" Type="bit" />
+          <Property Name="KitType" Type="bit" Nullable="false" />
+          <Property Name="GiftPoint" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_ItemLoc">
           <Key>
@@ -263,9 +264,9 @@
           <Property Name="UnitDesc" Type="varchar" MaxLength="10" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
           <Property Name="UnitMultDiv" Type="varchar" MaxLength="1" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" />
           <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -342,8 +343,8 @@
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
           <Property Name="RptExpDate" Type="datetime" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" />
+          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_UnitConversion">
           <Key>
@@ -401,6 +402,12 @@
           <Property Name="DiscWhseLoc" Type="varchar" MaxLength="10" />
           <Property Name="BranchWhseLoc" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Function Name="IN10400_GetItemSite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="ShowWhseLoc" Type="int" Mode="In" />
+        </Function>
         <Function Name="IN10400_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -540,6 +547,12 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="Batches" EntityType="IN10400Model.Batch" />
+          <FunctionImport Name="IN10400_GetItemSite" ReturnType="Collection(IN10400Model.IN10400_GetItemSite_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="ShowWhseLoc" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -618,7 +631,8 @@
           <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="CnvFact" Type="Double" Nullable="false" />
-          <Property Name="KitType" Type="Boolean" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
+          <Property Name="GiftPoint" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -892,8 +906,8 @@
           <Property Name="UnitDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="CnvFact" Type="Double" Nullable="false" />
           <Property Name="UnitMultDiv" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OM_UserDefault">
@@ -975,8 +989,8 @@
           <Property Name="QtyUncosted" Type="Double" Nullable="false" />
           <Property Name="PosmID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="RptExpDate" Type="DateTime" Precision="3" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <ComplexType Name="IN10400_pdConfig_Result">
           <Property Type="Int32" Name="ShowWhseLoc" Nullable="true" />
@@ -1074,6 +1088,36 @@
           <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="IN10400_GetItemSite_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="AvgCost" Nullable="false" />
+          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
+          <Property Type="Double" Name="QtyAvail" Nullable="false" />
+          <Property Type="Double" Name="QtyInTransit" Nullable="false" />
+          <Property Type="Double" Name="QtyOnBO" Nullable="false" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="QtyOnPO" Nullable="false" />
+          <Property Type="Double" Name="QtyOnTransferOrders" Nullable="false" />
+          <Property Type="Double" Name="QtyOnSO" Nullable="false" />
+          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="Double" Name="TotCost" Nullable="false" />
+          <Property Type="DateTime" Name="LastPurchaseDate" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="LastPurchasePrice" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="QtyUncosted" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPDASO" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1083,6 +1127,7 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="IN10400Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
                 <ScalarProperty Name="KitType" ColumnName="KitType" />
                 <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
                 <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
@@ -1638,6 +1683,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10400_GetItemSite" FunctionName="eBiz4DWebSysModel.Store.IN10400_GetItemSite">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10400Model.IN10400_GetItemSite_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="AvgCost" ColumnName="AvgCost" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyInTransit" ColumnName="QtyInTransit" />
+                <ScalarProperty Name="QtyOnBO" ColumnName="QtyOnBO" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyOnPO" ColumnName="QtyOnPO" />
+                <ScalarProperty Name="QtyOnTransferOrders" ColumnName="QtyOnTransferOrders" />
+                <ScalarProperty Name="QtyOnSO" ColumnName="QtyOnSO" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="TotCost" ColumnName="TotCost" />
+                <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
+                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
+                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
