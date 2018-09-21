@@ -248,7 +248,10 @@ namespace IN10200.Controllers
                     {
                         oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                         UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
-                        Update_IN_ItemLoc(_whseLoc, trans.InvtID, trans.SiteID, oldQty, 0);
+                        if (trans.WhseLoc.PassNull() != "")
+                        {
+                            Update_IN_ItemLoc(trans.WhseLoc, trans.InvtID, trans.SiteID, oldQty, 0);
+                        }
                     }
                     _app.IN_Trans.DeleteObject(trans);
                 }
@@ -329,7 +332,10 @@ namespace IN10200.Controllers
                         {
                             oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                             UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
-                            Update_IN_ItemLoc(_whseLoc, trans.InvtID, trans.SiteID, oldQty, 0);
+                            if (trans.WhseLoc.PassNull() != "")
+                            {
+                                Update_IN_ItemLoc(trans.PassNull(), trans.InvtID, trans.SiteID, oldQty, 0);
+                            }                            
                         }
 
                         lstTrans.Remove(trans);
@@ -1778,7 +1784,7 @@ namespace IN10200.Controllers
                 UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
                 if (!string.IsNullOrEmpty(s.WhseLoc))
                 {
-                    Update_IN_ItemLoc(s.WhseLoc, t.InvtID, t.SiteID, oldQty, 0);
+                    Update_IN_ItemLoc(t.WhseLoc, t.InvtID, t.SiteID, oldQty, 0);
                     Update_IN_ItemLoc(s.WhseLoc, s.InvtID, s.SiteID, 0, newQty);
                 }
                 
