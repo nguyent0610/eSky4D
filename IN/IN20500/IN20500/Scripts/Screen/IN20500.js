@@ -80,6 +80,8 @@ var firstLoad = function () {
     App.cboDfltLotSerFxdTyp.getStore().addListener('load', checkLoad);
     App.cboCpnyID.getStore().addListener('load', checkLoad);
     App.stoProductCpny.addListener('load', checkLoad);
+
+    App.txtBarCode.setVisible(HQ.isShowBarCode);
 };
 
 var setView = function () {

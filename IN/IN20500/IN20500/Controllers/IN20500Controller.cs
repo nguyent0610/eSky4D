@@ -74,6 +74,7 @@ namespace IN20500.Controllers
             var isHideChkPublic = false;
             var DfltValMthd = false;
             var GiftPoint = false;
+            var isShowBarCode = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
             var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
@@ -84,13 +85,15 @@ namespace IN20500.Controllers
             {
                 DfltValMthd = objConfigHideShow.DfltValMthd.HasValue ? objConfigHideShow.DfltValMthd.Value : false;
                 GiftPoint = objConfigHideShow.GiftPoint.HasValue ? objConfigHideShow.GiftPoint.Value : false;
+                isShowBarCode = objConfigHideShow.IsShowBarCode ?? false;
             }
             ViewBag.isHideChkPublic = isHideChkPublic;
             ViewBag.DfltValMthd = DfltValMthd;
             ViewBag.GiftPoint = GiftPoint;
+            ViewBag.IsShowBarCode = isShowBarCode;
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

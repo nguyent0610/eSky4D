@@ -392,6 +392,7 @@
           <Property Type="Boolean" Name="KitType" Nullable="true" />
           <Property Type="Boolean" Name="DfltValMthd" Nullable="true" />
           <Property Type="Boolean" Name="GiftPoint" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowBarCode" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -656,6 +657,7 @@
                 <ScalarProperty Name="KitType" ColumnName="KitType" />
                 <ScalarProperty Name="DfltValMthd" ColumnName="DfltValMthd" />
                 <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
+                <ScalarProperty Name="IsShowBarCode" ColumnName="IsShowBarCode" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -4015,6 +4015,30 @@ namespace IN20500
         private Nullable<global::System.Boolean> _GiftPoint;
         partial void OnGiftPointChanging(Nullable<global::System.Boolean> value);
         partial void OnGiftPointChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowBarCode
+        {
+            get
+            {
+                return _IsShowBarCode;
+            }
+            set
+            {
+                OnIsShowBarCodeChanging(value);
+                ReportPropertyChanging("IsShowBarCode");
+                _IsShowBarCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowBarCode");
+                OnIsShowBarCodeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowBarCode;
+        partial void OnIsShowBarCodeChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowBarCodeChanged();
 
         #endregion
 
