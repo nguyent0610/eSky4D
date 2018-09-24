@@ -108,22 +108,35 @@
                     //row 2
                     , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
-                      
-                       , HQ.DateField().ID("FromDate").HQLangCode("FromDate").Width(250)
+                           
+                        HQ.DateField().ID("FromDate").HQLangCode("FromDate").Width(250)
+                        .Listeners(ls =>
+                        {
+                            ls.Change.Fn = "fromDate_Change";
+                            ls.Blur.Fn = "dteToDate_Blur";
+                        })
 
-                            , HQ.Combo().ID("cboUpdateType")
+                        , HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
+                        .Listeners(ls =>
+                        {
+                            ls.Change.Fn = "toDate_Change";
+                            ls.Blur.Fn = "dteToDate_Blur";
+                        })
+                     
+
+                            
+                        , HQ.Combo().ID("cboUpdateType")
                             .Name("cboUpdateType").HQLangCode("AR2050UpdateType").HQProcedure("AR20500_pcUpdateType")
                             .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                             .Width(250).HQHeightWidth(400, 300)
                             .ForceSelection(true).HQAutoLoad(true)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                        })
+                            {
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                            })
                             .HQFirstDefault(true)
                             .LoadData()
                             .Listeners(lst =>

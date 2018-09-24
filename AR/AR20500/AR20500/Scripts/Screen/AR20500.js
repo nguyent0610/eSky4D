@@ -560,6 +560,31 @@ var dteToDate_change = function (dtp, newValue, oldValue, eOpts) {
     App.dteFromDate.validate();
 };
 
+
+
+var fromDate_Change = function (item) {
+    if (item.hasFocus) {
+        App.ToDate.setMinValue(App.FromDate.getValue());
+        if (App.ToDate.getValue() < App.FromDate.getValue()) {
+            App.ToDate.setValue(App.FromDate.getValue());
+        }
+    }
+}
+
+var toDate_Change = function (item) {
+    if (item.hasFocus) {
+        App.ToDate.setMinValue(App.FromDate.getValue());
+        if (App.ToDate.getValue() < App.FromDate.getValue()) {
+            App.ToDate.setValue(App.FromDate.getValue());
+        }
+    }
+}
+
+var dteToDate_Blur = function () {
+    App.ToDate.setMinValue(new Date(1 / 1 / 1990));
+}
+
+
 var askApprove = function (item) {
     if (item == 'yes') {     
         if (App.dteFromDate.getValue() == null) {
@@ -1049,7 +1074,7 @@ var stoLoad = function (sto, records, successful, eOpts) {
         HQ.common.changeData(HQ.isChange, 'AR20500');
 
 
-        stoChanged(App.stoCust);
+        stoChanged(sto);
 
         var markers = [];
         records.forEach(function (record) {
@@ -1091,10 +1116,14 @@ function refresh(item) {
     if (item == 'yes') {
         _Change = false;
         App.ColCheck_Header.setValue(false);
-        if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1)
+        if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1) {
             App.stoCust.reload();
-        else if (App.cboUpdateType.getValue() == 2)
+            App.stoCustPG.rejectChanges();
+        }
+        else if (App.cboUpdateType.getValue() == 2) {
             App.stoCustPG.reload();
+            App.stoCust.rejectChanges();
+        }
     }
 };
 
