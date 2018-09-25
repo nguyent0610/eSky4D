@@ -186,8 +186,8 @@
                 X.Column().Text(Util.GetLang("SA02900Descr")).DataIndex("Descr").Width(150),
                 X.Column().Text(Util.GetLang("SA02900LangStatus")).DataIndex("LangStatus").Width(150),
              
-                X.Column().Text(Util.GetLang("SA02900DefineVi")).DataIndex("Lang01").Width(150),
-                X.Column().Text(Util.GetLang("SA02900DefineEn")).DataIndex("Lang00").Width(150),
+                X.Column().Text(Util.GetLang("SA02900Content")).DataIndex("Lang01").Width(150),
+                X.Column().Text(Util.GetLang("SA02900ContentEng")).DataIndex("Lang00").Width(150),
                 X.CommandColumn()
                 .Width(150)
                 .Commands(
@@ -329,7 +329,7 @@
                 .Editor(
                     HQ.Combo().ID("cboToStatus")
                     .Name("cboToStatus").HQProcedure("SA02900_pcToStatus").PageSize(20).HQisPaging(true)
-                    .HQColumnShow("LangID,Lang00,Lang01").DisplayField("LangID").ValueField("LangID")
+                    .HQColumnShow("Code,Lang00,Lang01").DisplayField("Code").ValueField("Code")
                     .Width(300).HQHeightWidth(500, 400)
                     .AllowBlank(true).HQDBSys(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection()

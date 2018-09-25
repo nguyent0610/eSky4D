@@ -174,7 +174,7 @@ var menuClick = function (command) {
                         for (var i = 0; i < lstTop.length; i++) {
                             if (lstTop.items[i].data.AppFolID != '')
                             {
-                                var objRecord = HQ.store.findInStore(App.stoBot, ['BranchID', 'AppFolID'], [lstTop.items[i].data.BranchID, lstTop.items[i].data.AppFolID]);
+                                var objRecord = HQ.store.findInStore(App.stoBot, ['BranchID', 'AppFolID', 'RoleID', 'Status'], [lstTop.items[i].data.BranchID, lstTop.items[i].data.AppFolID, lstTop.items[i].data.RoleID, lstTop.items[i].data.Status]);
                                 if (objRecord == undefined) {
                                     error += (i + 1) + ", ";
                                 }
@@ -444,7 +444,7 @@ var grdBot_Edit = function (item, e) {
     }
     if (e.field == 'ToStatus')
     {
-        var objToStatus = HQ.store.findInStore(App.cboToStatus.store, ['LangID'], [e.value]);
+        var objToStatus = HQ.store.findInStore(App.cboToStatus.store, ['Code'], [e.value]);
         if (objToStatus != undefined) {
             e.record.set('Content', objToStatus.Lang01);
             e.record.set('ContentEng', objToStatus.Lang00);
