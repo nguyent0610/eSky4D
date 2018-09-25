@@ -27,14 +27,14 @@ namespace HQSendMailApprove
         public string BranchID { get; set; }
   
         public string Content { get; set; }
+        public string Subject { get; set; }
        
     }
     public static class Approve
     {
-
         #region Trunght
-      
-        public static void SendMail(string mailTo, string mailCC, string subject, string content,string[] fullPathAttach =null,string emailID="")
+
+        public static void SendMail(string mailTo, string mailCC, string subject, string content, string[] fullPathAttach = null, string emailID = "")
         {
             HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             try
@@ -42,9 +42,13 @@ namespace HQSendMailApprove
                 if (mailTo == string.Empty && mailCC == string.Empty) return;
                 var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.ToUpper())).FirstOrDefault();
                 if (email != null)
+                {
                     SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, fullPathAttach);
+                }
                 else
+                {
                     throw new Exception("No email config");
+                }
             }
             catch (Exception ex)
             {
@@ -59,9 +63,13 @@ namespace HQSendMailApprove
                 if (mailTo == string.Empty && mailCC == string.Empty) return;
                 var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.ToUpper())).FirstOrDefault();
                 if (email != null)
-                    SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content,byteMemory, fullPathAttach);
+                {
+                    SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, byteMemory, fullPathAttach);
+                }
                 else
+                {
                     throw new Exception("No email config");
+                }
             }
             catch (Exception ex)
             {
@@ -115,7 +123,6 @@ namespace HQSendMailApprove
                                 mail.Attachments.Add(new Attachment(FileAttach[i]));
                             }
                         }
-
                         smtpClient.Send(mail);
                     }
                 }
@@ -185,21 +192,18 @@ namespace HQSendMailApprove
        
         public static List<GetMailResult> GetMail(string procName, Dictionary<string, string> parameter)
         {
-
             HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder(app.Connection.ConnectionString);
-
 
             SqlCommand cmd = new SqlCommand();
             SqlConnection cn = new SqlConnection(entityBuilder.ProviderConnectionString);
             SqlDataAdapter adap = new SqlDataAdapter();
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
-
             try
             {
+                // Lấy danh sách email đổ vào DataTable
                 cn.Open();
-
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = procName;
@@ -209,19 +213,26 @@ namespace HQSendMailApprove
                     cmd.Parameters.AddWithValue(parm.Key, parm.Value);
                 }
                 adap.SelectCommand = cmd;
-
                 adap.Fill(dt);
-                List<GetMailResult> result = new List<GetMailResult>();
 
+                // Convert DataTable to List
+                List<GetMailResult> lstMail = new List<GetMailResult>();
                 foreach (DataRow item in dt.Rows)
                 {
-                    string to = item["To"] is DBNull ? string.Empty : (string)item["To"];
-                    string cc = item["CC"] is DBNull ? string.Empty : (string)item["CC"];
-                    string Content = item["Content"] is DBNull ? string.Empty : (string)item["Content"];
-                    if (to == string.Empty) continue;
-                    result.Add(new GetMailResult() { ID = (int)item["ID"], To = to, CC = cc, BranchID = (string)item["BranchID"], Content = Content });
+                    string to = item.Table.Columns.Contains("To") ? (string)item["To"] : string.Empty;
+                    if (to == string.Empty) { 
+                        continue; 
+                    } 
+                    lstMail.Add(new GetMailResult() { 
+                        ID = (int)item["ID"]
+                        , To = to
+                        , CC = item.Table.Columns.Contains("CC") ? (string)item["CC"] : string.Empty
+                        , BranchID = item.Table.Columns.Contains("BranchID")  ? (string)item["BranchID"]: string.Empty
+                        , Content =  item.Table.Columns.Contains("Content")  ? (string)item["Content"] : string.Empty                      
+                        , Subject = item.Table.Columns.Contains("Subject") ? (string)item["Subject"] : string.Empty
+                    });
                 }
-                return result;
+                return lstMail;
 
             }
             finally
@@ -302,22 +313,25 @@ namespace HQSendMailApprove
             {
                 try
                 {
-
+                     var branchID = strBranchID.ToUpper().Trim();
                     var lstMail = GetMail(handle.ProcName.PassNull().Trim() == "" ? "GetMailSend" : handle.ProcName, ParameterGetMailSend);
                     string Content = Approve_Content(handle.ProcContent.PassNull().Trim() == "" ? "GetMailContentSend" : handle.ProcContent, ParameterProcGetMailContentSend);
                     string to = "";
                     string cc = "";
-                    if (lstMail.Where(p => p.BranchID.ToUpper().Trim().Split(',').Contains(strBranchID.ToUpper().Trim())).FirstOrDefault() != null)
-                        to = lstMail.Where(p => p.BranchID.ToUpper().Trim().Split(',').Contains(strBranchID.ToUpper().Trim())).FirstOrDefault().To.PassNull();
-                    if (lstMail.Where(p => p.BranchID.ToUpper().Trim().Split(',').Contains(strBranchID.ToUpper().Trim())).FirstOrDefault() != null)
-                        cc = lstMail.Where(p => p.BranchID.ToUpper().Trim().Split(',').Contains(strBranchID.ToUpper().Trim())).FirstOrDefault().CC.PassNull();
-                    SendMail(to, cc, handle.MailSubject, Content);
+                    string subject = handle.MailSubject;
+                    var objMail = lstMail.Where(p => p.BranchID.ToUpper().Trim().Split(',').Contains(branchID)).FirstOrDefault();
+                    if (objMail != null)
+                    {
+                        to = objMail.To.PassNull();
+                        cc = objMail.CC.PassNull();
+                        subject = !string.IsNullOrWhiteSpace(objMail.Subject) ? objMail.Subject.PassNull() : subject;
+                    }
+                    SendMail(to, cc, subject, Content);
                 }
                 catch
                 {
                     // return "NO OK";
                 }
-
             }
             // return "OK";
         }
@@ -348,9 +362,11 @@ namespace HQSendMailApprove
                 if (objhandle.Param00.PassNull().ToUpper().Split(',').Contains("PUSHTASK"))
                     InsertHOPendingTask("InsertHOPendingTask", dic);
                 var lstMail = GetMail(objhandle.MailApprove.PassNull().Trim() == "" ? "MailSend" : objhandle.MailApprove, dic);
+                string subject = objhandle.MailSubject;
                 foreach (var item in lstMail)
                 {
-                    SendMail(item.To.PassNull(), item.CC.PassNull(), objhandle.MailSubject, item.Content);
+                    subject = item.Subject.PassNull() != string.Empty ? item.Subject.PassNull() : objhandle.MailSubject;
+                    SendMail(item.To.PassNull(), item.CC.PassNull(), subject, item.Content);
                 }
             }
             catch
@@ -389,9 +405,11 @@ namespace HQSendMailApprove
                 if (objhandle.Param00.PassNull().ToUpper().Split(',').Contains("PUSHTASK"))
                     InsertHOPendingTask("InsertHOPendingTask", dic);
                 var lstMail = GetMail(objhandle.MailApprove.PassNull().Trim() == "" ? "MailSend" : objhandle.MailApprove, dic);
+                string subject = objhandle.MailSubject;
                 foreach (var item in lstMail)
                 {
-                    SendMail(item.To.PassNull(), item.CC.PassNull(), objhandle.MailSubject, item.Content);
+                    subject = item.Subject.PassNull() != string.Empty ? item.Subject.PassNull() : objhandle.MailSubject;
+                    SendMail(item.To.PassNull(), item.CC.PassNull(), subject, item.Content);
                 }
             }
             catch (Exception ex)
@@ -543,9 +561,11 @@ namespace HQSendMailApprove
                     if (objhandle.Param00.PassNull().ToUpper().Split(',').Contains("PUSHTASK"))
                         InsertHOPendingTask("InsertHOPendingTask", dic);
                     var lstMail = GetMail(objhandle.MailApprove.PassNull().Trim() == "" ? "MailSend" : objhandle.MailApprove, dic);
+                    string subject = objhandle.MailSubject;
                     foreach (var item in lstMail)
                     {
-                        SendMail(item.To.PassNull(), item.CC.PassNull(), objhandle.MailSubject, item.Content);
+                        subject = item.Subject.PassNull() != string.Empty ? item.Subject.PassNull() : objhandle.MailSubject;
+                        SendMail(item.To.PassNull(), item.CC.PassNull(), subject, item.Content);
                     }
                 }
                 catch
@@ -590,10 +610,12 @@ namespace HQSendMailApprove
                 dic.Add("@Parm02", parm02);
 
                 var mail = GetMail(approvehandle.MailApprove.PassNull() == string.Empty ? "MailSend" : approvehandle.MailApprove, dic);
+                string subject = approvehandle.MailSubject.PassNull();
                 foreach (var item in mail)
                 {
                     string content = string.Format("<html><body><p>{0}</p></body></html>", item.Content.PassNull());
-                    SendMail(item.To.PassNull(), item.CC.PassNull(), approvehandle.MailSubject.PassNull(), content);
+                    subject = item.Subject.PassNull() != string.Empty ? item.Subject.PassNull() : approvehandle.MailSubject;
+                    SendMail(item.To.PassNull(), item.CC.PassNull(), subject, content);
                 }
             }
         }
