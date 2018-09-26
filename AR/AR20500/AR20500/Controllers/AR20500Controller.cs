@@ -850,95 +850,110 @@ namespace AR20500.Controllers
 
                 handle = data["cboHandle"];
                 status = data["cboStatus"];
+                string phoneCheck = "";
+                bool check = true;
                 foreach (var item in lstCustPG)
                 {
                     if (item.ColCheck == true)
                     {
-                        var objCheck = _db.CS_Leads.Any(x => x.PhoneNumber == item.Phone); // check tồn tại SĐT trong CS_Leads
-                        if (objCheck && askApprove == 0)
-                        {
-                            throw new MessageException(MessageType.Message, "2018091951", "askApprovePG", parm: new string[] { });
-                        }
+                        var objLead = _db.CS_Leads.FirstOrDefault(x => x.PhoneNumber == item.Phone); // check tồn tại SĐT trong CS_Leads
 
+                        if (objLead != null && askApprove == 0)
+                        {
+                            phoneCheck += item.Phone + " ,";
+                            check = false;
+                        }
+                        var objCheck = _db.CS_Leads.Any(x => x.PhoneNumber == item.Phone); // check tồn tại SĐT trong CS_Leads
                         var objCust = _db.CS_Leads.FirstOrDefault(x => x.LeadID == item.NewConsumerID && x.BranchID == item.BranchID);
                         var objAR_Consumer = _db.AR_Consumer.FirstOrDefault(p => p.ConsumerID == item.ConsumerID && p.Phone == item.Phone && p.SlsperID == item.SlsperID && p.BranchID == item.BranchID);
-
-                        if (handle != "D")
+                        if (check)
                         {
-                            if (status == "H")
+                            if (handle != "D")
                             {
-                                if (!objCheck)
+                                if (status == "H")
                                 {
-                                    if (objCust != null)
+                                    if (!objCheck)
                                     {
-                                        UpCS_Leads(objCust, item, false, handle);
+                                        if (objCust != null)
+                                        {
+                                            UpCS_Leads(objCust, item, false, handle);
+                                        }
+                                        else
+                                        {
+                                            if (item.ConsumerID.PassNull() != "")
+                                            {
+                                                objCust = new CS_Leads();
+                                                objCust.ResetET();
+                                                objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
+                                                objCust.BranchID = item.BranchID;
+                                                UpCS_Leads(objCust, item, true, handle);
+                                                _db.CS_Leads.AddObject(objCust);
+
+                                            }
+                                        }
+                                    }
+
+                                    calUpdate = true;
+
+                                    if (objAR_Consumer != null)
+                                    {
+                                        objAR_Consumer.ConsumerName = item.ConsumerName;
+                                        objAR_Consumer.Addr = item.Addr;
+                                        objAR_Consumer.Addr1 = item.NumberHouse;
+                                        objAR_Consumer.Addr2 = item.StreetNames;
+                                        objAR_Consumer.Ward = item.Ward;
+                                        objAR_Consumer.Territory = item.Territory;
+                                        objAR_Consumer.State = item.State;
+                                        objAR_Consumer.District = item.District;
+                                    }
+
+
+                                }
+                                _db.SaveChanges();
+                                if (calUpdate)
+                                {
+                                    if (!objCheck)
+                                    {
+                                        if (objCust != null)
+                                        {
+                                            _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID,
+                                                Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
+                                        }
                                     }
                                     else
                                     {
-                                        if (item.ConsumerID.PassNull() != "")
+                                        objCust = _db.CS_Leads.FirstOrDefault(x => x.PhoneNumber == item.Phone);
+                                        if (objCust != null)
                                         {
-                                            objCust = new CS_Leads();
-                                            objCust.ResetET();
-                                            objCust.LeadID = _db.CS30100_pdCSNumbering(Current.UserName, item.BranchID, Current.LangID).FirstOrDefault();
-                                            objCust.BranchID = item.BranchID;
-                                            UpCS_Leads(objCust, item, true, handle);
-                                            _db.CS_Leads.AddObject(objCust);
-                                          
+                                            _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
                                         }
                                     }
                                 }
-
-                                calUpdate = true;
-
+                            }
+                            else
+                            {
                                 if (objAR_Consumer != null)
                                 {
-                                    objAR_Consumer.ConsumerName = item.ConsumerName;
-                                    objAR_Consumer.Addr = item.Addr;
-                                    objAR_Consumer.Addr1 = item.NumberHouse;
-                                    objAR_Consumer.Addr2 = item.StreetNames;
-                                    objAR_Consumer.Ward = item.Ward;
-                                    objAR_Consumer.Territory = item.Territory;
-                                    objAR_Consumer.State = item.State;
-                                    objAR_Consumer.District = item.District;
+                                    objAR_Consumer.Status = "D";
                                 }
 
-
-                            }
-                            _db.SaveChanges();
-                            if (calUpdate)
-                            {
-                                if (!objCheck)
-                                {
-                                    if (objCust != null)
-                                    {
-                                        _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID,
-                                            Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
-                                    }
-                                }
-                                else
-                                {
-                                    objCust = _db.CS_Leads.FirstOrDefault(x => x.PhoneNumber == item.Phone);
-                                    if (objCust != null)
-                                    {
-                                        _db.AR20500_ppUpdateOMPDASalesOrdPG(Current.UserName, Current.CpnyID, Current.LangID, objCust.BranchID, item.SlsperID, item.ConsumerID, objCust.LeadID, objCust.PhoneNumber);
-                                    }
-                                }
+                                _db.SaveChanges();
                             }
                         }
-                        else
-                        {
-                            if(objAR_Consumer != null)
-                            {
-                                objAR_Consumer.Status = "D";
-                            }
-                       
-                            _db.SaveChanges();
-                        }
+                     
                         
                     }
                 }
 
-                return mLogMessage ?? Json(new { success = true, type = "message", code = "8009" });
+                if (!string.IsNullOrEmpty(phoneCheck))
+                {
+                    throw new MessageException(MessageType.Message, "2018091951", "askApprovePG", parm: new string[] { phoneCheck });
+                }
+                else
+                {
+                    return mLogMessage ?? Json(new { success = true, type = "message", code = "8009" });
+                }
+
             }
             catch(Exception ex){
                 if (ex is System.Data.SqlClient.SqlException)
