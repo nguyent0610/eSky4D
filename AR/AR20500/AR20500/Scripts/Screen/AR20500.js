@@ -12,6 +12,7 @@ var _isditContactName = false;
 var _fromDate;
 var _toDate;
 var _dis = "";
+var _mapTypeControl = false;
 var frmMain_BoxReady = function () {
     var date = new Date(HQ.LimitedYear, 0, 0);
     App.cboBrandID.store.reload();
@@ -197,7 +198,7 @@ var ColCheck_HeaderPG_Change = function (value) {
     }
 };
 var btnProcess_Click = function () {
-    if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1) {
+    if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1 || App.cboUpdateType.getValue() == 4) {
         var count = 0;
         App.grdCust.store.clearFilter();
         var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
@@ -1076,35 +1077,113 @@ var stoLoad = function (sto, records, successful, eOpts) {
 
         stoChanged(sto);
 
-        var markers = [];
+        var markers = [];//Store load map
+        var markersPDA = [];
+        var market = {};
         records.forEach(function (record) {
-            var marker = {
-                "index": record.index,
-                "id": record.index + 1,
-                "title": record.data.CustID + ": " + record.data.OutletName,
-                "lat": record.data.Lat,
-                "lng": record.data.Lng,
-                "ImageFileName": record.data.ImageFileName,
-                "description":
-                    '<div id="content">' +
-                        '<div id="siteNotice">' +
-                        '</div>' +
-                        '<h1 id="firstHeading" class="firstHeading">' +
-                            record.data.OutletName +
-                        '</h1>' +
-                        '<div id="bodyContent">' +
-                            '<p>' +
-                                record.data.Phone +
-                            '</p>' +
-                        '</div>' +
-                    '</div>'
+            if (record.data.UpdateType == 4) {
+                marker = {
+                    "index": record.index,
+                    "id": record.index + 1,
+                    "title": record.data.CustID + ": " + record.data.OutletName,
+                    "lat": record.data.LatLocation,
+                    "lng": record.data.LngLocation,
+                    "ImageFileName": record.data.ImageFileName,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h3 id="firstHeading" class="firstHeading">' +
+                                record.data.OutletName +
+                            '</h3>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Phone +
+                                '</p>' +
+                                '<p>' +
+                                    record.data.Addr1 +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+            }
+            else
+            {
+                marker = {
+                    "index": record.index,
+                    "id": record.index + 1,
+                    "title": record.data.CustID + ": " + record.data.OutletName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "ImageFileName": record.data.ImageFileName,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h3 id="firstHeading" class="firstHeading">' +
+                                record.data.OutletName +
+                            '</h3>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Phone +
+                                '</p>' +
+                                '<p>' +
+                                    record.data.Addr1 +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
             }
             markers.push(marker);
+            if (record.data.UpdateType == 4) {
+                var markerPDA = {
+                    "index": record.index,
+                    "id": record.index + 1,
+                    "title": record.data.CustID + ": " + record.data.OutletName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "ImageFileName": record.data.ImageFileName,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h3 id="firstHeading" class="firstHeading">' +
+                                record.data.OutletName +
+                            '</h3>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Phone +
+                                '</p>' +
+                                '<p>' +
+                                    record.data.Addr1 +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markersPDA.push(markerPDA);
+            }
         });
         if (records.length == 0) {
             HQ.common.showBusy(false);
         }
         Gmap.Process.drawMCP(markers, false);
+        GmapPDA.Process.drawMCP(markersPDA, false);
+        if (App.cboUpdateType.getValue() == 4) {
+            App.map_canvasPDA.setVisible(true);
+            App.map_canvasPDA.setTitle(HQ.common.getLang("AR20500PDA"));
+            App.map_canvas.setTitle(HQ.common.getLang("AR20500Cust"));
+            if (App.map_canvas_header != undefined) {
+                App.map_canvas_header.show();
+            }
+        }
+        else {
+            App.map_canvasPDA.setVisible(false);
+            App.map_canvasPDA.setTitle('');
+            App.map_canvas.setTitle('');
+            if (App.map_canvas_header != undefined) {
+                App.map_canvas_header.hide();
+            }
+        }
     } else {
         HQ.common.showBusy(false);
     }
@@ -1116,7 +1195,7 @@ function refresh(item) {
     if (item == 'yes') {
         _Change = false;
         App.ColCheck_Header.setValue(false);
-        if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1) {
+        if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1 || App.cboUpdateType.getValue()==4) {
             App.stoCust.reload();
             App.stoCustPG.rejectChanges();
         }
@@ -1439,6 +1518,22 @@ var cboUpdateType_Change = function () {
     if (!HQ.showVisitsPerDay) {
         HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
     }
+    if (App.cboUpdateType.getValue() == 4) {
+        App.map_canvasPDA.setVisible(true);
+        App.map_canvasPDA.setTitle(HQ.common.getLang("AR20500PDA"));
+        App.map_canvas.setTitle(HQ.common.getLang("AR20500Cust"));
+        if (App.map_canvas_header != undefined) {
+            App.map_canvas_header.show();
+        }
+    }
+    else {
+        App.map_canvasPDA.setVisible(false);
+        App.map_canvasPDA.setTitle('');
+        App.map_canvas.setTitle('');
+        if (App.map_canvas_header != undefined) {
+            App.map_canvas_header.hide();
+        }
+    }
     showSubRoute(App.cboUpdateType.getValue());
     Ext.resumeLayouts();
 
@@ -1470,6 +1565,7 @@ var Gmap = {
                 center: initLatLng,
                 zoom: 16,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
+                , mapTypeControl: _mapTypeControl
             };
 
             Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
@@ -1610,6 +1706,7 @@ var Gmap = {
                                 center: myLatlng,
                                 zoom: 16,
                                 mapTypeId: google.maps.MapTypeId.ROADMAP
+                                , mapTypeControl: _mapTypeControl
                             };
                             Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
                         }
@@ -1659,6 +1756,221 @@ var Gmap = {
         },
     }
 };
+var GmapPDA = {
+    DeclarePDA: {
+        map_canvasPDA: {},
+        mapPDA: {},
+        directionsServicePDA: {},
+        directionsDisplayPDA: {},
+        directionsDisplaysPDA: [],
+        infoWindowPDA: {},
+        stopMarkersPDA: [],
+        drawingManagerPDA: {}
+    },
+
+    Process: {
+
+        initializePDA: function () {
+            GmapPDA.DeclarePDA.map_canvasPDA = document.getElementById("map_canvasPDA");
+
+            var initLatLng = new google.maps.LatLng(10.782171, 106.654012, 17);
+            var myOptions = {
+                center: initLatLng,
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+                , mapTypeControl: _mapTypeControl
+            };
+
+            GmapPDA.DeclarePDA.mapPAD = new google.maps.Map(GmapPDA.DeclarePDA.map_canvasPDA, myOptions);
+            GmapPDA.DeclarePDA.directionsServicePDA = new google.maps.DirectionsService();
+            GmapPDA.DeclarePDA.directionsDisplayPDA = new google.maps.DirectionsRenderer();
+            GmapPDA.DeclarePDA.infoWindowPDA = new google.maps.InfoWindow();
+
+            GmapPDA.DeclarePDA.stopMarkersPDA = [];
+        },
+
+        navMapCenterByLocation: function (lat, lng, id) {
+            var selectedMarker;
+            var myLatlng = new google.maps.LatLng(lat, lng);
+            GmapPDA.DeclarePDA.mapPDA.setCenter(myLatlng);
+            GmapPDA.DeclarePDA.mapPDA.setZoom(GmapPDA.DeclarePDA.mapPDA.getZoom());
+
+            if (id) {
+                selectedMarker = GmapPDA.Process.find_marker_id(id);
+                if (!selectedMarker) {
+                    selectedMarker = GmapPDA.Process.find_closest_marker(lat, lng);
+                }
+            }
+            else {
+                selectedMarker = GmapPDA.Process.find_closest_marker(lat, lng);
+            }
+
+            if (selectedMarker) {
+                var visible = selectedMarker.visible;
+
+                if (selectedMarker.getAnimation() != null) {
+                    selectedMarker.setAnimation(null);
+                } else {
+                    if (!visible) {
+                        selectedMarker.visible = true;
+                    }
+                    selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function () {
+                        selectedMarker.setAnimation(null);
+                        if (!visible) {
+                            selectedMarker.visible = false;
+                        }
+                    }, 1400);
+                }
+            }
+        },
+
+        find_marker_id: function (id) {
+            for (i = 0; i < GmapPDA.DeclarePDA.stopMarkersPDA.length; i++) {
+                if (GmapPDA.DeclarePDA.stopMarkersPDA[i].id == id) {
+                    return GmapPDA.DeclarePDA.stopMarkersPDA[i];
+                }
+            }
+            return null;
+        },
+
+        find_closest_marker: function (lat1, lon1) {
+            var pi = Math.PI;
+            var R = 6371; //equatorial radius
+            var distances = [];
+            var closest = -1;
+
+            for (i = 0; i < GmapPDA.DeclarePDA.stopMarkersPDA.length; i++) {
+                var lat2 = GmapPDA.DeclarePDA.stopMarkersPDA[i].position.lat();
+                var lon2 = GmapPDA.DeclarePDA.stopMarkersPDA[i].position.lng();
+
+                var chLat = lat2 - lat1;
+                var chLon = lon2 - lon1;
+
+                var dLat = chLat * (pi / 180);
+                var dLon = chLon * (pi / 180);
+
+                var rLat1 = lat1 * (pi / 180);
+                var rLat2 = lat2 * (pi / 180);
+
+                var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(rLat1) * Math.cos(rLat2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                var d = R * c;
+
+                distances[i] = d;
+                if (closest == -1 || d < distances[closest]) {
+                    closest = i;
+                }
+            }
+
+            // (debug) The closest marker is:
+            return GmapPDA.DeclarePDA.stopMarkersPDA[closest];
+        },
+
+        prepairMap: function () {
+            if (GmapPDA.DeclarePDA.directionsDisplayPDA) {
+                GmapPDA.DeclarePDA.directionsDisplayPDA.setMap(null);
+                if (GmapPDA.DeclarePDA.directionsDisplaysPDA && GmapPDA.DeclarePDA.directionsDisplaysPDA.length > 0) {
+                    for (var i = 0; i < Gmap.DeclarePDA.directionsDisplaysPDA.length; i++) {
+                        GmapPDA.DeclarePDA.directionsDisplaysPDA[i].setMap(null);
+                        //GmapPDA.DeclarePDA.directionsDisplay[i] = new google.maps.DirectionsRenderer();
+                    }
+                }
+            }
+            GmapPDA.DeclarePDA.directionsService = new google.maps.DirectionsService();
+            GmapPDA.DeclarePDA.directionsDisplayPDA = new google.maps.DirectionsRenderer();
+        },
+
+        clearMap: function (stopMarkersPDA) {
+            for (i = 0; i < stopMarkersPDA.length; i++) {
+                GmapPDA.DeclarePDA.stopMarkersPDA[i].setMap(null);
+
+                if (i == stopMarkersPDA.length - 1) {
+                    GmapPDA.DeclarePDA.stopMarkersPDA = [];
+                }
+            }
+            GmapPDA.DeclarePDA.directionsDisplayPDA.setMap(GmapPDA.DeclarePDA.map);
+        },
+
+        drawMCP: function (markers) {
+            GmapPDA.Process.prepairMap();
+
+            if (markers.length > 0) {
+                GmapPDA.DeclarePDA.stopMarkersPDA = [];
+                // List of locations
+                var lat_lng = new Array();
+
+                // For each marker in list
+                for (i = 0; i < markers.length; i++) {
+                    var data = markers[i];
+                    if (data.lat && data.lng) {
+                        var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                        // pin color
+                        var pinColor = "FE6256";//"BDBDBD";//FE6256
+
+                        // Push the location to list
+                        lat_lng.push(myLatlng);
+
+                        // Maps center at the first location
+                        if (i == 0) {
+                            var myOptions = {
+                                center: myLatlng,
+                                zoom: 16,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                                , mapTypeControl: _mapTypeControl
+                            };
+                            GmapPDA.DeclarePDA.mapPDA = new google.maps.Map(GmapPDA.DeclarePDA.map_canvasPDA, myOptions);
+                        }
+
+                        // Make the marker at each location
+                        var markerLabel = data.visitSort;
+                        var marker = new google.maps.Marker({
+                            id: data.id,
+                            position: myLatlng,
+                            map: GmapPDA.DeclarePDA.mapPDA,
+                            title: data.title,
+                            icon: Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.6|0|{1}|10|_|{0}', i + 1, pinColor)
+                            // icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
+                        });
+
+                        // Set info display of the marker
+                        (function (marker, data) {
+                            google.maps.event.addListener(marker, "click", function (e) {
+                                App.slmCust.select(data.index);
+                                //displayImage(App.imgImages, data.ImageFileName);
+                                GmapPDA.DeclarePDA.infoWindowPDA.setContent(data.description);
+                                GmapPDA.DeclarePDA.infoWindowPDA.open(GmapPDA.DeclarePDA.mapPDA, marker);
+
+                                // Set animation of marker
+                                if (marker.getAnimation() != null) {
+                                    marker.setAnimation(null);
+                                } else {
+                                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    setTimeout(function () {
+                                        marker.setAnimation(null);
+                                    }, 1400);
+                                }
+                            });
+                        })(marker, data);
+
+                        GmapPDA.DeclarePDA.stopMarkersPDA.push(marker);
+                    }
+                }
+                HQ.common.showBusy(false);
+                GmapPDA.DeclarePDA.directionsDisplayPDA.setMap(GmapPDA.DeclarePDA.mapPDA);
+                //directionsDisplay.setOptions({ suppressMarkers: true });
+            }
+            else {
+                HQ.common.showBusy(false);
+                GmapPDA.Process.clearMap(GmapPDA.DeclarePDA.stopMarkersPDA);
+            }
+        },
+    }
+};
+
+
 var isFirstSubTerritoryExpand = true;
 // Expand State
 var cboColSubTerritory_Expand = function (combo) {

@@ -15637,6 +15637,54 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Date2;
         partial void OnDate2Changing(Nullable<global::System.DateTime> value);
         partial void OnDate2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> LatLocation
+        {
+            get
+            {
+                return _LatLocation;
+            }
+            set
+            {
+                OnLatLocationChanging(value);
+                ReportPropertyChanging("LatLocation");
+                _LatLocation = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LatLocation");
+                OnLatLocationChanged();
+            }
+        }
+        private Nullable<global::System.Double> _LatLocation;
+        partial void OnLatLocationChanging(Nullable<global::System.Double> value);
+        partial void OnLatLocationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> LngLocation
+        {
+            get
+            {
+                return _LngLocation;
+            }
+            set
+            {
+                OnLngLocationChanging(value);
+                ReportPropertyChanging("LngLocation");
+                _LngLocation = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LngLocation");
+                OnLngLocationChanged();
+            }
+        }
+        private Nullable<global::System.Double> _LngLocation;
+        partial void OnLngLocationChanging(Nullable<global::System.Double> value);
+        partial void OnLngLocationChanged();
 
         #endregion
 

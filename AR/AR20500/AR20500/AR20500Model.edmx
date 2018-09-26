@@ -921,6 +921,8 @@
           <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
           <Property Type="DateTime" Name="Date1" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="Date2" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="LatLocation" Nullable="true" />
+          <Property Type="Double" Name="LngLocation" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1571,6 +1573,8 @@
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Date1" ColumnName="Date1" />
                 <ScalarProperty Name="Date2" ColumnName="Date2" />
+                <ScalarProperty Name="LatLocation" ColumnName="LatLocation" />
+                <ScalarProperty Name="LngLocation" ColumnName="LngLocation" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
