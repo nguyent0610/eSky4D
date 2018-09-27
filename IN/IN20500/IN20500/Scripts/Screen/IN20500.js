@@ -37,7 +37,7 @@ var firstLoad = function () {
 
     App.chkPublic.setVisible(!HQ.isHideChkPublic);
     App.chkKitType.setVisible(HQ.KitType);
-    if (HQ.KitType == false)
+    if (!HQ.KitType)
     {
         App.CtnKitType.setMargin("22 0 0 0");
     }
@@ -789,6 +789,7 @@ var cboInvtID_TriggerClick = function (sender, value) {
     }
     App.cboInvtID.clearValue();
     InvtID = '';
+    setView();
 };
 
 var cboInvtID_Expand = function (sender, value) {

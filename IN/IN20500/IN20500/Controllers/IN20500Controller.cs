@@ -75,6 +75,7 @@ namespace IN20500.Controllers
             var DfltValMthd = false;
             var GiftPoint = false;
             var isShowBarCode = false;
+            var isShowKitType = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
             var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
@@ -83,14 +84,16 @@ namespace IN20500.Controllers
             }
             if (objConfigHideShow!= null)
             {
-                DfltValMthd = objConfigHideShow.DfltValMthd.HasValue ? objConfigHideShow.DfltValMthd.Value : false;
-                GiftPoint = objConfigHideShow.GiftPoint.HasValue ? objConfigHideShow.GiftPoint.Value : false;
+                DfltValMthd = objConfigHideShow.DfltValMthd ?? false;
+                GiftPoint = objConfigHideShow.GiftPoint ??  false;
                 isShowBarCode = objConfigHideShow.IsShowBarCode ?? false;
+                isShowKitType = objConfigHideShow.KitType ?? false;
             }
             ViewBag.isHideChkPublic = isHideChkPublic;
             ViewBag.DfltValMthd = DfltValMthd;
             ViewBag.GiftPoint = GiftPoint;
             ViewBag.IsShowBarCode = isShowBarCode;
+            ViewBag.IsShowKitType = isShowKitType;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -151,6 +154,14 @@ namespace IN20500.Controllers
                     header.Crtd_User = Current.UserName;
                     UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle);
                     _db.IN_Inventory.AddObject(header);
+                    var objUnit = _db.IN_UnitConversion.FirstOrDefault(x => x.InvtID == header.InvtID);
+                    if (objUnit == null)
+                    {
+                        objUnit = new IN_UnitConversion();
+                        CreateUnit(header,objUnit);
+                        _db.IN_UnitConversion.AddObject(objUnit);
+                    }
+                    
                 }
                 else
                 {
@@ -345,9 +356,9 @@ namespace IN20500.Controllers
             if (t.Public == false && s.Public == true)
             {
                 var del = _db.IN_InvtCpny.Where(p => p.InvtID == s.InvtID).ToList();
-                for (int i = 0; i < del.Count; i++)
+                foreach (var t1 in del)
                 {
-                    _db.IN_InvtCpny.DeleteObject(del[i]);
+                    _db.IN_InvtCpny.DeleteObject(t1);
                 }
             }
             t.Public = s.Public;
@@ -413,6 +424,25 @@ namespace IN20500.Controllers
             t.CnvFact = s.CnvFact > 0 ? s.CnvFact : 1;
             t.VideoModifiedDate = s.VideoModifiedDate;
             t.ImageModifiedDate = s.ImageModifiedDate;
+        }
+
+
+        private void CreateUnit(IN_Inventory t, IN_UnitConversion me) // bugID: 20180927_00049 VIETUC
+        {
+            me.UnitType = "3";
+            me.ClassID = "*";
+            me.InvtID = t.InvtID;
+            me.FromUnit = t.StkUnit;
+            me.ToUnit = t.StkUnit;
+            me.MultDiv = "M";
+            me.CnvFact = 1;
+
+            me.LUpd_DateTime = DateTime.Now;
+            me.LUpd_Prog = _screenNbr;
+            me.LUpd_User = _userName;
+            me.Crtd_DateTime = DateTime.Now;
+            me.Crtd_Prog = _screenNbr;
+            me.Crtd_User = Current.UserName;
         }
 
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z, List<SI_Hierarchy> lstSI_Hierarchy, List<IN_Inventory> lstIN_Inventory)
@@ -664,10 +694,17 @@ namespace IN20500.Controllers
                 if (objInvtID != null)
                 {
                     var del = _db.IN_InvtCpny.Where(p => p.InvtID == InvtID).ToList();
-                    for (int i = 0; i < del.Count; i++)
+                    foreach (IN_InvtCpny t in del)
                     {
-                        _db.IN_InvtCpny.DeleteObject(del[i]);
+                        _db.IN_InvtCpny.DeleteObject(t);
                     }
+                    var delUnit = _db.IN_UnitConversion.Where(x => x.InvtID == InvtID).ToList();
+
+                    foreach (var item in delUnit)
+                    {
+                        _db.IN_UnitConversion.DeleteObject(item);
+                    }
+
                     _db.IN_Inventory.DeleteObject(objInvtID);
 
 
