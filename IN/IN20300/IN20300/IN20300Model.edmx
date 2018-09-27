@@ -4,16 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="IN_Site" EntityType="eBiz4DWebSysModel.Store.IN_Site" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_SiteCpny" EntityType="eBiz4DWebSysModel.Store.IN_SiteCpny" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_Site">
           <Key>
             <PropertyRef Name="SiteId" />
           </Key>
-          <Property Name="SiteId" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SiteId" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="WhKeeper" Type="nvarchar" MaxLength="200" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
@@ -28,25 +24,31 @@
           <Property Name="District" Type="varchar" MaxLength="10" />
           <Property Name="Public" Type="bit" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="HOCreate" Type="bit" Nullable="false" />
           <Property Name="SiteType" Type="varchar" MaxLength="2" />
+          <Property Name="AllowedSales" Type="bit" />
         </EntityType>
         <EntityType Name="IN_SiteCpny">
           <Key>
             <PropertyRef Name="SiteId" />
             <PropertyRef Name="CpnyID" />
           </Key>
-          <Property Name="SiteId" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SiteId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CpnyID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <Function Name="IN20300_pcCpnybySite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="siteId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN20300_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="IN20300_ppCheckForDeleteSiteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -59,6 +61,10 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="IN_Site" EntityType="Self.IN_Site" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_SiteCpny" EntityType="Self.IN_SiteCpny" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -80,6 +86,11 @@
           </FunctionImport>
           <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
           <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
+          <FunctionImport Name="IN20300_pdConfig" ReturnType="Collection(IN20300Model.IN20300_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -103,6 +114,7 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
           <Property Type="String" Name="SiteType" Nullable="true" MaxLength="2" />
+          <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -139,7 +151,11 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
           <Property Type="String" Name="SiteType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="AllowedSales" Type="Boolean" />
         </EntityType>
+        <ComplexType Name="IN20300_pdConfig_Result">
+          <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -174,6 +190,7 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
+                <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -189,6 +206,7 @@
           <EntitySetMapping Name="IN_Site">
             <EntityTypeMapping TypeName="IN20300Model.IN_Site">
               <MappingFragment StoreEntitySet="IN_Site">
+                <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -215,6 +233,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20300_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20300Model.IN20300_pdConfig_Result">
+                <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -231,6 +256,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

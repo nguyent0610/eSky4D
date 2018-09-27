@@ -15,6 +15,7 @@ var checkLoad = function (sto) {
         _isLoadMaster = true;
         _Source = 0;
         App.stoIN_Site.reload();
+        App.chkAllowedSales.setVisible(HQ.allowedSales);
         HQ.common.showBusy(false);
     }
 };

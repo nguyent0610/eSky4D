@@ -232,6 +232,47 @@ namespace IN20300
     
             return base.ExecuteFunction<global::System.String>("IN20300_ppCheckForDeleteSiteID", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, siteIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20300_pdConfig_Result> IN20300_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN20300_pdConfig_Result>("IN20300_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -836,6 +877,30 @@ namespace IN20300
         private global::System.String _SiteType;
         partial void OnSiteTypeChanging(global::System.String value);
         partial void OnSiteTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowedSales
+        {
+            get
+            {
+                return _AllowedSales;
+            }
+            set
+            {
+                OnAllowedSalesChanging(value);
+                ReportPropertyChanging("AllowedSales");
+                _AllowedSales = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowedSales");
+                OnAllowedSalesChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowedSales;
+        partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowedSalesChanged();
 
         #endregion
 
@@ -1006,6 +1071,44 @@ namespace IN20300
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20300Model", Name="IN20300_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20300_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowedSales
+        {
+            get
+            {
+                return _AllowedSales;
+            }
+            set
+            {
+                OnAllowedSalesChanging(value);
+                ReportPropertyChanging("AllowedSales");
+                _AllowedSales = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowedSales");
+                OnAllowedSalesChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowedSales;
+        partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowedSalesChanged();
 
         #endregion
 
@@ -1447,6 +1550,30 @@ namespace IN20300
         private global::System.String _SiteType;
         partial void OnSiteTypeChanging(global::System.String value);
         partial void OnSiteTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowedSales
+        {
+            get
+            {
+                return _AllowedSales;
+            }
+            set
+            {
+                OnAllowedSalesChanging(value);
+                ReportPropertyChanging("AllowedSales");
+                _AllowedSales = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowedSales");
+                OnAllowedSalesChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowedSales;
+        partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowedSalesChanged();
 
         #endregion
 

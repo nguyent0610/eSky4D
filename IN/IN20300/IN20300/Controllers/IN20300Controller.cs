@@ -25,6 +25,13 @@ namespace IN20300.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         public ActionResult Index()
         {
+            var allowedSales = false;
+            var objConfig = _db.IN20300_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                allowedSales = objConfig.AllowedSales.Value && objConfig.AllowedSales.HasValue;
+            }
+            ViewBag.allowedSales = allowedSales;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -161,6 +168,7 @@ namespace IN20300.Controllers
             t.Public = s.Public;
             t.Fax = s.Fax;
             t.SiteType = s.SiteType;
+            t.AllowedSales = s.AllowedSales;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
