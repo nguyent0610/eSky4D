@@ -728,6 +728,55 @@ var HQ = {
                 }
             }
         },
+
+        insertAndFocusBlankRow: function (grid, fields, values, focusColumnIndex) {
+            var record;
+            var allData = grid.store.snapshot || grid.store.allData || grid.store.data;
+            var idx = -1;
+            if (allData) {
+                allData.each(function (item) {
+                    var intT = 0;
+                    idx++;
+                    for (var i = 0; i < fields.length; i++) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        record = item;
+                        return false;
+                    }
+                });
+            }
+            if (!record) {
+                HQ.store.insertBlank(grid.store, fields);
+            } else {
+                var page = Math.floor(idx / grid.store.pageSize) + 1;
+                if (page > 0) {
+                    grid.store.loadPage(page);
+                }
+            }
+            index = 1;
+            if (focusColumnIndex != undefined) {
+                var index = HQ.grid.findColumnIndex(grid.columns, focusColumnIndex);
+                if (index == -1) {
+                    index = 1;
+                }
+            }
+            setTimeout(function () {
+                if (grid.store.data.length > 0) {
+                    grid.editingPlugin.startEditByPosition({
+                        row: grid.store.data.length - 1,
+                        column: index
+                    });
+                }
+            }, 400);
+        },
+
         first: function (grd) {
             grd.getSelectionModel().select(0);
         },
@@ -834,7 +883,7 @@ var HQ = {
         },
         checkValidateEdit: function (grd, e, keys, isCheckSpecialChar) {
             if (keys.indexOf(e.field) != -1) {
-                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                var regex = /^(\w*(\d|([a-zA-Z])|-|\_))*$/
                 if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
                 if (isCheckSpecialChar) {
                     if (e.value)

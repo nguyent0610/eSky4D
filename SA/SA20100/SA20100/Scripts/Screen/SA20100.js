@@ -15,8 +15,6 @@ var checkLoad = function () {
     if (_Source == _maxSource) {
         _isLoadMaster = true
         _Source = 0;
-        App.cboLangID.store.reload();
-        App.stoStatus.reload();
     }
 };
 ////////////////////////////////////////////////////////////////////////
@@ -35,7 +33,8 @@ var firstLoad = function () {
             HQ.store.insertBlank(App.stoStatus, keys);
         }
     }
-
+    App.stoStatus.reload();
+    App.cboLangID.store.reload();
 };
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoStatus);
@@ -116,18 +115,22 @@ var stoLoadStatus = function (sto) {
     else
         HQ.grid.hide(App.grdStatus, ['ContentEng']);
 };
-var stocheckDelete_Load = function (sto) {
-    var index = 0;
-    index = _record.index;
-    if (App.stocheckDelete.data.items[0].data.Delete && lstDelete.length == 0)
-        lstDelete.push(index);
-};
+
 var grdStatus_BeforeEdit = function (item, e) {
     _statusID = e.record.data.StatusID;
     _statusType = e.record.data.StatusType;
+    App.cboLangID.forceSelection = false;
     if (!HQ.grid.checkBeforeEdit(e, keys))
         return false;
+    if (e.field == 'LangID') {
+        var objPageLang = findRecordCombo(e.value);
+        if (objPageLang) {
+            var positionLang = calcPage(objPageLang.index);
+            App.cboLangID.loadPage(positionLang);
+        }
+    }
 };
+
 var grdStatus_Edit = function (item, e) {
     if (e.field == 'LangID')
     {
@@ -157,7 +160,6 @@ var grdStatus_Select = function (item, record) {
     _statusID = record.data.StatusID;
     _statusType = record.data.StatusType;
     _record = record;
-    App.stocheckDelete.reload();
 }
 var save = function () {
     if (App.frmMain.isValid()) {
@@ -224,4 +226,23 @@ var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {
         }
 
     return true;
+};
+var findRecordCombo = function (value) {
+    var data = null;
+    var store = App.cboLangID.store;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (record) {
+        if (record.data.LangID == value) {
+            data = record;
+            return false;
+        }
+    });
+    return data;
+};
+var calcPage = function (value) {
+    var tmpValue = (Number(value) + 1) / 20;
+    if (Number.isInteger(tmpValue))
+        return Number(tmpValue);
+    else
+        return Math.floor(Number(tmpValue)) + 1;
 };

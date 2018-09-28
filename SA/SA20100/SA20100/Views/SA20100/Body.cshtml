@@ -87,7 +87,7 @@
                         .HQColumnShow("LangID,Content")
                         .HQHeightWidth(400, 300).PageSize(20).HQisPaging(true)
                         .ValueField("LangID").DisplayField("LangID")
-                        .ForceSelection(true).SelectOnFocus(true)
+                        .ForceSelection(false).SelectOnFocus(true)
                         .HQParam(new StoreParameterCollection() { 
                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -97,6 +97,7 @@
                         .Listeners(lst =>
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
+                            lst.Expand.Handler = "App.cboLangID.forceSelection = true;";
                         })
                         .LoadData()
                 )
