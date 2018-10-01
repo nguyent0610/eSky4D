@@ -13,6 +13,7 @@ var fieldsLangCheckRequire = ['LangStatus', 'StatusType', 'StatusName', 'SA20100
 var checkLoad = function () {
     _Source += 1;
     if (_Source == _maxSource) {
+        App.stoStatus.reload();
         _isLoadMaster = true
         _Source = 0;
     }
@@ -33,8 +34,8 @@ var firstLoad = function () {
             HQ.store.insertBlank(App.stoStatus, keys);
         }
     }
-    App.stoStatus.reload();
     App.cboLangID.store.reload();
+    App.cboStatusType.store.reload();
 };
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoStatus);
