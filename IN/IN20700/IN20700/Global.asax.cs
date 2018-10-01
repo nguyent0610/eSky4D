@@ -27,17 +27,17 @@ namespace IN20700
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "eBiz4DCloudSysKAO";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "HT_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
-            acc.Update = false;
+            acc.Update = true;
             Session["IN20700"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO";
+            Session["DBApp"] = Current.DBApp = "HT_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             //Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["CpnyID"] = Current.CpnyID = "18510574";
+            Session["CpnyID"] = Current.CpnyID = "04010002111";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 

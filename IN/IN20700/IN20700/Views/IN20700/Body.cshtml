@@ -20,22 +20,21 @@
     .Layout(LayoutType.Fit)
     .Items(
         ////Thiet ke giao dien o day
-
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
-        .ID("grdReasonCode")
+        .ID("grdDet")
         .Store(
             X.Store()
-            .ID("stoReasonCode")
+            .ID("stoData")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(IN20700_pgLoadGrid_Result), "mdlIN20700_pgLoadGrid", "ReasonCD"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReasonCode"))).AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(IN20700_pgLoadReasonCD_Result), "mdlIN20700_pgLoadReasonCD", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.BeforeLoad.Fn = "stoData_beforeLoad";
+                l.Load.Fn = "stoData_load";
+                l.Update.Fn = "stoData_changed";                 
             })
         )
         .Listeners(p =>
@@ -46,31 +45,39 @@
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
             X.Column().ID("ReasonCD").Text(Util.GetLang("ReasonCD")).DataIndex("ReasonCD").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(6).EnforceMaxLength(true)),
+                    .Editor(Html.X().TextField().MaxLength(3).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                     .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Width(150)
-            .Editor(
-                HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQProcedure("IN20700_pcLoadSiteAll")
-                .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400)
-                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
-                .HQParam(new StoreParameterCollection() { 
-                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw }
-                })
-                .LoadData()
-            ),
+                        .Editor(
+                        HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQProcedure("IN20700_pcLoadSiteID")
+                        .HQColumnShow("SiteID,Name,CpnyID").DisplayField("SiteID").ValueField("SiteID")
+                        .Width(300).HQHeightWidth(400, 500)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        ),
             X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150)
-            .Editor(
-                HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("IN20700_pcLoadSalesPerson")
-                .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
-                .Width(300).HQHeightWidth(500, 400)
-                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
-                .HQParam(new StoreParameterCollection() { 
-                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                })
-                .LoadData()
-            ),
+                        .Editor(
+                        HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("IN20700_pcLoadEmployeeID")
+                        .HQColumnShow("Slsperid,Name,BranchID").DisplayField("Slsperid").ValueField("Slsperid")
+                        .Width(300).HQHeightWidth(400, 500)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        ),                   
             X.CommandColumn()
             .Width(150)
             .Commands(
@@ -81,9 +88,9 @@
                 .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdReasonCode_Reject(record);")
+            .Listeners(l => l.Command.Handler = "grdDet_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmReasonCode").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -105,19 +112,20 @@
             .ClicksToEdit(1)
             .Listeners(ls =>
             {
-                ls.BeforeEdit.Fn = "grdReasonCode_BeforeEdit";
-                ls.Edit.Fn = "grdReasonCode_Edit";
-                ls.ValidateEdit.Fn = "grdReasonCode_ValidateEdit";
+                ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                ls.Edit.Fn = "grdDet_Edit";
+                ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
 
             })
         )
-
         .Features(
             X.GridFilters()
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("ReasonCD"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("SiteID"),
+                    X.StringFilter().DataIndex("SlsperID")
                 )
         )
     )

@@ -105,7 +105,7 @@ namespace IN20700.Controllers
             string[] records = reasonCD.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in records)
             {
-                if (_db.SI_CheckForDeleteReasonCD(s).FirstOrDefault() == "1")
+                if (_db.IN20700_ppCheckForDeleteReasonCD(s).FirstOrDefault() == "1")
                 {
                     return Json(new { success = false }, "text/html");
 

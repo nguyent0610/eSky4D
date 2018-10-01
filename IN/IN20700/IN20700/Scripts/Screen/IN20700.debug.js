@@ -1,48 +1,38 @@
-//// Declare //////////////////////////////////////////////////////////
-
-var keys = ['ReasonCD'];
-var fieldsCheckRequire = ["ReasonCD"];
-var fieldsLangCheckRequire = ["ReasonCD"];
+var keys = ['CountryID'];
 
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdReasonCode);
+            HQ.grid.first(App.grdSI_Country);
             break;
         case "prev":
-            HQ.grid.prev(App.grdReasonCode);
+            HQ.grid.prev(App.grdSI_Country);
             break;
         case "next":
-            HQ.grid.next(App.grdReasonCode);
+            HQ.grid.next(App.grdSI_Country);
             break;
         case "last":
-            HQ.grid.last(App.grdReasonCode);
+            HQ.grid.last(App.grdSI_Country);
             break;
         case "refresh":
-            if (HQ.isChange) {
-                HQ.message.show(20150303, '', 'refresh');
-            }
-            else {
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.stoReasonCode.reload();
-            }
+            App.stoData.reload();
+            HQ.grid.first(App.grdSI_Country);
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdReasonCode, keys);
+                HQ.grid.insert(App.grdSI_Country);
             }
             break;
         case "delete":
-            if (App.slmReasonCode.selected.items[0] != undefined) {
-                var rowindex = HQ.grid.indexSelect(App.grdReasonCode);
-                if (rowindex != '')
-                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdReasonCode), ''], 'deleteData', true)
+            if (App.slmData.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoReasonCode, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (checkRequire(App.stoData.getChangedData().Created) && checkRequire(App.stoData.getChangedData().Updated)) {
                     save();
                 }
             }
@@ -50,73 +40,66 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
+            if (HQ.store.isChange(App.stoData)) {
+                HQ.message.show(7, '', 'askClose');
+            } else {
+                HQ.common.close(this);
+            }
             break;
     }
 
 };
+var grdSI_Country_BeforeEdit = function (editor, e) {
+    if (!HQ.isUpdate) return false;
+    //keys = e.record.idProperty.split(',');
 
-//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
-var firstLoad = function () {
-    HQ.isFirstLoad = true;
-    App.stoReasonCode.reload();
+    if (keys.indexOf(e.field) != -1) {
+        if (e.record.data.tstamp != "")
+            return false;
+    }
+    return HQ.grid.checkInput(e, keys);
+
 };
+var grdSI_Country_Edit = function (item, e) {
 
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'IN20700');
+    if (keys.indexOf(e.field) != -1) {
+        if (e.value != '' && isAllValidKey(App.stoData.getChangedData().Created) && isAllValidKey(App.stoData.getChangedData().Updated))
+            HQ.store.insertBlank(App.stoData);
+    }
 };
-
-//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'IN20700');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+var grdSI_Country_ValidateEdit = function (item, e) {
+    if (keys.indexOf(e.field) != -1) {
+        if (HQ.grid.checkDuplicate(App.grdSI_Country, e, keys)) {
+            HQ.message.show(1112, e.value);
+            return false;
         }
-        HQ.isFirstLoad = false;
+        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+        if (!e.value.match(regex)) {
+            HQ.message.show(20140811, e.column.text);
+            return false;
+        }
+    }
+};
+var grdSI_Country_Reject = function (record) {
+    if (record.data.tstamp == '') {
+        App.stoData.remove(record);
+        App.grdSI_Country.getView().focusRow(App.stoData.getCount() - 1);
+        App.grdSI_Country.getSelectionModel().select(App.stoData.getCount() - 1);
+    } else {
+        record.reject();
     }
 };
 
-//trước khi load trang busy la dang load data
-var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-};
-
-var grdReasonCode_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-
-var grdReasonCode_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdReasonCode, e, keys);
-};
-
-var grdReasonCode_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdReasonCode, e, keys);
-};
-
-var grdReasonCode_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdReasonCode);
-    stoChanged(App.stoReasonCode);
-};
-
-/////////////////////////////////////////////////////////////////////////
-//// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            timeout: 1800000,
-            waitMsg: HQ.common.getLang("SavingData"),
+            waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'IN20700/Save',
             params: {
-                lstReasonCode: HQ.store.getData(App.stoReasonCode)
+                lstData: HQ.store.getData(App.stoData)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -128,18 +111,48 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdReasonCode.deleteSelected();
-        stoChanged(App.stoReasonCode);
+        App.grdSI_Country.deleteSelected();
+    }
+};
+//kiem tra key da nhap du chua
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+//kiem tra nhung field yeu cau bat buoc nhap
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+            if (items[i]["CountryID"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("CountryID"));
+                return false;
+            }
+            if (items[i]["Descr"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Descr"));
+                return false;
+            }
+
+        }
+        return true;
+    } else {
+        return true;
     }
 };
 
-/////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-function refresh(item) {
-    if (item == 'yes') {
-        HQ.isChange = false;
-        HQ.isFirstLoad = true;
-        App.stoReasonCode.reload();
+
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.close(this);
     }
 };
-///////////////////////////////////

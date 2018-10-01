@@ -1,1 +1,177 @@
-﻿var _0xf834 = ["\x52\x65\x61\x73\x6F\x6E\x43\x44", "\x67\x72\x64\x52\x65\x61\x73\x6F\x6E\x43\x6F\x64\x65", "\x66\x69\x72\x73\x74", "\x67\x72\x69\x64", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "\x69\x73\x43\x68\x61\x6E\x67\x65", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x52\x65\x61\x73\x6F\x6E\x43\x6F\x64\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x52\x65\x61\x73\x6F\x6E\x43\x6F\x64\x65", "\x69\x6E\x64\x65\x78\x53\x65\x6C\x65\x63\x74", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x63\x6F\x6D\x6D\x6F\x6E", "\x49\x4E\x32\x30\x37\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x69\x73\x56\x61\x6C\x69\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x53\x61\x76\x69\x6E\x67\x44\x61\x74\x61", "\x49\x4E\x32\x30\x37\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x44\x61\x74\x61", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var keys = [_0xf834[0]]; var fieldsCheckRequire = [_0xf834[0]]; var fieldsLangCheckRequire = [_0xf834[0]]; var menuClick = function (_0x9676x5) { switch (_0x9676x5) { case _0xf834[2]: HQ[_0xf834[3]][_0xf834[2]](App[_0xf834[1]]); break;; case _0xf834[4]: HQ[_0xf834[3]][_0xf834[4]](App[_0xf834[1]]); break;; case _0xf834[5]: HQ[_0xf834[3]][_0xf834[5]](App[_0xf834[1]]); break;; case _0xf834[6]: HQ[_0xf834[3]][_0xf834[6]](App[_0xf834[1]]); break;; case _0xf834[9]: if (HQ[_0xf834[7]]) { HQ[_0xf834[11]][_0xf834[10]](20150303, _0xf834[8], _0xf834[9]) } else { HQ[_0xf834[7]] = false; HQ[_0xf834[12]] = true; App[_0xf834[14]][_0xf834[13]](); }; break;; case _0xf834[17]: if (HQ[_0xf834[15]]) { HQ[_0xf834[3]][_0xf834[16]](App[_0xf834[1]], keys) }; break;; case _0xf834[23]: if (App[_0xf834[20]][_0xf834[19]][_0xf834[18]][0] != undefined) { var _0x9676x6 = HQ[_0xf834[3]][_0xf834[21]](App[_0xf834[1]]); if (_0x9676x6 != _0xf834[8]) { HQ[_0xf834[11]][_0xf834[10]](2015020807, [HQ[_0xf834[3]][_0xf834[21]](App[_0xf834[1]]), _0xf834[8]], _0xf834[22], true) }; }; break;; case _0xf834[28]: if (HQ[_0xf834[24]] || HQ[_0xf834[15]] || HQ[_0xf834[25]]) { if (HQ[_0xf834[27]][_0xf834[26]](App[_0xf834[14]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0xf834[29]: break;; case _0xf834[30]: HQ[_0xf834[31]][_0xf834[30]](this); break;; } }; var firstLoad = function () { HQ[_0xf834[12]] = true; App[_0xf834[14]][_0xf834[13]](); }; var stoChanged = function (_0x9676x9) { HQ[_0xf834[7]] = HQ[_0xf834[27]][_0xf834[7]](_0x9676x9); HQ[_0xf834[31]][_0xf834[33]](HQ[_0xf834[7]], _0xf834[32]); }; var stoLoad = function (_0x9676x9) { HQ[_0xf834[31]][_0xf834[34]](false); HQ[_0xf834[7]] = HQ[_0xf834[27]][_0xf834[7]](_0x9676x9); HQ[_0xf834[31]][_0xf834[33]](HQ[_0xf834[7]], _0xf834[32]); if (HQ[_0xf834[12]]) { if (HQ[_0xf834[15]]) { HQ[_0xf834[27]][_0xf834[35]](_0x9676x9, keys) }; HQ[_0xf834[12]] = false; }; }; var stoBeforeLoad = function (_0x9676x9) { HQ[_0xf834[31]][_0xf834[34]](true, HQ[_0xf834[31]][_0xf834[37]](_0xf834[36])) }; var grdReasonCode_BeforeEdit = function (_0x9676xd, _0x9676xe) { return HQ[_0xf834[3]][_0xf834[38]](_0x9676xe, keys) }; var grdReasonCode_Edit = function (_0x9676x10, _0x9676xe) { HQ[_0xf834[3]][_0xf834[39]](App[_0xf834[1]], _0x9676xe, keys) }; var grdReasonCode_ValidateEdit = function (_0x9676x10, _0x9676xe) { return HQ[_0xf834[3]][_0xf834[40]](App[_0xf834[1]], _0x9676xe, keys) }; var grdReasonCode_Reject = function (_0x9676x13) { HQ[_0xf834[3]][_0xf834[41]](_0x9676x13, App[_0xf834[1]]); stoChanged(App[_0xf834[14]]); }; var save = function () { if (App[_0xf834[43]][_0xf834[42]]()) { App[_0xf834[43]][_0xf834[48]]({ timeout: 1800000, waitMsg: HQ[_0xf834[31]][_0xf834[37]](_0xf834[44]), url: _0xf834[45], params: { lstReasonCode: HQ[_0xf834[27]][_0xf834[46]](App[_0xf834[14]]) }, success: function (_0x9676x15, _0x9676x16) { HQ[_0xf834[11]][_0xf834[10]](201405071); HQ[_0xf834[7]] = false; menuClick(_0xf834[9]); }, failure: function (_0x9676x15, _0x9676x16) { HQ[_0xf834[11]][_0xf834[47]](_0x9676x15, _0x9676x16, true) } }) } }; var deleteData = function (_0x9676x10) { if (_0x9676x10 == _0xf834[49]) { App[_0xf834[1]][_0xf834[50]](); stoChanged(App[_0xf834[14]]); } }; function refresh(_0x9676x10) { if (_0x9676x10 == _0xf834[49]) { HQ[_0xf834[7]] = false; HQ[_0xf834[12]] = true; App[_0xf834[14]][_0xf834[13]](); } }
+//////////Declare/////////////////
+var keys = ['ReasonCD'];
+var fieldsCheckRequire = ["ReasonCD", "Descr", "SiteID"];
+var fieldsLangCheckRequire = ["ReasonCD", "Descr", "SiteID"];
+///////////Store/////////////////
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoData_changed = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'IN20700');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoData_load = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'IN20700');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoData_beforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+/////////////////////////////////
+////////////Event/////////////////
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdDet);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdDet);
+            break;
+        case "next":
+            HQ.grid.next(App.grdDet);
+            break;
+        case "last":
+            HQ.grid.last(App.grdDet);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh('yes');
+            }
+            break;           
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdDet);
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.slmData.selected.items[0] != undefined) {
+                    var rowindex = HQ.grid.indexSelect(App.grdDet);
+                    if (rowindex != '')
+                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdDet), ''], 'deleteData', true)
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;     
+    }
+
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    if (HQ.isInsert == false) {
+        App.menuClickbtnNew.disable();
+    }
+    if (HQ.isDelete == false) {
+        App.menuClickbtnDelete.disable();
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
+        App.menuClickbtnSave.disable();
+    }
+    App.stoData.reload();
+}
+var grdDet_BeforeEdit = function (editor, e) {
+    if (HQ.isUpdate == false && HQ.isInsert == false)
+    {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    //return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdDet_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdDet, e, keys);
+    //if (e.field == 'ReasonCD') {
+    //    if (e.record.data.ReasonCD != "") {
+    //        e.record.set();
+    //    }
+
+    //}
+};
+var grdDet_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdDet, e, keys);
+};
+var grdDet_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdDet);
+    stoData_changed(App.stoData);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'IN20700/Save',
+            params: {
+                lstData: HQ.store.getData(App.stoData)
+            },
+            success: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+var deleteData = function (item) {
+    if (item == "yes") {
+        //alert(App.stoData);
+        var reasonCD = '';
+        var selectedRow = App.grdDet.selModel.selected.items.length;
+        for (var idx = selectedRow -1; idx >=0; idx --)
+        {
+            reasonCD += App.grdDet.selModel.selected.items[idx].data.ReasonCD + ",";
+        }
+        if (App.frmMain.isValid() && reasonCD != '') {
+            //App.frmMain.updateRecord();
+            App.frmMain.submit({
+                timeout: 1800000,
+                waitMsg: HQ.common.getLang("DeleteData"),
+                url: 'IN20700/Delete',
+                params: {
+                    reasonCD: reasonCD
+                },
+                success: function (msg, data) {
+                    App.grdDet.deleteSelected();
+                    stoData_changed(App.stoData);
+                    
+                },
+                failure: function (msg, data) {
+                    HQ.message.show(18, true);
+                    
+                }
+            });
+        }
+        
+    }
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoData.reload();
+    }
+};
