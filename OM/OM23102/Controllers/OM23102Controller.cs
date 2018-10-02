@@ -586,8 +586,8 @@ namespace OM23102.Controllers
                 area = new CellArea();
                 area.StartRow = 4;
                 area.EndRow = 1000;
-                area.StartColumn = 8;
-                area.EndColumn = 8;
+                area.StartColumn = 13;
+                area.EndColumn = 13;
                 validation.AddArea(area);
 
                 //CustName
@@ -648,6 +648,30 @@ namespace OM23102.Controllers
                 style.Custom = "#,##0";
                 cell.SetStyle(style);
 
+                cell = SheetTarget.Cells["I5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+
+                cell = SheetTarget.Cells["J5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+
+                cell = SheetTarget.Cells["K5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+
+                cell = SheetTarget.Cells["L5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+
+                cell = SheetTarget.Cells["M5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
 
                 var range1 = SheetTarget.Cells.CreateRange("A5", "A1000");
                 cell = SheetTarget.Cells["A5"];
@@ -667,11 +691,11 @@ namespace OM23102.Controllers
 
 
 
-                SheetTarget.AutoFilter.Range = "A4:H4";
+                SheetTarget.AutoFilter.Range = "A4:N4";
                 style = SheetTarget.Cells["A4"].GetStyle();
                 //style.HorizontalAlignment = TextAlignmentType.Right;             
                 style.IsLocked = false;
-                range = SheetTarget.Cells.CreateRange("A4:H4");
+                range = SheetTarget.Cells.CreateRange("A4:N4");
                 range.SetStyle(style);
 
                 #endregion
@@ -680,16 +704,20 @@ namespace OM23102.Controllers
                 SetCellValue(SheetTarget.Cells["D1"], Util.GetLang("OM23102EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SheetTarget.Cells.Merge(0, 3, 2, 5);
 
-                SetCellValueHeader(SheetTarget.Cells["A4"], Util.GetLang("OM23102ESTT"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["B4"], Util.GetLang("OM23102BranchID"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["C4"], Util.GetLang("OM23102SlsPerID"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["D4"], Util.GetLang("OM23102SlsName"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["E4"], Util.GetLang("OM23102Month"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["F4"], Util.GetLang("OM23102Class"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["G4"], Util.GetLang("OM23102SellIn"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["H4"], Util.GetLang("OM23102SellOut"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102CustID"), TextAlignmentType.Center, TextAlignmentType.Center);
-                //SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102CustName"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["A4"], Util.GetLang("OM23102ESTT"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["B4"], Util.GetLang("OM23102BranchID"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["C4"], Util.GetLang("OM23102SlsPerID"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["D4"], Util.GetLang("OM23102SlsName"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["E4"], Util.GetLang("OM23102Month"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["F4"], Util.GetLang("OM23102Class"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["G4"], Util.GetLang("OM23102SellIn"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["H4"], Util.GetLang("OM23102SellOut"), TextAlignmentType.Center, TextAlignmentType.Center, true);
+                SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102Coverage"), TextAlignmentType.Center, TextAlignmentType.Center, false);
+                SetCellValueHeader(SheetTarget.Cells["J4"], Util.GetLang("OM23102DNA"), TextAlignmentType.Center, TextAlignmentType.Center, false);
+                SetCellValueHeader(SheetTarget.Cells["K4"], Util.GetLang("OM23102ForcusedSKU"), TextAlignmentType.Center, TextAlignmentType.Center, false);
+                SetCellValueHeader(SheetTarget.Cells["L4"], Util.GetLang("OM23102Visit"), TextAlignmentType.Center, TextAlignmentType.Center, false);
+                SetCellValueHeader(SheetTarget.Cells["M4"], Util.GetLang("OM23102LPPC"), TextAlignmentType.Center, TextAlignmentType.Center, false);
+                SetCellValueHeader(SheetTarget.Cells["N4"], Util.GetLang("OM23102CustID"), TextAlignmentType.Center, TextAlignmentType.Center, true);
                 #endregion
 
                 SheetTarget.AutoFitColumns();
@@ -739,7 +767,7 @@ namespace OM23102.Controllers
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
                             string stt,branchid,slsperid,classid,custid = string.Empty;
-                            double sellin, sellout = 0;
+                            double sellin, sellout, coverage, dna, forcusedSKU, visit, lppc = 0;
                             DateTime month;                           
                             int lineRef = 1;
                             var lstBranch=_db.OM23102_peBranch(Current.UserName).ToList();
@@ -760,7 +788,12 @@ namespace OM23102.Controllers
                                     classid = workSheet.Cells[i, 5].StringValue.PassNull().ToUpper().Trim();
                                     sellin = workSheet.Cells[i, 6].DoubleValue;
                                     sellout = workSheet.Cells[i, 7].DoubleValue;
-                                    custid = workSheet.Cells[i, 8].StringValue.PassNull().ToUpper().Trim();
+                                    coverage = workSheet.Cells[i, 8].DoubleValue;
+                                    dna = workSheet.Cells[i, 9].DoubleValue;
+                                    forcusedSKU = workSheet.Cells[i, 10].DoubleValue;
+                                    visit = workSheet.Cells[i, 11].DoubleValue;
+                                    lppc = workSheet.Cells[i, 12].DoubleValue;
+                                    custid = workSheet.Cells[i, 13].StringValue.PassNull().ToUpper().Trim();
                                 }
                                 catch
                                 {
@@ -824,19 +857,19 @@ namespace OM23102.Controllers
                                     objFCS.SlsperId = slsperid;
                                     objFCS.FCSDate = month;
 
-                                    objFCS.Coverage = 0;
+                                    objFCS.Coverage = coverage;
                                     objFCS.Crtd_DateTime = DateTime.Now;
                                     objFCS.Crtd_Prog = _screenNbr;
                                     objFCS.Crtd_User = _userName;
-                                    objFCS.DNA = 0;
-                                    objFCS.ForcusedSKU = 0;
-                                    objFCS.LPPC = 0; //objFCS1 == null ? 0 : objFCS1.LPPC;
+                                    objFCS.DNA = dna;
+                                    objFCS.ForcusedSKU = forcusedSKU;
+                                    objFCS.LPPC = lppc; //objFCS1 == null ? 0 : objFCS1.LPPC;
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
-                                    objFCS.Visit = 0; //objFCS1 == null ? 0 : objFCS1.Visit;
+                                    objFCS.Visit = visit; //objFCS1 == null ? 0 : objFCS1.Visit;
                                     objFCS.VisitTime = 0; //objFCS1 == null ? 0 : objFCS1.VisitTime;
 
                                     _db.OM_PG_FCS.AddObject(objFCS);
@@ -849,6 +882,11 @@ namespace OM23102.Controllers
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
+                                    objFCS.Coverage = coverage;
+                                    objFCS.DNA = dna;
+                                    objFCS.ForcusedSKU = forcusedSKU;
+                                    objFCS.LPPC = lppc;
+                                    objFCS.Visit = visit;
                                 }
                                 lstImport.Add(objFCS);
 
@@ -935,16 +973,19 @@ namespace OM23102.Controllers
             style.VerticalAlignment = alignV;
             c.SetStyle(style);
         }
-        private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBackground = false)
         {
             c.PutValue(" " + lang);
             var style = c.GetStyle();
             style.Font.IsBold = true;
             style.Font.Size = 10;
-            style.Font.Color = Color.Black;
+            if (isBackground)
+            {
+                style.Font.Color = Color.Red;
 
-            style.Pattern = BackgroundType.Solid;
-            style.ForegroundColor = Color.Yellow;
+                style.Pattern = BackgroundType.Solid;
+                style.ForegroundColor = Color.Yellow;
+            }
 
             style.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
             style.Borders[BorderType.TopBorder].Color = Color.Black;
