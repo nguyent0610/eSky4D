@@ -672,16 +672,19 @@ var bindBatch = function (record) {
 };
 
 var bindTran = function () {
-    if (App.stoTrans.data.items.length > 0) {
-        var objFirst = App.stoTrans.data.items[0].data;
-        App.cboSiteID.setValue(objFirst.SiteID);
-        App.cboWhseLoc.setValue(objFirst.WhseLoc);
+    if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+        if (App.stoTrans.data.items.length > 0) {
+            var objFirst = App.stoTrans.data.items[0].data;
+            App.cboSiteID.setValue(objFirst.SiteID);
+            App.cboWhseLoc.setValue(objFirst.WhseLoc);
 
-        App.cboSiteID.store.reload();
-        App.cboWhseLocTrans.store.reload();
-        App.cboReasonTrans.store.reload();
-        //App.cboSlsperID.setValue(objFirst.SlsperID);
+            App.cboSiteID.store.reload();
+            App.cboWhseLocTrans.store.reload();
+            App.cboReasonTrans.store.reload();
+            //App.cboSlsperID.setValue(objFirst.SlsperID);
+        }
     }
+    
     App.lblQtyAvail.setText('');
 
     HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
@@ -1113,34 +1116,35 @@ var checkSetDefault = function () {
 };
 
 var defaultOnNew = function () {
-    
-    HQ.isNew = true;
-    var record = Ext.create('App.mdlBatch');
-    record.data.BranchID = HQ.cpnyID;
-    record.data.Status = 'H';
-    App.cboStatus.setValue('H');
-    record.data.DateEnt = HQ.businessDate;
-    App.cboSiteID.setValue(HQ.inSite);
-    if (HQ.showWhseLoc == 0) {
-        App.cboWhseLoc.setValue('');
-    }
-    else {
-        App.cboWhseLoc.setValue(HQ.WhseLoc);
-    }
-    if (HQ.perpost) {
-        App.cboPerPost.setValue(HQ.perpost);
-    }
-    //App.cboSlsperID.setValue('');
-    //// App.cboReasonCD.getStore().reload();
-    App.frmMain.validate();
-    if (HQ.showSiteColumn) {
-        App.colSiteID.show();
-    }
-    if (HQ.showWhseLocColumn) {
-        App.colWhseLoc.show();
-    }
+    if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+        HQ.isNew = true;
+        var record = Ext.create('App.mdlBatch');
+        record.data.BranchID = HQ.cpnyID;
+        record.data.Status = 'H';
+        App.cboStatus.setValue('H');
+        record.data.DateEnt = HQ.businessDate;
+        App.cboSiteID.setValue(HQ.inSite);
+        if (HQ.showWhseLoc == 0) {
+            App.cboWhseLoc.setValue('');
+        }
+        else {
+            App.cboWhseLoc.setValue(HQ.WhseLoc);
+        }
+        if (HQ.perpost) {
+            App.cboPerPost.setValue(HQ.perpost);
+        }
+        //App.cboSlsperID.setValue('');
+        //// App.cboReasonCD.getStore().reload();
+        App.frmMain.validate();
+        if (HQ.showSiteColumn) {
+            App.colSiteID.show();
+        }
+        if (HQ.showWhseLocColumn) {
+            App.colWhseLoc.show();
+        }
 
-    bindBatch(record);
+        bindBatch(record);
+    }    
 };
 
 var setStatusForm = function () {
@@ -1759,6 +1763,7 @@ var askRefresh = function (item) {
 };
 
 var getLotQtyAvail = function (row) {
+    
     var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr'], 'WhseLoc'], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr,  row.data.WhseLoc]);
     var qty = 0;
     var qtyAvail = 0;
@@ -1776,10 +1781,12 @@ var getLotQtyAvail = function (row) {
             qtyAvail = (lot.QtyAvail - qty);
             //qtyAvail = HQ.util.mathRound(row.data.UnitMultDiv == "M" ? (lot.QtyAvail - qty) / row.data.CnvFact : (lot.QtyAvail - qty) * row.data.CnvFact, 2);
             if (qtyAvail < 0) {
-                HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
-                qty = 0;
-                row.data.Qty = 0;
-                row.commit();
+                if (App.cboStatus.getValue() != "C") {
+                    HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
+                    qty = 0;
+                    row.data.Qty = 0;
+                    row.commit();
+                }
                 App.stoLotTrans.snapshot.each(function (item2) {
                     if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID && item2.data.WhseLoc == row.data.WhseLoc) {
                         qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
@@ -1802,10 +1809,12 @@ var getLotQtyAvail = function (row) {
             qty = Math.abs(qty)
             qtyAvail = 0 - qty;
             if (qtyAvail < 0) {
-                HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
-                qty = 0;
-                row.data.Qty = 0;
-                row.commit();
+                if (App.cboStatus.getValue() != "C") {
+                    HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
+                    qty = 0;
+                    row.data.Qty = 0;
+                    row.commit();
+                }                
                 App.stoLotTrans.snapshot.each(function (item2) {
                     if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID && item2.data.WhseLoc == row.data.WhseLoc) {
                         qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;

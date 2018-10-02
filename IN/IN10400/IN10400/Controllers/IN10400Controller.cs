@@ -224,11 +224,11 @@ namespace IN10400.Controllers
                     SiteID = siteID,
                     LotSerNbr = lotSerNbr
                 };
-                var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr && p.WhseLoc==whseLoc).ToList();
-                foreach (var item in lotTrans)
-                {
-                    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
-                }
+                //var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr && p.WhseLoc==whseLoc).ToList();
+                //foreach (var item in lotTrans)
+                //{
+                //    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+                //}
             }
             else
             {
@@ -240,11 +240,11 @@ namespace IN10400.Controllers
                     SiteID = siteID,
                     LotSerNbr = lotSerNbr
                 };
-                var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
-                foreach (var item in lotTrans)
-                {
-                    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
-                }
+                //var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
+                //foreach (var item in lotTrans)
+                //{
+                //    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+                //}
             } 
             
             List<IN10400_pdGetLot_Result> lstLot = new List<IN10400_pdGetLot_Result>() { lot };
