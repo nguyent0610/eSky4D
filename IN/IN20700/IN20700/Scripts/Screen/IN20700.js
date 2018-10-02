@@ -1,7 +1,7 @@
 //////////Declare/////////////////
 var keys = ['ReasonCD'];
-var fieldsCheckRequire = ["ReasonCD", "Descr", "SiteID"];
-var fieldsLangCheckRequire = ["ReasonCD", "Descr", "SiteID"];
+var fieldsCheckRequire = ["ReasonCD"];
+var fieldsLangCheckRequire = ["ReasonCD"];
 ///////////Store/////////////////
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoData_changed = function (sto) {
@@ -50,7 +50,12 @@ var menuClick = function (command) {
             break;           
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdDet);
+                App.grdDet.filters.clearFilters();
+                if (!checkDuplicateRow) {
+                    HQ.grid.insert(App.grdDet);
+                } else {
+                    return false
+                }
             }
             break;
         case "delete":
@@ -63,10 +68,10 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-                    save();
-                }
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {               
+                    if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                        save();
+                    }               
             }
             break;
         case "print":
@@ -86,6 +91,19 @@ var firstLoad = function () {
     }
     if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
         App.menuClickbtnSave.disable();
+    }
+    if (HQ.isShowSiteID) {    
+            HQ.grid.show(App.grdDet,['SiteID'])
+         
+    } else {
+        HQ.grid.hide(App.grdDet, ['SiteID'])
+    }
+    if (HQ.isShowSlsperID) {
+
+        HQ.grid.show(App.grdDet, ['SlsperID'])
+
+    } else {
+        HQ.grid.hide(App.grdDet, ['SlsperID'])
     }
     App.stoData.reload();
 }
@@ -174,4 +192,30 @@ function refresh(item) {
         HQ.isFirstLoad = true;
         App.stoData.reload();
     }
+};
+
+var checkDuplicateRow = function (grd, row, keys) {
+    var found = false;
+    var store = grd.getStore();
+    if (keys == undefined) keys = row.record.idProperty.split(',');
+    var allData = store.data;
+    for (var i = 0; i < allData.items.length; i++) {
+        var record = allData.items[i];
+        var data = '';
+        var rowdata = '';
+        for (var jkey = 0; jkey < keys.length; jkey++) {
+            if (record.data[keys[jkey]] != undefined) {
+                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                if (row.field == keys[jkey])
+                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                else
+                    rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+            }
+        }
+        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            break;
+        };
+    }
+
+    return found;
 };

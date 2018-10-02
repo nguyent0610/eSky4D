@@ -25,18 +25,19 @@
         }
     </style>
     <script>
-       
-        HQ.cpnyID = '@Current.CpnyID';
-        HQ.langID = '@Current.LangID';
-        HQ.userName = '@Current.UserName';
-        //HQ.isUpdate = HQ.util.toBool('true');
-        //HQ.isInsert = HQ.util.toBool('false');
-        //HQ.isDelete = HQ.util.toBool('false');
 
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    //HQ.isUpdate = HQ.util.toBool('true');
+    //HQ.isInsert = HQ.util.toBool('false');
+    //HQ.isDelete = HQ.util.toBool('false');
 
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.isShowSiteID = HQ.util.toBool('@ViewBag.IsShowSiteID');
+    HQ.isShowSlsperID = HQ.util.toBool('@ViewBag.IsShowSlsperID');
     </script>  
     <title>@ViewBag.Title</title>
 </head>

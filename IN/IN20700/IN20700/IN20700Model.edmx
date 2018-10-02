@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_ReasonCode">
           <Key>
             <PropertyRef Name="ReasonCD" />
@@ -28,6 +28,11 @@
         </Function>
         <Function Name="IN20700_pcLoadSiteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN20700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
@@ -64,7 +69,12 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="IN20700_ppCheckForDeleteReasonCD" ReturnType="Collection(String)">
-            <Parameter Name="ReasonCD" Mode="In" Type="String" />
+          <Parameter Name="ReasonCD" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN20700_pdConfig" ReturnType="Collection(IN20700Model.IN20700_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_ReasonCode">
@@ -99,6 +109,10 @@
           <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="IN20700_pdConfig_Result">
+          <Property Type="Boolean" Name="ShowSiteID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowSlsperID" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -153,6 +167,14 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN20700_ppCheckForDeleteReasonCD" FunctionName="eBiz4DWebSysModel.Store.IN20700_ppCheckForDeleteReasonCD" />
+          <FunctionImportMapping FunctionImportName="IN20700_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20700_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20700Model.IN20700_pdConfig_Result">
+                <ScalarProperty Name="ShowSiteID" ColumnName="ShowSiteID" />
+                <ScalarProperty Name="ShowSlsperID" ColumnName="ShowSlsperID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

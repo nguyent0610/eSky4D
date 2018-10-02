@@ -51,9 +51,9 @@
             X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Width(150)
                         .Editor(
                         HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQProcedure("IN20700_pcLoadSiteID")
-                        .HQColumnShow("SiteID,Name,CpnyID").DisplayField("SiteID").ValueField("SiteID")
+                        .HQColumnShow("Siteid,Name,CpnyID").DisplayField("Siteid").ValueField("Siteid")
                         .Width(300).HQHeightWidth(400, 500)
-                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        
                         .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
@@ -61,12 +61,18 @@
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                         .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection = true";
+                        })
                         ),
             X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150)
                         .Editor(
                         HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("IN20700_pcLoadEmployeeID")
-                        .HQColumnShow("Slsperid,Name,BranchID").DisplayField("Slsperid").ValueField("Slsperid")
+                        .HQColumnShow("SlsperID,Name,BranchID").DisplayField("SlsperID").ValueField("SlsperID")
                         .Width(300).HQHeightWidth(400, 500)
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                         .HQParam(new StoreParameterCollection() 
@@ -77,6 +83,11 @@
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection = true";
+                        })
                         ),                   
             X.CommandColumn()
             .Width(150)

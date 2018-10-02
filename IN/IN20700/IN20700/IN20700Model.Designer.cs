@@ -238,6 +238,47 @@ namespace IN20700
     
             return base.ExecuteFunction<global::System.String>("IN20700_ppCheckForDeleteReasonCD", reasonCDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20700_pdConfig_Result> IN20700_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN20700_pdConfig_Result>("IN20700_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -763,6 +804,68 @@ namespace IN20700
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20700Model", Name="IN20700_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20700_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowSiteID
+        {
+            get
+            {
+                return _ShowSiteID;
+            }
+            set
+            {
+                OnShowSiteIDChanging(value);
+                ReportPropertyChanging("ShowSiteID");
+                _ShowSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowSiteID");
+                OnShowSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowSiteID;
+        partial void OnShowSiteIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowSlsperID
+        {
+            get
+            {
+                return _ShowSlsperID;
+            }
+            set
+            {
+                OnShowSlsperIDChanging(value);
+                ReportPropertyChanging("ShowSlsperID");
+                _ShowSlsperID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowSlsperID");
+                OnShowSlsperIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowSlsperID;
+        partial void OnShowSlsperIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowSlsperIDChanged();
 
         #endregion
 

@@ -27,7 +27,7 @@ namespace IN20700
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "HT_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

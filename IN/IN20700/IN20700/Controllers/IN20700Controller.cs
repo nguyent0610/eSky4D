@@ -20,8 +20,22 @@ namespace IN20700.Controllers
         private string _screenNbr = "IN20700";
         private string _userName = Current.UserName;
         IN20700Entities _db = Util.CreateObjectContext<IN20700Entities>(false);
+        private bool isShowSiteID = false;
+        private bool isShowSlsperID = false;
+
         public ActionResult Index()
         {
+
+            var objShow = _db.IN20700_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objShow != null)
+            {
+                isShowSiteID = objShow.ShowSiteID.Value;
+                isShowSlsperID = objShow.ShowSlsperID.Value;
+
+            }
+            ViewBag.IsShowSiteID = isShowSiteID;
+            ViewBag.IsShowSlsperID = isShowSlsperID;
+
 
             Util.InitRight(_screenNbr);// lấy quyền cho user khi truy cập màn hình này
             return View();
@@ -52,7 +66,7 @@ namespace IN20700.Controllers
                     else
                     {
                        
-                        var objDel = _db.IN_ReasonCode.ToList().Where(p => p.ReasonCD.ToLower() == del.ReasonCD.ToLower()).FirstOrDefault();
+                        var objDel = _db.IN_ReasonCode.ToList().Where(p => p.ReasonCD.ToLower() == del.ReasonCD.ToLower()).FirstOrDefault();                       
                         if (objDel != null)
                         {
                             _db.IN_ReasonCode.DeleteObject(objDel);
@@ -69,12 +83,19 @@ namespace IN20700.Controllers
                     if (curItem.ReasonCD.PassNull() == "") continue;
 
                     var objReasonCD = _db.IN_ReasonCode.Where(p => p.ReasonCD.ToLower() == curItem.ReasonCD.ToLower()).FirstOrDefault();
-
+                    string check = _db.IN20700_ppCheckForDeleteReasonCD(curItem.ReasonCD).FirstOrDefault().ToString();
                     if (objReasonCD != null)
                     {
                         if (objReasonCD.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
                         {
-                            Update_IN_ReasonCode(objReasonCD, curItem, false);
+                            if (check=="0")
+                            {
+                                Update_IN_ReasonCode(objReasonCD, curItem, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "2018092501", "", new string[] { Util.GetLang("ReasonCD"), curItem.ReasonCD });
+                            }
                         }
                         else
                         {
@@ -127,8 +148,7 @@ namespace IN20700.Controllers
             }
             t.Descr = s.Descr;
             t.SiteID = s.SiteID;
-            t.SlsperID = s.SlsperID;
-
+            t.SlsperID = s.SlsperID;          
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
