@@ -35,7 +35,7 @@ namespace OM23102.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -666,20 +666,15 @@ namespace OM23102.Controllers
                 cell = SheetTarget.Cells["L5"];
                 style = cell.GetStyle();
                 style.Custom = "#,##0";
-                cell.SetStyle(style);
-
-                cell = SheetTarget.Cells["M5"];
-                style = cell.GetStyle();
-                style.Custom = "#,##0";
-                cell.SetStyle(style);
+                cell.SetStyle(style);               
 
                 var range1 = SheetTarget.Cells.CreateRange("A5", "A1000");
                 cell = SheetTarget.Cells["A5"];
                 range1.SetStyle(style);
 
-                var range2 = SheetTarget.Cells.CreateRange("G5", "G1000");
-                cell = SheetTarget.Cells["G5"];
-                range2.SetStyle(style);
+                //var range2 = SheetTarget.Cells.CreateRange("G5", "G1000");
+                //cell = SheetTarget.Cells["G5"];
+                //range2.SetStyle(style);
               
 
                 cell = SheetTarget.Cells["E5"];
@@ -689,7 +684,10 @@ namespace OM23102.Controllers
                 var range4 = SheetTarget.Cells.CreateRange("E5", "E1000");
                 range4.SetStyle(style);
 
-
+                cell = SheetTarget.Cells["M5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0.00";
+                cell.SetStyle(style);
 
                 SheetTarget.AutoFilter.Range = "A4:N4";
                 style = SheetTarget.Cells["A4"].GetStyle();
@@ -767,7 +765,8 @@ namespace OM23102.Controllers
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
                             string stt,branchid,slsperid,classid,custid = string.Empty;
-                            double sellin, sellout, coverage, dna, forcusedSKU, visit, lppc = 0;
+                            double sellin, sellout = 0;
+                            string coverage, dna, forcusedSKU, visit, lppc = string.Empty;
                             DateTime month;                           
                             int lineRef = 1;
                             var lstBranch=_db.OM23102_peBranch(Current.UserName).ToList();
@@ -787,19 +786,104 @@ namespace OM23102.Controllers
                                     month = workSheet.Cells[i, 4].DateTimeValue.AddMonths(1).AddDays(-1);
                                     classid = workSheet.Cells[i, 5].StringValue.PassNull().ToUpper().Trim();
                                     sellin = workSheet.Cells[i, 6].DoubleValue;
-                                    sellout = workSheet.Cells[i, 7].DoubleValue;
-                                    coverage = workSheet.Cells[i, 8].DoubleValue;
-                                    dna = workSheet.Cells[i, 9].DoubleValue;
-                                    forcusedSKU = workSheet.Cells[i, 10].DoubleValue;
-                                    visit = workSheet.Cells[i, 11].DoubleValue;
-                                    lppc = workSheet.Cells[i, 12].DoubleValue;
-                                    custid = workSheet.Cells[i, 13].StringValue.PassNull().ToUpper().Trim();
+                                    sellout = workSheet.Cells[i, 7].DoubleValue;                                   
+                                    custid = workSheet.Cells[i, 13].StringValue.PassNull().ToUpper().Trim();                                                                    
                                 }
                                 catch
                                 {
                                     lsterrStruct.Add((i + 1) + "");
                                     continue;
                                 }
+                                coverage = workSheet.Cells[i, 8].StringValue.PassNull();
+                                dna = workSheet.Cells[i, 9].StringValue.PassNull();
+                                forcusedSKU = workSheet.Cells[i, 10].StringValue.PassNull();
+                                visit = workSheet.Cells[i, 11].StringValue.PassNull();
+                                lppc = workSheet.Cells[i, 12].StringValue.PassNull();
+                                if (coverage != "")
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(coverage, out n);
+                                    if (!isNumeric)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                    else if (n < 0)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                }
+                                else
+                                    coverage = "0";
+                                if (dna != "")
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(dna, out n);
+                                    if (!isNumeric)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                    else if (n < 0)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                }
+                                else
+                                    dna = "0";
+                                if (forcusedSKU != "")
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(forcusedSKU, out n);
+                                    if (!isNumeric)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                    else if (n < 0)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                }
+                                else
+                                    forcusedSKU = "0";
+                                if (visit != "")
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(visit, out n);
+                                    if (!isNumeric)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                    else if (n < 0)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                }
+                                else
+                                    visit = "0";
+                                if (lppc != "")
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(lppc, out n);
+                                    if (!isNumeric)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                    else if (n < 0)
+                                    {
+                                        lsterrStruct.Add((i + 1) + "");
+                                        continue;
+                                    }
+                                }
+                                else
+                                    lppc = "0";
                                 if (branchid == "" || slsperid == "" || classid == "" || custid == "")
                                 {
                                     lsterrEmpty.Add((i + 1) + "");
@@ -845,8 +929,12 @@ namespace OM23102.Controllers
                                     continue;
                                 }
                                 var objFCS = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
-                                //var objFCS1 = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
-                                  
+                                var objFCS1 = lstImport.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
+                                if (objFCS1 != null)
+                                {
+                                    visit = objFCS1.Visit.ToString();
+                                    lppc = objFCS1.LPPC.ToString();
+                                }
                                 if (objFCS == null)
                                 {
                                     objFCS = new OM_PG_FCS();
@@ -856,20 +944,19 @@ namespace OM23102.Controllers
                                     objFCS.CustID = custid;
                                     objFCS.SlsperId = slsperid;
                                     objFCS.FCSDate = month;
-
-                                    objFCS.Coverage = coverage;
+                                    objFCS.Coverage = Math.Round(coverage.ToDouble(), MidpointRounding.AwayFromZero);
                                     objFCS.Crtd_DateTime = DateTime.Now;
                                     objFCS.Crtd_Prog = _screenNbr;
                                     objFCS.Crtd_User = _userName;
-                                    objFCS.DNA = dna;
-                                    objFCS.ForcusedSKU = forcusedSKU;
-                                    objFCS.LPPC = lppc; //objFCS1 == null ? 0 : objFCS1.LPPC;
+                                    objFCS.DNA = Math.Round(dna.ToDouble(), MidpointRounding.AwayFromZero);
+                                    objFCS.ForcusedSKU = Math.Round(forcusedSKU.ToDouble(), MidpointRounding.AwayFromZero);
+                                    objFCS.LPPC = Math.Round(lppc.ToDouble(), 2); //objFCS1 == null ? 0 : objFCS1.LPPC;
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
-                                    objFCS.SellIn = sellin;
-                                    objFCS.SellOut = sellout;
-                                    objFCS.Visit = visit; //objFCS1 == null ? 0 : objFCS1.Visit;
+                                    objFCS.SellIn = Math.Round(sellin, MidpointRounding.AwayFromZero);
+                                    objFCS.SellOut = Math.Round(sellout, MidpointRounding.AwayFromZero);
+                                    objFCS.Visit = Math.Round(visit.ToDouble(), MidpointRounding.AwayFromZero); //objFCS1 == null ? 0 : objFCS1.Visit;
                                     objFCS.VisitTime = 0; //objFCS1 == null ? 0 : objFCS1.VisitTime;
 
                                     _db.OM_PG_FCS.AddObject(objFCS);
@@ -880,13 +967,13 @@ namespace OM23102.Controllers
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
-                                    objFCS.SellIn = sellin;
-                                    objFCS.SellOut = sellout;
-                                    objFCS.Coverage = coverage;
-                                    objFCS.DNA = dna;
-                                    objFCS.ForcusedSKU = forcusedSKU;
-                                    objFCS.LPPC = lppc;
-                                    objFCS.Visit = visit;
+                                    objFCS.SellIn = Math.Round(sellin, MidpointRounding.AwayFromZero);
+                                    objFCS.SellOut = Math.Round(sellout, MidpointRounding.AwayFromZero);
+                                    objFCS.Coverage = Math.Round(coverage.ToDouble(), MidpointRounding.AwayFromZero);
+                                    objFCS.DNA = Math.Round(dna.ToDouble(), MidpointRounding.AwayFromZero);
+                                    objFCS.ForcusedSKU = Math.Round(forcusedSKU.ToDouble(), MidpointRounding.AwayFromZero);
+                                    objFCS.LPPC = Math.Round(lppc.ToDouble(), 2);
+                                    objFCS.Visit = Math.Round(visit.ToDouble(), MidpointRounding.AwayFromZero);
                                 }
                                 lstImport.Add(objFCS);
 
