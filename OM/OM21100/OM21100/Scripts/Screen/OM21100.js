@@ -2320,7 +2320,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(true);
                 App.cboSubBreakType.setReadOnly(true);
                 App.cboBreakBoundType.setReadOnly(true);
-                App.cboSolomonSite.setReadOnly(true);
+                
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
             }
             else {
@@ -2329,7 +2329,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(false);
                 App.cboSubBreakType.setReadOnly(false);
                 App.cboBreakBoundType.setReadOnly(false);
-                App.cboSolomonSite.setReadOnly(false);
+                
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(false);
             }
 
@@ -2356,6 +2356,10 @@ var DiscDefintion = {
                 App.cboProrateAmtType.setReadOnly(false);
                 //App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.enable();
+                App.cboSolomonSite.setReadOnly(false);
+                App.cboInvtIDSolomon.setReadOnly(false);
+                App.cboDiscSeqSolomon.setReadOnly(false);
+                App.chkDiscPrice.setReadOnly(false);
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -2380,6 +2384,10 @@ var DiscDefintion = {
                 App.cboProrateAmtType.setReadOnly(true);
                // App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.disable();
+                App.cboSolomonSite.setReadOnly(true);
+                App.cboInvtIDSolomon.setReadOnly(true);
+                App.cboDiscSeqSolomon.setReadOnly(true);
+                App.chkDiscPrice.setReadOnly(true);
             }
 
             HQ.gridSource = 0;
@@ -5302,4 +5310,20 @@ var joinParams = function (multiCombo) {
     }
 
     return returnValue;
+};
+var txtDiscSeq_Blur = function () {
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+    checkSpecialChar(App.txtDiscSeq.getValue());
+    if (!HQ.util.passNull(App.txtDiscSeq.getValue()) == '' && !HQ.util.passNull(App.txtDiscSeq.getValue().toString()).match(regex)) {
+        App.txtDiscSeq.setValue('');
+    }
+    
+}
+var checkSpecialChar = function (value) {
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+    if (value)
+        if (!HQ.util.passNull(value) == '' && !HQ.util.passNull(value.toString()).match(regex)) {
+            HQ.message.show(20140811, App.txtDiscSeq.fieldLabel);
+            return false;
+        }
 };

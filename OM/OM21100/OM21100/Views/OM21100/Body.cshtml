@@ -1690,7 +1690,7 @@
                         .Editor(
                             HQ.Combo()
                             .HQProcedure("OM21100_pcCustomerPriceClass")
-                            .HQColumnShow("PriceClassID,Descr")
+                                .HQColumnShow("PriceClassID,Descr")
                             .HQHeightWidth(400, 300)
                             .ForceSelection(true).SelectOnFocus(true)
                             .ValueField("PriceClassID").DisplayField("PriceClassID")
@@ -2366,7 +2366,7 @@
 @(
  X.Window().ID("winCopy")
     .Title(Util.GetLang(""))
-    //.Icon(Icon.BookOpen)
+        //.Icon(Icon.BookOpen)
     .Layout(LayoutType.Border)
     .Hidden(true).Maximizable(true)
     .Height(400)
@@ -2393,7 +2393,10 @@
                 {
                     l.Change.Fn = "cboDiscIDCopy_Change";
                 })
-                , HQ.TextBox().ID("txtDiscSeq").HQLangCode("DiscSeq").AllowBlank(false)
+                , HQ.TextBox().ID("txtDiscSeq").HQLangCode("DiscSeq").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                .Listeners(l => {
+                    l.Blur.Fn = "txtDiscSeq_Blur";
+                })
             )
         )
         , X.Panel().Layout(LayoutType.Fit).Region(Region.Center).Title("Chọn CTKM cần sao chép").MarginSpec("10 0 0 0")
@@ -2412,12 +2415,12 @@
                             })
                         .Listeners(l =>
                         {
-                          //  l.Load.Fn = "Main.Event.stoPromotionsCopy_Load";
+                            //  l.Load.Fn = "Main.Event.stoPromotionsCopy_Load";
                         })
                     )
                 .ColumnModel(
                     X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
-                    ,X.CheckColumn()
+                    , X.CheckColumn()
                     .HideTitleEl(true).DataIndex("Selected")
                     .Align(Alignment.Center).ToolTip(Util.GetLang("Selected"))
                     .Width(30)
@@ -2428,8 +2431,8 @@
                     , X.CheckColumn()
                     .DataIndex("Active")
                     .Align(Alignment.Center).Text(Util.GetLang("Active"))
-                    ,X.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("StartDate")
-                    ,X.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("EndDate")
+                    , X.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("StartDate")
+                    , X.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("EndDate")
                     , X.CommandColumn().Width(130)
                     .Commands(
                         X.GridCommand()
@@ -2502,6 +2505,6 @@
                     .Handler("App.winCopy.close();")
                 ) // buttons
             )
-        )   
-    
+        )
+
 )
