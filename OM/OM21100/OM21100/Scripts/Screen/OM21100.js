@@ -5170,8 +5170,8 @@ var rowindex = function (lineRef) {
 }
 
 function tabMain_Change(obj, tab, c, func){
-    if (tab.id == "pnlDPCC")
-        var checkActive=false;
+    if (tab.id == "pnlDPCC") {
+        var checkActive = false;
         var lstDataCpny = App.stoCompany.data
         for (var i = 0; i < App.stoCompany.data.length; i++) {
             if (!Ext.isEmpty(App.stoCompany.data.items[i].data.CpnyID)) {
@@ -5181,6 +5181,7 @@ function tabMain_Change(obj, tab, c, func){
         if (checkActive) {
             DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');
         }
+    }       
 
     if (tab.id == "pnlDPII") {
         var colRequiredValueIndex = HQ.grid.findColumnIndex(App.grdDiscItem.columns, 'RequiredValue');
