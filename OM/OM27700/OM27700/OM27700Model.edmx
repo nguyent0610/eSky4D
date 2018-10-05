@@ -411,6 +411,12 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="OM27700_ppCheckDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM27700_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ListCpny" Type="varchar(max)" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -545,6 +551,12 @@
           </FunctionImport>
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM27700Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="OM_BudgetTrade" EntityType="OM27700Model.OM_BudgetTrade" />
+          <FunctionImport Name="OM27700_ppCheckDelete" ReturnType="Collection(OM27700Model.OM27700_ppCheckDelete_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="DisplayID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -981,6 +993,9 @@
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM27700_ppCheckDelete_Result">
+          <Property Type="Int32" Name="Result" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1472,6 +1487,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM27700_ppCheckDelete" FunctionName="eBiz4DWebAppModel.Store.OM27700_ppCheckDelete" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM27700Model.OM27700_ppCheckDelete_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

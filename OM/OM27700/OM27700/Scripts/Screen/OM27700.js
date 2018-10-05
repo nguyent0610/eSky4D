@@ -18,6 +18,7 @@ var _source = 0;
 var _muc = 0;
 var _invt = '';
 var odlValueDate = new Date();
+var _checkDelete = 0;
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboCustID.store.findRecord("CustID", value);
@@ -833,12 +834,20 @@ var Event = {
             App.stoDisplay.reload();
             App.slmLevel.select(0);
         },
-
+        cboAccumulateID_blur: function (cbo, newValue, oldValue, eOpts) {
+            checkUnicode = 0;
+            checkSpecialChar(App.cboAccumulateID.getValue());
+            if (checkUnicode == 1) {
+                App.cboAccumulateID.setValue('');
+            }
+        },
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
             App.dtpStartDateInvt.setMinValue(App.dtpFromDate.getValue());
             odlValueDate = oldValue;
+            App.dtpRegisForm.setMinValue(newValue);
+            App.dtpRegisTo.setMinValue(newValue);
         },
         dtpFromDate_Select :function (dtp, newValue, oldValue, eOpts) {
 
@@ -849,35 +858,39 @@ var Event = {
                 if (oldValue != undefined) {
                     var lst = App.grdSale.store.snapshot || App.grdSale.store.allData || App.grdSale.data;
                     if (lst != undefined) {
-                        minDate = lst.items[0].data.StartDateInvt;
-                        maxDate = lst.items[0].data.EndDateInvt;
-                        for (var i = 0 ; i < lst.length; i++) {
-                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
-                                if (lst.items[i].data.StartDateInvt < minDate) {
-                                    minDate = lst.items[i].data.StartDateInvt;
+                        if (lst.items[0].data.InvtID != "") {
+                            minDate = lst.items[0].data.StartDateInvt;
+                            maxDate = lst.items[0].data.EndDateInvt;
+                            for (var i = 0 ; i < lst.length; i++) {
+                                if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
+                                    if (lst.items[i].data.StartDateInvt < minDate) {
+                                        minDate = lst.items[i].data.StartDateInvt;
+                                    }
                                 }
-                            }
-                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
-                                if (lst.items[i].data.EndDateInvt > maxDate) {
-                                    maxDate = lst.items[i].data.EndDateInvt;
+                                if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
+                                    if (lst.items[i].data.EndDateInvt > maxDate) {
+                                        maxDate = lst.items[i].data.EndDateInvt;
+                                    }
                                 }
-                            }
 
+                            }
+                            for (var i = 0 ; i < lst.length; i++) {
+                                if (dtp.value > lst.items[i].data.StartDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt)) {
+                                    line += Number(i + 1) + ", ";
+                                }
+                            }
+                            if (dtp.value > minDate) {
+                                HQ.message.show(2018091761, [line, Ext.Date.format(dtp.value, HQ.formatDate), Ext.Date.format(App.dtpToDate.getValue(), HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
+                                App.dtpFromDate.setValue(odlValueDate);
+                                App.dtpToDate.setMinValue(odlValueDate);
+                            }
+                            else {
+                                App.dtpToDate.setMinValue(dtp.value);
+                            }
                         }
+                        
                     }
-                    for (var i = 0 ; i < lst.length; i++) {
-                        if (dtp.value > lst.items[i].data.StartDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt)) {
-                            line += Number(i + 1) + ", ";
-                        }
-                    }
-                    if (dtp.value > minDate) {
-                        HQ.message.show(2018091761, [line, Ext.Date.format(dtp.value, HQ.formatDate), Ext.Date.format(App.dtpToDate.getValue(), HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
-                        App.dtpFromDate.setValue(odlValueDate);
-                        App.dtpToDate.setMinValue(odlValueDate);
-                    }
-                    else {
-                        App.dtpToDate.setMinValue(dtp.value);
-                    }
+                    
                 }
             }
             else {
@@ -894,31 +907,35 @@ var Event = {
                 if (oldValue != undefined) {
                     var lst = App.grdSale.store.snapshot || App.grdSale.store.allData || App.grdSale.data;
                     if (lst != undefined) {
-                        minDate = lst.items[0].data.StartDateInvt;
-                        maxDate = lst.items[0].data.EndDateInvt;
-                        for (var i = 0 ; i < lst.length; i++) {
-                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
-                                if (lst.items[i].data.StartDateInvt < minDate) {
-                                    minDate = lst.items[i].data.StartDateInvt;
+                        if (lst.items[0].data.InvtID != "") {
+                            minDate = lst.items[0].data.StartDateInvt;
+                            maxDate = lst.items[0].data.EndDateInvt;
+                            for (var i = 0 ; i < lst.length; i++) {
+                                if (lst.items[i].data.InvtID != '' && lst.items[i].data.StartDateInvt) {
+                                    if (lst.items[i].data.StartDateInvt < minDate) {
+                                        minDate = lst.items[i].data.StartDateInvt;
+                                    }
                                 }
-                            }
-                            if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
-                                if (lst.items[i].data.EndDateInvt > maxDate) {
-                                    maxDate = lst.items[i].data.EndDateInvt;
+                                if (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt) {
+                                    if (lst.items[i].data.EndDateInvt > maxDate) {
+                                        maxDate = lst.items[i].data.EndDateInvt;
+                                    }
                                 }
-                            }
 
+                            }
+                            for (var i = 0 ; i < lst.length; i++) {
+                                if (dtp.value < lst.items[i].data.EndDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt)) {
+                                    line += Number(i + 1) + ", ";
+                                }
+                            }
+                            if (dtp.value < maxDate) {
+                                HQ.message.show(2018091761, [line, Ext.Date.format(App.dtpFromDate.getValue(), HQ.formatDate), Ext.Date.format(dtp.value, HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
+                                App.dtpToDate.setValue(odlValueDate);
+                            }
                         }
+                        
                     }
-                    for (var i = 0 ; i < lst.length; i++) {
-                        if (dtp.value < lst.items[i].data.EndDateInvt && (lst.items[i].data.InvtID != '' && lst.items[i].data.EndDateInvt)) {
-                            line += Number(i + 1) + ", ";
-                        }
-                    }
-                    if (dtp.value < maxDate) {
-                        HQ.message.show(2018091761, [line, Ext.Date.format(App.dtpFromDate.getValue(), HQ.formatDate), Ext.Date.format(dtp.value, HQ.formatDate), App.cboAccumulateID.getValue()], "", true);
-                        App.dtpToDate.setValue(odlValueDate);
-                    }
+                    
                 }
             }
         },
@@ -926,6 +943,8 @@ var Event = {
             App.dtpStartDateInvt.setMaxValue(App.dtpToDate.getValue());
             App.dtpEndDateInvt.setMaxValue(App.dtpToDate.getValue());
             odlValueDate = oldValue;
+            App.dtpRegisForm.setMaxValue(newValue);
+            App.dtpRegisTo.setMaxValue(newValue);
         },
         dtpRegisForm_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpRegisTo.setMinValue(newValue);
@@ -1225,11 +1244,19 @@ var Event = {
                     break;
                 case "delete":
                     if (HQ.isDelete) {
+                        App.stoCheckDelete.reload();
                         if (App.cboStatus.getValue() == _beginStatus) {
                             if (HQ.focus == 'accumulate') {
-                                if (App.cboAccumulateID.getValue()) {
-                                    HQ.message.show(11, '', 'Process.deleteDisplay');
-                                }
+                                setTimeout(function () {
+                                    if (_checkDelete == 1) {
+                                        HQ.message.show(2018071760, [App.cboAccumulateID.getValue()], "", true);
+                                    }
+                                    else {
+                                        if (App.cboAccumulateID.getValue()) {
+                                            HQ.message.show(11, '', 'Process.deleteDisplay');
+                                        }
+                                    }
+                                }, 1000);
                             }
                             else if (HQ.focus == 'cpny') {
                                 var selRecs = App.grdCompany.selModel.selected.items;
@@ -3124,3 +3151,15 @@ var tabSaleProduct_Active = function () {
     App.clStartDate.setVisible(HQ.dateInvt);
     App.clEndDate.setVisible(HQ.dateInvt);
 }
+var stoCheckDelete_Load = function () {
+    _checkDelete = App.stoCheckDelete.data.items[0].data.Result;
+};
+var checkSpecialChar = function (value) {
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()!#$%^&*()~`+-]))*$/;
+    if (value)
+        if (!HQ.util.passNull(value) == '' && !HQ.util.passNull(value.toString()).match(regex)) {
+            HQ.message.show(20140811, App.cboAccumulateID.fieldLabel);
+            checkUnicode = 1;
+            return false;
+        }
+};

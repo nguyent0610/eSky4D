@@ -1123,6 +1123,58 @@ namespace OM27700
     
             return base.ExecuteFunction<OM27700_ptTreeNode_Result>("OM27700_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="displayID">No Metadata Documentation available.</param>
+        public ObjectResult<OM27700_ppCheckDelete_Result> OM27700_ppCheckDelete(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String displayID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter displayIDParameter;
+            if (displayID != null)
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", displayID);
+            }
+            else
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM27700_ppCheckDelete_Result>("OM27700_ppCheckDelete", cpnyIDParameter, userNameParameter, langIDParameter, displayIDParameter);
+        }
 
         #endregion
 
@@ -9830,6 +9882,44 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM27700Model", Name="OM27700_ppCheckDelete_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM27700_ppCheckDelete_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Result;
+        partial void OnResultChanging(Nullable<global::System.Int32> value);
+        partial void OnResultChanged();
 
         #endregion
 

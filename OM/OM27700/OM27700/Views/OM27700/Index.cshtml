@@ -9,6 +9,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "OM27700";
     var acc = Session["OM27700"] as AccessRight;
     
@@ -147,6 +148,26 @@
             })
                 // Store: stoInvt
         )*@
+
+        @(HQ.Store().ID("stoCheckDelete").HQProcedure("OM27700_ppCheckDelete")
+            .HQParam(new StoreParameterCollection()
+                {
+                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@DisplayID", Value = "App.cboAccumulateID.getValue()", Mode = ParameterMode.Raw }
+
+                }).LoadData()
+                .Listeners(lst =>
+                {
+                    lst.Load.Fn = "stoCheckDelete_Load";
+                })
+        )
+
+
+
+
+
              
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
