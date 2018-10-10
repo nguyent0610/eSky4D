@@ -318,6 +318,7 @@ var grdTrans_BeforeEdit = function (editor, e) {
         e.record.data.TranDate = App.txtDateEnt.getValue();
         e.record.data.SiteID = App.cboSiteID.getValue();
         e.record.data.WhseLoc = App.cboWhseLoc.getValue();
+        e.record.data.ReasonCD = App.cboReasonCD.getValue();
         e.record.commit();
     }
     if (Ext.isEmpty(e.record.data.RefNbr)) {
@@ -340,7 +341,6 @@ var grdTrans_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
-            // App.grdTrans.view.loadMask.show();
             HQ.common.showBusy(true, 'Process...');
             App.stoItemSite.load({
                 params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, whseLoc: selected[0].data.WhseLoc, showWhseLoc: HQ.showWhseLoc },
@@ -445,12 +445,6 @@ var grdTrans_Edit = function (item, e) {
             } else {
                 checkExitEdit(e);
             }
-            //if (key == 'UnitPrice')
-            //{
-            //    e.record.set('TranAmt', e.record.data.Qty * e.record.data.UnitCost);
-            //    e.commit();
-            //    calculate();
-            //}
 
         } else {
 
@@ -473,7 +467,16 @@ var grdTrans_ValidateEdit = function (item, e) {
         }       
     }
 
-    return HQ.grid.checkValidateEdit(App.grdTrans, e, keys1, false);
+    if (e.field == "InvtID" && HQ.showSiteColumn && HQ.showWhseLocColumn) {
+        var obj = HQ.store.findRecord(App.stoTrans, ['InvtID', 'SiteID', 'WhseLoc'], [e.value, e.record.data.SiteID, e.record.data.WhseLoc]);
+        if (obj != undefined) {
+            e.record.set("SiteID", "");
+            e.record.set("WhseLoc", "");
+        }
+    }
+    else {
+        return HQ.grid.checkValidateEdit(App.grdTrans, e, keys1, false);
+    }    
 };
 
 var grdLot_BeforeEdit = function (item, e) {
@@ -643,7 +646,7 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
 var bindBatch = function (record) {
     HQ.objBatch = record;
     App.cboBatNbr.events['change'].suspend();
-    App.cboSiteID.events['change'].suspend();
+    //App.cboSiteID.events['change'].suspend();
     // App.cboFromToSiteID.events['change'].suspend();
     App.frmMain.events['fieldchange'].suspend();
     App.cboStatus.forceSelection = false;
@@ -656,7 +659,7 @@ var bindBatch = function (record) {
 
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
-    App.cboSiteID.events['change'].resume();
+    //App.cboSiteID.events['change'].resume();
     //App.cboFromToSiteID.events['change'].resume();
     setStatusForm();
 
@@ -672,19 +675,10 @@ var bindBatch = function (record) {
 };
 
 var bindTran = function () {
-    if (Ext.isEmpty(App.cboBatNbr.getValue())) {
-        if (App.stoTrans.data.items.length > 0) {
-            var objFirst = App.stoTrans.data.items[0].data;
-            App.cboSiteID.setValue(objFirst.SiteID);
-            App.cboWhseLoc.setValue(objFirst.WhseLoc);
-
-            App.cboSiteID.store.reload();
-            App.cboWhseLocTrans.store.reload();
-            App.cboReasonTrans.store.reload();
-            //App.cboSlsperID.setValue(objFirst.SlsperID);
-        }
-    }
     
+    App.cboSiteID.store.reload();
+    App.cboWhseLocTrans.store.reload();
+    App.cboReasonTrans.store.reload();
     App.lblQtyAvail.setText('');
 
     HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
@@ -1248,9 +1242,10 @@ var checkExitEdit = function (row) {
     var trans = row.record.data;
     if (key == 'InvtID' || key == 'BarCode') {
 
-        trans.ReasonCD = App.cboReasonCD.getValue();
-        trans.SiteID = App.cboSiteID.getValue();
-        trans.WhseLoc = App.cboWhseLoc.getValue();
+
+        //trans.ReasonCD = App.cboReasonCD.getValue();
+        //trans.SiteID = App.cboSiteID.getValue();
+        //trans.WhseLoc = App.cboWhseLoc.getValue();
 
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
@@ -1731,11 +1726,11 @@ var getQtyAvail = function (row) {
 var calculateInvtTotal = function (invtID, siteID,whseLoc, lineRef) {
     var qty = 0;
     var qtyOld = 0;
-    App.stoTrans.each(function (item) {
-        if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc==whseLoc && (lineRef == "" || (lineRef != "" && lineRef != item.data.LineRef))) {
-            qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
-        }
-    });
+    //App.stoTrans.each(function (item) {
+    //    if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc==whseLoc && (lineRef == "" || (lineRef != "" && lineRef != item.data.LineRef))) {
+    //        qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+    //    }
+    //});
     App.stoOldTrans.each(function (item) {
         if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc==whseLoc) {
             qtyOld += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
@@ -1850,8 +1845,7 @@ var deleteLot = function (item) {
 
 var cboSiteID_Change = function (item, newValue, oldValue) {
     if (newValue != oldValue && item.hasFocus) {
-        App.cboWhseLoc.setValue("");
-       
+        App.cboWhseLoc.setValue("");       
     }
     App.cboWhseLoc.store.reload();
     App.cboInventory.store.reload();
