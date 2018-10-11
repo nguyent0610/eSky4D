@@ -678,11 +678,11 @@ namespace OM27700.Controllers
                         
                         if (accumulate.tstamp.ToHex() == inputAccumulate.tstamp.ToHex())
                         {
-                            var recordCheck = _db.OM_BudgetTrade.Where(p => p.TradeID == accumulate.AccumulateID).Count();
-                            if (recordCheck >= 1)
-                            {
-                                throw new MessageException(MessageType.Message, "2018091760", "", new string[] { accumulate.AccumulateID });
-                            }
+                            //var recordCheck = _db.OM_BudgetTrade.Where(p => p.TradeID == accumulate.AccumulateID).Count();
+                            //if (recordCheck >= 1)
+                            //{
+                            //    throw new MessageException(MessageType.Message, "2018091760", "", new string[] { accumulate.AccumulateID });
+                            //}
                             Update_Header(ref accumulate, inputAccumulate, false);
                         }
                         else

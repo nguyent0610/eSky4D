@@ -278,10 +278,10 @@
           <Property Name="QtyTotal" Type="float" Nullable="false" />
           <Property Name="QtyAlloc" Type="float" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -416,6 +416,13 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM27700_ppCheckDeleteLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="AccumulateID" Type="varchar" Mode="In" />
+          <Parameter Name="LevelID" Type="int" Mode="In" />
         </Function>
         <Function Name="OM27700_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ListCpny" Type="varchar(max)" Mode="In" />
@@ -556,6 +563,13 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM27700_ppCheckDeleteLevel" ReturnType="Collection(OM27700Model.OM27700_ppCheckDeleteLevel_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="AccumulateID" Mode="In" Type="String" />
+            <Parameter Name="LevelID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
@@ -986,14 +1000,17 @@
           <Property Name="QtyTotal" Type="Double" Nullable="false" />
           <Property Name="QtyAlloc" Type="Double" Nullable="false" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="OM27700_ppCheckDelete_Result">
+          <Property Type="Int32" Name="Result" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OM27700_ppCheckDeleteLevel_Result">
           <Property Type="Int32" Name="Result" Nullable="true" />
         </ComplexType>
         </Schema>
@@ -1490,6 +1507,13 @@
           <FunctionImportMapping FunctionImportName="OM27700_ppCheckDelete" FunctionName="eBiz4DWebAppModel.Store.OM27700_ppCheckDelete" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM27700Model.OM27700_ppCheckDelete_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM27700_ppCheckDeleteLevel" FunctionName="eBiz4DWebAppModel.Store.OM27700_ppCheckDeleteLevel" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM27700Model.OM27700_ppCheckDeleteLevel_Result">
                 <ScalarProperty Name="Result" ColumnName="Result" />
               </ComplexTypeMapping>
             </ResultMapping>

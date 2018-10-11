@@ -19,6 +19,8 @@ var _muc = 0;
 var _invt = '';
 var odlValueDate = new Date();
 var _checkDelete = 0;
+var _levelID = '';
+var _checkDeleteLevel = 0;
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboCustID.store.findRecord("CustID", value);
@@ -1245,6 +1247,7 @@ var Event = {
                 case "delete":
                     if (HQ.isDelete) {
                         App.stoCheckDelete.reload();
+                        App.stoCheckDeleteLevel.reload();
                         if (App.cboStatus.getValue() == _beginStatus) {
                             if (HQ.focus == 'accumulate') {
                                 setTimeout(function () {
@@ -1284,7 +1287,14 @@ var Event = {
                             else if (HQ.focus == 'level') {
                                 var rowindex = HQ.grid.indexSelect(App.grdLevel);
                                 if (rowindex != '') {
-                                    HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdLevel), ''], 'Process.deleteLevel', true);
+                                        setTimeout(function () {
+                                        if (_checkDeleteLevel == 0) {
+                                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdLevel), ''], 'Process.deleteLevel', true);
+                                        }
+                                        else {
+                                            HQ.message.show(2018101160, [_levelID], "", true);
+                                        }
+                                    }, 1000);
                                 }
                             }
                             else if (HQ.focus == 'invt') {
@@ -1360,7 +1370,7 @@ var Event = {
                             App.slmSale.select(App.stoSale.indexOf(record));
                             return;
                         }
-                        if (App.cboApplyType.value == "Q") {
+                        if (App.cboApplyType.value == "Q" || App.cboApplyType.value == "P") {
                             App.stoLevel.data.items.forEach(function (item) {
                                 if (item.data.LevelDescr == "") {
                                     return;
@@ -1404,6 +1414,7 @@ var Event = {
 
             store.clearFilter();
             if (selected.length > 0) {
+                _levelID = selected[0].data.LevelID;
                 store.filterBy(function (record) {
                     if (record.data.LevelID == selected[0].data.LevelID) {
                         return record;
@@ -1485,8 +1496,10 @@ var Event = {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
                     var status = App.cboStatus.getValue();
-                    if (App.slmLevel.selected.items[0] != undefined)
+                    if (App.slmLevel.selected.items[0] != undefined){
                         var Level = App.slmLevel.selected.items[0].data.LevelID;
+                        _levelID = App.slmLevel.selected.items[0].data.LevelID;
+                    }
                     else
                         var Level = '';
                     if (status == _beginStatus && Level != "") {
@@ -3154,6 +3167,9 @@ var tabSaleProduct_Active = function () {
 var stoCheckDelete_Load = function () {
     _checkDelete = App.stoCheckDelete.data.items[0].data.Result;
 };
+var stoCheckDeleteLevel_Load = function () {
+    _checkDeleteLevel = App.stoCheckDeleteLevel.data.items[0].data.Result;
+}
 var checkSpecialChar = function (value) {
     var regex = /^(\w*(\d|[a-zA-Z]|[\_@()!#$%^&*()~`+-]))*$/;
     if (value)

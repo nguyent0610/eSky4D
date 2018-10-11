@@ -164,6 +164,22 @@
                 })
         )
 
+        @(HQ.Store().ID("stoCheckDeleteLevel").HQProcedure("OM27700_ppCheckDeleteLevel")
+            .HQParam(new StoreParameterCollection()
+                {
+                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@AccumulateID", Value = "App.cboAccumulateID.getValue()", Mode = ParameterMode.Raw }
+                     , new StoreParameter() { Name = "@LevelID", Value = "_levelID", Mode = ParameterMode.Raw }
+
+                }).LoadData()
+                .Listeners(lst =>
+                {
+                    lst.Load.Fn = "stoCheckDeleteLevel_Load";
+                })
+        )
+
 
 
 
