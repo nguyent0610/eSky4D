@@ -25,7 +25,7 @@ namespace IN10400.Controllers
     {
         private string _screenNbr = "IN10400";
         private string _userName = Current.UserName;
-        private string _branchID = "";
+        //private string _branchID = "";
         private string _handle = "";
         private string _whseLoc = "";
         IN10400Entities _app = Util.CreateObjectContext<IN10400Entities>(false);
@@ -50,6 +50,8 @@ namespace IN10400.Controllers
             bool showSiteColumn = false;
             bool showWhseLocColumn = false;
             bool isChangeSite = false;
+            bool showBranchName = false;
+            bool showAvlColumn = false;
             var objConfig = _app.IN10400_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -59,6 +61,8 @@ namespace IN10400.Controllers
                 showSiteColumn = objConfig.ShowSiteColumn ?? false;
                 showWhseLocColumn = objConfig.ShowWhseLocColumn ?? false;
                 isChangeSite = objConfig.IsChangeSite ?? false;
+                showBranchName = objConfig.ShowBranchName ?? false;
+                showAvlColumn = objConfig.ShowAvlColumn ?? false;
             }
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
 
@@ -77,6 +81,8 @@ namespace IN10400.Controllers
             ViewBag.WhseLoc = userDft == null ? "" : userDft.INWhseLoc;
             ViewBag.BranchID = branchID;
             ViewBag.showWhseLoc = showWhseLoc;
+            ViewBag.ShowBranchName = showBranchName;
+            ViewBag.ShowAvlColumn = showAvlColumn;
             return View();
 
         }
@@ -664,8 +670,8 @@ namespace IN10400.Controllers
                 string invtID = _lstTrans[i].InvtID;
                 string siteID = _lstTrans[i].SiteID;
                 string whseLoc = _lstTrans[i].WhseLoc;
-                double editQty = 0;
-                double qtyTot = 0;
+                //double editQty = 0;
+                //double qtyTot = 0;
                 if (!string.IsNullOrEmpty(invtID))
                 {
                     if (whseLoc.PassNull() != "")

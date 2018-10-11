@@ -43,7 +43,20 @@
                     .Items(
                         HQ.TextBox().ID("txtBranchID").Name("BranchID").HQLangCode("BranchID").ReadOnly(true).Tag("X").Width(300).DataIndex("BranchID")
                             .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                        ,
 
+                            HQ.TextBox().ID("txtBranchName").ReadOnly(true).Hidden(true)
+                            .HQLangCode("BranchName").Width(300)
+                            .Tag("X"),
+
+                        HQ.Combo().ID("cboBranch").Name("BranchID").HQLangCode("BranchName").Hidden(true)
+                            .HQProcedure("OM10100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
+                            .DisplayField("BranchName").ValueField("BranchID")
+                            .LabelWidth(130).Width(300).HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection(){
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            })
+                            .LoadData()
                         ,X.ComboBox()
                             .ID("cboBatNbr").Tag("X")
                             .Name("BatNbr")
@@ -363,6 +376,8 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                     )
+                , X.NumberColumn().Text(Util.GetLang("QtyAvail")).DataIndex("QtyAvail").Align(Alignment.Right).Width(100).Format("0,000").ID("colQtyAvail")
+                
                 ,X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Align(Alignment.Right).Width(100).Format("0,000")
                     .Editor(
                         HQ.NumberField().MaxValue(10000).DecimalPrecision(0)

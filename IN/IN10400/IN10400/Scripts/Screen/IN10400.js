@@ -197,6 +197,10 @@ var firstLoad = function () {
     App.stoUnitConversion.addListener('load', store_Load);
     App.cboReasonCD.getStore().addListener('load', store_Load);
     App.cboPerPost.store.addListener('load', cboPerPost_Load);
+
+    App.cboBranch.store.addListener('load', cboBranch_Load);
+
+
     App.cboPerPost.store.reload();
     if (HQ.showWhseLoc == 0) {
         App.cboWhseLoc.setVisible(false);
@@ -211,6 +215,10 @@ var firstLoad = function () {
             App.cboWhseLoc.allowBlank = true;
         }
     }
+    App.txtBranchID.setVisible(!HQ.showBranchName);
+    App.txtBranchName.setVisible(HQ.showBranchName);
+    App.colQtyAvail.setVisible(HQ.showAvlColumn);
+
     App.cboWhseLoc.isValid();
     App.stoSetup.load();
     App.stoUserDefault.load();
@@ -230,6 +238,13 @@ var firstLoad = function () {
     App.frmMain.validate();
     //HQ.common.showBusy(false)
 };
+
+function cboBranch_Load() {
+    var branchName = '';
+    var obj = HQ.store.findInStore(App.cboBranch.store, ['BranchID'], [App.txtBranchID.getValue()]);
+    branchName = obj.BranchName;
+    App.txtBranchName.setValue(branchName);
+}
 
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
     if (field.key != undefined) {
@@ -1717,10 +1732,13 @@ var getQtyAvail = function (row) {
     var cnvFact = row.data.CnvFact === 0 ? 1 : row.data.CnvFact;
     if (!Ext.isEmpty(site)) {         
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID,row.data.WhseLoc, "")) / cnvFact, 0));
+        row.data.QtyAvail = HQ.util.mathRound((site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID, row.data.WhseLoc, "")) / cnvFact, 0);
     }
     else {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID,row.data.WhseLoc, "")) / cnvFact, 0));
+        row.data.QtyAvail = HQ.util.mathRound((0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID, row.data.WhseLoc, "")) / cnvFact, 0);
     }
+    App.grdTrans.view.refresh();
 };
 
 var calculateInvtTotal = function (invtID, siteID,whseLoc, lineRef) {
