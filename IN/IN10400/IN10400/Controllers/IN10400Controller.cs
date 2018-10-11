@@ -142,17 +142,17 @@ namespace IN10400.Controllers
             return this.Store(lstUnit);
         }
 
-        public ActionResult GetItemSite(string invtID, string siteID, string whseLoc, int showWhseLoc)
+        public ActionResult GetItemSite(string invtID, string siteID, string whseLoc, int showWhseLoc, string branchID)
         {
 
-            if (showWhseLoc==1 && whseLoc.PassNull()!="")
+            if (showWhseLoc==2 || whseLoc.PassNull()!="")
             {
-                var objSite = _app.IN10400_GetItemSite(Current.CpnyID,Current.UserName,Current.LangID,showWhseLoc).FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID &&p.WhseLoc==whseLoc);
+                var objSite = _app.IN10400_GetItemSite(Current.CpnyID, Current.UserName, Current.LangID, branchID, invtID, siteID, showWhseLoc).FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc == whseLoc);
                 return this.Store(objSite);
             }
             else
             {
-                var objSite = _app.IN10400_GetItemSite(Current.CpnyID, Current.UserName, Current.LangID, showWhseLoc).FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                var objSite = _app.IN10400_GetItemSite(Current.CpnyID, Current.UserName, Current.LangID, branchID, invtID, siteID, showWhseLoc).FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
                 return this.Store(objSite);
             }            
         }

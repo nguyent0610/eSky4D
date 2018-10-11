@@ -358,7 +358,7 @@ var grdTrans_SelectionChange = function (item, selected) {
             HQ.numSelectTrans = 0;
             HQ.common.showBusy(true, 'Process...');
             App.stoItemSite.load({
-                params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, whseLoc: selected[0].data.WhseLoc, showWhseLoc: HQ.showWhseLoc },
+                params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, whseLoc: selected[0].data.WhseLoc, showWhseLoc: HQ.showWhseLoc, branchID: App.txtBranchID.getValue() },
                 callback: checkSelect,
                 row: selected[0]
             });
@@ -434,7 +434,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoItemSite.load({
-                    params: { siteID: e.record.data.SiteID, invtID: e.record.data.InvtID, whseLoc: e.record.data.WhseLoc, showWhseLoc: HQ.showWhseLoc },
+                    params: { siteID: e.record.data.SiteID, invtID: e.record.data.InvtID, whseLoc: e.record.data.WhseLoc, showWhseLoc: HQ.showWhseLoc, branchID: App.txtBranchID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });
@@ -448,7 +448,7 @@ var grdTrans_Edit = function (item, e) {
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 2;
                 App.stoItemSite.load({
-                    params: { siteID: e.record.data.SiteID, invtID: e.record.data.InvtID, whseLoc: e.record.data.WhseLoc, showWhseLoc: HQ.showWhseLoc },
+                    params: { siteID: e.record.data.SiteID, invtID: e.record.data.InvtID, whseLoc: e.record.data.WhseLoc, showWhseLoc: HQ.showWhseLoc, branchID: App.txtBranchID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });

@@ -795,8 +795,11 @@ namespace IN10400
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
         /// <param name="showWhseLoc">No Metadata Documentation available.</param>
-        public ObjectResult<IN10400_GetItemSite_Result> IN10400_GetItemSite(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, Nullable<global::System.Int32> showWhseLoc)
+        public ObjectResult<IN10400_GetItemSite_Result> IN10400_GetItemSite(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String invtID, global::System.String siteID, Nullable<global::System.Int32> showWhseLoc)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -828,6 +831,36 @@ namespace IN10400
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
             ObjectParameter showWhseLocParameter;
             if (showWhseLoc.HasValue)
             {
@@ -838,7 +871,7 @@ namespace IN10400
                 showWhseLocParameter = new ObjectParameter("ShowWhseLoc", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction<IN10400_GetItemSite_Result>("IN10400_GetItemSite", cpnyIDParameter, userNameParameter, langIDParameter, showWhseLocParameter);
+            return base.ExecuteFunction<IN10400_GetItemSite_Result>("IN10400_GetItemSite", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, invtIDParameter, siteIDParameter, showWhseLocParameter);
         }
 
         #endregion
@@ -877,7 +910,8 @@ namespace IN10400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String perPost)
         {
             Batch batch = new Batch();
             batch.BranchID = branchID;
@@ -895,6 +929,7 @@ namespace IN10400
             batch.LUpd_Prog = lUpd_Prog;
             batch.LUpd_User = lUpd_User;
             batch.tstamp = tstamp;
+            batch.PerPost = perPost;
             return batch;
         }
 
@@ -1562,7 +1597,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String PerPost
         {
@@ -1574,7 +1609,7 @@ namespace IN10400
             {
                 OnPerPostChanging(value);
                 ReportPropertyChanging("PerPost");
-                _PerPost = StructuralObject.SetValidValue(value, true);
+                _PerPost = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("PerPost");
                 OnPerPostChanged();
             }
@@ -1630,6 +1665,54 @@ namespace IN10400
         private global::System.String _WhseLoc;
         partial void OnWhseLocChanging(global::System.String value);
         partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                OnDiscIDChanging(value);
+                ReportPropertyChanging("DiscID");
+                _DiscID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscID");
+                OnDiscIDChanged();
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeq
+        {
+            get
+            {
+                return _DiscSeq;
+            }
+            set
+            {
+                OnDiscSeqChanging(value);
+                ReportPropertyChanging("DiscSeq");
+                _DiscSeq = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscSeq");
+                OnDiscSeqChanged();
+            }
+        }
+        private global::System.String _DiscSeq;
+        partial void OnDiscSeqChanging(global::System.String value);
+        partial void OnDiscSeqChanged();
 
         #endregion
 
@@ -1682,7 +1765,10 @@ namespace IN10400
         /// <param name="brand">Initial value of the Brand property.</param>
         /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType)
+        /// <param name="cnvFact">Initial value of the CnvFact property.</param>
+        /// <param name="kitType">Initial value of the KitType property.</param>
+        /// <param name="giftPoint">Initial value of the GiftPoint property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact, global::System.Boolean kitType, global::System.Double giftPoint)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -1718,6 +1804,9 @@ namespace IN10400
             iN_Inventory.Brand = brand;
             iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
+            iN_Inventory.CnvFact = cnvFact;
+            iN_Inventory.KitType = kitType;
+            iN_Inventory.GiftPoint = giftPoint;
             return iN_Inventory;
         }
 
@@ -3459,9 +3548,9 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Double> CnvFact
+        public global::System.Double CnvFact
         {
             get
             {
@@ -3476,16 +3565,16 @@ namespace IN10400
                 OnCnvFactChanged();
             }
         }
-        private Nullable<global::System.Double> _CnvFact;
-        partial void OnCnvFactChanging(Nullable<global::System.Double> value);
+        private global::System.Double _CnvFact;
+        partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> KitType
+        public global::System.Boolean KitType
         {
             get
             {
@@ -3500,16 +3589,16 @@ namespace IN10400
                 OnKitTypeChanged();
             }
         }
-        private Nullable<global::System.Boolean> _KitType;
-        partial void OnKitTypeChanging(Nullable<global::System.Boolean> value);
+        private global::System.Boolean _KitType;
+        partial void OnKitTypeChanging(global::System.Boolean value);
         partial void OnKitTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Double> GiftPoint
+        public global::System.Double GiftPoint
         {
             get
             {
@@ -3524,8 +3613,8 @@ namespace IN10400
                 OnGiftPointChanged();
             }
         }
-        private Nullable<global::System.Double> _GiftPoint;
-        partial void OnGiftPointChanging(Nullable<global::System.Double> value);
+        private global::System.Double _GiftPoint;
+        partial void OnGiftPointChanging(global::System.Double value);
         partial void OnGiftPointChanged();
 
         #endregion
@@ -7274,18 +7363,21 @@ namespace IN10400
         /// <param name="invtMult">Initial value of the InvtMult property.</param>
         /// <param name="qty">Initial value of the Qty property.</param>
         /// <param name="rlsed">Initial value of the Rlsed property.</param>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
         /// <param name="tranAmt">Initial value of the TranAmt property.</param>
         /// <param name="tranFee">Initial value of the TranFee property.</param>
         /// <param name="tranDate">Initial value of the TranDate property.</param>
         /// <param name="unitCost">Initial value of the UnitCost property.</param>
         /// <param name="unitPrice">Initial value of the UnitPrice property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="qtyUncosted">Initial value of the QtyUncosted property.</param>
         /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="toWhseLoc">Initial value of the ToWhseLoc property.</param>
-        public static IN_Trans CreateIN_Trans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Boolean freeItem, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double qtyUncosted, global::System.String whseLoc, global::System.String toWhseLoc)
+        public static IN_Trans CreateIN_Trans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Boolean freeItem, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double qtyUncosted, global::System.String whseLoc, global::System.String toWhseLoc)
         {
             IN_Trans iN_Trans = new IN_Trans();
             iN_Trans.BranchID = branchID;
@@ -7298,13 +7390,16 @@ namespace IN10400
             iN_Trans.InvtMult = invtMult;
             iN_Trans.Qty = qty;
             iN_Trans.Rlsed = rlsed;
+            iN_Trans.SiteID = siteID;
             iN_Trans.TranAmt = tranAmt;
             iN_Trans.TranFee = tranFee;
             iN_Trans.TranDate = tranDate;
             iN_Trans.UnitCost = unitCost;
             iN_Trans.UnitPrice = unitPrice;
             iN_Trans.Crtd_DateTime = crtd_DateTime;
+            iN_Trans.Crtd_User = crtd_User;
             iN_Trans.LUpd_DateTime = lUpd_DateTime;
+            iN_Trans.LUpd_User = lUpd_User;
             iN_Trans.tstamp = tstamp;
             iN_Trans.QtyUncosted = qtyUncosted;
             iN_Trans.WhseLoc = whseLoc;
@@ -7715,7 +7810,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SiteID
         {
@@ -7727,7 +7822,7 @@ namespace IN10400
             {
                 OnSiteIDChanging(value);
                 ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, true);
+                _SiteID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SiteID");
                 OnSiteIDChanged();
             }
@@ -8051,7 +8146,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -8063,7 +8158,7 @@ namespace IN10400
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -8123,7 +8218,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -8135,7 +8230,7 @@ namespace IN10400
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }

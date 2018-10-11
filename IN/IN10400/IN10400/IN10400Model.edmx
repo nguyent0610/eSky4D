@@ -16,7 +16,7 @@
           <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="TotAmt" Type="float" Nullable="false" />
           <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="100" />
+          <Property Name="Descr" Type="nvarchar(max)" />
           <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
           <Property Name="FromToSiteID" Type="varchar" MaxLength="30" />
           <Property Name="ImpExp" Type="varchar" MaxLength="1" />
@@ -38,7 +38,9 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="PerPost" Type="varchar" MaxLength="6" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" />
+          <Property Name="PerPost" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="SiteID" Type="varchar" MaxLength="30" />
           <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
         </EntityType>
@@ -118,9 +120,9 @@
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ImageModifiedDate" Type="datetime" />
           <Property Name="VideoModifiedDate" Type="datetime" />
-          <Property Name="CnvFact" Type="float" />
-          <Property Name="KitType" Type="bit" />
-          <Property Name="GiftPoint" Type="float" />
+          <Property Name="CnvFact" Type="float" Nullable="false" />
+          <Property Name="KitType" Type="bit" Nullable="false" />
+          <Property Name="GiftPoint" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_ItemLoc">
           <Key>
@@ -318,13 +320,13 @@
           <Property Name="Rlsed" Type="smallint" Nullable="false" />
           <Property Name="ShipperID" Type="varchar" MaxLength="15" />
           <Property Name="ShipperLineRef" Type="varchar" MaxLength="5" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="SlsperID" Type="varchar" MaxLength="30" />
           <Property Name="ToSiteID" Type="varchar" MaxLength="30" />
           <Property Name="TranAmt" Type="float" Nullable="false" />
           <Property Name="TranFee" Type="float" Nullable="false" />
           <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="TranDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="TranDesc" Type="nvarchar(max)" />
           <Property Name="TranType" Type="varchar" MaxLength="2" />
           <Property Name="UnitCost" Type="float" Nullable="false" />
           <Property Name="UnitDesc" Type="nvarchar" MaxLength="15" />
@@ -332,10 +334,10 @@
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CostID" Type="varchar" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
@@ -404,6 +406,9 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="ShowWhseLoc" Type="int" Mode="In" />
         </Function>
         <Function Name="IN10400_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -547,6 +552,9 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="ShowWhseLoc" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="IN_Inventory" EntityType="IN10400Model.IN_Inventory" />
@@ -884,13 +892,13 @@
           <Property Name="Rlsed" Type="Int16" Nullable="false" />
           <Property Name="ShipperID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="ShipperLineRef" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SlsperID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="TranAmt" Type="Double" Nullable="false" />
           <Property Name="TranFee" Type="Double" Nullable="false" />
           <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TranDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TranDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TranType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="UnitCost" Type="Double" Nullable="false" />
           <Property Name="UnitDesc" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
@@ -898,10 +906,10 @@
           <Property Name="UnitPrice" Type="Double" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CostID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="QtyUncosted" Type="Double" Nullable="false" />
@@ -1075,9 +1083,9 @@
           <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="CnvFact" Type="Double" />
-          <Property Name="KitType" Type="Boolean" />
-          <Property Name="GiftPoint" Type="Double" />
+          <Property Name="CnvFact" Type="Double" Nullable="false" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
+          <Property Name="GiftPoint" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Batch">
           <Key>
@@ -1090,7 +1098,7 @@
           <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TotAmt" Type="Double" Nullable="false" />
           <Property Name="DateEnt" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Descr" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EditScrnNbr" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="FromToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ImpExp" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
@@ -1112,9 +1120,11 @@
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="PerPost" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="PerPost" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscSeq" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1682,6 +1692,8 @@
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="IN10400Model.Batch">
               <MappingFragment StoreEntitySet="Batch">
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
                 <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
                 <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="PerPost" ColumnName="PerPost" />
