@@ -464,6 +464,13 @@ var grdTrans_Edit = function (item, e) {
         } else {
 
         }
+        if (e.field == "SiteID" || e.field == "WhseLoc") {
+            App.stoItemSite.load({
+                params: { siteID: e.record.data.SiteID, invtID: e.record.data.InvtID, whseLoc: e.record.data.WhseLoc, showWhseLoc: HQ.showWhseLoc, branchID: App.txtBranchID.getValue() },
+                callback: checkSourceEdit,
+                row: e
+            });
+        }        
     } else {
         if (key != 'InvtID') handleTab(key);
     }
@@ -1413,6 +1420,10 @@ var checkExitEdit = function (row) {
             }
 
         }
+    }
+
+    if (key == "SiteID" || key == "WhseLoc") {
+        getQtyAvail(row.record);
     }
 
     trans.ExtCost = trans.TranAmt;
