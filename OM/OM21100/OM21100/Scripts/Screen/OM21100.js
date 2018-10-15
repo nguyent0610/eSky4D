@@ -928,6 +928,12 @@ var Main = {
                     App.cboDiscClass.setReadOnly(false);
                     App.cboDiscType.setReadOnly(false);
                 }
+                setTimeout(function () {
+                    if (field) {
+                        field.hasFocus = false;
+                        field.focus();
+                    }
+                }, 1000);
             }
         },
 
@@ -2361,6 +2367,7 @@ var DiscDefintion = {
                 App.cboInvtIDSolomon.setReadOnly(false);
                 App.cboDiscSeqSolomon.setReadOnly(false);
                 App.chkDiscPrice.setReadOnly(false);
+                App.chkRegistrationOfIndustryAndTrade.setReadOnly(false);
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -2389,6 +2396,7 @@ var DiscDefintion = {
                 App.cboInvtIDSolomon.setReadOnly(true);
                 App.cboDiscSeqSolomon.setReadOnly(true);
                 App.chkDiscPrice.setReadOnly(true);
+                App.chkRegistrationOfIndustryAndTrade.setReadOnly(true);
             }
 
             HQ.gridSource = 0;
