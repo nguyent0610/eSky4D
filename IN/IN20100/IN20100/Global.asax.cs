@@ -30,8 +30,8 @@ namespace IN20100
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString(); //"EARTHSVR\\SQL2012";
-            Current.DBSys = "ND_eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString(); //"EARTHSVR\\SQL2012";
+            Current.DBSys = "HT_eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -39,7 +39,7 @@ namespace IN20100
             acc.Update = true;
             acc.Release = true;
             Session["IN20100"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "HT_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NDMT";
             Session["Language"] = Current.Language = "vi";

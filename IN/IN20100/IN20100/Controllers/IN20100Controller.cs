@@ -27,6 +27,14 @@ namespace IN20100.Controllers
         {
             
             Util.InitRight(_screenNbr);
+            var config = _db.IN20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            var isNvarchar = false;
+            if (config != null)
+            {
+                isNvarchar = config ?? false;
+            }
+            ViewBag.isNvarchar = isNvarchar;
+
             return View();
         }
 
@@ -50,14 +58,15 @@ namespace IN20100.Controllers
                 lstUnitConversion.Created.AddRange(lstUnitConversion.Updated);
                 foreach (IN20100_pgLoadUnitConversion_Result del in lstUnitConversion.Deleted)
                 {
+                    var obj = lstUnitConversion.Created.FirstOrDefault(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower());
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-                    if (lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).Count() > 0)
+                    if (obj != null)
                     {
-                        lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).FirstOrDefault().tstamp = del.tstamp;
+                        obj.tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.IN_UnitConversion.ToList().Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).FirstOrDefault();
+                        var objDel = _db.IN_UnitConversion.FirstOrDefault(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower());
                         if (objDel != null)
                         {
                             _db.IN_UnitConversion.DeleteObject(objDel);
@@ -79,13 +88,13 @@ namespace IN20100.Controllers
                 {
                     if (curUnitConversion.UnitType.PassNull() == "" && curUnitConversion.ClassID.PassNull() == "" && curUnitConversion.InvtID.PassNull() == "" && curUnitConversion.FromUnit.PassNull()== "" && curUnitConversion.ToUnit.PassNull() == "") continue;
 
-                    var UnitConversion = _db.IN_UnitConversion.Where(p => p.UnitType.ToLower() == curUnitConversion.UnitType.ToLower() && p.ClassID.ToLower() == curUnitConversion.ClassID.ToLower() && p.InvtID.ToLower() == curUnitConversion.InvtID.ToLower() && p.FromUnit.ToLower() == curUnitConversion.FromUnit.ToLower() && p.ToUnit.ToLower() == curUnitConversion.ToUnit.ToLower()).FirstOrDefault();
+                    var unitConversion = _db.IN_UnitConversion.FirstOrDefault(p => p.UnitType.ToLower() == curUnitConversion.UnitType.ToLower() && p.ClassID.ToLower() == curUnitConversion.ClassID.ToLower() && p.InvtID.ToLower() == curUnitConversion.InvtID.ToLower() && p.FromUnit.ToLower() == curUnitConversion.FromUnit.ToLower() && p.ToUnit.ToLower() == curUnitConversion.ToUnit.ToLower());
 
-                    if (UnitConversion != null)
+                    if (unitConversion != null)
                     {
-                        if (UnitConversion.tstamp.ToHex() == curUnitConversion.tstamp.ToHex())
+                        if (unitConversion.tstamp.ToHex() == curUnitConversion.tstamp.ToHex())
                         {
-                            Update_IN_UnitConversion(UnitConversion, curUnitConversion, false);
+                            Update_IN_UnitConversion(unitConversion, curUnitConversion, false);
                         }
                         else
                         {
@@ -94,9 +103,9 @@ namespace IN20100.Controllers
                     }
                     else
                     {
-                        UnitConversion = new IN_UnitConversion();
-                        Update_IN_UnitConversion(UnitConversion, curUnitConversion, true);
-                        _db.IN_UnitConversion.AddObject(UnitConversion);
+                        unitConversion = new IN_UnitConversion();
+                        Update_IN_UnitConversion(unitConversion, curUnitConversion, true);
+                        _db.IN_UnitConversion.AddObject(unitConversion);
                     }
                 }
 

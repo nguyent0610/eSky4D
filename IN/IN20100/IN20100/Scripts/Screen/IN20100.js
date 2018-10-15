@@ -1,7 +1,11 @@
 ﻿//// Declare ///////////////////////////////////////////////////////////
+
+
+
 var keys = ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'];
 var fieldsCheckRequire = ["UnitType", "ClassID", "InvtID", "FromUnit", "ToUnit", "MultDiv", "CnvFact"];
 var fieldsLangCheckRequire = ["UnitType", "ClassID", "InvtID", "FromUnit", "ToUnit", "MultDiv", "CnvFact"];
+
 ////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var _Source = 0;
@@ -216,18 +220,21 @@ var grdUnitConversion_Edit = function (item, e) {
             e.record.set('InvtID', '*');
             e.record.set('Descr', '*');
             e.record.set('CnvFact', 1);
+            App.cboFromUnit.forceSelection = false;
         }
         if (e.value == '2') {
             e.record.set('InvtID', '*');
             e.record.set('Descr', '*');
             e.record.set('ClassID', '');
             e.record.set('CnvFact', 1);
+            App.cboFromUnit.forceSelection = true;
         }
         if (e.value == '3') {
             e.record.set('InvtID', '');
             e.record.set('Descr', '');
             e.record.set('ClassID', '*');
             e.record.set('CnvFact', 1);
+            App.cboFromUnit.forceSelection = true;
         }
     }
     HQ.grid.checkInsertKey(App.grdUnitConversion, e, keys);
@@ -235,7 +242,7 @@ var grdUnitConversion_Edit = function (item, e) {
 };
 
 var grdUnitConversion_ValidateEdit = function (item, e) {
-    if (e.field == 'InvtID' || e.field == 'ClassID') {
+    if (e.field === 'InvtID' || e.field === 'ClassID' || ((e.field === 'FromUnit' || e.field === 'ToUnit') && HQ.isNvarchar)) {
         return HQ.grid.checkValidateEditDG(App.grdUnitConversion, e, keys);
     } else {
         return HQ.grid.checkValidateEdit(App.grdUnitConversion, e, keys, true);

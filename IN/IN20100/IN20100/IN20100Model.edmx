@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_UnitConversion">
           <Key>
             <PropertyRef Name="UnitType" />
@@ -14,9 +14,9 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Name="UnitType" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="FromUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="FromUnit" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ToUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="MultDiv" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
@@ -28,6 +28,11 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="IN20100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="IN20100_pgLoadUnitConversion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="IN_UnitConversion" EntityType="Self.IN_UnitConversion" Schema="dbo" store:Type="Tables" />
@@ -39,6 +44,11 @@
         <EntityContainer Name="IN20100Entities" annotation:LazyLoadingEnabled="true" >
           <FunctionImport Name="IN20100_pgLoadUnitConversion" ReturnType="Collection(IN20100Model.IN20100_pgLoadUnitConversion_Result)" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN20100Model.IN_UnitConversion" />
+          <FunctionImport Name="IN20100_pdConfig" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20100_pgLoadUnitConversion_Result">
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
@@ -60,9 +70,9 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Name="UnitType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="FromUnit" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FromUnit" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="ToUnit" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="MultDiv" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="CnvFact" Type="Double" Nullable="false" />
@@ -115,6 +125,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20100_pdConfig" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
