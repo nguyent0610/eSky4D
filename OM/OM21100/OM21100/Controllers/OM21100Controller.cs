@@ -118,7 +118,7 @@ namespace OM21100.Controllers
                 hideCopy = objConfig.HideCopy.HasValue && objConfig.HideCopy.Value;
                 hideSite = objConfig.HideSite.HasValue && objConfig.HideSite.Value;
                 hideSiteSolomon = objConfig.HideSiteSolomon.HasValue && objConfig.HideSiteSolomon.Value;
-                hideReIndustryAndTrade =objConfig.HideReIndustryAndTrade.HasValue && objConfig.HideReIndustryAndTrade.Value;
+                hideReIndustryAndTrade = objConfig.HideReIndustryAndTrade.HasValue && objConfig.HideReIndustryAndTrade.Value;
             }
 
             ViewBag.allowExport = allowExport;

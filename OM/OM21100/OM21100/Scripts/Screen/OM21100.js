@@ -9,6 +9,11 @@ var _selTerritory = '';
 var keys1 = ['CpnyID'];
 var invtIDRender = '';
 var lstCpnyID = [];
+var _copy = 0;
+var _siteID = '';
+var _siteEdit = '';
+var _discSeqNew = '';
+var _branchID = '';
 var Main = {
 
     Process: {
@@ -848,8 +853,11 @@ var Main = {
             App.cboInvtIDSolomon.setVisible(HQ.hideInvtIDSolomon);
             App.chkDiscPrice.setVisible(HQ.hideDiscPrice);
             App.cboDiscSeqSolomon.setVisible(HQ.hideDiscSeqSolomon);
+            App.btnCopy.setVisible(HQ.hideCopy);
+            App.FreeITemSiteWhseLoc.setVisible(HQ.hideSite);
+            App.FreeITemSiteID.setVisible(HQ.hideSite);
+            App.cboSolomonSite.setVisible(HQ.hideSiteSolomon);
             App.chkRegistrationOfIndustryAndTrade.setVisible(!HQ.hideReIndustryAndTrade);
-            
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -1988,6 +1996,22 @@ var DiscDefintion = {
             return r.data.Descr;
         },
 
+        renderFreeITemSiteWhseLoc: function (value, metaData, record, row, col, store, gridView) {
+            var r = HQ.store.findRecord(App.cboFreeITemSiteWhseLoc.store, ['WhseLoc'], [record.data.FreeITemSiteWhseLoc]);
+            if (Ext.isEmpty(r)) {
+                return value;
+            }
+            return r.data.Descr;
+        },
+        
+        renderFreeITemSiteID: function (value, metaData, record, row, col, store, gridView) {
+            var r = HQ.store.findRecord(App.cboFreeITemSiteID.store, ['SiteId'], [record.data.FreeITemSiteID]);
+            if (Ext.isEmpty(r)) {
+                return value;
+            }
+            return r.data.Name;
+        },
+
         indexSelect: function (grd) {
             var index = '';
             var allData = grd.store.data;
@@ -2297,6 +2321,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(true);
                 App.cboSubBreakType.setReadOnly(true);
                 App.cboBreakBoundType.setReadOnly(true);
+                
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
             }
             else {
@@ -2305,6 +2330,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(false);
                 App.cboSubBreakType.setReadOnly(false);
                 App.cboBreakBoundType.setReadOnly(false);
+                
                 //App.chkConvertDiscAmtToFreeItem.setReadOnly(false);
             }
 
@@ -2331,6 +2357,10 @@ var DiscDefintion = {
                 App.cboProrateAmtType.setReadOnly(false);
                 //App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.enable();
+                App.cboSolomonSite.setReadOnly(false);
+                App.cboInvtIDSolomon.setReadOnly(false);
+                App.cboDiscSeqSolomon.setReadOnly(false);
+                App.chkDiscPrice.setReadOnly(false);
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -2355,6 +2385,10 @@ var DiscDefintion = {
                 App.cboProrateAmtType.setReadOnly(true);
                // App.chkDiscAmtBonus.setReadOnly(false);
                 //App.btnSubBreakItem.disable();
+                App.cboSolomonSite.setReadOnly(true);
+                App.cboInvtIDSolomon.setReadOnly(true);
+                App.cboDiscSeqSolomon.setReadOnly(true);
+                App.chkDiscPrice.setReadOnly(true);
             }
 
             HQ.gridSource = 0;
@@ -2397,6 +2431,9 @@ var DiscDefintion = {
                 App.cboDiscSeq.store.load(function () {
                     if (App.cboDiscSeq.store.getCount()) {
                         var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
+                        if (_copy == 1) {
+                            discSeqValue = _discSeqNew;
+                        }
                         if (discSeqValue == App.cboDiscSeq.getValue()) {
                             App.cboDiscSeq.setValue(discSeqValue);
                             App.stoDiscSeqInfo.reload();
@@ -2410,6 +2447,7 @@ var DiscDefintion = {
                     }
                 });
             }
+            _copy = 0;
             
             //}
         },
@@ -2947,16 +2985,19 @@ var DiscDefintion = {
                 //}
 
                 if (cbo.value == "A") {
-                    App.chkAutoFreeItem.setDisabled(false);
+                    
                     App.chkAutoFreeItem.setValue(false);
+                    App.chkAutoFreeItem.setDisabled(false);
                 }
                 else if (cbo.value == "M") {
-                    App.chkAutoFreeItem.setDisabled(true);
+                    
                     App.chkAutoFreeItem.setValue(true);
+                    App.chkAutoFreeItem.setDisabled(true);
                 }
                 else {
-                    App.chkAutoFreeItem.setDisabled(false);
+                    
                     App.chkAutoFreeItem.setValue(false);
+                    App.chkAutoFreeItem.setDisabled(false);
                 }
             //}
         },
@@ -4528,6 +4569,7 @@ var DiscDefintion = {
         },
 
         grdFreeItem_beforeEdit: function (editor, e) {
+            _siteEdit = e.record.data.FreeITemSiteID;
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     var status = App.cboStatus.value;
@@ -4742,7 +4784,31 @@ var DiscDefintion = {
                         }
                     }
                 }
-            }                
+            }
+            if(e.field=="FreeITemSiteID")
+            {
+                //var lstCompany = App.grdCompany.store.snapshot || App.grdCompany.store.allData || App.grdCompany.store.data;
+                //if(lstCompany!=undefined){
+                //    for(var i=0;i<lstCompany.length;i++){
+                //        _branchID +=lstCompany.items[i].data.CpnyID + ",";
+                //    }
+                //}
+
+                //if (_branchID == '')
+                //{
+                //    HQ.message.show(2018081663, [HQ.common.getLang("AppComp")], '', true);
+                //    return false;
+                //}
+                var tam = "@@@@@@@@@@";
+                App.cboFreeITemSiteWhseLoc.store.clearFilter();
+                if (e.record.data.FreeITemSiteID != "" && e.record.data.FreeITemSiteID != null) {
+                    tam = e.record.data.FreeITemSiteID;
+                }
+                App.cboFreeITemSiteWhseLoc.store.filter('SiteID', tam);
+                if (e.record.data.FreeITemSiteID != _siteEdit) {
+                    e.record.set("FreeITemSiteWhseLoc", "");
+                }
+            }
             
         },
     }
@@ -5088,7 +5154,6 @@ var chkDiscPrice_Change = function (chk, newValue, oldValue, eOpts) {
     }
 };
 
-
 var chkRegistrationOfIndustryAndTrade_Change = function (chk, newValue, oldValue, eOpts) {
     if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
         if (chk.hasFocus) {
@@ -5100,7 +5165,6 @@ var chkRegistrationOfIndustryAndTrade_Change = function (chk, newValue, oldValue
         }
     }
 };
-
 
 
 var rowindex = function (lineRef) {
@@ -5118,8 +5182,8 @@ var rowindex = function (lineRef) {
 }
 
 function tabMain_Change(obj, tab, c, func){
-    if (tab.id == "pnlDPCC")
-        var checkActive=false;
+    if (tab.id == "pnlDPCC") {
+        var checkActive = false;
         var lstDataCpny = App.stoCompany.data
         for (var i = 0; i < App.stoCompany.data.length; i++) {
             if (!Ext.isEmpty(App.stoCompany.data.items[i].data.CpnyID)) {
@@ -5129,6 +5193,7 @@ function tabMain_Change(obj, tab, c, func){
         if (checkActive) {
             DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');
         }
+    }       
 
     if (tab.id == "pnlDPII") {
         var colRequiredValueIndex = HQ.grid.findColumnIndex(App.grdDiscItem.columns, 'RequiredValue');
@@ -5166,3 +5231,112 @@ function tabMain_Change(obj, tab, c, func){
             App.cboRequiredType.setReadOnly(true);
     }
 }
+var btnCopy_Click = function () {
+    App.winCopy.show();
+    App.cboDiscIDCopy.isValid();
+    App.txtDiscSeq.isValid();
+}
+var cboDiscIDCopy_Change = function () {
+    App.storPromotionsCopy.reload();
+}
+var grdPromotionsCopy_beforeEdit = function (editor, e) {
+    if (e.record.data.Selected == false) {
+        var count = 0;
+        for (var j = 0; j < App.storPromotionsCopy.data.length; j++) {
+            if (App.grdPromotionsCopy.store.data.items[j].data.Selected == true) {
+                count++;
+            }
+        }
+        if (count > 0) {
+            return false;
+        }
+    }
+}
+var btnSaveCopy_click = function () {
+    if (App.cboDiscIDCopy.getValue() == '' || App.cboDiscIDCopy.getValue() == null) {
+        HQ.message.show(15, [App.cboDiscIDCopy.fieldLabel], '', true);
+        return false;
+    }
+    else if (App.txtDiscSeq.getValue() == '' || App.txtDiscSeq.getValue() == null) {
+        HQ.message.show(15, [App.txtDiscSeq.fieldLabel], '', true);
+        return false;
+    }
+    else if (HQ.store.findInStore(App.storPromotionsCopy, ["Selected"], ["true"]) == undefined) {
+        HQ.message.show(2018080960);
+        return false;
+    }
+    App.frmCopy.submit({
+        waitMsg: HQ.common.getLang("SavingData"),
+        url: 'OM21100/SaveDataCopy',
+        timeout: 10000000,
+        params: {
+            lstPromotionsCopy: Ext.encode(App.storPromotionsCopy.getRecordsValues()),
+            DiscIDNew : App.cboDiscIDCopy.getValue() ,
+            DiscSeqNew: App.txtDiscSeq.getValue()
+        },
+        success: function (msg, data) {
+            if (data.result.msgCode) {
+                HQ.message.show(data.result.msgCode);
+            }
+            else {
+                HQ.message.show(201405071);
+            }
+            App.cboDiscID.setValue(App.cboDiscIDCopy.getValue());
+            App.cboDiscSeq.setValue(App.txtDiscSeq.getValue());
+            _discSeqNew = App.txtDiscSeq.getValue();
+            //Main.Process.reloadAllData();
+            App.cboDiscIDCopy.clearValue();
+            App.storPromotionsCopy.reload();
+            App.txtDiscSeq.setValue('');
+            _copy = 1;
+            App.winCopy.close();
+        },
+        failure: function (msg, data) {
+            //if (data.result.msgCode) {
+            //    HQ.message.show(data.result.msgCode);
+            //}
+            //else {
+                HQ.message.process(msg, data, true);
+            //}
+        }
+    });
+}
+var slmFreeItem_select = function (slm, selRec, idx, eOpts) {
+    _siteID = selRec.data.FreeITemSiteID;
+    App.cboFreeITemSiteWhseLoc.store.reload();
+}
+var cboFreeITemSiteID_change = function(chk, newValue, oldValue, eOpts)
+{
+    _siteID = newValue;
+    App.cboFreeITemSiteWhseLoc.store.reload();
+    App.cboFreeITemSiteWhseLoc.clearValue();
+}
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+
+    return returnValue;
+};
+var txtDiscSeq_Blur = function () {
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+    checkSpecialChar(App.txtDiscSeq.getValue());
+    if (!HQ.util.passNull(App.txtDiscSeq.getValue()) == '' && !HQ.util.passNull(App.txtDiscSeq.getValue().toString()).match(regex)) {
+        App.txtDiscSeq.setValue('');
+    }
+    
+}
+var checkSpecialChar = function (value) {
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+    if (value)
+        if (!HQ.util.passNull(value) == '' && !HQ.util.passNull(value.toString()).match(regex)) {
+            HQ.message.show(20140811, App.txtDiscSeq.fieldLabel);
+            return false;
+        }
+};
