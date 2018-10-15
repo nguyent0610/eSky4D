@@ -372,22 +372,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscSeq> OM_DiscSeq
-        {
-            get
-            {
-                if ((_OM_DiscSeq == null))
-                {
-                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
-                }
-                return _OM_DiscSeq;
-            }
-        }
-        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Batch> Batches
         {
             get
@@ -432,6 +416,22 @@ namespace OM21100
             }
         }
         private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscSeq> OM_DiscSeq
+        {
+            get
+            {
+                if ((_OM_DiscSeq == null))
+                {
+                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
+                }
+                return _OM_DiscSeq;
+            }
+        }
+        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
 
         #endregion
 
@@ -590,14 +590,6 @@ namespace OM21100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
-        {
-            base.AddObject("OM_DiscSeq", oM_DiscSeq);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the Batches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToBatches(Batch batch)
@@ -619,6 +611,14 @@ namespace OM21100
         public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
         {
             base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
+        {
+            base.AddObject("OM_DiscSeq", oM_DiscSeq);
         }
 
         #endregion
@@ -2782,7 +2782,8 @@ namespace OM21100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="perPost">Initial value of the PerPost property.</param>
+        public static Batch CreateBatch(global::System.String branchID, global::System.String module, global::System.String batNbr, global::System.Double totAmt, global::System.DateTime dateEnt, global::System.Int32 noteID, global::System.String origBranchID, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String perPost)
         {
             Batch batch = new Batch();
             batch.BranchID = branchID;
@@ -2800,6 +2801,7 @@ namespace OM21100
             batch.LUpd_Prog = lUpd_Prog;
             batch.LUpd_User = lUpd_User;
             batch.tstamp = tstamp;
+            batch.PerPost = perPost;
             return batch;
         }
 
@@ -3511,6 +3513,78 @@ namespace OM21100
         private global::System.String _DiscSeq;
         partial void OnDiscSeqChanging(global::System.String value);
         partial void OnDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PerPost
+        {
+            get
+            {
+                return _PerPost;
+            }
+            set
+            {
+                OnPerPostChanging(value);
+                ReportPropertyChanging("PerPost");
+                _PerPost = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PerPost");
+                OnPerPostChanged();
+            }
+        }
+        private global::System.String _PerPost;
+        partial void OnPerPostChanging(global::System.String value);
+        partial void OnPerPostChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 
@@ -4028,8 +4102,10 @@ namespace OM21100
         /// <param name="brand">Initial value of the Brand property.</param>
         /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
+        /// <param name="cnvFact">Initial value of the CnvFact property.</param>
         /// <param name="kitType">Initial value of the KitType property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Boolean kitType)
+        /// <param name="giftPoint">Initial value of the GiftPoint property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact, global::System.Boolean kitType, global::System.Double giftPoint)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -4065,7 +4141,9 @@ namespace OM21100
             iN_Inventory.Brand = brand;
             iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
+            iN_Inventory.CnvFact = cnvFact;
             iN_Inventory.KitType = kitType;
+            iN_Inventory.GiftPoint = giftPoint;
             return iN_Inventory;
         }
 
@@ -5807,9 +5885,9 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Double> CnvFact
+        public global::System.Double CnvFact
         {
             get
             {
@@ -5824,8 +5902,8 @@ namespace OM21100
                 OnCnvFactChanged();
             }
         }
-        private Nullable<global::System.Double> _CnvFact;
-        partial void OnCnvFactChanging(Nullable<global::System.Double> value);
+        private global::System.Double _CnvFact;
+        partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
     
         /// <summary>
@@ -5851,6 +5929,30 @@ namespace OM21100
         private global::System.Boolean _KitType;
         partial void OnKitTypeChanging(global::System.Boolean value);
         partial void OnKitTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double GiftPoint
+        {
+            get
+            {
+                return _GiftPoint;
+            }
+            set
+            {
+                OnGiftPointChanging(value);
+                ReportPropertyChanging("GiftPoint");
+                _GiftPoint = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GiftPoint");
+                OnGiftPointChanged();
+            }
+        }
+        private global::System.Double _GiftPoint;
+        partial void OnGiftPointChanging(global::System.Double value);
+        partial void OnGiftPointChanged();
 
         #endregion
 
@@ -8821,8 +8923,9 @@ namespace OM21100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="qtyUncosted">Initial value of the QtyUncosted property.</param>
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="toWhseLoc">Initial value of the ToWhseLoc property.</param>
-        public static IN_Trans CreateIN_Trans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Boolean freeItem, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double qtyUncosted, global::System.String toWhseLoc)
+        public static IN_Trans CreateIN_Trans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Boolean freeItem, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double qtyUncosted, global::System.String whseLoc, global::System.String toWhseLoc)
         {
             IN_Trans iN_Trans = new IN_Trans();
             iN_Trans.BranchID = branchID;
@@ -8847,6 +8950,7 @@ namespace OM21100
             iN_Trans.LUpd_User = lUpd_User;
             iN_Trans.tstamp = tstamp;
             iN_Trans.QtyUncosted = qtyUncosted;
+            iN_Trans.WhseLoc = whseLoc;
             iN_Trans.ToWhseLoc = toWhseLoc;
             return iN_Trans;
         }
@@ -9806,7 +9910,7 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String WhseLoc
         {
@@ -9818,7 +9922,7 @@ namespace OM21100
             {
                 OnWhseLocChanging(value);
                 ReportPropertyChanging("WhseLoc");
-                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                _WhseLoc = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("WhseLoc");
                 OnWhseLocChanged();
             }
@@ -9885,7 +9989,9 @@ namespace OM21100
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="fromDate">Initial value of the FromDate property.</param>
         /// <param name="toDate">Initial value of the ToDate property.</param>
-        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.DateTime fromDate, global::System.DateTime toDate)
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
+        /// <param name="toWhseLoc">Initial value of the ToWhseLoc property.</param>
+        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.String whseLoc, global::System.String toWhseLoc)
         {
             IN_Transfer iN_Transfer = new IN_Transfer();
             iN_Transfer.BranchID = branchID;
@@ -9904,6 +10010,8 @@ namespace OM21100
             iN_Transfer.tstamp = tstamp;
             iN_Transfer.FromDate = fromDate;
             iN_Transfer.ToDate = toDate;
+            iN_Transfer.WhseLoc = whseLoc;
+            iN_Transfer.ToWhseLoc = toWhseLoc;
             return iN_Transfer;
         }
 
@@ -10687,6 +10795,54 @@ namespace OM21100
         private global::System.DateTime _ToDate;
         partial void OnToDateChanging(global::System.DateTime value);
         partial void OnToDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ToWhseLoc
+        {
+            get
+            {
+                return _ToWhseLoc;
+            }
+            set
+            {
+                OnToWhseLocChanging(value);
+                ReportPropertyChanging("ToWhseLoc");
+                _ToWhseLoc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ToWhseLoc");
+                OnToWhseLocChanged();
+            }
+        }
+        private global::System.String _ToWhseLoc;
+        partial void OnToWhseLocChanging(global::System.String value);
+        partial void OnToWhseLocChanged();
 
         #endregion
 
@@ -14548,19 +14704,19 @@ namespace OM21100
         /// <param name="excludeOtherDisc">Initial value of the ExcludeOtherDisc property.</param>
         /// <param name="pctDiscountByLevel">Initial value of the PctDiscountByLevel property.</param>
         /// <param name="requiredType">Initial value of the RequiredType property.</param>
-        /// <param name="isRequiredQty">Initial value of the IsRequiredQty property.</param>
         /// <param name="choiceType">Initial value of the ChoiceType property.</param>
         /// <param name="prorateAmtType">Initial value of the ProrateAmtType property.</param>
         /// <param name="priorityPromo">Initial value of the PriorityPromo property.</param>
-        /// <param name="excludePromo">Initial value of the ExcludePromo property.</param>
         /// <param name="isDeductQtyAmt">Initial value of the IsDeductQtyAmt property.</param>
+        /// <param name="excludePromo">Initial value of the ExcludePromo property.</param>
         /// <param name="subBreakType">Initial value of the SubBreakType property.</param>
         /// <param name="breakBoundType">Initial value of the BreakBoundType property.</param>
         /// <param name="convertDiscAmtToFreeItem">Initial value of the ConvertDiscAmtToFreeItem property.</param>
+        /// <param name="isRequiredQty">Initial value of the IsRequiredQty property.</param>
         /// <param name="discSeqSolomon">Initial value of the DiscSeqSolomon property.</param>
         /// <param name="invtIDSolomon">Initial value of the InvtIDSolomon property.</param>
         /// <param name="discPrice">Initial value of the DiscPrice property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.Boolean isRequiredQty, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.String excludePromo, global::System.Boolean isDeductQtyAmt, global::System.String subBreakType, global::System.String breakBoundType, global::System.Boolean convertDiscAmtToFreeItem, global::System.String discSeqSolomon, global::System.String invtIDSolomon, global::System.Boolean discPrice)
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.Boolean isDeductQtyAmt, global::System.String excludePromo, global::System.String subBreakType, global::System.String breakBoundType, global::System.Boolean convertDiscAmtToFreeItem, global::System.Boolean isRequiredQty, global::System.String discSeqSolomon, global::System.String invtIDSolomon, global::System.Boolean discPrice)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -14587,15 +14743,15 @@ namespace OM21100
             oM_DiscSeq.ExcludeOtherDisc = excludeOtherDisc;
             oM_DiscSeq.PctDiscountByLevel = pctDiscountByLevel;
             oM_DiscSeq.RequiredType = requiredType;
-            oM_DiscSeq.IsRequiredQty = isRequiredQty;
             oM_DiscSeq.ChoiceType = choiceType;
             oM_DiscSeq.ProrateAmtType = prorateAmtType;
             oM_DiscSeq.PriorityPromo = priorityPromo;
-            oM_DiscSeq.ExcludePromo = excludePromo;
             oM_DiscSeq.IsDeductQtyAmt = isDeductQtyAmt;
+            oM_DiscSeq.ExcludePromo = excludePromo;
             oM_DiscSeq.SubBreakType = subBreakType;
             oM_DiscSeq.BreakBoundType = breakBoundType;
             oM_DiscSeq.ConvertDiscAmtToFreeItem = convertDiscAmtToFreeItem;
+            oM_DiscSeq.IsRequiredQty = isRequiredQty;
             oM_DiscSeq.DiscSeqSolomon = discSeqSolomon;
             oM_DiscSeq.InvtIDSolomon = invtIDSolomon;
             oM_DiscSeq.DiscPrice = discPrice;
@@ -15359,30 +15515,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean IsRequiredQty
-        {
-            get
-            {
-                return _IsRequiredQty;
-            }
-            set
-            {
-                OnIsRequiredQtyChanging(value);
-                ReportPropertyChanging("IsRequiredQty");
-                _IsRequiredQty = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsRequiredQty");
-                OnIsRequiredQtyChanged();
-            }
-        }
-        private global::System.Boolean _IsRequiredQty;
-        partial void OnIsRequiredQtyChanging(global::System.Boolean value);
-        partial void OnIsRequiredQtyChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Boolean> DonateGroupProduct
@@ -15407,30 +15539,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> StockPromotion
-        {
-            get
-            {
-                return _StockPromotion;
-            }
-            set
-            {
-                OnStockPromotionChanging(value);
-                ReportPropertyChanging("StockPromotion");
-                _StockPromotion = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("StockPromotion");
-                OnStockPromotionChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _StockPromotion;
-        partial void OnStockPromotionChanging(Nullable<global::System.Boolean> value);
-        partial void OnStockPromotionChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String ChoiceType
@@ -15451,6 +15559,30 @@ namespace OM21100
         private global::System.String _ChoiceType;
         partial void OnChoiceTypeChanging(global::System.String value);
         partial void OnChoiceTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> StockPromotion
+        {
+            get
+            {
+                return _StockPromotion;
+            }
+            set
+            {
+                OnStockPromotionChanging(value);
+                ReportPropertyChanging("StockPromotion");
+                _StockPromotion = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StockPromotion");
+                OnStockPromotionChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _StockPromotion;
+        partial void OnStockPromotionChanging(Nullable<global::System.Boolean> value);
+        partial void OnStockPromotionChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -15505,30 +15637,6 @@ namespace OM21100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ExcludePromo
-        {
-            get
-            {
-                return _ExcludePromo;
-            }
-            set
-            {
-                OnExcludePromoChanging(value);
-                ReportPropertyChanging("ExcludePromo");
-                _ExcludePromo = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ExcludePromo");
-                OnExcludePromoChanged();
-            }
-        }
-        private global::System.String _ExcludePromo;
-        partial void OnExcludePromoChanging(global::System.String value);
-        partial void OnExcludePromoChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.Boolean IsDeductQtyAmt
         {
             get
@@ -15547,6 +15655,30 @@ namespace OM21100
         private global::System.Boolean _IsDeductQtyAmt;
         partial void OnIsDeductQtyAmtChanging(global::System.Boolean value);
         partial void OnIsDeductQtyAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ExcludePromo
+        {
+            get
+            {
+                return _ExcludePromo;
+            }
+            set
+            {
+                OnExcludePromoChanging(value);
+                ReportPropertyChanging("ExcludePromo");
+                _ExcludePromo = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ExcludePromo");
+                OnExcludePromoChanged();
+            }
+        }
+        private global::System.String _ExcludePromo;
+        partial void OnExcludePromoChanging(global::System.String value);
+        partial void OnExcludePromoChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -15619,6 +15751,30 @@ namespace OM21100
         private global::System.Boolean _ConvertDiscAmtToFreeItem;
         partial void OnConvertDiscAmtToFreeItemChanging(global::System.Boolean value);
         partial void OnConvertDiscAmtToFreeItemChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsRequiredQty
+        {
+            get
+            {
+                return _IsRequiredQty;
+            }
+            set
+            {
+                OnIsRequiredQtyChanging(value);
+                ReportPropertyChanging("IsRequiredQty");
+                _IsRequiredQty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsRequiredQty");
+                OnIsRequiredQtyChanged();
+            }
+        }
+        private global::System.Boolean _IsRequiredQty;
+        partial void OnIsRequiredQtyChanging(global::System.Boolean value);
+        partial void OnIsRequiredQtyChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -15715,6 +15871,30 @@ namespace OM21100
         private global::System.String _SolomonSite;
         partial void OnSolomonSiteChanging(global::System.String value);
         partial void OnSolomonSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RegistrationOfIndustryAndTrade
+        {
+            get
+            {
+                return _RegistrationOfIndustryAndTrade;
+            }
+            set
+            {
+                OnRegistrationOfIndustryAndTradeChanging(value);
+                ReportPropertyChanging("RegistrationOfIndustryAndTrade");
+                _RegistrationOfIndustryAndTrade = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RegistrationOfIndustryAndTrade");
+                OnRegistrationOfIndustryAndTradeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RegistrationOfIndustryAndTrade;
+        partial void OnRegistrationOfIndustryAndTradeChanging(Nullable<global::System.Boolean> value);
+        partial void OnRegistrationOfIndustryAndTradeChanged();
 
         #endregion
 
@@ -16867,7 +17047,8 @@ namespace OM21100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowHandle sI_ApprovalFlowHandle = new SI_ApprovalFlowHandle();
             sI_ApprovalFlowHandle.AppFolID = appFolID;
@@ -16881,6 +17062,7 @@ namespace OM21100
             sI_ApprovalFlowHandle.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowHandle.LUpd_User = lUpd_User;
             sI_ApprovalFlowHandle.tstamp = tstamp;
+            sI_ApprovalFlowHandle.BranchID = branchID;
             return sI_ApprovalFlowHandle;
         }
 
@@ -17523,6 +17705,33 @@ namespace OM21100
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -18496,6 +18705,30 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideSiteSolomon;
         partial void OnHideSiteSolomonChanging(Nullable<global::System.Boolean> value);
         partial void OnHideSiteSolomonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideReIndustryAndTrade
+        {
+            get
+            {
+                return _HideReIndustryAndTrade;
+            }
+            set
+            {
+                OnHideReIndustryAndTradeChanging(value);
+                ReportPropertyChanging("HideReIndustryAndTrade");
+                _HideReIndustryAndTrade = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideReIndustryAndTrade");
+                OnHideReIndustryAndTradeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideReIndustryAndTrade;
+        partial void OnHideReIndustryAndTradeChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideReIndustryAndTradeChanged();
 
         #endregion
 

@@ -90,7 +90,8 @@ namespace OM21100.Controllers
                 , hideDiscPrice= false
                 , hideCopy=false
                 , hideSite = false
-                , hideSiteSolomon = false;
+                , hideSiteSolomon = false
+                , hideReIndustryAndTrade = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -117,6 +118,7 @@ namespace OM21100.Controllers
                 hideCopy = objConfig.HideCopy.HasValue && objConfig.HideCopy.Value;
                 hideSite = objConfig.HideSite.HasValue && objConfig.HideSite.Value;
                 hideSiteSolomon = objConfig.HideSiteSolomon.HasValue && objConfig.HideSiteSolomon.Value;
+                hideReIndustryAndTrade =objConfig.HideReIndustryAndTrade.HasValue && objConfig.HideReIndustryAndTrade.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -141,6 +143,7 @@ namespace OM21100.Controllers
             ViewBag.hideCopy = hideCopy;
             ViewBag.hideSite = hideSite;
             ViewBag.hideSiteSolomon = hideSiteSolomon;
+            ViewBag.hideReIndustryAndTrade = hideReIndustryAndTrade;
             return View();
         }
 
@@ -3291,6 +3294,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.StartDate = inputDiscSeq.StartDate.ToDateShort();
             updatedDiscSeq.Active = inputDiscSeq.Active;
             updatedDiscSeq.AllowEditDisc = inputDiscSeq.AllowEditDisc;
+            updatedDiscSeq.RegistrationOfIndustryAndTrade = inputDiscSeq.RegistrationOfIndustryAndTrade;
             if (inputDiscSeq.ProAplForItem == "M")
             {
                 updatedDiscSeq.AutoFreeItem = true;
