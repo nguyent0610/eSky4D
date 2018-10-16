@@ -869,47 +869,15 @@ var Main = {
                 var discSeq = App.frmDiscSeqInfo.getRecord();
                 if (discSeq) {
                     App.frmDiscSeqInfo.updateRecord();
-                    if (!discSeq.dirty) {
-                        if (!HQ.store.isChange(App.grdDiscBreak.store)) {
-                            if (!HQ.store.isChange(App.grdFreeItem.store)) {
-                                if (!HQ.store.isChange(App.grdCompany.store)) {
-                                    if (!HQ.store.isChange(App.grdDiscItem.store)) {
-                                        if (!HQ.store.isChange(App.grdBundle.store)) {
-                                            if (!HQ.store.isChange(App.grdDiscCustClass.store)) {
-                                                if (!HQ.store.isChange(App.grdDiscCust.store)) {
-                                                    HQ.isChange = HQ.store.isChange(App.grdDiscItemClass.store);
-                                                }
-                                                else {
-                                                    HQ.isChange = true;
-                                                }
-                                            }
-                                            else {
-                                                HQ.isChange = true;
-                                            }
-                                        }
-                                        else {
-                                            HQ.isChange = true;
-                                        }
-                                    }
-                                    else {
-                                        HQ.isChange = true;
-                                    }
-                                }
-                                else {
-                                    HQ.isChange = true;
-                                }
-                            }
-                            else {
-                                HQ.isChange = true;
-                            }
-                        }
-                        else {
-                            HQ.isChange = true;
-                        }
-                    }
-                    else {
-                        HQ.isChange = true;
-                    }
+                    HQ.isChange =  discSeq.dirty
+                                || HQ.store.isChange(App.grdDiscBreak.store)
+                                || HQ.store.isChange(App.grdFreeItem.store)
+                                || HQ.store.isChange(App.grdCompany.store)
+                                || HQ.store.isChange(App.grdDiscItem.store)
+                                || HQ.store.isChange(App.grdBundle.store)
+                                || HQ.store.isChange(App.grdDiscCustClass.store)
+                                || HQ.store.isChange(App.grdDiscCust.store) 
+                                || HQ.store.isChange(App.grdDiscItemClass.store);
                 }
                 if (HQ.isChange || HQ.isChange0) {
                     HQ.common.changeData(true, 'OM21100');//co thay doi du lieu gan * tren tab title header
@@ -927,13 +895,7 @@ var Main = {
                 } else if (!HQ.isChange && App.cboDiscSeq.store.data.length == 0) {
                     App.cboDiscClass.setReadOnly(false);
                     App.cboDiscType.setReadOnly(false);
-                }
-                setTimeout(function () {
-                    if (field) {
-                        field.hasFocus = false;
-                        field.focus();
-                    }
-                }, 1000);
+                }               
             }
         },
 
@@ -2729,6 +2691,11 @@ var DiscDefintion = {
                 App.grdDiscBreak.columns[3].setText(HQ.common.getLang('NoBundle'));
             } else {
                 App.grdDiscBreak.columns[3].setText(HQ.common.getLang('BreakAmt'));
+            }
+            if (App.cboExcludePromo.hidden && App.txtPriorityPromo.hidden && App.cboBreakBoundType.hidden) {
+                App.ctnPriority.hide();
+            } else {
+                App.ctnPriority.show();
             }
         },
 
