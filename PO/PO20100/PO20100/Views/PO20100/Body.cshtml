@@ -33,7 +33,23 @@
     .ID("frmMain")
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        }, "Print", true, ""))
     .Layout(LayoutType.Border)
     .Listeners(l =>
     {
@@ -233,8 +249,68 @@
             .Layout(LayoutType.Border)
             .CloseAction(CloseAction.Hide)
             .Items(
+                X.Panel().ID("treeBranch")
+            .Region(Region.West).Flex(30)
+            .MinWidth(150).Split(true).AutoScroll(true)
+            .Listeners(l =>
+            {
+                l.AfterRender.Handler = "treeBranch_AfterRender('treeBranch');";
+            }
+            )
+                .BottomBar(
+                    X.Toolbar()
+                    .Items(
+                        X.ToolbarFill()
 
-                X.GridPanel()
+                        , HQ.Button().ID("btnExpand")
+                        .HQLangCode("Expand")
+                        .Icon(Icon.BulletTogglePlus)
+                        .Handler("btnExpand_click")
+
+                        , X.ToolbarSpacer()
+                        , X.ToolbarSeparator()
+                        , X.ToolbarSpacer()
+
+                        , HQ.Button().ID("btnCollapse")
+                        .HQLangCode("Collapse")
+                        .Icon(Icon.BulletToggleMinus)
+                        .Handler("btnCollapse_click")
+
+                        , X.ToolbarFill()
+                    )
+                )
+
+                , X.Panel()
+                .Region(Region.Center).Flex(10)
+                .Layout(LayoutType.VBox)
+                .MinWidth(50)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnAddAll")
+                    .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnAddAll_click")
+
+                    , HQ.Button().ID("btnAdd")
+                    .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                    .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnAdd_click")
+
+                    , HQ.Button().ID("btnDel")
+                    .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                    .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnDel_click")
+
+                    , HQ.Button().ID("btnDelAll")
+                    .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                    .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnDelAll_click")
+                ),
+                X.Panel().ID("pnlgrid_Tree")
+                .Region(Region.East).Flex(60)
+                .Layout(LayoutType.Border)
+                .Items(
+                        X.GridPanel()
                 .Scroll(ScrollMode.Both)
                 .View(X.GridView().TrackOver(false))
                 .ID("grdPO_PriceCpny")
@@ -258,7 +334,7 @@
                 .SortableColumns(false)
                 .ColumnModel(
 
-                 X.RowNumbererColumn()
+                 X.RowNumbererColumn().Width(30)
                     , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(150).ID("txtCpny")
                     .Editor(
                         HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("PO20100_pcBranchAllByUser")
@@ -270,7 +346,7 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Flex(1)
+                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Flex(1).Renderer("renderBranchName")
                     , X.CommandColumn().Width(130)
                     .Commands(
                         X.GridCommand()
@@ -324,7 +400,9 @@
                             X.StringFilter().DataIndex("CpnyID"),
                             X.StringFilter().DataIndex("CpnyName")
                         )
+                )            
                 )
+                
             )
             .Listeners(lss =>
             {

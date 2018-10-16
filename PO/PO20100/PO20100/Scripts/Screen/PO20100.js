@@ -571,6 +571,325 @@ var btnCopy_click = function (btn, e, eOpts) {
 };
 
 
+var treeBranch_AfterRender = function (id) {
+    HQ.common.showBusy(true, HQ.waitMsg);
+    App.direct.PO20100GetTreeBranch(id, {
+        success: function (result) {
+            App.treePanelBranch.getRootNode().expand();
+            HQ.common.showBusy(false, HQ.waitMsg);
+        }
+    });
+};
+var btnExpand_click = function (btn, e, eOpts) {
+    App.treePanelBranch.expandAll();
+};
+var btnCollapse_click = function (btn, e, eOpts) {
+    App.treePanelBranch.collapseAll();
+};
+
+
+var btnAddAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        //if (checkEditData()) {
+        var allNodes = getLeafNodes(App.treePanelBranch.getRootNode(), true);
+        if (allNodes && allNodes.length > 0) {
+            App.grdPO_PriceCpny.store.suspendEvents();
+            allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoPO_PriceCpny, keys1);
+                if (node.data.Type == "Company") {
+                    var record = HQ.store.findInStore(App.grdPO_PriceCpny.store,
+                        ['CpnyID'],
+                        [node.data.RecID]);
+                    if (!record) {
+                        record = App.stoPO_PriceCpny.getAt(App.grdPO_PriceCpny.store.getCount() - 1);
+                        record.set('CpnyID', node.data.RecID);
+                    }
+                }
+            });
+            HQ.store.insertBlank(App.stoPO_PriceCpny, keys1);
+            var record = App.stoPO_PriceCpny.getAt(App.stoPO_PriceCpny.getCount() - 1);
+            App.treePanelBranch.clearChecked();
+            App.grdPO_PriceCpny.store.resumeEvents();
+            App.grdPO_PriceCpny.view.refresh();
+            App.grdPO_PriceCpny.store.loadPage(1);
+        }
+        // }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnAdd_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        // if (checkEditData()) {
+        var allNodes = App.treePanelBranch.getCheckedNodes();
+        if (allNodes && allNodes.length > 0) {
+            App.grdPO_PriceCpny.store.suspendEvents();
+            allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoPO_PriceCpny, keys1);
+                if (node.attributes.Type == "Company") {
+                    var record = HQ.store.findInStore(App.grdPO_PriceCpny.store,
+                        ['CpnyID'],
+                        [node.attributes.RecID]);
+                    if (!record) {
+                        record = App.stoPO_PriceCpny.getAt(App.grdPO_PriceCpny.store.getCount() - 1);
+                        record.set('CpnyID', node.attributes.RecID);
+                    }
+                }
+            });
+            HQ.store.insertBlank(App.stoPO_PriceCpny, keys1);
+            var record = App.stoPO_PriceCpny.getAt(App.stoPO_PriceCpny.getCount() - 1);
+            App.grdPO_PriceCpny.store.resumeEvents();
+            App.grdPO_PriceCpny.view.refresh();
+            App.treePanelBranch.clearChecked();
+        }
+        frmChange();
+        // }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDel_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var selRecs = App.grdPO_PriceCpny.selModel.selected.items;
+        if (selRecs.length > 0) {
+            var params = [];
+            selRecs.forEach(function (record) {
+                params.push(record.data.CpnyID);
+            });
+            HQ.message.show(2015020806,
+                params.join(" & ") + "," + HQ.common.getLang("AppComp"),
+                'deleteSelectedCompanies');
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDelAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        HQ.message.show(11, '', 'deleteAllCompanies');
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var getDeepAllLeafNodes = function (node, onlyLeaf) {
+    var allNodes = new Array();
+    if (!Ext.value(node, false)) {
+        return [];
+    }
+    if (node.isLeaf()) {
+        return node;
+    } else {
+        node.eachChild(
+         function (Mynode) {
+             allNodes = allNodes.concat(Mynode.childNodes);
+         }
+        );
+    }
+    return allNodes;
+};
+var getLeafNodes = function (node) {
+    var childNodes = [];
+    node.eachChild(function (child) {
+        if (child.isLeaf()) {
+            childNodes.push(child);
+        }
+        else {
+            var children = getLeafNodes(child);
+            if (children.length) {
+                children.forEach(function (nill) {
+                    childNodes.push(nill);
+                });
+            }
+        }
+    });
+    return childNodes;
+};
+var deleteSelectedCompanies = function (item) {
+    if (item == "yes") {
+        App.grdPO_PriceCpny.deleteSelected();
+        frmChange();
+    }
+};
+
+var deleteAllCompanies = function (item) {
+    if (item == "yes") {
+        //App.grdPO_PriceCpny.store.removeAll();
+
+        App.stoPO_PriceCpny.suspendEvents();
+        var allData = App.stoPO_PriceCpny.snapshot || App.stoPO_PriceCpny.allData || App.stoPO_PriceCpny.data;
+        var selRecs = allData.items;
+        for (var i = selRecs.length - 1; i >= 0; i--) {
+            App.grdPO_PriceCpny.getStore().remove(allData.items[i], App.grdPO_PriceCpny);
+            App.grdPO_PriceCpny.getView().focusRow(App.grdPO_PriceCpny.getStore().getCount() - 1);
+            App.grdPO_PriceCpny.getSelectionModel().select(App.grdPO_PriceCpny.getStore().getCount() - 1);
+        }
+        var invtBlank = HQ.store.findRecord(App.grdPO_PriceCpny.store, ['CpnyID'], ['']);
+        if (!invtBlank) {
+            App.grdPO_PriceCpny.store.insert(0, Ext.create("App.mdlPO_PriceCpny", {
+                CpnyID: ''
+            }));
+        }
+        App.stoPO_PriceCpny.resumeEvents();
+        App.grdPO_PriceCpny.view.refresh();
+        App.stoPO_PriceCpny.loadPage(1);
+        frmChange();
+    }
+};
+var treePanelBranch_checkChange = function (node, checked, eOpts) {
+    //if (App.cboStatus.getValue() == _holdStatus) {
+        checkNode(checked, node);
+        checkParentNode(checked, node);
+        //node.childNodes.forEach(function (childNode) {
+        //    childNode.set("checked", checked);
+        //});
+    //} else {
+    //    App.treePanelBranch.clearChecked();
+    //}
+};
+var checkNode = function (checked, node) {
+    if (node.childNodes.length > 0) {
+        for (var i = 0; i < node.childNodes.length; i++) {
+            node.set('checked', checked)
+            checkNode(checked, node.childNodes[i]);
+        }
+    }
+    node.set('checked', checked);
+};
+var checkParentNode = function (checked, node) {
+
+
+    if (node.parentNode != undefined) {
+        node.parentNode.set('checked', checked)
+        checkParentNode(checked, node.parentNode);
+    }
+}
+var tree_ItemCollapse = function (a, b) {
+    collapseNode(a);
+}
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboCpnyID.findRecord("BranchID", rec.data.CpnyID);
+    if (record) {
+        return record.data.BranchName;
+    }
+    else {
+        return value;
+    }
+};
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: HQ.common.getLang("Exporting"),
+        url: 'PO20100/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+            //lstOM_CabinetChecking: Ext.encode(App.stoOM_CabinetChecking.getRecordsValues())
+        },
+        success: function (msg, data) {
+            window.location = 'PO20100/DownloadAndDelete?file=' + data.result.fileName;
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+};
+var btnImport_Click = function (sender, e) {
+    if (!App.frmMain.isValid()) {
+        showFieldInvalid(App.frmMain);
+        App.btnImport.reset();
+    }
+    else {
+        var fileName = sender.getValue();
+        var ext = fileName.split(".").pop().toLowerCase();
+        if (ext == "xls" || ext == "xlsx") {
+            App.frmMain.submit({
+                waitMsg: "Importing....",
+                url: 'PO20100/Import',
+                timeout: 18000000,
+                clientValidation: false,
+                method: 'POST',
+                params: {
+                },
+                success: function (msg, data) {
+
+                    if (this.result.data.lstPO_Price != undefined) {
+                        App.stoPO_Price.suspendEvents();
+                        this.result.data.lstPO_Price.forEach(function (item) {
+                            var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], [item.InvtID]);
+                            if (!objInvtID) {
+                                HQ.store.insertRecord(App.stoPO_Price, "InvtID", Ext.create('App.mdlPO_Price'), false);
+                                objInvtID = App.stoPO_Price.data.items[App.stoPO_Price.getCount() - 1];
+                                objInvtID.set("InvtID", item.InvtID);
+                                objInvtID.set("UOM", item.UOM);
+                                objInvtID.set("Price", item.Price);
+                                objInvtID.set("QtyBreak", 1);
+                            }
+                            objInvtID.set("UOM", item.UOM);
+                            objInvtID.set("Price", item.Price);
+                            objInvtID.set("QtyBreak", 1);
+                        });
+                        App.stoPO_Price.resumeEvents();
+                        App.grdPO_Price.view.refresh();
+                    }
+
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
+                    var record = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], ['']);
+                    if (!record) {
+                        HQ.store.insertBlank(App.grdPO_Price.store, keys);
+                    }
+                    if (!Ext.isEmpty(this.result.data.message)) {
+                        HQ.message.show('2013103001', [this.result.data.message], '', true);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                    }
+
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+        else {
+            HQ.message.show('2014070701', ext, '');
+            sender.reset();
+        }
+    }
+
+    
+};
+var focusOnInvalidField = function (item) {
+    if (item == "ok") {
+        App.frmMain.getForm().getFields().each(function (field) {
+            if (!field.isValid()) {
+                field.focus();
+                return false;
+            }
+        });
+    }
+};
+var showFieldInvalid = function (form) {
+    var done = 1;
+    form.getForm().getFields().each(function (field) {
+        if (!field.isValid()) {
+            HQ.message.show(15, field.fieldLabel, 'focusOnInvalidField');
+            done = 0;
+            return false;
+        }
+    });
+    return done;
+};
+
+
 //var tabPO_Setup_AfterRender = function (obj) {
 //    if (this.parentAutoLoadControl != null)
 //        obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
