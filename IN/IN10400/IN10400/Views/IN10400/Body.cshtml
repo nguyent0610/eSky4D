@@ -49,7 +49,7 @@
                             .HQLangCode("BranchName").Width(300)
                             .Tag("X"),
 
-                        HQ.Combo().ID("cboBranch").Name("BranchID").HQLangCode("BranchName").Hidden(true)
+                        HQ.Combo().ID("cboBranch").HQLangCode("BranchName").Hidden(true)
                             .HQProcedure("OM10100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
                             .DisplayField("BranchName").ValueField("BranchID")
                             .LabelWidth(130).Width(300).HQHeightWidth(400, 300)
