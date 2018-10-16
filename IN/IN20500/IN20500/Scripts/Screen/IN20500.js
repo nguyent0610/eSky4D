@@ -81,6 +81,8 @@ var firstLoad = function () {
     App.cboCpnyID.getStore().addListener('load', checkLoad);
     App.stoProductCpny.addListener('load', checkLoad);
 
+    App.btnExport.setVisible(HQ.isShowImport);
+    App.btnImport.setVisible(HQ.isShowImport);
     App.txtBarCode.setVisible(HQ.isShowBarCode);
 };
 
@@ -1227,3 +1229,64 @@ var expandAll = function (tree) {
         return nodes;
     });
 };
+
+
+
+
+/////////////excel
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'IN20500/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+
+        },
+        success: function (msg, data) {
+            var filePath = data.result.filePath;
+            if (filePath) {
+                window.location = "IN20500/Download?filePath=" + filePath + "&fileName=data_";
+            }
+          
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+
+}
+var btnImport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: HQ.common.getLang("WaitMsg"),
+        url: 'IN20500/Import',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        success: function (msg, data) {
+            if (this.result.data.message) {
+                HQ.message.show('2013103001', [this.result.data.message], '', true);
+            }
+            else {
+                HQ.message.process(msg, data, true);
+            }
+            refresh("yes");
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+            App.btnImport.reset();
+        }
+    });
+}
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
+}

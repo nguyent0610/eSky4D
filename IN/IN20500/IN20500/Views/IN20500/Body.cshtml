@@ -16,7 +16,25 @@
     .ID("frmMain")
     .TrackResetOnLoad(true)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", true, ""))
+    //.TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+                .ID("btnImport")
+                .ButtonText("Import")
+                .ButtonOnly(true)
+                .Icon(Icon.BookAdd)
+                .Listeners(p=>{
+                    p.Change.Fn = "btnImport_Click";              
+                })          
+            , X.Button()
+                .ID("btnExport")
+                .Text(Util.GetLang("Export"))
+                .Icon(Icon.ArrowTurnRight)
+                .Listeners(p=>{
+                    p.Click.Fn = "btnExport_Click";
+                })
+        }, "print", true, ""))
+
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
     .Listeners(l =>

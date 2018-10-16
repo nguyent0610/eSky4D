@@ -84,22 +84,6 @@ namespace IN20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_InvtCpny> IN_InvtCpny
-        {
-            get
-            {
-                if ((_IN_InvtCpny == null))
-                {
-                    _IN_InvtCpny = base.CreateObjectSet<IN_InvtCpny>("IN_InvtCpny");
-                }
-                return _IN_InvtCpny;
-            }
-        }
-        private ObjectSet<IN_InvtCpny> _IN_InvtCpny;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<HO_PendingTasks> HO_PendingTasks
         {
             get
@@ -116,18 +100,18 @@ namespace IN20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SI_ApprovalFlowHandle> SI_ApprovalFlowHandle
+        public ObjectSet<IN_UnitConversion> IN_UnitConversion
         {
             get
             {
-                if ((_SI_ApprovalFlowHandle == null))
+                if ((_IN_UnitConversion == null))
                 {
-                    _SI_ApprovalFlowHandle = base.CreateObjectSet<SI_ApprovalFlowHandle>("SI_ApprovalFlowHandle");
+                    _IN_UnitConversion = base.CreateObjectSet<IN_UnitConversion>("IN_UnitConversion");
                 }
-                return _SI_ApprovalFlowHandle;
+                return _IN_UnitConversion;
             }
         }
-        private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
+        private ObjectSet<IN_UnitConversion> _IN_UnitConversion;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -148,18 +132,34 @@ namespace IN20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_UnitConversion> IN_UnitConversion
+        public ObjectSet<IN_InvtCpny> IN_InvtCpny
         {
             get
             {
-                if ((_IN_UnitConversion == null))
+                if ((_IN_InvtCpny == null))
                 {
-                    _IN_UnitConversion = base.CreateObjectSet<IN_UnitConversion>("IN_UnitConversion");
+                    _IN_InvtCpny = base.CreateObjectSet<IN_InvtCpny>("IN_InvtCpny");
                 }
-                return _IN_UnitConversion;
+                return _IN_InvtCpny;
             }
         }
-        private ObjectSet<IN_UnitConversion> _IN_UnitConversion;
+        private ObjectSet<IN_InvtCpny> _IN_InvtCpny;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SI_ApprovalFlowHandle> SI_ApprovalFlowHandle
+        {
+            get
+            {
+                if ((_SI_ApprovalFlowHandle == null))
+                {
+                    _SI_ApprovalFlowHandle = base.CreateObjectSet<SI_ApprovalFlowHandle>("SI_ApprovalFlowHandle");
+                }
+                return _SI_ApprovalFlowHandle;
+            }
+        }
+        private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
 
         #endregion
 
@@ -174,14 +174,6 @@ namespace IN20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_InvtCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_InvtCpny(IN_InvtCpny iN_InvtCpny)
-        {
-            base.AddObject("IN_InvtCpny", iN_InvtCpny);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the HO_PendingTasks EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToHO_PendingTasks(HO_PendingTasks hO_PendingTasks)
@@ -190,11 +182,11 @@ namespace IN20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the SI_ApprovalFlowHandle EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the IN_UnitConversion EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
+        public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
         {
-            base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
+            base.AddObject("IN_UnitConversion", iN_UnitConversion);
         }
     
         /// <summary>
@@ -206,11 +198,19 @@ namespace IN20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_UnitConversion EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the IN_InvtCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
+        public void AddToIN_InvtCpny(IN_InvtCpny iN_InvtCpny)
         {
-            base.AddObject("IN_UnitConversion", iN_UnitConversion);
+            base.AddObject("IN_InvtCpny", iN_InvtCpny);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SI_ApprovalFlowHandle EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
+        {
+            base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
         }
 
         #endregion
@@ -4494,6 +4494,30 @@ namespace IN20500
         private Nullable<global::System.Boolean> _IsShowBarCode;
         partial void OnIsShowBarCodeChanging(Nullable<global::System.Boolean> value);
         partial void OnIsShowBarCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowImportExport
+        {
+            get
+            {
+                return _IsShowImportExport;
+            }
+            set
+            {
+                OnIsShowImportExportChanging(value);
+                ReportPropertyChanging("IsShowImportExport");
+                _IsShowImportExport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowImportExport");
+                OnIsShowImportExportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowImportExport;
+        partial void OnIsShowImportExportChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowImportExportChanged();
 
         #endregion
 

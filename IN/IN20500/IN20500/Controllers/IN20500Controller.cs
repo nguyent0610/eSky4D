@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -10,11 +10,15 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using Aspose.Cells;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using HQ.eSkySys;
 //using HQSendMailApprove;
 using System.Web.Hosting;
+using HQFramework.Common;
 using Ionic.Zip;
+using HQFramework.DAL;
 
 namespace IN20500.Controllers
 {
@@ -76,6 +80,7 @@ namespace IN20500.Controllers
             var GiftPoint = false;
             var isShowBarCode = false;
             var isShowKitType = false;
+            var isShowImport = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
             var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
@@ -88,12 +93,14 @@ namespace IN20500.Controllers
                 GiftPoint = objConfigHideShow.GiftPoint ??  false;
                 isShowBarCode = objConfigHideShow.IsShowBarCode ?? false;
                 isShowKitType = objConfigHideShow.KitType ?? false;
+                isShowImport = objConfigHideShow.IsShowImportExport ?? false;
             }
             ViewBag.isHideChkPublic = isHideChkPublic;
             ViewBag.DfltValMthd = DfltValMthd;
             ViewBag.GiftPoint = GiftPoint;
             ViewBag.IsShowBarCode = isShowBarCode;
             ViewBag.IsShowKitType = isShowKitType;
+            ViewBag.IsShowImport = isShowImport;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -743,6 +750,572 @@ namespace IN20500.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        public ActionResult Import()
+        {
+            var colTexts = HeaderExcel();
+            var dataRowIdx = 1;
+            FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+            HttpPostedFile file = fileUploadField.PostedFile;
+            FileInfo fileInfo = new FileInfo(file.FileName);
+            try
+            {
+                if (fileInfo.Extension.ToLower() == ".xls" || fileInfo.Extension.ToLower() == ".xlsx")
+                {
+                    Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                    Worksheet workSheet = workbook.Worksheets[0];
+
+                    if (workSheet.Cells.MaxDataRow < 1)
+                    {
+                        throw new MessageException(MessageType.Message, "2018062955");
+                    }
+                    string message = string.Empty;
+                    string invtIDNull = string.Empty;
+                    string descrNull = string.Empty;
+                    string classIDNull = string.Empty;
+                    string typeNull = string.Empty;
+                    string sourceNull = string.Empty;
+                    string valMthdNull = string.Empty;
+                    string lotSerTrackNull = string.Empty;
+                    string stkUnitNull = string.Empty;
+                    string pOUnitNull = string.Empty;
+                    string sOUnitNull = string.Empty;
+                    string taxCatNull = string.Empty;
+
+
+                    string invtID = string.Empty;
+                    string descr = string.Empty;
+                    string classID = string.Empty;
+                    string type = string.Empty;
+                    string source = string.Empty;
+                    string valMthd = string.Empty;
+                    string lotSerTrack = string.Empty;
+                    string stkUnit = string.Empty;
+                    string pOUnit = string.Empty;
+                    string sOUnit = string.Empty;
+                    string taxCat = string.Empty;
+
+                    for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++) //index luôn đi từ 0
+                    {
+                        #region Get data from excel
+                        bool flagCheck = false;
+                        invtID = workSheet.Cells[i, colTexts.IndexOf("InvtID")].StringValue.Trim();
+                        descr = workSheet.Cells[i, colTexts.IndexOf("Descr")].StringValue.Trim();
+                        classID = workSheet.Cells[i, colTexts.IndexOf("ClassID")].StringValue.Trim();
+                        type = workSheet.Cells[i, colTexts.IndexOf("Type")].StringValue.Trim();
+                        source = workSheet.Cells[i, colTexts.IndexOf("Source")].StringValue.Trim();
+                        valMthd = workSheet.Cells[i, colTexts.IndexOf("ValMthd")].StringValue.Trim();
+                        lotSerTrack = workSheet.Cells[i, colTexts.IndexOf("LotSerTrack")].StringValue.Trim();
+                        stkUnit = workSheet.Cells[i, colTexts.IndexOf("StkUnit")].StringValue.Trim();
+                        pOUnit = workSheet.Cells[i, colTexts.IndexOf("POUnit")].StringValue.Trim();
+                        sOUnit = workSheet.Cells[i, colTexts.IndexOf("SOUnit")].StringValue.Trim();
+                        taxCat = workSheet.Cells[i, colTexts.IndexOf("TaxCat")].StringValue.Trim();
+
+                        #endregion
+
+                        #region checkdata
+
+                        if ((!string.IsNullOrEmpty(descr) || !string.IsNullOrEmpty(classID) || !string.IsNullOrEmpty(type) || !string.IsNullOrEmpty(source) || !string.IsNullOrEmpty(valMthd) || !string.IsNullOrEmpty(lotSerTrack) || !string.IsNullOrEmpty(stkUnit)) && string.IsNullOrEmpty(invtID))
+                        {
+                            invtID += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+                        if (string.IsNullOrEmpty(descr))
+                        {
+                            descrNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(classID))
+                        {
+                            classIDNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(type))
+                        {
+                            typeNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(source))
+                        {
+                            sourceNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(valMthd))
+                        {
+                            valMthdNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(lotSerTrack))
+                        {
+                            lotSerTrackNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(stkUnit))
+                        {
+                            stkUnitNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(pOUnit))
+                        {
+                            pOUnitNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(sOUnit))
+                        {
+                            sOUnitNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+
+                        if (string.IsNullOrEmpty(taxCat))
+                        {
+                            taxCatNull += (i + 1) + ", ";
+                            flagCheck = true;
+                        }
+                        
+
+                        #endregion
+
+                        #region Save data 
+
+                        if (!flagCheck)
+                        {
+                            var obj = _db.IN_Inventory.FirstOrDefault(x => x.InvtID == invtID);
+                            if (obj == null)
+                            {
+                                obj = new IN_Inventory();
+                                obj.InvtID = invtID;
+                                obj.Descr = descr;
+                                obj.ClassID = classID;
+                                obj.InvtType = type;
+                                obj.Source = source;
+                                obj.ValMthd = valMthd;
+                                obj.LotSerTrack = lotSerTrack;
+                                obj.DfltPOUnit = pOUnit;
+                                obj.DfltSOUnit = sOUnit;
+                                obj.TaxCat = taxCat;
+                                obj.StkUnit = stkUnit;
+
+                                obj.NodeID = classID;
+                                obj.NodeLevel = 2;
+                                obj.ParentRecordID = 1;
+                                obj.Public = true;
+                                obj.BarCode = "";
+                                obj.Buyer = "";
+                                obj.Color = "";
+                                obj.Descr1 = "";
+                                obj.IROverStkQty = 0;
+                                obj.IRSftyStkDays = 0;
+                                obj.IRSftyStkPct = 0;
+                                obj.IRSftyStkQty = 0;
+                                obj.PriceClassID = "";
+                                obj.LossRate00 = 0;
+                                obj.LossRate01 = 0;
+                                obj.LossRate02 = 0;
+                                obj.LossRate03 = 0;
+                                obj.LotSerFxdLen = 0;
+                                obj.LotSerFxdTyp = "";
+                                obj.LotSerFxdVal = "";
+                                obj.LotSerIssMthd = "";
+                                obj.LotSerNumLen = 0;
+                                obj.LotSerNumVal = "";
+                                obj.MaterialType = "MD";
+                                obj.POFee = 0;
+                                obj.POPrice = 0;
+                                obj.PrePayPct = 0;
+                                obj.SOFee = 0;
+                                obj.SOPrice = 0;
+                                obj.SerAssign = "";
+                                obj.ShelfLife = 0;
+                                obj.WarrantyDays = 0;
+                                obj.Size = "";
+                                obj.Status = "AC";
+                                obj.StkItem = 1;
+                                obj.StkVol = 0;
+                                obj.StkWt = 0;
+                                obj.StkWtUnit = "";
+                                obj.Style = "";
+                                obj.VendID1 = "";
+                                obj.VendID2 = "";
+                                obj.LotSerRcptAuto = false;
+                                obj.GiftPoint = 0;
+                                obj.ApproveStatus = "H";
+                                obj.CnvFact = 1;
+                                obj.Category = "";
+                                obj.Brand = "";
+                                obj.ProGroup = "";
+                                obj.ProType = "";
+
+
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
+                                obj.Crtd_DateTime = DateTime.Now;
+                                obj.Crtd_Prog = _screenNbr;
+                                obj.Crtd_User = _userName;
+                                _db.IN_Inventory.AddObject(obj);
+                            }
+                            else
+                            {
+                                obj.Descr = descr;
+                                obj.ClassID = classID;
+                                obj.PriceClassID = type;
+                                obj.Source = source;
+                                obj.ValMthd = valMthd;
+                                obj.LotSerTrack = lotSerTrack;
+                                obj.DfltPOUnit = pOUnit;
+                                obj.DfltSOUnit = sOUnit;
+                                obj.TaxCat = taxCat;
+
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
+
+                            }
+
+                        }
+                       
+
+                        #endregion
+                    }
+
+                    message = invtIDNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("InvtID"), invtIDNull.TrimEnd(','));
+                    message += descrNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("Descr"), descrNull.TrimEnd(','));
+                    message += classIDNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("ClassID"), descrNull.TrimEnd(','));
+                    message += typeNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("Type"), descrNull.TrimEnd(','));
+                    message += sourceNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("Source"), descrNull.TrimEnd(','));
+                    message += valMthdNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("ValMthd"), descrNull.TrimEnd(','));
+                    message += lotSerTrackNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("LotSerTrack"), descrNull.TrimEnd(','));
+                    message += stkUnitNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("StkUnit"), descrNull.TrimEnd(','));
+                    message += pOUnitNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("POUnit"), descrNull.TrimEnd(','));
+                    message += sOUnitNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("SOUnit"), descrNull.TrimEnd(','));
+                    message += taxCatNull == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("TaxCat"), descrNull.TrimEnd(','));
+
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        _db.SaveChanges();
+                    }
+                    Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "148");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+
+            return _logMessage;
+        }
+
+        [HttpPost]
+        public ActionResult Export(FormCollection data, string applicationID, string fiCode, string requestBy, string status, DateTime? fromDate, DateTime? toDate)
+        {
+
+            var colTexts = HeaderExcel();
+           
+            Stream stream = new MemoryStream();
+            Workbook workbook = new Workbook();
+            workbook.Worksheets.Add();
+            Cell cell;
+            Worksheet sheet = workbook.Worksheets[0];
+            Worksheet masterData = workbook.Worksheets[1];
+
+            sheet.Name = Util.GetLang("IN20500NameSheet");
+            masterData.Name = "MasterData";
+            DataAccess dal = Util.Dal();
+            #region header info
+            // Header text columns
+            sheet.AutoFitColumns();
+
+            for (int i = 0; i < colTexts.Count; i++)
+            {
+                SetCellValue(sheet.Cells[0, i], Util.GetLang(colTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10, true, false, false);
+                sheet.Cells.SetColumnWidth(i, 25);
+            }
+            var style = workbook.GetStyleInPool(0);
+            #endregion
+            var allColumns = new List<string>();
+            allColumns.AddRange(colTexts);
+
+            ParamCollection pc = new ParamCollection();
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtProductClass = dal.ExecDataTable("IN20500_pcProductClassExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtProductClass, true, 0, 0, false);
+
+            string formulaProductClass = "=MasterData!$A$2:$A$" + (dtProductClass.Rows.Count + 2);
+            Validation validation = GetValidation(ref sheet, formulaProductClass, "Chọn Nhóm", "Mã Nhóm này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtProductClass.Rows.Count + 100, colTexts.IndexOf("ClassID")));
+   
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtType = dal.ExecDataTable("IN20500_pcIvntTypeExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtType, true, 0, 3, false);
+
+            string formulaType = "=MasterData!$D$2:$D$" + (dtType.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaType, "Chọn Loại ", "Mã Loại  này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtType.Rows.Count + 100, colTexts.IndexOf("Type")));            
+
+
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtSource = dal.ExecDataTable("IN20500_pcSourceExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtSource, true, 0, 6, false);
+
+            string formulaSource = "=MasterData!$G$2:$G$" + (dtSource.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaSource, "Chọn Nguồn", "Mã Nguồn này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtSource.Rows.Count + 100, colTexts.IndexOf("Source")));   
+            
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtValMthd = dal.ExecDataTable("IN20500_pcValMthdExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtValMthd, true, 0, 9, false);
+
+            string formulaValMthd = "=MasterData!$J$2:$J$" + (dtValMthd.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaValMthd, "Chọn Phương Pháp Tính Giá", "Mã Phương Pháp Tính Giá này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtValMthd.Rows.Count + 100, colTexts.IndexOf("ValMthd")));
+           
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtLotSerTrack = dal.ExecDataTable("IN20500_pcLotSerTrackExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtLotSerTrack, true, 0, 11, false);
+
+            string formulaLotSerTrack = "=MasterData!$L$2:$L$" + (dtLotSerTrack.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaLotSerTrack, "", "Mã này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtLotSerTrack.Rows.Count + 100, colTexts.IndexOf("LotSerTrack"))); 
+            
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtStkUnit = dal.ExecDataTable("IN20500_pcgetToUnitExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtStkUnit, true, 0, 13, false);
+
+            string formulaStkUnit = "=MasterData!$N$2:$N$" + (dtStkUnit.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaStkUnit, "Chọn Đơn Vị Lưu Kho", "Mã Đơn Vị Lưu Kho này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtStkUnit.Rows.Count + 100, colTexts.IndexOf("StkUnit")));       
+            
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtDfltPOUnit = dal.ExecDataTable("IN20500_pcDfltPOUnitExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtDfltPOUnit, true, 0, 15, false);
+
+            string formulaDfltPOUnit = "=MasterData!$P$2:$P$" + (dtDfltPOUnit.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaDfltPOUnit, "Chọn Đơn Vị Mua", "Mã Đơn Vị Mua này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtDfltPOUnit.Rows.Count + 100, colTexts.IndexOf("POUnit"))); 
+            
+            
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtSOUnit = dal.ExecDataTable("IN20500_pcDfltPOUnitExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtSOUnit, true, 0, 15, false);
+
+            string formulaSOUnit = "=MasterData!$P$2:$P$" + (dtSOUnit.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaSOUnit, "Chọn Đơn Vị bán", "Mã Đơn Vị Bán này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtSOUnit.Rows.Count + 100, colTexts.IndexOf("SOUnit")));
+ 
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtTax = dal.ExecDataTable("IN20500_pcTaxCatExcel", CommandType.StoredProcedure, ref pc);
+            masterData.Cells.ImportDataTable(dtTax, true, 0, 17, false);
+
+            string formulaTax = "=MasterData!$R$2:$R$" + (dtTax.Rows.Count + 2);
+            validation = GetValidation(ref sheet, formulaTax, "Chọn Loại Thuế", "Mã Loại Thuế Bán này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtTax.Rows.Count + 100, colTexts.IndexOf("TaxCat")));
+
+
+
+            sheet.Cells.SetRowHeight(0, 30);
+
+            sheet.Protect(ProtectionType.All);
+            masterData.Protect(ProtectionType.All);
+            masterData.VisibilityType = VisibilityType.Hidden;
+
+            var strFirstRow = 2.ToString();
+            style = sheet.Cells["A" + strFirstRow].GetStyle();
+            style.IsLocked = false;
+            Range range;
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("InvtID")) + 2, GetCell(allColumns.IndexOf("InvtID")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("Descr")) + 2, GetCell(allColumns.IndexOf("Descr")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("ClassID")) + 2, GetCell(allColumns.IndexOf("ClassID")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("Type")) + 2, GetCell(allColumns.IndexOf("Type")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("Source")) + 2, GetCell(allColumns.IndexOf("Source")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("ValMthd")) + 2, GetCell(allColumns.IndexOf("ValMthd")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("LotSerTrack")) + 2, GetCell(allColumns.IndexOf("LotSerTrack")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("StkUnit")) + 2, GetCell(allColumns.IndexOf("StkUnit")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("POUnit")) + 2, GetCell(allColumns.IndexOf("POUnit")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("SOUnit")) + 2, GetCell(allColumns.IndexOf("SOUnit")) + 1000);
+            range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("TaxCat")) + 2, GetCell(allColumns.IndexOf("TaxCat")) + 1000);
+            range.SetStyle(style);
+
+
+            workbook.Save(stream, SaveFormat.Xlsx);
+            stream.Flush();
+            stream.Position = 0;
+
+            return new FileStreamResult(stream, "application/vnd.ms-excel")
+            {
+                FileDownloadName = string.Format("{0}.xlsx", Util.GetLang("IN20500_excel"))
+            };
+
+
+        }
+
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle, bool isBackground, bool isWrapsTex)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            if (isTitle)
+            {
+                style.Font.Color = Color.Red;
+            }
+            if (isBackground)
+            {
+                style.Font.Color = Color.Red;
+                style.Pattern = BackgroundType.Solid;
+                style.ForegroundColor = Color.Yellow;
+            }
+            if (isWrapsTex)
+            {
+                style.IsTextWrapped = true;
+            }
+            c.SetStyle(style);
+        }
+
+
+        private Validation GetValidation(ref Worksheet SheetMCP, string formular1, string inputMess, string errMess)
+        {
+            var validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+            validation.IgnoreBlank = true;
+            validation.Type = Aspose.Cells.ValidationType.List;
+            validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+            validation.Operator = OperatorType.Between;
+            validation.Formula1 = formular1;
+            validation.InputTitle = "";
+            validation.InputMessage = inputMess;
+            validation.ErrorMessage = errMess;
+            return validation;
+        }
+        private CellArea GetCellArea(int startRow, int endRow, int columnIndex, int endColumnIndex = -1)
+        {
+            var area = new CellArea();
+            area.StartRow = startRow;
+            area.EndRow = endRow;
+            area.StartColumn = columnIndex;
+            area.EndColumn = endColumnIndex == -1 ? columnIndex : endColumnIndex;
+            return area;
+        }
+        private List<string> HeaderExcel()
+        {
+            return new List<string>() { "InvtID", "Descr", "ClassID", "Type",  "Source", "ValMthd", "LotSerTrack", "StkUnit", "POUnit", "SOUnit", "TaxCat" };
+        }
+
+
+        private string GetCell(int column) // Hàm bị sai khi lấy vị trí column AA
+        {
+            if (column == 0)
+            {
+                return "A";
+            }
+            bool flag = false;
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string cell = "";
+            while (column / 26 >= 1)
+            {
+                cell += ABC.Substring((column / 26) - 1, 1);
+                column = column - 26;
+                flag = true;
+
+            }
+            if (column % 26 != 0)
+            {
+                cell += ABC.Substring(column % 26, 1);
+            }
+            else
+            {
+                if (column % 26 == 0 && flag)
+                {
+                    cell += ABC.Substring(0, 1);
+                }
+            }
+
+            return cell;
+        }
+
+
         
     }
 }

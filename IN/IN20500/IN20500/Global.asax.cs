@@ -39,13 +39,13 @@ namespace IN20500
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "VietUc_eSky4DSYS";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "VIETUC_eSky4DSyS";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN20500"] = acc;
-            Session["DBApp"] = Current.DBApp = "VietUc_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "VIETUC_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
