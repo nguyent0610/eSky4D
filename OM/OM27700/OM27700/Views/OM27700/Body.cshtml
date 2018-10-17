@@ -448,12 +448,12 @@
                             , X.NumberColumn().ID("colLevelFrom").Text(Util.GetLang("OM27700LevelFrom")).DataIndex("LevelFrom")
                                 .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
                             .Editor(
-                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
                             )
                             , X.NumberColumn().ID("colLevelTo").Text(Util.GetLang("OM27700LevelTo")).DataIndex("LevelTo")
                             .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
                             .Editor(
-                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
                             )
                             , X.NumberColumn().Text(Util.GetLang("OM27700DiscPct")).DataIndex("PercentBonus").Format("0,000.00")
                             .Align(Alignment.Right).Hideable(false).Width(120).StyleSpec("text-align:right;")

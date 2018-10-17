@@ -1392,7 +1392,24 @@ var Event = {
                                 CheckIntIDNotItems = 0;
                         }
                         else {
-                            Process.saveData();
+                            var line = '';
+                            var lstLevel = App.grdLevel.store.snapshot || App.grdLevel.store.allData || App.grdLevel.store.data;
+                            if (lstLevel != undefined) {
+                                for (var i = 0 ; i < lstLevel.length; i++) {
+                                    if (lstLevel.items[i].data.Descr != "") {
+                                        if (lstLevel.items[i].data.LevelTo < lstLevel.items[i].data.LevelFrom) {
+                                            line += Number(i + 1) + ", ";
+                                        }
+                                    }
+                                }
+                            }
+                            if (line != '') {
+                                HQ.message.show(2018101760, [line], '', true);
+                            }
+                            else {
+                                Process.saveData();
+                            }
+                            
                         }
 
                     }
