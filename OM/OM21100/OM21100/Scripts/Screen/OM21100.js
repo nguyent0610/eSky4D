@@ -4631,7 +4631,7 @@ var DiscDefintion = {
                     App.cboDiscType.setReadOnly(true);
                 }
             }
-            if (e.field == 'BreakQty' || e.field == 'BreakQtyUpper' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper' || e.field == 'SubBreakQty' || e.field == 'SubBreakAmt')
+            if (e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper' || e.field == 'SubBreakQty' || e.field == 'SubBreakAmt') // || e.field == 'BreakQtyUpper'
             {
                 if (e.record.data.BreakQty > 0 || e.record.data.BreakAmt > 0)
                     App.cboBreakBy.setReadOnly(true);
@@ -4647,6 +4647,19 @@ var DiscDefintion = {
                     App.cboSubBreakType.setReadOnly(false);
                     App.cboBreakBoundType.setReadOnly(false);
                 }
+            }
+            if (e.field == 'BreakQtyUpper') {
+                var readonly = false;
+                var lstBreakQtyUpper = App.grdDiscBreak.store.snapshot || App.grdDiscBreak.store.allData || App.grdDiscBreak.store.data;
+                if (lstBreakQtyUpper != undefined) {
+                    for (var i = 0; i < lstBreakQtyUpper.length; i++) {
+                        if (lstBreakQtyUpper.items[i].data.BreakQtyUpper > 0) {
+                            readonly = true;
+                        }
+                    }
+                    
+                }
+                App.cboBreakBoundType.setReadOnly(readonly);
             }
             if (e.field == "DiscAmtBonus" && (e.record.data.BreakAmt != 0 || e.record.data.BreakQty!=0)) {
                 if (e.record.data.DiscAmtBonus == 0) {
@@ -5300,7 +5313,7 @@ var joinParams = function (multiCombo) {
     return returnValue;
 };
 var txtDiscSeq_Blur = function () {
-    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+    var regex = /^(\w*(\d|[a-zA-Z]|[\_@()!#$%^&()~`+-=]))*$/;
     checkSpecialChar(App.txtDiscSeq.getValue());
     if (!HQ.util.passNull(App.txtDiscSeq.getValue()) == '' && !HQ.util.passNull(App.txtDiscSeq.getValue().toString()).match(regex)) {
         App.txtDiscSeq.setValue('');
