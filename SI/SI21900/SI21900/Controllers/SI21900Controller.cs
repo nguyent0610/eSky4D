@@ -22,14 +22,14 @@ namespace SI21900.Controllers
         SI21900Entities _db = Util.CreateObjectContext<SI21900Entities>(false);
         public ActionResult Index()
         {
-            var Distance = false;
+           // var Distance = false;
             Util.InitRight(_screenNbr);
-            var config = _db.SI21900_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
-            if (config != null)
-            {
-                Distance = config.Distance.HasValue && config.Distance.Value;
-            }
-            ViewBag.Distance = Distance;
+            //var config = _db.SI21900_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            //if (config != null)
+            //{
+            //    Distance = config.Distance.HasValue && config.Distance.Value;
+            //}
+            //ViewBag.Distance = Distance;
 
 
             return View();
@@ -40,8 +40,8 @@ namespace SI21900.Controllers
             return PartialView();
         }
         public ActionResult GetTerritory()
-        {           
-            return this.Store(_db.SI21900_pgLoadTerritory().ToList());
+        {
+            return this.Store(_db.SI21900_pgLoadTerritory(Current.UserName, Current.CpnyID, Current.LangID).ToList());
         }
         public ActionResult Save(FormCollection data)
         {
@@ -117,7 +117,7 @@ namespace SI21900.Controllers
             }
 			t.Zone = s.Zone;
             t.Descr = s.Descr;
-            t.Distance = s.Distance;
+           // t.Distance = s.Distance;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

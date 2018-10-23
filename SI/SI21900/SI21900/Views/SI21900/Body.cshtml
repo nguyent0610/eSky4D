@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -44,48 +44,75 @@
                  })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-              //X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone").Width(150)
-              //      .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
-       
-            X.Column().ID("Territory").Text(Util.GetLang("Territory")).DataIndex("Territory").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+            X.RowNumbererColumn().Width(40)
+            , X.Column()
+                .Text(Util.GetLang("SI21900_Zone")) // Mã Miền
+                .DataIndex("Zone")
+                    .Editor(HQ.Combo()
+                        .ID("cboZone")
+                        .HQProcedure("SI21900_pcZone")
+                        .HQColumnShow("Code,Descr").DataIndex("Zone")
+                        .HQHeightWidth(400, 300)
+                        .ValueField("Code").DisplayField("Code")
+                        .SelectOnFocus(true).ForceSelection(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
+                                    lst.Change.Fn = "cboZone_Change";
+                                    lst.Select.Fn = "cboZone_Change";
+
+                                })
+                        )
+
+            , X.Column()
+                .Text(Util.GetLang("SI21900_ZoneDescr")) // Tên Miền
+                .DataIndex("ZoneDescr")
+                .Width(150)
+                 
+            ,X.Column()
+                .ID("Territory")
+                .Text(Util.GetLang("SI21900_Territory")) // Mã Vùng Bán Hàng
+                .DataIndex("Territory").Width(150)
+                        .Editor(Html.X()
+                            .TextField()
+                            .MaxLength(10)
+                            .EnforceMaxLength(true))
                     
-              X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone")
-                        .Editor(
-                            HQ.Combo().ID("cboZone")
-                            .HQProcedure("SI21900_pcZone")
-                            .HQColumnShow("Code,Descr").DataIndex("Zone")
-                            .HQHeightWidth(400, 300)
-                            .ValueField("Code").DisplayField("Code")
-                           .SelectOnFocus(true).ForceSelection(true)
-                            .LoadData()
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .Listeners(lst =>
-                                    {
-                                        lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
-                                        lst.Change.Fn = "cboZone_Change";
-                                        lst.Select.Fn = "cboZone_Change";
-                                        
-                                    })
-                        ),
-                        
-             X.Column().Text(Util.GetLang("ZoneDescr")).DataIndex("ZoneDescr").Width(150),
-                  //  .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),    
-                   X.Column().Text(Util.GetLang("Distance")).DataIndex("Distance").Width(150).ID("txtDistance")
-            .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(2).MaxValue(99999999.99).AllowExponential(false)).Renderer("renderDistance"),        
+            ,X.Column()
+                .Text(Util.GetLang("SI21900_Descr")) // Tên Vùng Bán Hàng
+                .DataIndex("Descr")
+                .Width(150)
+                    .Editor(Html.X()
+                        .TextField()
+                        .MaxLength(200)
+                        .EnforceMaxLength(true))
+                    
+            
+                    
+            //,X.Column()
+            //    .Text(Util.GetLang("Distance"))
+            //    .DataIndex("Distance")
+            //    .Width(150)
+            //    .ID("txtDistance")
+            //    .Editor(Html.X()
+            //            .NumberField()
+            //            .MinValue(0)
+            //            .DecimalPrecision(2)
+            //            .MaxValue(99999999.99)
+            //            .AllowExponential(false))
+            //            .Renderer("renderDistance")       
                             
-            X.CommandColumn()
-            .Width(150)
-            .Commands(
-                X.GridCommand()
-                .Text(Util.GetLang("Reject"))
-                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                .CommandName("reject")
-                .Icon(Icon.ArrowUndo)
-            )
+            ,X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                    )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
             .Listeners(l => l.Command.Handler = "grdTerritory_Reject(record);")
         )

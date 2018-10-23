@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SI_Territory">
           <Key>
             <PropertyRef Name="Territory" />
@@ -19,14 +19,14 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Zone" Type="varchar" MaxLength="10" />
-          <Property Name="Distance" Type="float" />
+          <Property Name="STT" Type="varchar" MaxLength="10" />
         </EntityType>
-        <Function Name="SI21900_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        <Function Name="SI21900_pcZone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI21900_pgLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <Function Name="SI21900_pgLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SI_Territory" EntityType="Self.SI_Territory" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -35,13 +35,13 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SI21900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI21900Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="SI21900_pgLoadTerritory" ReturnType="Collection(SI21900Model.SI21900_pgLoadTerritory_Result)" />
           <EntitySet Name="SI_Territory" EntityType="SI21900Model.SI_Territory" />
-          <FunctionImport Name="SI21900_pdConfig" ReturnType="Collection(SI21900Model.SI21900_pdConfig_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          <FunctionImport Name="SI21900_pgLoadTerritory" ReturnType="Collection(SI21900Model.SI21900_pgLoadTerritory_Result3)">
             <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="SI21900_pcZone" ReturnType="Collection(SI21900Model.SI21900_pcZone_Result1)" />
         </EntityContainer>
         <ComplexType Name="SI21900_pgLoadTerritory_Result">
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
@@ -49,26 +49,54 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="200" />
-          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SI21900_pdConfig_Result">
+          <Property Type="Boolean" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SI21900_pgLoadTerritory_Result1">
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
         <EntityType Name="SI_Territory">
           <Key>
             <PropertyRef Name="Territory" />
           </Key>
-          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="Zone" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Distance" Type="Double" />
+          <Property Name="Territory" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="STT" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="SI21900_pdConfig_Result">
-          <Property Type="Boolean" Name="Distance" Nullable="true" />
+        <ComplexType Name="SI21900_pcZone_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="SI21900_pgLoadTerritory_Result2">
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SI21900_pgLoadTerritory_Result3">
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SI21900_pcZone_Result1">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -76,22 +104,10 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SI21900Entities" >
-          <FunctionImportMapping FunctionImportName="SI21900_pgLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI21900_pgLoadTerritory">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pgLoadTerritory_Result">
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Zone" ColumnName="Zone" />
-                <ScalarProperty Name="ZoneDescr" ColumnName="ZoneDescr" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="SI_Territory">
             <EntityTypeMapping TypeName="SI21900Model.SI_Territory">
               <MappingFragment StoreEntitySet="SI_Territory">
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="STT" ColumnName="STT" />
                 <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
@@ -105,10 +121,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI21900_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SI21900_pdConfig" >
+          <FunctionImportMapping FunctionImportName="SI21900_pgLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI21900_pgLoadTerritory">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pdConfig_Result">
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
+              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pgLoadTerritory_Result3">
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="ZoneDescr" ColumnName="ZoneDescr" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI21900_pcZone" FunctionName="eBiz4DWebSysModel.Store.SI21900_pcZone">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pcZone_Result1">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -134,7 +162,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI21900Model.SI_Territory" Width="1.5" PointX="6.1692652842818134" PointY="2.0265508899588842" />
+        <EntityTypeShape EntityType="SI21900Model.SI_Territory" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

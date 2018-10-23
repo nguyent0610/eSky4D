@@ -100,29 +100,11 @@ namespace SI21900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI21900_pgLoadTerritory_Result> SI21900_pgLoadTerritory()
-        {
-            return base.ExecuteFunction<SI21900_pgLoadTerritory_Result>("SI21900_pgLoadTerritory");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SI21900_pdConfig_Result> SI21900_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        public ObjectResult<SI21900_pgLoadTerritory_Result3> SI21900_pgLoadTerritory(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
             ObjectParameter userNameParameter;
             if (userName != null)
             {
@@ -131,6 +113,16 @@ namespace SI21900
             else
             {
                 userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
             ObjectParameter langIDParameter;
@@ -143,7 +135,15 @@ namespace SI21900
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<SI21900_pdConfig_Result>("SI21900_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+            return base.ExecuteFunction<SI21900_pgLoadTerritory_Result3>("SI21900_pgLoadTerritory", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI21900_pcZone_Result1> SI21900_pcZone()
+        {
+            return base.ExecuteFunction<SI21900_pcZone_Result1>("SI21900_pcZone");
         }
 
         #endregion
@@ -441,24 +441,24 @@ namespace SI21900
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Double> Distance
+        public global::System.String STT
         {
             get
             {
-                return _Distance;
+                return _STT;
             }
             set
             {
-                OnDistanceChanging(value);
-                ReportPropertyChanging("Distance");
-                _Distance = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Distance");
-                OnDistanceChanged();
+                OnSTTChanging(value);
+                ReportPropertyChanging("STT");
+                _STT = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("STT");
+                OnSTTChanged();
             }
         }
-        private Nullable<global::System.Double> _Distance;
-        partial void OnDistanceChanging(Nullable<global::System.Double> value);
-        partial void OnDistanceChanged();
+        private global::System.String _STT;
+        partial void OnSTTChanging(global::System.String value);
+        partial void OnSTTChanged();
 
         #endregion
 
@@ -468,6 +468,164 @@ namespace SI21900
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI21900Model", Name="SI21900_pcZone_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI21900_pcZone_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI21900_pcZone_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        public static SI21900_pcZone_Result CreateSI21900_pcZone_Result(global::System.String code, global::System.String descr)
+        {
+            SI21900_pcZone_Result sI21900_pcZone_Result = new SI21900_pcZone_Result();
+            sI21900_pcZone_Result.Code = code;
+            sI21900_pcZone_Result.Descr = descr;
+            return sI21900_pcZone_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI21900Model", Name="SI21900_pcZone_Result1")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI21900_pcZone_Result1 : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI21900_pcZone_Result1 object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        public static SI21900_pcZone_Result1 CreateSI21900_pcZone_Result1(global::System.String code, global::System.String descr)
+        {
+            SI21900_pcZone_Result1 sI21900_pcZone_Result1 = new SI21900_pcZone_Result1();
+            sI21900_pcZone_Result1.Code = code;
+            sI21900_pcZone_Result1.Descr = descr;
+            return sI21900_pcZone_Result1;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -653,30 +811,459 @@ namespace SI21900
         private global::System.String _ZoneDescr;
         partial void OnZoneDescrChanging(global::System.String value);
         partial void OnZoneDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI21900Model", Name="SI21900_pgLoadTerritory_Result1")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI21900_pgLoadTerritory_Result1 : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI21900_pgLoadTerritory_Result1 object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI21900_pgLoadTerritory_Result1 CreateSI21900_pgLoadTerritory_Result1(global::System.String territory, global::System.Byte[] tstamp)
+        {
+            SI21900_pgLoadTerritory_Result1 sI21900_pgLoadTerritory_Result1 = new SI21900_pgLoadTerritory_Result1();
+            sI21900_pgLoadTerritory_Result1.Territory = territory;
+            sI21900_pgLoadTerritory_Result1.tstamp = tstamp;
+            return sI21900_pgLoadTerritory_Result1;
+        }
+
+        #endregion
+
+        #region Primitive Properties
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Double> Distance
+        public global::System.String Zone
         {
             get
             {
-                return _Distance;
+                return _Zone;
             }
             set
             {
-                OnDistanceChanging(value);
-                ReportPropertyChanging("Distance");
-                _Distance = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Distance");
-                OnDistanceChanged();
+                OnZoneChanging(value);
+                ReportPropertyChanging("Zone");
+                _Zone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zone");
+                OnZoneChanged();
             }
         }
-        private Nullable<global::System.Double> _Distance;
-        partial void OnDistanceChanging(Nullable<global::System.Double> value);
-        partial void OnDistanceChanged();
+        private global::System.String _Zone;
+        partial void OnZoneChanging(global::System.String value);
+        partial void OnZoneChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ZoneDescr
+        {
+            get
+            {
+                return _ZoneDescr;
+            }
+            set
+            {
+                OnZoneDescrChanging(value);
+                ReportPropertyChanging("ZoneDescr");
+                _ZoneDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ZoneDescr");
+                OnZoneDescrChanged();
+            }
+        }
+        private global::System.String _ZoneDescr;
+        partial void OnZoneDescrChanging(global::System.String value);
+        partial void OnZoneDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI21900Model", Name="SI21900_pgLoadTerritory_Result2")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI21900_pgLoadTerritory_Result2 : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI21900_pgLoadTerritory_Result2 object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI21900_pgLoadTerritory_Result2 CreateSI21900_pgLoadTerritory_Result2(global::System.String territory, global::System.Byte[] tstamp)
+        {
+            SI21900_pgLoadTerritory_Result2 sI21900_pgLoadTerritory_Result2 = new SI21900_pgLoadTerritory_Result2();
+            sI21900_pgLoadTerritory_Result2.Territory = territory;
+            sI21900_pgLoadTerritory_Result2.tstamp = tstamp;
+            return sI21900_pgLoadTerritory_Result2;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Zone
+        {
+            get
+            {
+                return _Zone;
+            }
+            set
+            {
+                OnZoneChanging(value);
+                ReportPropertyChanging("Zone");
+                _Zone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zone");
+                OnZoneChanged();
+            }
+        }
+        private global::System.String _Zone;
+        partial void OnZoneChanging(global::System.String value);
+        partial void OnZoneChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ZoneDescr
+        {
+            get
+            {
+                return _ZoneDescr;
+            }
+            set
+            {
+                OnZoneDescrChanging(value);
+                ReportPropertyChanging("ZoneDescr");
+                _ZoneDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ZoneDescr");
+                OnZoneDescrChanged();
+            }
+        }
+        private global::System.String _ZoneDescr;
+        partial void OnZoneDescrChanging(global::System.String value);
+        partial void OnZoneDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI21900Model", Name="SI21900_pgLoadTerritory_Result3")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI21900_pgLoadTerritory_Result3 : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI21900_pgLoadTerritory_Result3 object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI21900_pgLoadTerritory_Result3 CreateSI21900_pgLoadTerritory_Result3(global::System.String territory, global::System.Byte[] tstamp)
+        {
+            SI21900_pgLoadTerritory_Result3 sI21900_pgLoadTerritory_Result3 = new SI21900_pgLoadTerritory_Result3();
+            sI21900_pgLoadTerritory_Result3.Territory = territory;
+            sI21900_pgLoadTerritory_Result3.tstamp = tstamp;
+            return sI21900_pgLoadTerritory_Result3;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Zone
+        {
+            get
+            {
+                return _Zone;
+            }
+            set
+            {
+                OnZoneChanging(value);
+                ReportPropertyChanging("Zone");
+                _Zone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zone");
+                OnZoneChanged();
+            }
+        }
+        private global::System.String _Zone;
+        partial void OnZoneChanging(global::System.String value);
+        partial void OnZoneChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ZoneDescr
+        {
+            get
+            {
+                return _ZoneDescr;
+            }
+            set
+            {
+                OnZoneDescrChanging(value);
+                ReportPropertyChanging("ZoneDescr");
+                _ZoneDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ZoneDescr");
+                OnZoneDescrChanged();
+            }
+        }
+        private global::System.String _ZoneDescr;
+        partial void OnZoneDescrChanging(global::System.String value);
+        partial void OnZoneDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 

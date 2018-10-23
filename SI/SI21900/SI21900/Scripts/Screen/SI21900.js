@@ -82,7 +82,7 @@ var firstLoad = function () {
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();
-    App.txtDistance.setVisible(HQ.Distance);
+   // App.txtDistance.setVisible(HQ.Distance);
 };
 
 var frmChange = function () {
