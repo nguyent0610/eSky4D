@@ -32,7 +32,8 @@
         HQ.provinceView = HQ.util.toBool('@ViewBag.ProvinceView');
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()'); // chú ý ẩn hiện 
+        HQ.country = HQ.util.toBool('@ViewBag.CountryView'); // chú ý ẩn hiện
 
     </script>  
     <title>@ViewBag.Title</title>

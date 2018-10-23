@@ -5,6 +5,7 @@ var fieldsLangCheckRequire = ["Country", "State"];
 
 var menuClick = function (command) {
     switch (command) {
+        
         case "first":
             HQ.grid.first(App.grdDet);
             break;
@@ -18,11 +19,12 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdDet);
             break;
         case "refresh":
+            debugger
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
+                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 App.stoData.reload();
             }
@@ -143,6 +145,7 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+
 
 
 

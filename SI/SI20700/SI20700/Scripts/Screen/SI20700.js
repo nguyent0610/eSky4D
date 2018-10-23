@@ -1,7 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Country', 'State'];
-var fieldsCheckRequire = ["Country", "State", "Descr", "Territory"];
-var fieldsLangCheckRequire = ["Country", "State", "Descr", "Territory"];
+var fieldsCheckRequire = ["Country", "State", "Descr"];
+var fieldsLangCheckRequire = ["Country", "State", "Descr"];
 var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
@@ -36,6 +36,7 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdDet);
             break;
         case "refresh":
+            
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
@@ -44,8 +45,17 @@ var menuClick = function (command) {
                 HQ.isFirstLoad = true;
                 App.stoData.reload();
             }
+            //var record = HQ.store.findInStore(App.grdDet.store, ['Country', 'State'], ['', ''])
+            //    if (!record) {
+            //        HQ.store.insertBlank(App.grdDet.store, keys);
+            //    }
+            var record = HQ.store.findRecord(App.stoData, keys, ['Country', 'State']);
+                if (!record) {
+                    HQ.store.insertBlank(App.stoData, ['Country', 'State']);
+                }
             break;
         case "new":
+            
             if (HQ.isInsert) {
                 HQ.grid.insert(App.grdDet, keys);
             }
@@ -84,9 +94,25 @@ var firstLoad = function () {
     App.cboTerritory.getStore().addListener('load', checkLoad);
 
     if (HQ.provinceView === false) {
+        
         App.Province.hide();
-    }
-    //checkLoad();
+   }
+   if (HQ.country == false)
+   {
+       
+       keys = ["State"];
+       fieldsCheckRequire = [ "State", "Descr"];
+       fieldsLangCheckRequire = [ "State", "Descr"];
+       App.Country.hide();
+   }
+   else
+   {
+       keys = ['Country', 'Territory', "State"];
+       fieldsCheckRequire = ["Country" ];
+       fieldsLangCheckRequire = ["Country" ];
+       App.Country.show();
+   }
+    checkLoad();
 };
 
 var frmChange = function () {
@@ -122,6 +148,7 @@ var grdDet_BeforeEdit = function (editor, e) {
 
 var grdDet_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdDet, e, keys);
+   // if()
     frmChange();
 };
 
@@ -140,6 +167,7 @@ var grdDet_Reject = function (record) {
 ////Process
 ////Function menuClick
 var save = function () {
+    
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
@@ -171,6 +199,7 @@ var deleteData = function (item) {
 //Other function
 
 function refresh(item) {
+    
     if (item == 'yes') {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
@@ -178,4 +207,98 @@ function refresh(item) {
     }
 };
 
+
+////
+var grdTerritoryClassDetail_Edit = function (item, e) {
+    
+    if (e.field == "Territory") {
+        var a = HQ.store.findRecord(App.cboTerritory.store, ['Territory'], [e.value]);
+        if (e.value != "" && e.value != null) {
+            e.record.set('DescrTerritory', a.data.DescrTerritory);
+            //  e.record.set('Addr1', a.data.Addr1);
+        }
+        else {
+            //   e.record.set('CustName', '');
+            e.record.set('DescrTerritory', '');
+        }
+    }
+    //if (e.field == "Territory") {
+    //    if (_territory != e.value) {
+    //        e.record.set("Area", '');
+    //        e.record.set("State", '')
+    //    }
+    //}
+    //if (e.field == "Territory" || e.field == "State" || e.field == "Area") {
+    //    if (_territory != e.record.data.Territory || _area != e.record.data.Area || _state != e.record.data.State) {
+    //        e.record.set("BranchID", '');
+    //    }
+    //}
+    //if (e.field == "BranchID") {
+    //    if (_branchID != e.value) {
+    //        e.record.set("CustId", '')
+    //    }
+    //}
+    //App.cbo_SubTerritory.store.clearFilter();
+    //App.cboState.store.clearFilter();
+    //App.cboBranchID.store.clearFilter();
+    //App.cboCustID.store.clearFilter();
+   // App.cboTerritory.store.clearFilter();
+    HQ.grid.checkInsertKey(App.grdDet, e, keys);
+    frmChange();
+};
+
+
+/////////////////////////////////////
+var btnImport_Click = function (sender, e) {
+    
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'SI20700/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    else {
+        HQ.message.show('2014070701', '', '');
+        sender.reset();
+    }
+};
+///////////////////////////////////
+//Export
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'SI20700/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+
+        },
+        success: function (msg, data) {
+            alert('sus');
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+};
 
