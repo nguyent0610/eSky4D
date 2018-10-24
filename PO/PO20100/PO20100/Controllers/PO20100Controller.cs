@@ -48,7 +48,7 @@ namespace PO20100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -547,6 +547,7 @@ namespace PO20100.Controllers
                 Style colStyleCrush = SheetData.Cells[allColumns.IndexOf("InvtID")].GetStyle();
                 colStyleCrush.Font.Color = Color.Black;
                 colStyleCrush.IsLocked = false;
+                colStyleCrush.Number = 49;
                 flag1.FontColor = true;
                 flag1.NumberFormat = true;
                 flag1.Locked = true;
@@ -697,7 +698,6 @@ namespace PO20100.Controllers
                         List<PO_Price> lstPO_Price = new List<PO_Price>();
 
 
-
                         string regex = "!$^&=:;><?*%\"#{}[]\\/,";
                         for (int i = 1; i <= SheetInfomation.Cells.MaxDataRow; i++)
                         {
@@ -706,6 +706,11 @@ namespace PO20100.Controllers
                             string InvtID = SheetInfomation.Cells[i, ColTexts.IndexOf("InvtID")].StringValue.PassNull().ToUpper();
                             string Unit = SheetInfomation.Cells[i, ColTexts.IndexOf("Unit")].StringValue.PassNull();
                             string Price = SheetInfomation.Cells[i, ColTexts.IndexOf("Price")].StringValue.PassNull();
+
+                            if (i == 1 && InvtID.PassNull() == "")
+                            {
+                                throw new MessageException(MessageType.Message, "2018102463", "", new string[] { });
+                            }
 
                             if (InvtID.PassNull() == "")
                             {

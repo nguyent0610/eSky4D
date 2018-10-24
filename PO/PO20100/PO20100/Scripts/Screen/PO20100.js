@@ -9,6 +9,11 @@ var fieldsLangCheckRequirePO_PriceCpny = ["CpnyID"];
 
 var _focusNo = 0;
 HQ.copy = false;
+var _invtID = '';
+var listImport;
+var _msgImport;
+var _dataImport;
+
 //////////////////////////////////////////////////////////////////////
 
 var loadSourceCombo = function () {
@@ -189,6 +194,7 @@ var menuClick = function (command) {
 };
 
 var cboInvtID_Change = function (item, newValue, oldValue) {
+    _invtID = newValue;
     App.cboUOM.store.reload();
 };
 
@@ -345,7 +351,7 @@ var stoPO_Price_Load = function (sto) {
 };
 
 var grdPO_Price_BeforeEdit = function (editor, e) {
-
+    App.cboUOM.store.reload();
     if (!Ext.isEmpty(App.stoPOPriceHeader.data.items[0].data.PriceID))
     {
         if (!HQ.isUpdate)
@@ -353,6 +359,14 @@ var grdPO_Price_BeforeEdit = function (editor, e) {
             return false;
         } else if (e.field == 'UOM' && e.record.data.tstamp != '') {
             return false;
+        }
+    }
+    if (e.field == 'UOM') {
+        objInvtID = HQ.store.findRecord(App.cboInvtID.getStore(), ["InvtID"], [e.record.data.InvtID]);
+        if (objInvtID) {
+            _invtID = e.record.data.InvtID;
+            _classID = e.record.data.ClassID;
+            App.cboUOM.store.reload();
         }
     }
     if(Ext.isEmpty(App.cboPriceID.getValue())){
@@ -819,27 +833,49 @@ var btnImport_Click = function (sender, e) {
                 params: {
                 },
                 success: function (msg, data) {
+                    _msgImport = msg;
+                    _dataImport = data;
 
                     if (this.result.data.lstPO_Price != undefined) {
+                        var lineUOM = '';
+                        var line = '';
                         App.stoPO_Price.suspendEvents();
+                        var i =0;
                         this.result.data.lstPO_Price.forEach(function (item) {
+                            i++;
                             var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], [item.InvtID]);
-                            if (!objInvtID) {
-                                HQ.store.insertRecord(App.stoPO_Price, "InvtID", Ext.create('App.mdlPO_Price'), false);
-                                objInvtID = App.stoPO_Price.data.items[App.stoPO_Price.getCount() - 1];
-                                objInvtID.set("InvtID", item.InvtID);
-                                objInvtID.set("UOM", item.UOM);
-                                objInvtID.set("Price", item.Price);
-                                objInvtID.set("QtyBreak", 1);
+                            if (objInvtID != undefined) {
+                                if (objInvtID.UOM != item.UOM) {
+                                    lineUOM += lineIntID(item.InvtID) + ", ";
+                                }
                             }
-                            objInvtID.set("UOM", item.UOM);
-                            objInvtID.set("Price", item.Price);
-                            objInvtID.set("QtyBreak", 1);
+
                         });
+                        if (lineUOM != '') {
+                            HQ.message.show(2018102464, [lineUOM, App.cboPriceID.getValue()], '', true);
+                            return;
+                        }
+
+                        listImport = this.result.data;
+                        this.result.data.lstPO_Price.forEach(function (item) {
+                            var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID', 'UOM'], [item.InvtID, item.UOM]);
+
+                            if (objInvtID != undefined) {
+                                line += lineIntID(item.InvtID) + ", ";
+                            }
+                        });
+                        if (line != '') {
+                            HQ.message.show(2018102461, [line], 'insertImport', true);
+                            return;
+                        }
                         App.stoPO_Price.resumeEvents();
                         App.grdPO_Price.view.refresh();
                     }
-
+                       
+                    
+                    if (lineUOM != '') {
+                        return;
+                    }
                     HQ.isChange = false;
                     HQ.isFirstLoad = true;
                     var record = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], ['']);
@@ -866,6 +902,47 @@ var btnImport_Click = function (sender, e) {
     }
 
     
+};
+var insertImport = function (item) {
+    if (item == 'yes') {
+        listImport.lstPO_Price.forEach(function (itemImport) {
+            var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID', 'UOM'], [itemImport.InvtID, itemImport.UOM]);
+            if (!objInvtID) {
+                HQ.store.insertRecord(App.stoPO_Price, "InvtID", Ext.create('App.mdlPO_Price'), false);
+                objInvtID = App.stoPO_Price.data.items[App.stoPO_Price.getCount() - 1];
+                objInvtID.set("InvtID", itemImport.InvtID);
+                objInvtID.set("UOM", itemImport.UOM);
+            }
+            objInvtID.set("Price", itemImport.Price);
+            objInvtID.set("QtyBreak", 1);
+        })
+        App.stoPO_Price.resumeEvents();
+        App.grdPO_Price.view.refresh();
+
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+
+        var record = HQ.store.findRecord(App.stoPO_Price, ['InvtID', 'SlsUnit'], ['', '']);
+        if (!record) {
+            HQ.store.insertBlank(App.grdPO_Price.store, keyPrice);
+        }
+
+        if (!Ext.isEmpty(listImport.message)) {
+            HQ.message.show('2013103001', [listImport.message], '', true);
+        }
+        else {
+            HQ.message.process(_msgImport, _dataImport, true);
+        }
+    }
+}
+var renderInvtName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboInvtID.findRecord("InvtID", rec.data.InvtID);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
 };
 var focusOnInvalidField = function (item) {
     if (item == "ok") {
@@ -1128,3 +1205,13 @@ var showFieldInvalid = function (form) {
 //        HQ.common.close(this);
 //    }
 //};
+
+
+function lineIntID(item) {
+    var data = App.stoPO_Price.data.items;
+    for (var i = 0; i < App.stoPO_Price.data.length ; i++) {
+        if (data[i].data.InvtID == item) {
+            return i + 1;
+        }
+    }
+}

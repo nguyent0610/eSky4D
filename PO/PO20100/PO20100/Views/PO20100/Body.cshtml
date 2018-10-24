@@ -159,17 +159,21 @@
                             lst.Change.Fn = "cboInvtID_Change";
                         })
                     )
-                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Renderer("renderInvtName")
                     , X.Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(100)
                     .Editor(
                         HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("PO20100_pcUOM_InvtID")
                         .HQParam(new StoreParameterCollection()
                         {
-                            new StoreParameter() { Name = "@InvtID", Value = "App.cboInvtID.getValue()" , Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
                         })
                         .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit")
                         .Width(300).HQHeightWidth(500, 400)
                         .HQDBSys(false).AllowBlank(true).ForceSelection(true).HQAutoLoad(false)
+                        .Listeners(lst =>{
+                            lst.Blur.Handler = "App.cboUOM.forceSelection = true";
+                            lst.Focus.Handler = "App.cboUOM.forceSelection = false";
+                        })
                         .LoadData()
                     )
                     , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(120).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).DecimalPrecision(0).AllowExponential(false)).Align(Alignment.Right).StyleSpec("text-align:left")

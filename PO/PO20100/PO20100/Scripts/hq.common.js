@@ -760,7 +760,7 @@ var HQ = {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            var allData = grd.store.allData || grd.store.data;
+            var allData = grd.store.snapshot || grd.store.allData || grd.store.data;
             for (var i = 0; i < allData.items.length; i++) {
                 var record = allData.items[i];
                 var data = '';
