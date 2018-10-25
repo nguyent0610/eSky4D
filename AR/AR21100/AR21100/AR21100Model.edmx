@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Channel">
           <Key>
             <PropertyRef Name="Code" />
@@ -18,9 +18,24 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="PrefixCustID" Type="varchar" MaxLength="10" />
+          <Property Name="Type" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <Function Name="AR21100_pgLoadChannel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="AR21100_pcChannelType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21100_pgLoadChannel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="AR_Channel" EntityType="Self.AR_Channel" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -34,7 +49,21 @@
           </FunctionImport>
           <FunctionImport Name="AR21100_pgLoadSYS_Language" />
           <EntitySet Name="AR_Channel" EntityType="AR21100Model.AR_Channel" />
-          <FunctionImport Name="AR21100_pgLoadChannel" ReturnType="Collection(AR21100Model.AR21100_pgLoadChannel_Result)" />
+          <FunctionImport Name="AR21100_pgLoadChannel" ReturnType="Collection(AR21100Model.AR21100_pgLoadChannel_Result)" >
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21100_pcChannelType" ReturnType="Collection(AR21100Model.AR21100_pcChannelType_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21100_pdConfig" ReturnType="Collection(AR21100Model.AR21100_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_Channel">
           <Key>
@@ -49,13 +78,21 @@
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PrefixCustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="AR21100_pgLoadChannel_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR21100_pcChannelType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="15" />
+          </ComplexType>
+        <ComplexType Name="AR21100_pdConfig_Result">
+          <Property Type="Boolean" Name="ChanelType" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -66,6 +103,7 @@
           <EntitySetMapping Name="AR_Channel">
             <EntityTypeMapping TypeName="AR21100Model.AR_Channel">
               <MappingFragment StoreEntitySet="AR_Channel">
+                <ScalarProperty Name="PrefixCustID" ColumnName="PrefixCustID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
@@ -80,12 +118,27 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR21100_pgLoadChannel" FunctionName="eBiz4DWebSysModel.Store.AR21100_pgLoadChannel">
-            <ResultMapping>
+          <ResultMapping>
               <ComplexTypeMapping TypeName="AR21100Model.AR21100_pgLoadChannel_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21100_pcChannelType" FunctionName="eBiz4DWebSysModel.Store.AR21100_pcChannelType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21100Model.AR21100_pcChannelType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR21100_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21100Model.AR21100_pdConfig_Result">
+                <ScalarProperty Name="ChanelType" ColumnName="ChanelType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

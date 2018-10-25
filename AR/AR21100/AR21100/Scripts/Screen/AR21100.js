@@ -1,8 +1,8 @@
 //// Declare //////////////////////////////////////////////////////////
 
-var keys = ['Code'];
-var fieldsCheckRequire = ["Code", "Type"];
-var fieldsLangCheckRequire = ["Code", "Type"];
+var keys ;
+var fieldsCheckRequire ;
+var fieldsLangCheckRequire ;
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -70,6 +70,7 @@ var grdChannel_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdChannel, e, keys);
 };
 var grdChannel_Reject = function (record) {
+    
     HQ.grid.checkReject(record, App.grdChannel);
     stoChanged(App.stoChannel);
 };
@@ -124,6 +125,22 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.cboChannelType.getStore().addListener('load', checkLoad);
+    
+    if (HQ.channelTypeView == false)
+    {
+        App.AR21100ChannelType.hide();
+        keys = ["Code"];
+        fieldsCheckRequire = ["Code", "Descr"];
+        fieldsLangCheckRequire = ["Code", "Descr"];
+    }
+    else
+    {
+        keys = ['Code'];
+        fieldsCheckRequire = ["Code", "Descr", "Type"];
+        fieldsLangCheckRequire = ["Code", "Descr", "Type"];
+        App.AR21100ChannelType.show();
+    }
+    checkLoad();
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
@@ -147,7 +164,7 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
-var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) {
+var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) {    
     var record = App.cboChannelType.findRecord("Code", value);
     if (record) {
         return record.data.Descr;

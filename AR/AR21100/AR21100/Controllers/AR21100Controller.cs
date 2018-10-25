@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -25,6 +25,14 @@ namespace AR21100.Controllers
         {
 
             Util.InitRight(_screenNbr);
+            bool chanelType = false;
+            var obj = _db.AR21100_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (obj != null)
+            {
+                chanelType = obj.ChanelType.Value && obj.ChanelType.HasValue;
+            }
+            ViewBag.ChannelTypeView = chanelType;
+
             return View();
         }
 
@@ -36,7 +44,8 @@ namespace AR21100.Controllers
 
         public ActionResult GetChannel()
         {
-            return this.Store(_db.AR21100_pgLoadChannel().ToList());
+            var channel = _db.AR21100_pgLoadChannel(Current.CpnyID,Current.UserName,Current.LangID).ToList();
+            return this.Store(channel);
         }
 
         [HttpPost]
@@ -46,8 +55,8 @@ namespace AR21100.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstChannel"]);
-                ChangeRecords<AR_Channel> lstChannel = dataHandler.BatchObjectData<AR_Channel>();
-                foreach (AR_Channel deleted in lstChannel.Deleted)
+                ChangeRecords<AR21100_pgLoadChannel_Result> lstChannel = dataHandler.BatchObjectData<AR21100_pgLoadChannel_Result>();
+                foreach (AR21100_pgLoadChannel_Result deleted in lstChannel.Deleted)
                 {
                     var del = _db.AR_Channel.Where(p => p.Code == deleted.Code).FirstOrDefault();
                     if (del != null)
@@ -58,15 +67,16 @@ namespace AR21100.Controllers
 
                 lstChannel.Created.AddRange(lstChannel.Updated);
 
-                foreach (AR_Channel curChannel in lstChannel.Created)
+                foreach (AR21100_pgLoadChannel_Result curChannel in lstChannel.Created)
                 {
                     if (curChannel.Code.PassNull() == "") continue;
 
                     var Channel = _db.AR_Channel.Where(p => p.Code.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
 
+
                     if (Channel != null)
                     {
-                        if (Channel.tstamp.ToHex() == curChannel.tstamp.ToHex())
+                        if (Channel.tstamp.ToHex() == curChannel.tstamp.ToHex()) // luôn bắt code
                         {
                             Update_AR_Channel(Channel, curChannel, false);
                         }
@@ -94,7 +104,7 @@ namespace AR21100.Controllers
             }
         }
 
-        private void Update_AR_Channel(AR_Channel t, AR_Channel s, bool isNew)
+        private void Update_AR_Channel(AR_Channel t, AR21100_pgLoadChannel_Result s, bool isNew)
         {
             if (isNew)
             {

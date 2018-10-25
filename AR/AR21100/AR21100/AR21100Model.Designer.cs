@@ -127,9 +127,124 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<AR21100_pgLoadChannel_Result> AR21100_pgLoadChannel()
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR21100_pgLoadChannel_Result> AR21100_pgLoadChannel(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
-            return base.ExecuteFunction<AR21100_pgLoadChannel_Result>("AR21100_pgLoadChannel");
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR21100_pgLoadChannel_Result>("AR21100_pgLoadChannel", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR21100_pcChannelType_Result> AR21100_pcChannelType(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR21100_pcChannelType_Result>("AR21100_pcChannelType", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR21100_pdConfig_Result> AR21100_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR21100_pdConfig_Result>("AR21100_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
         }
 
         #endregion
@@ -161,7 +276,8 @@ namespace AR21100
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AR_Channel CreateAR_Channel(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        /// <param name="type">Initial value of the Type property.</param>
+        public static AR_Channel CreateAR_Channel(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String type)
         {
             AR_Channel aR_Channel = new AR_Channel();
             aR_Channel.Code = code;
@@ -172,6 +288,7 @@ namespace AR21100
             aR_Channel.Crtd_Prog = crtd_Prog;
             aR_Channel.Crtd_User = crtd_User;
             aR_Channel.tstamp = tstamp;
+            aR_Channel.Type = type;
             return aR_Channel;
         }
 
@@ -401,7 +518,7 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Type
         {
@@ -413,7 +530,7 @@ namespace AR21100
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, true);
+                _Type = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
@@ -421,6 +538,30 @@ namespace AR21100
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PrefixCustID
+        {
+            get
+            {
+                return _PrefixCustID;
+            }
+            set
+            {
+                OnPrefixCustIDChanging(value);
+                ReportPropertyChanging("PrefixCustID");
+                _PrefixCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PrefixCustID");
+                OnPrefixCustIDChanged();
+            }
+        }
+        private global::System.String _PrefixCustID;
+        partial void OnPrefixCustIDChanging(global::System.String value);
+        partial void OnPrefixCustIDChanged();
 
         #endregion
 
@@ -430,6 +571,123 @@ namespace AR21100
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR21100Model", Name="AR21100_pcChannelType_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR21100_pcChannelType_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR21100_pcChannelType_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        public static AR21100_pcChannelType_Result CreateAR21100_pcChannelType_Result(global::System.String code, global::System.String descr)
+        {
+            AR21100_pcChannelType_Result aR21100_pcChannelType_Result = new AR21100_pcChannelType_Result();
+            aR21100_pcChannelType_Result.Code = code;
+            aR21100_pcChannelType_Result.Descr = descr;
+            return aR21100_pcChannelType_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR21100Model", Name="AR21100_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR21100_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ChanelType
+        {
+            get
+            {
+                return _ChanelType;
+            }
+            set
+            {
+                OnChanelTypeChanging(value);
+                ReportPropertyChanging("ChanelType");
+                _ChanelType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChanelType");
+                OnChanelTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ChanelType;
+        partial void OnChanelTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnChanelTypeChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -445,11 +703,13 @@ namespace AR21100
         /// Create a new AR21100_pgLoadChannel_Result object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="type">Initial value of the Type property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AR21100_pgLoadChannel_Result CreateAR21100_pgLoadChannel_Result(global::System.String code, global::System.Byte[] tstamp)
+        public static AR21100_pgLoadChannel_Result CreateAR21100_pgLoadChannel_Result(global::System.String code, global::System.String type, global::System.Byte[] tstamp)
         {
             AR21100_pgLoadChannel_Result aR21100_pgLoadChannel_Result = new AR21100_pgLoadChannel_Result();
             aR21100_pgLoadChannel_Result.Code = code;
+            aR21100_pgLoadChannel_Result.Type = type;
             aR21100_pgLoadChannel_Result.tstamp = tstamp;
             return aR21100_pgLoadChannel_Result;
         }
@@ -509,7 +769,7 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Type
         {
@@ -521,7 +781,7 @@ namespace AR21100
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, true);
+                _Type = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
