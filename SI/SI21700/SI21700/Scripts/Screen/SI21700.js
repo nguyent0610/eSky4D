@@ -1,6 +1,6 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-var screenNbr = 'SI21700';
-var keys = ['Country', 'State', 'District'];
+//var screenNbr = 'SI21700';
+var keys = ['Country', 'District', 'State'];
 var fieldsCheckRequire = ["Country", "State", "District", "Name"];
 var fieldsLangCheckRequire = ["Country", "State", "District", "Name"];
 
@@ -46,9 +46,14 @@ var menuClick = function (command) {
                 HQ.isFirstLoad = true;
                 App.stoSI_District.reload();
             }
+            var record = HQ.store.findRecord(App.stoData, keys, ['Country', 'State']);
+            if (!record) {
+                HQ.store.insertBlank(App.stoData, keys);
+            }
             break;
         case "new":
             if (HQ.isInsert) {
+                debugger
                 HQ.grid.insert(App.grdSI_District, keys);
             }
             break;
@@ -84,6 +89,21 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     //checkLoad();
     App.cboCountry.getStore().addListener('load', checkLoad);
+    
+    if (HQ.countryView == false) {
+
+        keys = ["State", "District"];
+        fieldsCheckRequire = ["State", "District", "Name"];
+        fieldsLangCheckRequire = ["State", "District", "Name"];
+        App.Country.hide();
+    }
+    else {
+        keys = ['Country', 'State', "District"];
+        fieldsCheckRequire = ["Country", "State", "District", "Name"];
+        fieldsLangCheckRequire = ["Country", "State", "District", "Name"];
+        App.Country.show();
+    }
+    checkLoad();
 };
 
 var frmChange = function () {
@@ -128,20 +148,20 @@ var grdSI_District_Reject = function (record) {
     frmChange();
 };
 
-var cboCountry_Change = function () {
-    App.cboState.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord != undefined)
-            if (curRecord.data.State) {
-                App.cboState.setValue(curRecord.data.State);
-            }
-        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-        if (!dt) {
-            //curRecord.data.State = '';
-            App.cboState.setValue("");
-        }
-    });
-};
+//var cboCountry_Change = function () {
+//    App.cboState.getStore().load(function () {
+//        var curRecord = App.frmMain.getRecord();
+//        if (curRecord != undefined)
+//            if (curRecord.data.State) {
+//                App.cboState.setValue(curRecord.data.State);
+//            }
+//        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+//        if (!dt) {
+//            //curRecord.data.State = '';
+//            App.cboState.setValue("");
+//        }
+//    });
+//};
 //////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 ////Process Data
@@ -181,4 +201,76 @@ function refresh(item) {
         HQ.isFirstLoad = true;
         App.stoSI_District.reload();
     }
+};
+
+
+
+//////////////////////// combo phụ thuộc vào combo
+var grdStateClassDetail_Edit = function (item, e) {
+
+    if (e.field == "State") {
+        var a = HQ.store.findRecord(App.cboState.store, ['State'], [e.value]);
+        if (e.value != "" && e.value != null) {
+            e.record.set('DescrState', a.data.DescrState);
+        }
+        else {
+            e.record.set('DescrState', '');
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdSI_District, e, keys);
+    frmChange();
+};
+
+///////////// Import
+var btnImport_Click = function (sender, e) {
+    debugger
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'SI21700/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    else {
+        HQ.message.show('2014070701', '', '');
+        sender.reset();
+    }
+};
+///////////////////////////////////
+//Export
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'SI21700/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+
+        },
+        success: function (msg, data) {
+            alert('sus');
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
 };

@@ -17,7 +17,21 @@
         .ID("frmMain")
         .BodyPadding(0)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]
+            {
+                X.FileUploadField()
+                    .ID("btnImport")
+                    .ButtonText("Import")
+                    .ButtonOnly(true)
+                    .Icon(Icon.BookAdd)
+                    .Listeners(p=>{p.Change.Fn = "btnImport_Click";})  
+                , X.Button()
+                    .ID("btnExport")
+                    .Text(Util.GetLang("Export"))
+                    .Icon(Icon.ArrowTurnRight)
+                    .Listeners(p=>{p.Click.Fn = "btnExport_Click";})
+            }
+                , "Print", true, "menuClick"))
         .Layout(LayoutType.Fit)
         .Items(
         
@@ -43,63 +57,95 @@
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
-               
-                 , X.Column().Text(Util.GetLang("Country")).DataIndex("Country").Width(150)
-                .Editor(
-                    HQ.Combo().ID("cboCountry").Name("cboCountry").HQProcedure("SI21700_pcCountryAll")
-                    .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
-                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).AllowBlank(true).ForceSelection(true)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                        {
-                            lst.Change.Fn = "cboCountry_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        })
-                     .LoadData()
-                )
-                
-                 , X.Column().Text(Util.GetLang("State")).DataIndex("State").Width(150)
-                .Editor(
-                     HQ.Combo().ID("cboState").HQProcedure("SI21700_pcStateAll")
-                        .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
-                        .ValueField("State").DisplayField("State").HQAutoLoad(false)
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .HQParam(new StoreParameterCollection()  { 
-                            //do cboState load dựa vào cboCountry nên ta sử dụng bắt giá trị Country của hàng đang click vào trên grid
-                            new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
-                        })
-                        .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        })
-                        .LoadData()
-                ) 
-                , X.Column().Text(Util.GetLang("District")).DataIndex("District").Width(150)
-                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true))
-                
-                , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150)
-                .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
-               
-                , X.CommandColumn().Width(150)
-                .Commands(
-                    Html.X().GridCommand()
-                    .Text(Util.GetLang("Reject"))
-                    .ToolTip(t =>
-                    {
-                        t.Text = Util.GetLang("Rejectrowchanges");
-                    })
-                    .CommandName("reject")
-                    .Icon(Icon.ArrowUndo)
-                )
-                .PrepareToolbar(t =>
-                {
-                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                })
-                .Listeners(l =>
-                {
-                    l.Command.Handler = "grd_Reject(record);";
-                })
+//Đất Nước              
+                , X.Column()
+                    .Text(Util.GetLang("SI21700_Country"))
+                    .DataIndex("Country")
+                    .ID("Country")
+                    .Width(150) 
+                        .Editor(
+                            HQ.Combo()
+                                .ID("cboCountry")
+                                .Name("cboCountry")
+                                .HQProcedure("SI21700_pcCountryAll")
+                                .HQColumnShow("CountryID,Descr")
+                                .DisplayField("CountryID")
+                                .ValueField("CountryID")
+                                .Width(300)
+                                .HQHeightWidth(500, 400)
+                                .MarginSpec("5 0 0 0")
+                                .HQDBSys(false)
+                                .AllowBlank(true)
+                                .ForceSelection(true)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                //    lst.Change.Fn = "cboCountry_Change";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                             .LoadData()
+                            )
+// Mã Tỉnh/Thành phố
+                , X.Column().Text(Util.GetLang("SI21700_State")) 
+                    .DataIndex("State")
+                    .Flex(1)
+                    .Editor(
+                        HQ.Combo()
+                            .ID("cboState")
+                            .HQProcedure("SI21700_pcStateAll")
+                            .HQColumnShow("State,DescrState")
+                            .HQHeightWidth(300, 400)
+                            .ForceSelection(true)
+                            .ValueField("State")
+                            .DisplayField("State")
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                            .HQParam(new StoreParameterCollection()  
+                            {   
+                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)                              
+                            })
+                            .LoadData()
+                        )
+// Tên Tỉnh/Thành Phố
+                , X.Column()
+                    .ID("DescrState")
+                    .Text(Util.GetLang("SI21700_DescrState"))
+                    .DataIndex("DescrState")
+                        .Flex(1)
+// Quận
+                , X.Column().Text(Util.GetLang("SI21700_District")) 
+                    .DataIndex("District")
+                        .Flex(1) 
+                    .Editor(Html.X()
+                        .TextField()
+                        .MaxLength(10)
+                        .EnforceMaxLength(true))
+// Tên Quận
+                , X.Column().Text(Util.GetLang("SI21700_Name")) 
+                    .DataIndex("Name")
+                        .Flex(1) 
+                    .Editor(Html.X()
+                        .TextField()
+                        .MaxLength(30)
+                        .EnforceMaxLength(true))
+//Reject
+                , X.CommandColumn()
+                    .Width(100)
+                    .Commands(
+                        Html.X()
+                            .GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t =>{t.Text = Util.GetLang("Rejectrowchanges");})
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>{t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";})
+                        .Listeners(l => { l.Command.Handler = "grdSI_District_Reject(record);"; })
             )
             .SelectionModel(X.RowSelectionModel().ID("slmSI_District").Mode(SelectionMode.Multi))
             .BottomBar(
@@ -122,7 +168,9 @@
                 {
                     ls.BeforeEdit.Fn = "grdSI_District_BeforeEdit";
                     ls.Edit.Fn = "grdSI_District_Edit";
-                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit";                  
+                    ls.Edit.Fn = "grdStateClassDetail_Edit";
+                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit";  
+                                    
                 })
             )
             .Features(
@@ -131,10 +179,15 @@
                 .Filters(
                     X.StringFilter().DataIndex("Country"),
                     X.StringFilter().DataIndex("State"),
+                    X.StringFilter().DataIndex("DescrState"),
                     X.StringFilter().DataIndex("District"),
                     X.StringFilter().DataIndex("Name")
-                )
+                ) 
             ) // grdSI_District
+                .Listeners(lst =>
+                    {
+                        lst.Activate.Handler = "HQ.focus = 'grdStateClassDetail_Edit';";
+                    })
         ) // frmMain
     ) // Viewport
 )
