@@ -8,6 +8,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "PO20100";
     var acc = Session["PO20100"] as AccessRight;
 }
@@ -73,6 +74,19 @@
                 }
             ) 
       )
+    @(HQ.Store().ID("stoUOM_InvtID").HQProcedure("PO20100_pcUOM_InvtID")
+            .HQParam(new StoreParameterCollection()
+                {
+                   new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
+
+                }).LoadData()
+                //.Listeners(lst => {
+                //    lst.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                //    lst.Load.Handler = "HQ.common.showBusy(false)";
+                //})
+                )
+
+    
           
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
     

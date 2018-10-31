@@ -684,6 +684,7 @@ namespace PO20100.Controllers
                 string errorInvtID = string.Empty;
                 string errorUnit = string.Empty;
                 string errorPrice = string.Empty;
+                string errorPriceNegative = string.Empty;
 
                 string errorSave = string.Empty;
 
@@ -696,21 +697,20 @@ namespace PO20100.Controllers
                     {
                         Worksheet SheetInfomation = workbook.Worksheets[0];
                         List<PO_Price> lstPO_Price = new List<PO_Price>();
-
-
+                        if (SheetInfomation.Cells[1, ColTexts.IndexOf("InvtID")].StringValue.PassNull().ToUpper() == "")
+                        {
+                            throw new MessageException(MessageType.Message, "2018102463", "", new string[] { });
+                        }
                         string regex = "!$^&=:;><?*%\"#{}[]\\/,";
                         for (int i = 1; i <= SheetInfomation.Cells.MaxDataRow; i++)
                         {
                             string ClassID = string.Empty;
                             bool flagCheck = false;
-                            string InvtID = SheetInfomation.Cells[i, ColTexts.IndexOf("InvtID")].StringValue.PassNull().ToUpper();
+                            string InvtID = SheetInfomation.Cells[i, ColTexts.IndexOf("InvtID")].StringValue.PassNull();
                             string Unit = SheetInfomation.Cells[i, ColTexts.IndexOf("Unit")].StringValue.PassNull();
                             string Price = SheetInfomation.Cells[i, ColTexts.IndexOf("Price")].StringValue.PassNull();
 
-                            if (i == 1 && InvtID.PassNull() == "")
-                            {
-                                throw new MessageException(MessageType.Message, "2018102463", "", new string[] { });
-                            }
+                            
 
                             if (InvtID.PassNull() == "")
                             {
@@ -750,6 +750,11 @@ namespace PO20100.Controllers
                                 try
                                 {
                                     var dou = Price.ToDouble();
+                                    if (dou < 0)
+                                    {
+                                        errorPriceNegative += (i + 1).ToString() + ", ";
+                                        flagCheck = true;
+                                    }
                                 }
                                 catch
                                 {
@@ -795,6 +800,7 @@ namespace PO20100.Controllers
                         message += errorUnit == "" ? "" : string.Format(Message.GetString("2018101661", null), Util.GetLang("InvtID"), errorUnit);
                         message += errorInvtID == "" ? "" : string.Format(Message.GetString("2018101662", null), Util.GetLang("InvtID"), errorInvtID);
                         message += errorPrice == "" ? "" : string.Format(Message.GetString("2018101663", null), Util.GetLang("Price"), errorPrice);
+                        message += errorPriceNegative == "" ? "" : string.Format(Message.GetString("2018103161", null), Util.GetLang("Price"), errorPriceNegative);
 
 
                         if (message == "" || message == string.Empty)

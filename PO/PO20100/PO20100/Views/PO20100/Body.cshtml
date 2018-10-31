@@ -163,13 +163,14 @@
                     , X.Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(100)
                     .Editor(
                         HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("PO20100_pcUOM_InvtID")
-                        .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
-                        })
+                        .StoreID("stoUOM_InvtID")
+                        //.HQParam(new StoreParameterCollection()
+                        //{
+                        //    new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
+                        //})
                         .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit")
                         .Width(300).HQHeightWidth(500, 400)
-                        .HQDBSys(false).AllowBlank(true).ForceSelection(true).HQAutoLoad(false)
+                        .HQDBSys(false).AllowBlank(true).HQAutoLoad(false)
                         .Listeners(lst =>{
                             lst.Blur.Handler = "App.cboUOM.forceSelection = true";
                             lst.Focus.Handler = "App.cboUOM.forceSelection = false";

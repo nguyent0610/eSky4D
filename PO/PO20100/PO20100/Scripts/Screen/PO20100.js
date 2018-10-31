@@ -101,6 +101,7 @@ var menuClick = function (command) {
            
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
+                
             }
             else {
                 HQ.isChange = false;
@@ -195,7 +196,6 @@ var menuClick = function (command) {
 
 var cboInvtID_Change = function (item, newValue, oldValue) {
     _invtID = newValue;
-    App.cboUOM.store.reload();
 };
 
 function btnFill_Click() {
@@ -351,7 +351,7 @@ var stoPO_Price_Load = function (sto) {
 };
 
 var grdPO_Price_BeforeEdit = function (editor, e) {
-    App.cboUOM.store.reload();
+
     if (!Ext.isEmpty(App.stoPOPriceHeader.data.items[0].data.PriceID))
     {
         if (!HQ.isUpdate)
@@ -400,7 +400,7 @@ var grdPO_Price_Edit = function (item, e) {
 
 var grdPO_Price_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEditDG(App.grdPO_Price, e, keys);
+    return checkValidateEditDG(App.grdPO_Price, e, keys);
 };
 
 var grdPO_Price_Reject = function (record) {
@@ -450,7 +450,7 @@ var grdPO_PriceCpny_Edit = function (item, e) {
 
 var grdPO_PriceCpny_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEditDG(App.grdPO_PriceCpny, e, keys1);
+    return checkValidateEditDG(App.grdPO_PriceCpny, e, keys1);
 };
 
 var grdPO_PriceCpny_Reject = function (record) {
@@ -520,7 +520,9 @@ var save = function () {
                 HQ.message.show(201405071);
                 App.cboPriceID.getStore().reload();
                 HQ.copy = false;
-                refresh("yes");                
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoPOPriceHeader.reload();
                 //App.stoPO_Price.reload();
                 //App.stoPO_PriceCpny.reload();
             },
@@ -567,6 +569,10 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         menuClick("refresh");
+        //var record = HQ.store.findInStore(App.cboPriceID.store,["PriceID"],[App.cboPriceID.getValue()]);
+        //if(record== undefined){
+            App.cboPriceID.setValue('');
+        //}
         HQ.copy = false;
     }
 };
@@ -845,7 +851,7 @@ var btnImport_Click = function (sender, e) {
                             i++;
                             var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], [item.InvtID]);
                             if (objInvtID != undefined) {
-                                if (objInvtID.UOM != item.UOM) {
+                                if (objInvtID.data.UOM != item.UOM) {
                                     lineUOM += lineIntID(item.InvtID) + ", ";
                                 }
                             }
@@ -868,14 +874,24 @@ var btnImport_Click = function (sender, e) {
                             HQ.message.show(2018102461, [line], 'insertImport', true);
                             return;
                         }
+                        else
+                        {
+                            listImport.lstPO_Price.forEach(function (itemImport) {
+                                var objInvtID = HQ.store.findRecord(App.stoPO_Price, ['InvtID', 'UOM'], [itemImport.InvtID, itemImport.UOM]);
+                                if (!objInvtID) {
+                                    HQ.store.insertRecord(App.stoPO_Price, "InvtID", Ext.create('App.mdlPO_Price'), false);
+                                    objInvtID = App.stoPO_Price.data.items[App.stoPO_Price.getCount() - 1];
+                                    objInvtID.set("InvtID", itemImport.InvtID);
+                                    objInvtID.set("UOM", itemImport.UOM);
+                                }
+                                objInvtID.set("Price", itemImport.Price);
+                                objInvtID.set("QtyBreak", 1);
+                            })
+                        }
                         App.stoPO_Price.resumeEvents();
                         App.grdPO_Price.view.refresh();
                     }
-                       
-                    
-                    if (lineUOM != '') {
-                        return;
-                    }
+
                     HQ.isChange = false;
                     HQ.isFirstLoad = true;
                     var record = HQ.store.findRecord(App.stoPO_Price, ['InvtID'], ['']);
@@ -1214,4 +1230,38 @@ function lineIntID(item) {
             return i + 1;
         }
     }
+}
+var checkValidateEditDG = function (grd, e, keys) {
+    if (keys.indexOf(e.field) != -1) {
+        if (checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
+    }
+};
+var checkDuplicate = function (grd, row, keys) {
+    var found = false;
+    var store = grd.getStore();
+    if (keys == undefined) keys = row.record.idProperty.split(',');
+    var allData = grd.store.snapshot || grd.store.allData || grd.store.data;
+    for (var i = 0; i < allData.items.length; i++) {
+        var record = allData.items[i];
+        var data = '';
+        var rowdata = '';
+        for (var jkey = 0; jkey < keys.length; jkey++) {
+            if (record.data[keys[jkey]] != undefined) {
+                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                if (row.field == keys[jkey])
+                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                else
+                    rowdata += (row.record.data[keys[jkey]] != undefined ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
+            }
+        }
+        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            break;
+        };
+    }
+    return found;
 }
