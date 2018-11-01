@@ -493,7 +493,7 @@ var save = function () {
                 var erroDisc = "";
                 for (var i = 0; i < lstData.length; i++) {
                     if (lstData.items[i].data.Disc < 0) {
-                        erroDisc = erroDisc + (lstData.items[i].index + 1) + ",";
+                        erroDisc = erroDisc + (i + 1) + ",";
                     }
                 }
                 if (erroDisc != "") {
@@ -502,6 +502,21 @@ var save = function () {
                 }
             }
         }        
+
+        var lstData = App.grdPO_Price.store.snapshot;
+        if (lstData != undefined) {
+            var erroDisc = "";
+            for (var i = 0; i < lstData.length; i++) {
+                if (lstData.items[i].data.Price <= 0 && lstData.items[i].data.InvtID != "") {
+                    erroDisc = erroDisc + (i + 1) + ",";
+                }
+            }
+            if (erroDisc != "") {
+                HQ.message.show(2018041212, [HQ.common.getLang('Price'), erroDisc], '', true);
+                return;
+            }
+        }
+
 
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
@@ -586,6 +601,15 @@ var btnCopy_click = function (btn, e, eOpts) {
         App.cboPriceID.setReadOnly(false);
         App.cboPriceID.forceSelection = false;
         App.cboPriceID.events['change'].resume();
+
+        var lstData = App.grdPO_Price.store.snapshot;
+        if (lstData != undefined) {
+            var erroDisc = "";
+            for (var i = 0; i < lstData.length; i++) {
+                lstData.items[i].data.tstamp = '';
+            }
+            
+        }
     }
 
 };
