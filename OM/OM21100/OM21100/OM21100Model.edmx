@@ -5,67 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityType Name="Batch">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="Module" />
-            <PropertyRef Name="BatNbr" />
-          </Key>
-          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Module" Type="varchar" MaxLength="2" Nullable="false" />
-          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TotAmt" Type="float" Nullable="false" />
-          <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
-          <Property Name="Descr" Type="nvarchar(max)" />
-          <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
-          <Property Name="FromToSiteID" Type="varchar" MaxLength="30" />
-          <Property Name="ImpExp" Type="varchar" MaxLength="1" />
-          <Property Name="IntRefNbr" Type="varchar" MaxLength="10" />
-          <Property Name="JrnlType" Type="varchar" MaxLength="2" />
-          <Property Name="NoteID" Type="int" Nullable="false" />
-          <Property Name="OrigBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="OrigBranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="OrigScrnNbr" Type="varchar" MaxLength="5" />
-          <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
-          <Property Name="RefNbr" Type="varchar" MaxLength="10" />
-          <Property Name="RvdBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="Rlsed" Type="smallint" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="1" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="DiscID" Type="varchar" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" MaxLength="10" />
-          <Property Name="PerPost" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="HO_PendingTasks">
-          <Key>
-            <PropertyRef Name="TaskID" />
-          </Key>
-          <Property Name="ObjectID" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="BranchID" Type="varchar(max)" Nullable="false" />
-          <Property Name="EditScreenNbr" Type="varchar" MaxLength="12" Nullable="false" />
-          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Note" Type="nvarchar(max)" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="TaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Parm00" Type="nvarchar(max)" />
-          <Property Name="Parm02" Type="nvarchar(max)" />
-          <Property Name="Parm01" Type="nvarchar(max)" />
-        </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
             <PropertyRef Name="InvtID" />
@@ -142,236 +81,9 @@
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ImageModifiedDate" Type="datetime" />
           <Property Name="VideoModifiedDate" Type="datetime" />
-          <Property Name="CnvFact" Type="float" Nullable="false" />
+          <Property Name="CnvFact" Type="float" />
           <Property Name="KitType" Type="bit" Nullable="false" />
           <Property Name="GiftPoint" Type="float" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_ItemLot">
-          <Key>
-            <PropertyRef Name="SiteID" />
-            <PropertyRef Name="InvtID" />
-            <PropertyRef Name="WhseLoc" />
-            <PropertyRef Name="LotSerNbr" />
-          </Key>
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="Cost" Type="float" Nullable="false" />
-          <Property Name="ExpDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="LIFODate" Type="smalldatetime" Nullable="false" />
-          <Property Name="MfgrLotSerNbr" Type="char" MaxLength="25" Nullable="false" />
-          <Property Name="QtyAlloc" Type="float" Nullable="false" />
-          <Property Name="QtyAllocIN" Type="float" Nullable="false" />
-          <Property Name="QtyAllocOther" Type="float" Nullable="false" />
-          <Property Name="QtyAllocPORet" Type="float" Nullable="false" />
-          <Property Name="QtyAllocSO" Type="float" Nullable="false" />
-          <Property Name="QtyAvail" Type="float" Nullable="false" />
-          <Property Name="QtyOnHand" Type="float" Nullable="false" />
-          <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
-          <Property Name="WarrantyDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="PackageID" Type="varchar" MaxLength="100" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="QtyAllocPDASO" Type="float" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_ItemSite">
-          <Key>
-            <PropertyRef Name="InvtID" />
-            <PropertyRef Name="SiteID" />
-          </Key>
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="AvgCost" Type="float" Nullable="false" />
-          <Property Name="QtyAlloc" Type="float" Nullable="false" />
-          <Property Name="QtyAllocIN" Type="float" Nullable="false" />
-          <Property Name="QtyAllocPORet" Type="float" Nullable="false" />
-          <Property Name="QtyAllocSO" Type="float" Nullable="false" />
-          <Property Name="QtyAvail" Type="float" Nullable="false" />
-          <Property Name="QtyInTransit" Type="float" Nullable="false" />
-          <Property Name="QtyOnBO" Type="float" Nullable="false" />
-          <Property Name="QtyOnHand" Type="float" Nullable="false" />
-          <Property Name="QtyOnPO" Type="float" Nullable="false" />
-          <Property Name="QtyOnTransferOrders" Type="float" Nullable="false" />
-          <Property Name="QtyOnSO" Type="float" Nullable="false" />
-          <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
-          <Property Name="StkItem" Type="smallint" Nullable="false" />
-          <Property Name="TotCost" Type="float" Nullable="false" />
-          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="QtyUncosted" Type="float" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
-          <Property Name="QtyAllocPDASO" Type="float" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_LotTrans">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="RefNbr" />
-            <PropertyRef Name="LotSerNbr" />
-            <PropertyRef Name="INTranLineRef" />
-          </Key>
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="RefNbr" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="LotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="INTranLineRef" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="ExpDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="InvtMult" Type="smallint" Nullable="false" />
-          <Property Name="KitID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="MfgrLotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="Qty" Type="float" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="TranType" Type="varchar" MaxLength="2" Nullable="false" />
-          <Property Name="UnitCost" Type="float" Nullable="false" />
-          <Property Name="UnitPrice" Type="float" Nullable="false" />
-          <Property Name="WarrantyDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="UnitDesc" Type="varchar" MaxLength="10" />
-          <Property Name="CnvFact" Type="float" Nullable="false" />
-          <Property Name="UnitMultDiv" Type="varchar" MaxLength="1" />
-          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_Setup">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="SetupID" />
-          </Key>
-          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="SetupID" Type="varchar" MaxLength="2" Nullable="false" />
-          <Property Name="AutoRefNbr" Type="bit" Nullable="false" />
-          <Property Name="CnvFactEditable" Type="bit" />
-          <Property Name="NegQty" Type="bit" Nullable="false" />
-          <Property Name="LastBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="LastRefNbr" Type="varchar" MaxLength="10" />
-          <Property Name="LastTransferNbr" Type="varchar" MaxLength="10" />
-          <Property Name="LastIssueNbr" Type="varchar" MaxLength="10" />
-          <Property Name="LastRcptNbr" Type="varchar" MaxLength="10" />
-          <Property Name="DfltValMthd" Type="varchar" MaxLength="1" />
-          <Property Name="DfltSite" Type="varchar" MaxLength="30" />
-          <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
-          <Property Name="UseBarCode" Type="bit" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="CheckINVal" Type="bit" Nullable="false" />
-          <Property Name="LastStkOutNbr" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="IN_Trans">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="RefNbr" />
-            <PropertyRef Name="LineRef" />
-          </Key>
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="RefNbr" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="CnvFact" Type="float" Nullable="false" />
-          <Property Name="ExtCost" Type="float" Nullable="false" />
-          <Property Name="FreeItem" Type="bit" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" />
-          <Property Name="InvtMult" Type="smallint" Nullable="false" />
-          <Property Name="JrnlType" Type="varchar" MaxLength="3" />
-          <Property Name="ObjID" Type="varchar" MaxLength="30" />
-          <Property Name="Qty" Type="float" Nullable="false" />
-          <Property Name="ReasonCD" Type="varchar" MaxLength="6" />
-          <Property Name="Rlsed" Type="smallint" Nullable="false" />
-          <Property Name="ShipperID" Type="varchar" MaxLength="15" />
-          <Property Name="ShipperLineRef" Type="varchar" MaxLength="5" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperID" Type="varchar" MaxLength="30" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="30" />
-          <Property Name="TranAmt" Type="float" Nullable="false" />
-          <Property Name="TranFee" Type="float" Nullable="false" />
-          <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="TranDesc" Type="nvarchar(max)" />
-          <Property Name="TranType" Type="varchar" MaxLength="2" />
-          <Property Name="UnitCost" Type="float" Nullable="false" />
-          <Property Name="UnitDesc" Type="nvarchar" MaxLength="15" />
-          <Property Name="UnitMultDiv" Type="varchar" MaxLength="1" />
-          <Property Name="UnitPrice" Type="float" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="CostID" Type="varchar" MaxLength="30" />
-          <Property Name="QtyUncosted" Type="float" Nullable="false" />
-          <Property Name="PosmID" Type="varchar" MaxLength="30" />
-          <Property Name="RptExpDate" Type="datetime" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_Transfer">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="TrnsfrDocNbr" />
-          </Key>
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TrnsfrDocNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar(max)" />
-          <Property Name="ExpectedDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="NoteID" Type="int" Nullable="false" />
-          <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
-          <Property Name="RefNbr" Type="varchar" MaxLength="15" />
-          <Property Name="RcptBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="RcptDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="RcptNbr" Type="varchar" MaxLength="10" />
-          <Property Name="ShipperID" Type="varchar" MaxLength="15" />
-          <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" />
-          <Property Name="Source" Type="varchar" MaxLength="2" />
-          <Property Name="Status" Type="varchar" MaxLength="1" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="30" />
-          <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="TransferType" Type="varchar" MaxLength="1" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="ToCpnyID" Type="varchar" MaxLength="30" />
-          <Property Name="AdvanceType" Type="varchar" MaxLength="5" />
-          <Property Name="ListDiscSeq" Type="varchar" MaxLength="1000" />
-          <Property Name="RefBatNbr" Type="varchar" MaxLength="50" />
-          <Property Name="FromDate" Type="datetime" Nullable="false" />
-          <Property Name="ToDate" Type="datetime" Nullable="false" />
-          <Property Name="WhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ToWhseLoc" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscBreak">
           <Key>
@@ -387,10 +99,10 @@
           <Property Name="DiscAmt" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="MaxLot" Type="float" Nullable="false" />
@@ -441,10 +153,10 @@
           <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
@@ -476,10 +188,10 @@
           <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscFreeItem">
@@ -499,10 +211,10 @@
           <Property Name="UnitDescr" Type="nvarchar" MaxLength="15" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="GroupItem" Type="varchar" MaxLength="30" />
           <Property Name="TypeUnit" Type="int" />
@@ -528,10 +240,10 @@
           <Property Name="UnitDesc" Type="nvarchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="QtyType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="RequiredValue" Type="int" Nullable="false" />
@@ -552,10 +264,10 @@
           <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="30" />
         </EntityType>
@@ -569,10 +281,10 @@
           <Property Name="DiscType" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Crtd_Role" Type="varchar" MaxLength="30" />
           <Property Name="Accumulate" Type="bit" Nullable="false" />
@@ -595,10 +307,10 @@
           <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ProAplForItem" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="AutoFreeItem" Type="bit" Nullable="false" />
@@ -613,22 +325,23 @@
           <Property Name="ExcludeOtherDisc" Type="bit" Nullable="false" />
           <Property Name="PctDiscountByLevel" Type="bit" Nullable="false" />
           <Property Name="RequiredType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="IsRequiredQty" Type="bit" Nullable="false" />
           <Property Name="DonateGroupProduct" Type="bit" />
-          <Property Name="ChoiceType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="StockPromotion" Type="bit" />
+          <Property Name="ChoiceType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="ProrateAmtType" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="PriorityPromo" Type="int" Nullable="false" />
-          <Property Name="IsDeductQtyAmt" Type="bit" Nullable="false" />
           <Property Name="ExcludePromo" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="IsDeductQtyAmt" Type="bit" Nullable="false" />
           <Property Name="SubBreakType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="BreakBoundType" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="ConvertDiscAmtToFreeItem" Type="bit" Nullable="false" />
-          <Property Name="IsRequiredQty" Type="bit" Nullable="false" />
           <Property Name="DiscSeqSolomon" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="InvtIDSolomon" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="DiscPrice" Type="bit" Nullable="false" />
           <Property Name="SolomonSite" Type="varchar" MaxLength="30" />
           <Property Name="RegistrationOfIndustryAndTrade" Type="bit" />
+          <Property Name="IsGetFreeItem" Type="bit" />
         </EntityType>
         <EntityType Name="OM_DiscSubBreakItem">
           <Key>
@@ -686,42 +399,6 @@
           <Property Name="DiscBreakLineRef" Type="varchar" MaxLength="5" />
           <Property Name="RefLineRef" Type="varchar" MaxLength="5" />
           <Property Name="GroupRefLineRef" Type="varchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="SI_ApprovalFlowHandle">
-          <Key>
-            <PropertyRef Name="AppFolID" />
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="Handle" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Handle" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="LangHandle" Type="varchar" MaxLength="50" />
-          <Property Name="ToStatus" Type="varchar" MaxLength="10" />
-          <Property Name="ProcName" Type="nvarchar" MaxLength="250" />
-          <Property Name="ContentApprove" Type="nvarchar" MaxLength="500" />
-          <Property Name="MailSubject" Type="nvarchar" MaxLength="250" />
-          <Property Name="MailTo" Type="nvarchar" MaxLength="400" />
-          <Property Name="MailCC" Type="nvarchar" MaxLength="400" />
-          <Property Name="Param00" Type="nvarchar" MaxLength="500" />
-          <Property Name="Param01" Type="nvarchar" MaxLength="500" />
-          <Property Name="Param02" Type="nvarchar" MaxLength="500" />
-          <Property Name="Param03" Type="nvarchar" MaxLength="500" />
-          <Property Name="Param04" Type="nvarchar" MaxLength="500" />
-          <Property Name="Param05" Type="nvarchar" MaxLength="500" />
-          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="MailApprove" Type="varchar" MaxLength="100" />
-          <Property Name="ProcContent" Type="varchar" MaxLength="100" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <Function Name="INNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -954,15 +631,7 @@
           <Parameter Name="ListCpnyID" Type="varchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="HO_PendingTasks" EntityType="Self.HO_PendingTasks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IN_Inventory" EntityType="Self.IN_Inventory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_ItemLot" EntityType="Self.IN_ItemLot" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_ItemSite" EntityType="Self.IN_ItemSite" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_LotTrans" EntityType="Self.IN_LotTrans" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_Setup" EntityType="Self.IN_Setup" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_Trans" EntityType="Self.IN_Trans" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_Transfer" EntityType="Self.IN_Transfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_DiscBreak" EntityType="Self.OM_DiscBreak" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_DiscChannel" EntityType="Self.OM_DiscChannel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_DiscCpny" EntityType="Self.OM_DiscCpny" Schema="dbo" store:Type="Tables" />
@@ -976,7 +645,6 @@
           <EntitySet Name="OM_DiscSeq" EntityType="Self.OM_DiscSeq" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_DiscSubBreakItem" EntityType="Self.OM_DiscSubBreakItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_OrdDisc" EntityType="Self.OM_OrdDisc" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1033,7 +701,6 @@
           <EntitySet Name="OM_DiscCust" EntityType="OM21100Model.OM_DiscCust" />
           <EntitySet Name="OM_DiscCustClass" EntityType="OM21100Model.OM_DiscCustClass" />
           <EntitySet Name="OM_DiscItemClass" EntityType="OM21100Model.OM_DiscItemClass" />
-          <EntitySet Name="HO_PendingTasks" EntityType="OM21100Model.HO_PendingTasks" />
           <EntitySet Name="OM_OrdDisc" EntityType="OM21100Model.OM_OrdDisc" />
           <FunctionImport Name="OM21100_ptInventory" ReturnType="Collection(OM21100Model.OM21100_ptInventory_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
@@ -1118,9 +785,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="IN_Setup" EntityType="OM21100Model.IN_Setup" />
-          <EntitySet Name="IN_ItemSite" EntityType="OM21100Model.IN_ItemSite" />
-          <EntitySet Name="IN_LotTrans" EntityType="OM21100Model.IN_LotTrans" />
           <FunctionImport Name="OM21100_pdGetDataShipment" ReturnType="Collection(OM21100Model.OM21100_pdGetDataShipment_Result)">
             <Parameter Name="DiscID" Mode="In" Type="String" />
             <Parameter Name="DiscSeq" Mode="In" Type="String" />
@@ -1158,7 +822,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="IN_ItemLot" EntityType="OM21100Model.IN_ItemLot" />
           <FunctionImport Name="OM21100_pdGetcheckQty" ReturnType="Collection(OM21100Model.OM21100_pdGetcheckQty_Result)">
             <Parameter Name="lstInvtID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
@@ -1199,7 +862,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="IN_Trans" EntityType="OM21100Model.IN_Trans" />
           <FunctionImport Name="OM21100_pdDelDataErroRealse">
             <Parameter Name="DiscID" Mode="In" Type="String" />
             <Parameter Name="DiscSeq" Mode="In" Type="String" />
@@ -1232,9 +894,6 @@
             <Parameter Name="LstItemClass" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_DiscFreeItem" EntityType="OM21100Model.OM_DiscFreeItem" />
-          <EntitySet Name="Batches" EntityType="OM21100Model.Batch" />
-          <EntitySet Name="IN_Transfer" EntityType="OM21100Model.IN_Transfer" />
-          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM21100Model.SI_ApprovalFlowHandle" />
           <FunctionImport Name="OM21100_pgPromotionsCopy" ReturnType="Collection(OM21100Model.OM21100_pgPromotionsCopy_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -1358,10 +1017,10 @@
           <Property Type="String" Name="DiscType" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Crtd_Role" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="Accumulate" Nullable="false" />
@@ -1397,10 +1056,10 @@
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
@@ -1415,10 +1074,10 @@
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_DiscItemClass">
@@ -1432,34 +1091,12 @@
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="UnitDesc" MaxLength="30" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="HO_PendingTasks">
-          <Key>
-            <PropertyRef Name="TaskID" />
-          </Key>
-          <Property Type="String" Name="ObjectID" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="EditScreenNbr" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Content" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="TaskID" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="Parm00" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Parm02" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Parm01" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OM_OrdDisc">
           <Key>
@@ -1691,7 +1328,7 @@
           <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="CnvFact" Type="Double" Nullable="false" />
+          <Property Name="CnvFact" Type="Double" />
           <Property Name="KitType" Type="Boolean" Nullable="false" />
           <Property Name="GiftPoint" Type="Double" Nullable="false" />
         </EntityType>
@@ -1730,110 +1367,8 @@
           <Property Type="Boolean" Name="HideSite" Nullable="true" />
           <Property Type="Boolean" Name="HideSiteSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideReIndustryAndTrade" Nullable="true" />
+          <Property Type="Boolean" Name="HideGetFreeItem" Nullable="true" />
         </ComplexType>
-        <EntityType Name="IN_Setup">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="SetupID" />
-          </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="SetupID" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="AutoRefNbr" Type="Boolean" Nullable="false" />
-          <Property Name="CnvFactEditable" Type="Boolean" />
-          <Property Name="NegQty" Type="Boolean" Nullable="false" />
-          <Property Name="LastBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastRefNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastTransferNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastIssueNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastRcptNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DfltValMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="DfltSite" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PreFixBat" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="UseBarCode" Type="Boolean" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="CheckINVal" Type="Boolean" Nullable="false" />
-          <Property Name="LastStkOutNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IN_ItemSite">
-          <Key>
-            <PropertyRef Name="InvtID" />
-            <PropertyRef Name="SiteID" />
-          </Key>
-          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="AvgCost" Type="Double" Nullable="false" />
-          <Property Name="QtyAlloc" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocIN" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocPORet" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocSO" Type="Double" Nullable="false" />
-          <Property Name="QtyAvail" Type="Double" Nullable="false" />
-          <Property Name="QtyInTransit" Type="Double" Nullable="false" />
-          <Property Name="QtyOnBO" Type="Double" Nullable="false" />
-          <Property Name="QtyOnHand" Type="Double" Nullable="false" />
-          <Property Name="QtyOnPO" Type="Double" Nullable="false" />
-          <Property Name="QtyOnTransferOrders" Type="Double" Nullable="false" />
-          <Property Name="QtyOnSO" Type="Double" Nullable="false" />
-          <Property Name="QtyShipNotInv" Type="Double" Nullable="false" />
-          <Property Name="StkItem" Type="Int16" Nullable="false" />
-          <Property Name="TotCost" Type="Double" Nullable="false" />
-          <Property Name="LastPurchaseDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LastPurchasePrice" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="QtyUncosted" Type="Double" Nullable="false" />
-          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="QtyAllocPDASO" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_LotTrans">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="RefNbr" />
-            <PropertyRef Name="LotSerNbr" />
-            <PropertyRef Name="INTranLineRef" />
-          </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RefNbr" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerNbr" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="INTranLineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="ExpDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="InvtMult" Type="Int16" Nullable="false" />
-          <Property Name="KitID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="MfgrLotSerNbr" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Qty" Type="Double" Nullable="false" />
-          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ToSiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TranType" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="UnitCost" Type="Double" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="WarrantyDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="UnitDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="CnvFact" Type="Double" Nullable="false" />
-          <Property Name="UnitMultDiv" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         <ComplexType Name="OM21100_pdGetDataShipment_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SiteID" Nullable="true" MaxLength="30" />
@@ -1877,40 +1412,6 @@
           <Property Type="String" Name="ToBranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
         </ComplexType>
-        <EntityType Name="IN_ItemLot">
-          <Key>
-            <PropertyRef Name="SiteID" />
-            <PropertyRef Name="InvtID" />
-            <PropertyRef Name="LotSerNbr" />
-            <PropertyRef Name="WhseLoc" />
-          </Key>
-          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerNbr" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Cost" Type="Double" Nullable="false" />
-          <Property Name="ExpDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LIFODate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="MfgrLotSerNbr" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="false" />
-          <Property Name="QtyAlloc" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocIN" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocOther" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocPORet" Type="Double" Nullable="false" />
-          <Property Name="QtyAllocSO" Type="Double" Nullable="false" />
-          <Property Name="QtyAvail" Type="Double" Nullable="false" />
-          <Property Name="QtyOnHand" Type="Double" Nullable="false" />
-          <Property Name="QtyShipNotInv" Type="Double" Nullable="false" />
-          <Property Name="WarrantyDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="WhseLoc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="PackageID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="QtyAllocPDASO" Type="Double" Nullable="false" />
-        </EntityType>
         <ComplexType Name="OM21100_pdGetcheckQty_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
           <Property Type="Boolean" Name="CheckQty" Nullable="true" />
@@ -1945,55 +1446,6 @@
           <Property Type="Double" Name="Price" Nullable="false" />
           <Property Type="String" Name="FreeITemSiteWhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
-        <EntityType Name="IN_Trans">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="RefNbr" />
-            <PropertyRef Name="LineRef" />
-          </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RefNbr" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="CnvFact" Type="Double" Nullable="false" />
-          <Property Name="ExtCost" Type="Double" Nullable="false" />
-          <Property Name="FreeItem" Type="Boolean" Nullable="false" />
-          <Property Name="InvtID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="InvtMult" Type="Int16" Nullable="false" />
-          <Property Name="JrnlType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="ObjID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Qty" Type="Double" Nullable="false" />
-          <Property Name="ReasonCD" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="Rlsed" Type="Int16" Nullable="false" />
-          <Property Name="ShipperID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="ShipperLineRef" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SlsperID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TranAmt" Type="Double" Nullable="false" />
-          <Property Name="TranFee" Type="Double" Nullable="false" />
-          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TranDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TranType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="UnitCost" Type="Double" Nullable="false" />
-          <Property Name="UnitDesc" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="UnitMultDiv" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="CostID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="QtyUncosted" Type="Double" Nullable="false" />
-          <Property Name="PosmID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="RptExpDate" Type="DateTime" Precision="3" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
         <ComplexType Name="OM21100_ptTreeNodeCustomer_Result">
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="ParentID" Nullable="true" MaxLength="100" />
@@ -2019,10 +1471,10 @@
           <Property Name="UnitDesc" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="QtyType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="RequiredValue" Type="Int32" Nullable="false" />
@@ -2046,10 +1498,10 @@
           <Property Name="DiscAmt" Type="Double" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="Descr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="MaxLot" Type="Double" Nullable="false" />
@@ -2108,132 +1560,16 @@
           <Property Name="UnitDescr" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="GroupItem" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="TypeUnit" Type="Int32" />
           <Property Name="Priority" Type="Int32" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="FreeITemSiteWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Batch">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="Module" />
-            <PropertyRef Name="BatNbr" />
-          </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Module" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TotAmt" Type="Double" Nullable="false" />
-          <Property Name="DateEnt" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EditScrnNbr" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="FromToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ImpExp" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="IntRefNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="JrnlType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="NoteID" Type="Int32" Nullable="false" />
-          <Property Name="OrigBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrigBranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrigScrnNbr" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="ReasonCD" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RefNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RvdBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Rlsed" Type="Int16" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="DiscID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DiscSeq" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="PerPost" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IN_Transfer">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="TrnsfrDocNbr" />
-          </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TrnsfrDocNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ExpectedDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="NoteID" Type="Int32" Nullable="false" />
-          <Property Name="ReasonCD" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RefNbr" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="RcptBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RcptDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="RcptNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ShipperID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="ShipViaID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Source" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TransferType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="ToCpnyID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="AdvanceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="ListDiscSeq" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="RefBatNbr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="WhseLoc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ToWhseLoc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="SI_ApprovalFlowHandle">
-          <Key>
-            <PropertyRef Name="AppFolID" />
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="Handle" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Name="AppFolID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="RoleID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Handle" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="LangHandle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ToStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ProcName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ContentApprove" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="MailSubject" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="MailTo" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="MailCC" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="Param00" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Param01" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Param02" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Param03" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Param04" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Param05" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="MailApprove" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ProcContent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="OM21100_pgPromotionsCopy_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
@@ -2263,10 +1599,10 @@
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="ProAplForItem" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="AutoFreeItem" Type="Boolean" Nullable="false" />
@@ -2281,22 +1617,23 @@
           <Property Name="ExcludeOtherDisc" Type="Boolean" Nullable="false" />
           <Property Name="PctDiscountByLevel" Type="Boolean" Nullable="false" />
           <Property Name="RequiredType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="IsRequiredQty" Type="Boolean" Nullable="false" />
           <Property Name="DonateGroupProduct" Type="Boolean" />
-          <Property Name="ChoiceType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="StockPromotion" Type="Boolean" />
+          <Property Name="ChoiceType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="ProrateAmtType" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="PriorityPromo" Type="Int32" Nullable="false" />
-          <Property Name="IsDeductQtyAmt" Type="Boolean" Nullable="false" />
           <Property Name="ExcludePromo" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeductQtyAmt" Type="Boolean" Nullable="false" />
           <Property Name="SubBreakType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="BreakBoundType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="ConvertDiscAmtToFreeItem" Type="Boolean" Nullable="false" />
-          <Property Name="IsRequiredQty" Type="Boolean" Nullable="false" />
           <Property Name="DiscSeqSolomon" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="InvtIDSolomon" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DiscPrice" Type="Boolean" Nullable="false" />
           <Property Name="SolomonSite" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="RegistrationOfIndustryAndTrade" Type="Boolean" />
+          <Property Name="IsGetFreeItem" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2520,29 +1857,6 @@
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
                 <ScalarProperty Name="DiscID" ColumnName="DiscID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="HO_PendingTasks">
-            <EntityTypeMapping TypeName="OM21100Model.HO_PendingTasks">
-              <MappingFragment StoreEntitySet="HO_PendingTasks">
-                <ScalarProperty Name="Parm01" ColumnName="Parm01" />
-                <ScalarProperty Name="Parm02" ColumnName="Parm02" />
-                <ScalarProperty Name="Parm00" ColumnName="Parm00" />
-                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="EditScreenNbr" ColumnName="EditScreenNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2869,110 +2183,11 @@
                 <ScalarProperty Name="HideSite" ColumnName="HideSite" />
                 <ScalarProperty Name="HideSiteSolomon" ColumnName="HideSiteSolomon" />
                 <ScalarProperty Name="HideReIndustryAndTrade" ColumnName="HideReIndustryAndTrade" />
+                <ScalarProperty Name="HideGetFreeItem" ColumnName="HideGetFreeItem" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="INNumbering" FunctionName="eBiz4DWebAppModel.Store.INNumbering" />
-          <EntitySetMapping Name="IN_Setup">
-            <EntityTypeMapping TypeName="OM21100Model.IN_Setup">
-              <MappingFragment StoreEntitySet="IN_Setup">
-                <ScalarProperty Name="LastStkOutNbr" ColumnName="LastStkOutNbr" />
-                <ScalarProperty Name="CheckINVal" ColumnName="CheckINVal" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
-                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
-                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
-                <ScalarProperty Name="DfltValMthd" ColumnName="DfltValMthd" />
-                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
-                <ScalarProperty Name="LastIssueNbr" ColumnName="LastIssueNbr" />
-                <ScalarProperty Name="LastTransferNbr" ColumnName="LastTransferNbr" />
-                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
-                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
-                <ScalarProperty Name="NegQty" ColumnName="NegQty" />
-                <ScalarProperty Name="CnvFactEditable" ColumnName="CnvFactEditable" />
-                <ScalarProperty Name="AutoRefNbr" ColumnName="AutoRefNbr" />
-                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_ItemSite">
-            <EntityTypeMapping TypeName="OM21100Model.IN_ItemSite">
-              <MappingFragment StoreEntitySet="IN_ItemSite">
-                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
-                <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
-                <ScalarProperty Name="TotCost" ColumnName="TotCost" />
-                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
-                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
-                <ScalarProperty Name="QtyOnSO" ColumnName="QtyOnSO" />
-                <ScalarProperty Name="QtyOnTransferOrders" ColumnName="QtyOnTransferOrders" />
-                <ScalarProperty Name="QtyOnPO" ColumnName="QtyOnPO" />
-                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
-                <ScalarProperty Name="QtyOnBO" ColumnName="QtyOnBO" />
-                <ScalarProperty Name="QtyInTransit" ColumnName="QtyInTransit" />
-                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
-                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
-                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
-                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
-                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
-                <ScalarProperty Name="AvgCost" ColumnName="AvgCost" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_LotTrans">
-            <EntityTypeMapping TypeName="OM21100Model.IN_LotTrans">
-              <MappingFragment StoreEntitySet="IN_LotTrans">
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-                <ScalarProperty Name="ToWhseLoc" ColumnName="ToWhseLoc" />
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
-                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
-                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
-                <ScalarProperty Name="TranType" ColumnName="TranType" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
-                <ScalarProperty Name="KitID" ColumnName="KitID" />
-                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
-                <ScalarProperty Name="INTranLineRef" ColumnName="INTranLineRef" />
-                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdGetDataShipment" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdGetDataShipment">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_pdGetDataShipment_Result">
@@ -3030,38 +2245,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdUpdataDiscSeqAfter" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdUpdataDiscSeqAfter" />
-          <EntitySetMapping Name="IN_ItemLot">
-            <EntityTypeMapping TypeName="OM21100Model.IN_ItemLot">
-              <MappingFragment StoreEntitySet="IN_ItemLot">
-                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
-                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
-                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
-                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
-                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
-                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
-                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
-                <ScalarProperty Name="QtyAllocOther" ColumnName="QtyAllocOther" />
-                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
-                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
-                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
-                <ScalarProperty Name="LIFODate" ColumnName="LIFODate" />
-                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdGetcheckQty" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdGetcheckQty" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_pdGetcheckQty_Result">
@@ -3113,53 +2296,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdUpdataErro" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdUpdataErro" />
-          <EntitySetMapping Name="IN_Trans">
-            <EntityTypeMapping TypeName="OM21100Model.IN_Trans">
-              <MappingFragment StoreEntitySet="IN_Trans">
-                <ScalarProperty Name="ToWhseLoc" ColumnName="ToWhseLoc" />
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="RptExpDate" ColumnName="RptExpDate" />
-                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
-                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
-                <ScalarProperty Name="CostID" ColumnName="CostID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
-                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
-                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
-                <ScalarProperty Name="TranType" ColumnName="TranType" />
-                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="TranFee" ColumnName="TranFee" />
-                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
-                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
-                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="ShipperLineRef" ColumnName="ShipperLineRef" />
-                <ScalarProperty Name="ShipperID" ColumnName="ShipperID" />
-                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="ObjID" ColumnName="ObjID" />
-                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
-                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="FreeItem" ColumnName="FreeItem" />
-                <ScalarProperty Name="ExtCost" ColumnName="ExtCost" />
-                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdDelDataErroRealse" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdDelDataErroRealse" />
           <FunctionImportMapping FunctionImportName="OM21100_ptTreeNodeCustomer" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptTreeNodeCustomer">
             <ResultMapping>
@@ -3293,136 +2429,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Batches">
-            <EntityTypeMapping TypeName="OM21100Model.Batch">
-              <MappingFragment StoreEntitySet="Batch">
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="PerPost" ColumnName="PerPost" />
-                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
-                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
-                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="OrigScrnNbr" ColumnName="OrigScrnNbr" />
-                <ScalarProperty Name="OrigBranchID" ColumnName="OrigBranchID" />
-                <ScalarProperty Name="OrigBatNbr" ColumnName="OrigBatNbr" />
-                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
-                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
-                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
-                <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
-                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
-                <ScalarProperty Name="EditScrnNbr" ColumnName="EditScrnNbr" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
-                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="Module" ColumnName="Module" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_Transfer">
-            <EntityTypeMapping TypeName="OM21100Model.IN_Transfer">
-              <MappingFragment StoreEntitySet="IN_Transfer">
-                <ScalarProperty Name="ToWhseLoc" ColumnName="ToWhseLoc" />
-                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
-                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="RefBatNbr" ColumnName="RefBatNbr" />
-                <ScalarProperty Name="ListDiscSeq" ColumnName="ListDiscSeq" />
-                <ScalarProperty Name="AdvanceType" ColumnName="AdvanceType" />
-                <ScalarProperty Name="ToCpnyID" ColumnName="ToCpnyID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
-                <ScalarProperty Name="ShipperID" ColumnName="ShipperID" />
-                <ScalarProperty Name="RcptNbr" ColumnName="RcptNbr" />
-                <ScalarProperty Name="RcptDate" ColumnName="RcptDate" />
-                <ScalarProperty Name="RcptBatNbr" ColumnName="RcptBatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
-                <ScalarProperty Name="ExpectedDate" ColumnName="ExpectedDate" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="TrnsfrDocNbr" ColumnName="TrnsfrDocNbr" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SI_ApprovalFlowHandle">
-            <EntityTypeMapping TypeName="OM21100Model.SI_ApprovalFlowHandle">
-              <MappingFragment StoreEntitySet="SI_ApprovalFlowHandle">
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
-                <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="Param05" ColumnName="Param05" />
-                <ScalarProperty Name="Param04" ColumnName="Param04" />
-                <ScalarProperty Name="Param03" ColumnName="Param03" />
-                <ScalarProperty Name="Param02" ColumnName="Param02" />
-                <ScalarProperty Name="Param01" ColumnName="Param01" />
-                <ScalarProperty Name="Param00" ColumnName="Param00" />
-                <ScalarProperty Name="MailCC" ColumnName="MailCC" />
-                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
-                <ScalarProperty Name="MailSubject" ColumnName="MailSubject" />
-                <ScalarProperty Name="ContentApprove" ColumnName="ContentApprove" />
-                <ScalarProperty Name="ProcName" ColumnName="ProcName" />
-                <ScalarProperty Name="ToStatus" ColumnName="ToStatus" />
-                <ScalarProperty Name="LangHandle" ColumnName="LangHandle" />
-                <ScalarProperty Name="Handle" ColumnName="Handle" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OM_DiscSeq">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscSeq">
               <MappingFragment StoreEntitySet="OM_DiscSeq">
+                <ScalarProperty Name="IsGetFreeItem" ColumnName="IsGetFreeItem" />
                 <ScalarProperty Name="RegistrationOfIndustryAndTrade" ColumnName="RegistrationOfIndustryAndTrade" />
                 <ScalarProperty Name="SolomonSite" ColumnName="SolomonSite" />
                 <ScalarProperty Name="DiscPrice" ColumnName="DiscPrice" />
                 <ScalarProperty Name="InvtIDSolomon" ColumnName="InvtIDSolomon" />
                 <ScalarProperty Name="DiscSeqSolomon" ColumnName="DiscSeqSolomon" />
-                <ScalarProperty Name="IsRequiredQty" ColumnName="IsRequiredQty" />
                 <ScalarProperty Name="ConvertDiscAmtToFreeItem" ColumnName="ConvertDiscAmtToFreeItem" />
                 <ScalarProperty Name="BreakBoundType" ColumnName="BreakBoundType" />
                 <ScalarProperty Name="SubBreakType" ColumnName="SubBreakType" />
-                <ScalarProperty Name="ExcludePromo" ColumnName="ExcludePromo" />
                 <ScalarProperty Name="IsDeductQtyAmt" ColumnName="IsDeductQtyAmt" />
+                <ScalarProperty Name="ExcludePromo" ColumnName="ExcludePromo" />
                 <ScalarProperty Name="PriorityPromo" ColumnName="PriorityPromo" />
                 <ScalarProperty Name="ProrateAmtType" ColumnName="ProrateAmtType" />
-                <ScalarProperty Name="StockPromotion" ColumnName="StockPromotion" />
                 <ScalarProperty Name="ChoiceType" ColumnName="ChoiceType" />
+                <ScalarProperty Name="StockPromotion" ColumnName="StockPromotion" />
                 <ScalarProperty Name="DonateGroupProduct" ColumnName="DonateGroupProduct" />
+                <ScalarProperty Name="IsRequiredQty" ColumnName="IsRequiredQty" />
                 <ScalarProperty Name="RequiredType" ColumnName="RequiredType" />
                 <ScalarProperty Name="PctDiscountByLevel" ColumnName="PctDiscountByLevel" />
                 <ScalarProperty Name="ExcludeOtherDisc" ColumnName="ExcludeOtherDisc" />
@@ -3479,29 +2505,20 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="62">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="98">
         <EntityTypeShape EntityType="OM21100Model.OM_Discount" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscCpny" Width="1.5" PointX="2.375" PointY="11.875" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscCust" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscCustClass" Width="1.5" PointX="4.125" PointY="4.5" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscItemClass" Width="1.875" PointX="1.5" PointY="6.375" />
-        <EntityTypeShape EntityType="OM21100Model.HO_PendingTasks" Width="1.5" PointX="8.5" PointY="7.875" />
         <EntityTypeShape EntityType="OM21100Model.OM_OrdDisc" Width="1.5" PointX="7.375" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscChannel" Width="1.5" PointX="9" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscCustCate" Width="1.5" PointX="9" PointY="3.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_Inventory" Width="1.5" PointX="13.375" PointY="0.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_Setup" Width="1.5" PointX="15.375" PointY="10.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_ItemSite" Width="1.5" PointX="17.375" PointY="0.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_LotTrans" Width="1.5" PointX="17.375" PointY="7.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_ItemLot" Width="1.5" PointX="13.375" PointY="17.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_Trans" Width="1.5" PointX="19.375" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscItem" Width="1.5" PointX="0.75" PointY="14.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscBreak" Width="1.5" PointX="6.375" PointY="13.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscSubBreakItem" Width="1.5" PointX="19.375" PointY="10.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscFreeItem" Width="1.5" PointX="5.375" PointY="19.75" />
-        <EntityTypeShape EntityType="OM21100Model.Batch" Width="1.5" PointX="8.375" PointY="13.75" />
-        <EntityTypeShape EntityType="OM21100Model.IN_Transfer" Width="1.5" PointX="10.375" PointY="13.75" />
-        <EntityTypeShape EntityType="OM21100Model.SI_ApprovalFlowHandle" Width="1.5" PointX="19.375" PointY="14.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscSeq" Width="1.5" PointX="15.375" PointY="17.75" />
       </Diagram>
     </Diagrams>

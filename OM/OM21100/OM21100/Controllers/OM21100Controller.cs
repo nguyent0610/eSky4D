@@ -35,14 +35,7 @@ namespace OM21100.Controllers
 
         private List<OM21100_pgCompany_Result> _lstCpny;
         private List<OM21100_pgDiscItem_Result> _lstInvt;
-        private List<OM21100_pdGetDataItemTrans_Result> _lstGetDataItemTrans;
-        private IN_Setup _objIN;
-        List<Batch> _lstBatch = new List<Batch>();
-        List<IN_Transfer> _lstIN_Transfer = new List<IN_Transfer>();
-        List<IN_Trans> _lstIN_Trans = new List<IN_Trans>();
-        List<IN_LotTrans> _lstIN_LotTrans = new List<IN_LotTrans>();
         private OM_DiscSeq _objOM_DiscSeq;
-        bool checkEdit =false;
         private const string ItemChannel = "IC"; // Mặt hàng + Channel
         private const string GItemChannel = "GC"; // Nhóm MH + Channel
         private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
@@ -91,7 +84,8 @@ namespace OM21100.Controllers
                 , hideCopy=false
                 , hideSite = false
                 , hideSiteSolomon = false
-                , hideReIndustryAndTrade = false;
+                , hideReIndustryAndTrade = false
+                , hideGetFreeItem = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -119,6 +113,7 @@ namespace OM21100.Controllers
                 hideSite = objConfig.HideSite.HasValue && objConfig.HideSite.Value;
                 hideSiteSolomon = objConfig.HideSiteSolomon.HasValue && objConfig.HideSiteSolomon.Value;
                 hideReIndustryAndTrade = objConfig.HideReIndustryAndTrade.HasValue && objConfig.HideReIndustryAndTrade.Value;
+                hideGetFreeItem = objConfig.HideGetFreeItem  ?? false;
             }
 
             ViewBag.allowExport = allowExport;
@@ -144,6 +139,7 @@ namespace OM21100.Controllers
             ViewBag.hideSite = hideSite;
             ViewBag.hideSiteSolomon = hideSiteSolomon;
             ViewBag.hideReIndustryAndTrade = hideReIndustryAndTrade;
+            ViewBag.hideGetFreeItem = hideGetFreeItem;
             return View();
         }
 
@@ -897,14 +893,7 @@ namespace OM21100.Controllers
                         }
 
                     }
-                    var tam = _db.OM_DiscSeq.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.Active == 1 && p.Status == "C" && inputDiscSeq.StockPromotion==true).FirstOrDefault();
-                    if (tam != null)
-                    {
-                        if((tam.Status!= _handle && _handle!="") || tam.Active != inputDiscSeq.Active)
-                        {
-                            checkEdit = true;
-                        }                        
-                    }
+
 
                     var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes.Split(',');
 
@@ -1068,7 +1057,7 @@ namespace OM21100.Controllers
                         {
                             _db.OM_DiscSubBreakItem.DeleteObject(item);
                         }
-                        Submit_Data(null, "", null);
+                        Submit_Data("", null);
                         return Json(new { success = true });
                     }
                     else
@@ -1152,7 +1141,7 @@ namespace OM21100.Controllers
                         {
                             _db.OM_DiscSubBreakItem.DeleteObject(item);
                         }
-                        Submit_Data(null, "", null);
+                        Submit_Data( "", null);
                         return Json(new { success = true });
                     }
                     else
@@ -1174,292 +1163,7 @@ namespace OM21100.Controllers
             }
         }
 
-        public void SaveTrans(OM_DiscSeq objOM_DiscSeq)
-        {
-            _lstGetDataShipment = _db.OM21100_pdGetDataShipment(objOM_DiscSeq.DiscID, objOM_DiscSeq.DiscSeq,Current.UserName,Current.CpnyID,Current.LangID).ToList();
-            foreach (OM21100_pdGetDataShipment_Result items in _lstGetDataShipment)
-            {
-                if(items.BranchID!=null && items.BranchID != "")
-                {
-                    Batch batch = null;
-                    Save_Batch(batch, objOM_DiscSeq, items.BranchID, items);
-                }                
-            }
-        }
-
-        private void Save_Batch(Batch batch,OM_DiscSeq inputDiscSeq,string branchID,OM21100_pdGetDataShipment_Result items)
-        {
-            if (batch != null)
-            {
-                Update_Batch(batch, items, inputDiscSeq, branchID, false);
-            }
-            else
-            {
-                _lstGetDataItemTrans = _db.OM21100_pdGetDataItemTrans(items.SiteID, branchID, inputDiscSeq.DiscID, inputDiscSeq.DiscSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-                _batNbr = _db.INNumbering(branchID, "BatNbr").FirstOrDefault();
-                batch = new Batch();
-                Update_Batch(batch, items, inputDiscSeq, branchID, true);
-                _lstBatch.Add(batch);
-                _db.Batches.AddObject(batch);
-            }
-            Save_Transfer(batch, branchID, inputDiscSeq, items);
-        }
-
-        private void Save_Transfer(Batch batch,string branchID,OM_DiscSeq inputDiscSeq,OM21100_pdGetDataShipment_Result objTrans)
-        {
-             var transfer = new IN_Transfer();
-             transfer.ResetET();
-             transfer.TrnsfrDocNbr = _db.INNumbering(branchID, "TrnsNbr").FirstOrDefault();
-             transfer.RefNbr = _db.INNumbering(branchID, "RefNbr").FirstOrDefault();
-             Update_Transfer(transfer, branchID, inputDiscSeq, objTrans, true);
-             _db.IN_Transfer.AddObject(transfer);
-            _lstIN_Transfer.Add(transfer);
-             Save_Trans(transfer, objTrans);
-        }
-
-        private void Save_Trans(IN_Transfer transfer, OM21100_pdGetDataShipment_Result objTrans)
-        {
-            _objIN = _db.IN_Setup.FirstOrDefault(p => p.BranchID == objTrans.BranchID);
-            if (_objIN == null)
-            {
-                _objIN = new IN_Setup();
-            }
-            var obj = _db.OM21100_pdGetLineRef(transfer.BatNbr, transfer.BranchID, transfer.RefNbr, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-            if (obj != null && obj != "")
-            {
-                _lineRefnumber = Convert.ToInt32(obj);
-            }
-            else
-            {
-                _lineRefnumber = 0;
-            }
-
-            foreach (OM21100_pdGetDataItemTrans_Result trans in _lstGetDataItemTrans)
-            {
-                _lineRefnumber = _lineRefnumber + 1;
-                var transDB = _db.IN_Trans.FirstOrDefault(p =>
-                                p.BatNbr == transfer.BatNbr && p.RefNbr == transfer.RefNbr &&
-                                p.BranchID == transfer.BranchID);
-
-                _LineRef = string.Empty;
-                for (var i = 0; i < (5 - (_lineRefnumber.ToString().Length)); i++)
-                {
-                    _LineRef = _LineRef + '0';
-                }
-                _LineRef = _LineRef + _lineRefnumber;
-                transDB = new IN_Trans();
-                transDB.SiteID = objTrans.SiteID;
-                Update_Trans(transfer, transDB, trans, true);
-                _db.IN_Trans.AddObject(transDB);
-                _lstIN_Trans.Add(transDB);
-                Save_Lot(transfer, transDB);
-            }
-
-        }
-
-        private bool Save_Lot(IN_Transfer transfer, IN_Trans tran)
-        {
-            //var lots = _db.IN_LotTrans.Where(p => p.BranchID == transfer.BranchID && p.BatNbr == transfer.BatNbr).ToList();
-            //foreach (var item in lots)
-            //{
-            //    if (item.EntityState == EntityState.Deleted || item.EntityState == EntityState.Detached) continue;
-            //    if (!_lstLot.Any(p => p.INTranLineRef == item.INTranLineRef && p.LotSerNbr == item.LotSerNbr))
-            //    {
-            //        var oldQty = item.UnitMultDiv == "D" ? item.Qty / item.CnvFact : item.Qty * item.CnvFact;
-
-            //        UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr, oldQty, 0, 0);
-
-            //        _app.IN_LotTrans.DeleteObject(item);
-            //    }
-            //}
-
-            //var lstLotTmp = _lstLot.Where(p => p.INTranLineRef == tran.LineRef).ToList();
-            //foreach (var lotCur in lstLotTmp)
-            //{
-            //    var lot = _app.IN_LotTrans.FirstOrDefault(p => p.BranchID == transfer.BranchID && p.BatNbr == transfer.BatNbr && p.INTranLineRef == lotCur.INTranLineRef && p.LotSerNbr == lotCur.LotSerNbr);
-            //    if (lot == null || lot.EntityState == EntityState.Deleted || lot.EntityState == EntityState.Detached)
-            //    {
-            //        lot = new IN_LotTrans();
-            //        Update_Lot(lot, lotCur, transfer, tran, true);
-            //        _app.IN_LotTrans.AddObject(lot);
-            //    }
-            //    else
-            //    {
-            //        Update_Lot(lot, lotCur, transfer, tran, false);
-            //    }
-            //}
-            return true;
-        }
-
-        private void Update_Transfer(IN_Transfer t,string branchID,OM_DiscSeq inputDiscSeq,OM21100_pdGetDataShipment_Result objTrans, bool isNew)
-        {
-            if (isNew)
-            {
-                t.BranchID = branchID;
-                t.BatNbr = _batNbr;
-                t.TrnsfrDocNbr = t.TrnsfrDocNbr;
-                t.RefNbr = t.RefNbr;
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = Current.UserName;
-                t.Crtd_DateTime = DateTime.Now;
-            }
-            t.NoteID = 0;
-            t.AdvanceType = null;
-            t.Comment = objTrans.Comment.PassNull();
-            t.ReasonCD = objTrans.ReasonCD.PassNull();
-            t.RcptDate = objTrans.RcptDate.ToDateShort();
-            t.SiteID = objTrans.SiteID.PassNull();
-            t.Status = "H";
-            t.ToSiteID = objTrans.ToSiteID.PassNull();
-            t.TranDate = objTrans.TranDate.ToDateShort();
-            t.TransferType = "1";
-            t.ShipViaID = objTrans.ShipViaID.PassNull();
-            t.Source = "IN";
-            t.ToCpnyID = branchID;
-            t.ExpectedDate = objTrans.ExpectedDate.ToDateShort();
-            t.LUpd_DateTime = DateTime.Now;
-            t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = Current.UserName;
-        }
-        
-        private void Update_Batch(Batch t, OM21100_pdGetDataShipment_Result objTrans, OM_DiscSeq inputDiscSeq, string branchID, bool isNew)
-        {
-            if (isNew)
-            {
-                t.ResetET();
-                t.BranchID = branchID;
-                t.BatNbr = _batNbr;
-                t.Module = "IN";
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = Current.UserName;
-                t.Crtd_DateTime = DateTime.Now;
-            }
-            Double tong = _lstGetDataItemTrans.Sum(x => x.Qty * x.Price);
-            t.JrnlType = "IN";
-            t.LUpd_DateTime = DateTime.Now;
-            t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = Current.UserName;
-            t.DateEnt = objTrans.TranDate.ToDateShort();
-            t.Descr = objTrans.Descr;
-            t.EditScrnNbr = t.EditScrnNbr.PassNull() == string.Empty ? _screenNbr : t.EditScrnNbr;
-            t.NoteID = 0;
-            t.ReasonCD = objTrans.ReasonCD;
-            t.TotAmt = tong;
-            t.Rlsed = 0;
-            t.Status = "H";
-            t.DiscID = inputDiscSeq.DiscID;
-            t.DiscSeq = inputDiscSeq.DiscSeq;
-        }
-        
-        private void Update_Trans(IN_Transfer transfer, IN_Trans t, OM21100_pdGetDataItemTrans_Result s, bool isNew)
-        {
-            double oldQty, newQty;
-
-
-            if (!isNew)
-                oldQty = t.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
-            else
-                oldQty = 0;
-
-            newQty = s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact;
-
-            UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
-
-            UpdateINAlloc(s.InvtID, t.SiteID, 0, newQty);
-
-
-
-            if (isNew)
-            {
-                t.ResetET();
-                t.LineRef = _LineRef;
-                t.BranchID = transfer.BranchID;
-                t.BatNbr = transfer.BatNbr;
-                t.RefNbr = transfer.RefNbr;
-
-                t.Crtd_DateTime = DateTime.Now;
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = Current.UserName;
-            }
-
-            t.LUpd_DateTime = DateTime.Now;
-            t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = Current.UserName;
-            t.RptExpDate = transfer.RcptDate;
-            t.CnvFact = s.CnvFact;
-            t.ExtCost = s.ExtCost;
-            t.InvtID = s.InvtID;
-            t.InvtMult = s.InvtMult;
-            t.JrnlType = s.JrnlType;
-            t.ObjID = s.ObjID;
-            t.ReasonCD = transfer.ReasonCD;
-            t.Qty = Math.Round(s.Qty, 0);
-            t.Rlsed = s.Rlsed;
-            t.ShipperID = s.ShipperID;
-            t.ShipperLineRef = s.ShipperLineRef;
-            t.SiteID = transfer.SiteID;
-            t.ToSiteID = transfer.ToSiteID;
-            t.TranAmt = Math.Round(s.TranAmt, 0);
-            t.TranFee = s.TranFee;
-            t.TranDate = transfer.TranDate;
-            t.TranDesc = s.TranDesc;
-            t.TranType = s.TranType;
-            t.UnitCost = s.UnitCost;
-            t.UnitDesc = s.UnitDesc;
-            t.UnitMultDiv = s.UnitMultDiv;
-            t.UnitPrice = Math.Round(s.UnitPrice, 0);
-        }
-                
-        private bool UpdateINAlloc(string invtID, string siteID, double oldQty, double newQty)
-        {
-            try
-            {
-                var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                if (objInvt != null && objInvt.StkItem == 1)
-                {
-                    var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
-                    if (objSite == null) objSite = new IN_ItemSite() { InvtID = invtID, SiteID = siteID };
-
-                    if (!_objIN.NegQty && newQty > 0 && objSite.QtyAvail + oldQty - newQty < 0)
-                    {
-                        throw new MessageException(MessageType.Message, "608", "", new string[] { invtID, siteID });
-                    }
-                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, 0);
-                    objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, 0);
-
-                    return true;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private bool UpdateAllocLot(string invtID, string siteID, string lotSerNbr, double oldQty, double newQty, int decQty)
-        {
-            IN_Inventory objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-            if (objInvt == null) objInvt = new IN_Inventory();
-            if (objInvt.StkItem == 1)
-            {
-                var objItemLot = _db.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == lotSerNbr);
-                if (objItemLot != null)
-                {
-                    if (!_objIN.NegQty && newQty > 0 && objItemLot.QtyAvail + oldQty - newQty < 0)
-                    {
-
-                        //Util.AppendLog(ref _logMessage, "608", parm: new[] { objItemLot.InvtID + " " objItemLot.LotSerNbr , objItemSite.SiteID });
-                        return false;
-                    }
-                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + newQty - oldQty, decQty);
-                    objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - newQty + oldQty, decQty);
-                }
-                return true;
-            }
-            return true;
-        }
-
+ 
         private void saveDiscSeq(FormCollection data, OM_Discount inputDisc, OM_DiscSeq inputDiscSeq, bool isNewDiscSeq)
         {
             var handle = data["cboHandle"];
@@ -2040,13 +1744,7 @@ namespace OM21100.Controllers
                 }
             }
 
-            //if (handle != "N" && handle != null && (roles.Any(c => c.ToUpper() == inputSeq.Crtd_Role)
-            //    || roles.Any(c => c.ToUpper() == inputDisc.Crtd_Role.ToUpper()) // khong hieu cai role
-            //    || (inputSeq.Crtd_Role.PassNull() == "SUBDIST"
-            //    && roles.Any(c => c.ToUpper() == "DIST"))))
-            //    Save_Task(data, lstCompany, seq, inputSeq, handle);
-            //else
-            Save_Break(data, null, null, inputSeq);
+            Save_Break(data, null, inputSeq);
         }
 
         private void Save_Task(FormCollection data, List<OM21100_pgCompany_Result> lstCompany, OM_DiscSeq seq, OM_DiscSeq inputSeq, string cboHandle)
@@ -2056,71 +1754,12 @@ namespace OM21100.Controllers
             {
                 branches += cpny.CpnyID + ',';
             }
-            if (branches.Length > 0) branches = branches.Substring(0, branches.Length - 1);
-            var handle = (from p in _db.SI_ApprovalFlowHandle
-                          where p.AppFolID == _screenNbr
-&& p.Status == inputSeq.Status
-&& p.Handle == cboHandle
-                          select p).FirstOrDefault();
-            if (handle != null && handle.Param03.PassNull().Split(',').Any(c => c.ToLower() == "many"))
-            {
-                foreach (var branch in branches.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    var dataTask = (from p in _db.HO_PendingTasks
-                                    where p.ObjectID == inputSeq.DiscID + "-" + inputSeq.DiscSeq
-                                        && p.EditScreenNbr == _screenNbr
-                                        && p.BranchID == branch
-                                    select p).FirstOrDefault();
-                    if (dataTask == null && handle != null)
-                    {
-                        if (!handle.Param00.PassNull().Split(',').Any(c => c.ToLower() == "notapprove"))
-                        {
-                            HO_PendingTasks newTask = new HO_PendingTasks();
-                            newTask.BranchID = branch;
-                            newTask.ObjectID = inputSeq.DiscID + "-" + inputSeq.DiscSeq;
-                            newTask.EditScreenNbr = _screenNbr;
-                            newTask.Content = string.Format(handle.ContentApprove, inputSeq.DiscID + "-" + inputSeq.DiscSeq, inputSeq.Descr, branch);
-                            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                            newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
-                            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                            newTask.Status = handle.ToStatus;
-                            newTask.tstamp = new byte[1];
-                            _db.HO_PendingTasks.AddObject(newTask);
-                        }
-                        seq.Status = handle.ToStatus;
-                    }
-                }
-
-            }
-            else
-            {
-                var dataTask = (from p in _db.HO_PendingTasks
-                                where p.ObjectID == inputSeq.DiscID + "-" + inputSeq.DiscSeq && p.EditScreenNbr == _screenNbr
-                                    && p.BranchID == branches
-                                select p).FirstOrDefault();
-                if (dataTask == null && handle != null)
-                {
-                    if (!handle.Param00.PassNull().Split(',').Any(c => c.ToLower() == "notapprove"))
-                    {
-                        HO_PendingTasks newTask = new HO_PendingTasks();
-                        newTask.BranchID = branches;
-                        newTask.ObjectID = inputSeq.DiscID + "-" + inputSeq.DiscSeq;
-                        newTask.EditScreenNbr = _screenNbr;
-                        newTask.Content = string.Format(handle.ContentApprove, inputSeq.DiscID + "-" + inputSeq.DiscSeq, inputSeq.Descr, branches);
-                        newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                        newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
-                        newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                        newTask.Status = handle.ToStatus;
-                        newTask.tstamp = new byte[1];
-                        _db.HO_PendingTasks.AddObject(newTask);
-                    }
-                    seq.Status = handle.ToStatus;
-                }
-            }
-            Save_Break(data, handle, branches, inputSeq);
+            if (branches.Length > 0) branches = branches.Substring(0, branches.Length - 1);                        
+            
+            Save_Break(data, branches, inputSeq);
         }
 
-        private void Save_Break(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_Break(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discBreakHandler = new StoreDataHandler(data["lstDiscBreak"]);
             var lstDiscBreak = discBreakHandler.ObjectData<OM21100_pgDiscBreak_Result>()
@@ -2167,7 +1806,7 @@ namespace OM21100.Controllers
                 }
             }
 
-            Save_FreeItem(data, handle, branches, inputSeq);
+            Save_FreeItem(data, branches, inputSeq);
         }
         private void saveDiscSubBreakItem(FormCollection data, string discID, string discSeq)
         {
@@ -2255,7 +1894,7 @@ namespace OM21100.Controllers
             }
         }
 
-        private void Save_FreeItem(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_FreeItem(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var freeItemChangeHandler = new StoreDataHandler(data["lstFreeItemChange"]);
             var lstFreeItemChange = freeItemChangeHandler.BatchObjectData<OM21100_pgFreeItem_Result>();
@@ -2324,53 +1963,53 @@ namespace OM21100.Controllers
             }
 
             if (inputSeq.DiscClass == "II")
-                Save_DiscItem(data, handle, branches, inputSeq);
+                Save_DiscItem(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "BB")
-                Save_Bundle(data, handle, branches, inputSeq);
+                Save_Bundle(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "TT")
-                Save_DiscCustClass(data, handle, branches, inputSeq);
+                Save_DiscCustClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "CC")
-                Save_DiscCust(data, handle, branches, inputSeq);
+                Save_DiscCust(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "PP")
-                Save_DiscItemClass(data, handle, branches, inputSeq);
+                Save_DiscItemClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "CI")
-                Save_DiscItem(data, handle, branches, inputSeq);
+                Save_DiscItem(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "TI")
-                Save_DiscItem(data, handle, branches, inputSeq);
+                Save_DiscItem(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "TP")
-                Save_DiscItemClass(data, handle, branches, inputSeq);
+                Save_DiscItemClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "TB")
-                Save_Bundle(data, handle, branches, inputSeq);
+                Save_Bundle(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "CB")
-                Save_Bundle(data, handle, branches, inputSeq);
+                Save_Bundle(data, branches, inputSeq);
 
             else if (inputSeq.DiscClass == Channel)
             {
-                Save_DiscChannel(data, handle, branches, inputSeq);
+                Save_DiscChannel(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == CustCate)
             {
-                Save_DiscCustCate(data, handle, branches, inputSeq);
+                Save_DiscCustCate(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == ItemChannel)
             {
-                Save_DiscItem(data, handle, branches, inputSeq);
+                Save_DiscItem(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == ItemCustCate)
             {
-                Save_DiscItem(data, handle, branches, inputSeq);
+                Save_DiscItem(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == GItemChannel)
             {
-                Save_DiscItemClass(data, handle, branches, inputSeq);
+                Save_DiscItemClass(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == GItemCustCate)
             {
-                Save_DiscItemClass(data, handle, branches, inputSeq);
+                Save_DiscItemClass(data, branches, inputSeq);
             }
         }
 
-        private void Save_DiscCustClass(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscCustClass(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discCustClassHandler = new StoreDataHandler(data["lstDiscCustClass"]);
             var lstDiscCustClass = discCustClassHandler.ObjectData<OM21100_pgDiscCustClass_Result>()
@@ -2410,292 +2049,21 @@ namespace OM21100.Controllers
             }
 
             if (inputSeq.DiscClass == "TT")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
             else if (inputSeq.DiscClass == "TI")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
             else if (inputSeq.DiscClass == "TP")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
             else if (inputSeq.DiscClass == "TB")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
         }
 
-        private void Submit_Data(SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
-        {
-            if (inputSeq != null)
-            {
-                DataAccess dal = Util.Dal();
-                INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
-                if (inputSeq.Active == 1 && inputSeq.StockPromotion == true && (_handle == "C" || (inputSeq.Status == "C" && _handle == "")) && (inputSeq.EndDate.ToDateShort()>= DateTime.Now.ToDateShort()))
-                {
-                    var obj = _db.OM_DiscSeq.Where(p => p.Active == 1 && p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq && p.Status == "C" && p.StockPromotion == true).FirstOrDefault();
-                    #region
-                    if (obj == null)
-                    {
-                        string cpny = "";
-                        string lstinvt = "";
-                        foreach (OM21100_pgDiscItem_Result objInvt in _lstInvt)
-                        {
-                            lstinvt = lstinvt + objInvt.InvtID + "@#@#"+ objInvt.QtyStockAdvance+",";
-                        }
-
-                        foreach (OM21100_pgCompany_Result item in _lstCpny)
-                        {
-                            cpny = cpny + item.CpnyID + ",";
-                        }
-
-                        var lstobj = _db.OM21100_pdGetcheckSite(cpny, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-
-                        if (lstobj != null)
-                        {
-                            var lsterror = "";
-                            foreach (OM21100_pdGetcheckSite_Result cur in lstobj)
-                            {
-                                if (cur.SiteID == null || cur.SiteID == "" || cur.ToSiteID == null || cur.ToSiteID == "")
-                                {
-                                    lsterror = lsterror + cur.BranchID + ",";
-                                }
-
-                            }
-                            if (lsterror != "")
-                            {
-                                throw new MessageException(MessageType.Message, "2018032211", "", new string[] { lsterror });
-                            }
-                            else
-                            {
-                                var message = "";
-                                foreach (OM21100_pdGetcheckSite_Result item in lstobj)
-                                {
-                                    var check = _db.OM21100_pdGetcheckQty(lstinvt, item.SiteID, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                                    if (check !=null)
-                                    {
-                                        message += string.Format(Message.GetString("2018032311", null), item.SiteID, item.BranchID, check.InvtID);
-                                    }
-                                }
-                                if (message != "")
-                                {
-                                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
-                                }
-                                else
-                                {
-                                    _db.SaveChanges();
-                                    SaveTrans(_objOM_DiscSeq);
-                                    _db.SaveChanges();                                    
-
-                                    try
-                                    {
-                                        dal.BeginTrans(IsolationLevel.ReadCommitted);
-                                        foreach (Batch objBatch in _lstBatch)
-                                        {                                            
-                                            inventory.IN10300_Release(objBatch.BranchID,objBatch.BatNbr);
-                                        }
-                                        inventory = null;
-                                        dal.CommitTrans();
-                                    }
-                                    catch (Exception)
-                                    {
-
-                                        UpdateDataErroReleas(_discID,_discSeq,_lstBatch,_lstIN_Transfer,_lstIN_Trans,_lstIN_LotTrans,true);
-                                        #region
-                                        //_db.OM21100_pdUpdataDiscSeqAfter(_discID,_discSeq,Current.UserName,Current.CpnyID,Current.LangID);
-                                        //dal.RollbackTrans();
-                                        //foreach (Batch objBatch in _lstBatch)
-                                        //{
-                                        //    var batch = _db.Batches.FirstOrDefault(p => p.BranchID == objBatch.BranchID && p.BatNbr == objBatch.BatNbr);
-                                        //    if (batch != null)
-                                        //    {
-                                        //        batch.Status = "V";
-                                        //        batch.Rlsed = -1;
-                                        //    }
-                                        //}
-                                        //foreach(IN_Transfer objIN_Transfer in _lstIN_Transfer)
-                                        //{
-                                        //    var objTransfer = _db.IN_Transfer.FirstOrDefault(p => p.BranchID == objIN_Transfer.BranchID && p.BatNbr == objIN_Transfer.BatNbr && p.TrnsfrDocNbr== objIN_Transfer.TrnsfrDocNbr);
-                                        //    if (objTransfer != null)
-                                        //    {
-                                        //        objTransfer.Status = "V";
-                                        //    }
-                                        //}
-
-                                        //foreach(IN_Trans objIN_Trans in _lstIN_Trans)
-                                        //{
-                                        //    double oldQty = 0;                                            
-                                        //    oldQty = objIN_Trans.UnitMultDiv == "D" ? objIN_Trans.Qty / objIN_Trans.CnvFact : objIN_Trans.Qty * objIN_Trans.CnvFact;
-                                        //    objIN_Trans.Rlsed = -1;
-                                        //    UpdateINAlloc(objIN_Trans.InvtID, objIN_Trans.SiteID, oldQty, 0);
-                                        //}
-
-                                        //foreach (var lot in _lstIN_LotTrans)
-                                        //{
-                                        //    double oldQty = 0;
-
-                                        //    oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-
-                                        //    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
-                                        //}
-                                        #endregion
-                                        _db.SaveChanges();
-                                        throw;
-                                    }
-                                    finally
-                                    {
-                                        dal = null;
-                                        inventory = null;
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                    #endregion
-                }
-                else
-                {
-                    if (checkEdit)
-                    { 
-                        if(_db.Batches.Where(p=>p.DiscID==inputSeq.DiscID && p.DiscSeq==inputSeq.DiscSeq && p.Status != "V").FirstOrDefault() != null)
-                        {
-                            var lstBatch = _db.Batches.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
-                            string batnbr = string.Empty;
-                            foreach (var objbatch in lstBatch)
-                            {
-                                batnbr = batnbr + objbatch.BatNbr + ",";
-                            }
-
-                            if (inputSeq.Active == 0)
-                            {
-                                var objOM_OrdDisc = _db.OM21100_pdCheckOrderDisc(_discID, _discSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-                                if (objOM_OrdDisc != null)
-                                {
-                                    string invterror = "";
-                                    foreach(var a in objOM_OrdDisc)
-                                    {
-                                        string[] arrListStr = a.InvtID.Split(',');
-                                        for (int j=0; j < arrListStr.Length; j++)
-                                        {
-                                            if (invterror.Contains(arrListStr[j]) == false)
-                                            {
-                                                invterror = invterror + a.InvtID + ",";
-                                            }
-                                        }
-                                            
-                                    }
-                                    if (invterror != "")
-                                    {
-                                        throw new MessageException(MessageType.Message, "2018032413", "", new string[] { invterror });
-                                    }
-                                    
-                                    
-                                }
-                            }
-                            
-                            string cpny = string.Empty;
-                            string message = string.Empty;
-                            foreach (OM21100_pgCompany_Result item in _lstCpny)
-                            {
-                                cpny = cpny + item.CpnyID + ",";
-                            }
-
-                            var lstobj = _db.OM21100_pdGetcheckSite(cpny, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-
-                            foreach (var item in lstobj)
-                            {
-                                var objcheckToSite = _db.OM21100_pdGetcheckQtyEditStatus(item.ToSiteID, _discID, _discSeq, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                                if (objcheckToSite != null)
-                                {
-                                    message += string.Format(Message.GetString("2018032511", null), item.ToSiteID, item.BranchID, objcheckToSite.InvtID);
-                                }
-                            }
-                            if (message != string.Empty)
-                            {
-                                throw new MessageException(MessageType.Message, "2018032518", "", new string[] { message });
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
-                                    dal.BeginTrans(IsolationLevel.ReadCommitted);
-                                    foreach (Batch objBatch in lstBatch)
-                                    {
-                                        inventory.Issue_Cancel(objBatch.BranchID, objBatch.BatNbr, string.Empty, true);
-                                    }
-                                    inventory = null;
-                                    dal.CommitTrans();
-                                    _db.SaveChanges();
-                                }
-                                catch (Exception)
-                                {
-                                    dal.RollbackTrans();
-                                }
-                            }
-                            
-                        }
-                        else
-                        {
-                            _db.SaveChanges();
-                        }                        
-                    }
-                    else
-                    {
-                        _db.SaveChanges();
-                    }                    
-                }
-            }            
-            else
-            {
-                _db.SaveChanges();
-            }           
+        private void Submit_Data(string branches, OM_DiscSeq inputSeq)
+        {            
+            _db.SaveChanges();
         }
 
-        private void UpdateDataErroReleas(string  discID, string discSeq, List<Batch> lstBatch, List<IN_Transfer> lstIN_Transfer,List<IN_Trans> lstIN_Trans ,List<IN_LotTrans> lstIN_LotTrans, bool isNew)
-        {
-            try
-            {
-                DataAccess dal = Util.Dal();
-                _db.OM21100_pdUpdataDiscSeqAfter(discID, discSeq, Current.UserName, Current.CpnyID, Current.LangID);
-                dal.RollbackTrans();
-                foreach (Batch objBatch in lstBatch)
-                {
-                    var batch = _db.Batches.FirstOrDefault(p => p.BranchID == objBatch.BranchID && p.BatNbr == objBatch.BatNbr);
-                    if (batch != null)
-                    {
-                        batch.Status = "V";
-                        batch.Rlsed = -1;
-                    }
-                }
-                foreach (IN_Transfer objIN_Transfer in lstIN_Transfer)
-                {
-                    var objTransfer = _db.IN_Transfer.FirstOrDefault(p => p.BranchID == objIN_Transfer.BranchID && p.BatNbr == objIN_Transfer.BatNbr && p.TrnsfrDocNbr == objIN_Transfer.TrnsfrDocNbr);
-                    if (objTransfer != null)
-                    {
-                        objTransfer.Status = "V";
-                    }
-                }
-
-                foreach (IN_Trans objIN_Trans in lstIN_Trans)
-                {
-                    double oldQty = 0;
-                    oldQty = objIN_Trans.UnitMultDiv == "D" ? objIN_Trans.Qty / objIN_Trans.CnvFact : objIN_Trans.Qty * objIN_Trans.CnvFact;
-                    objIN_Trans.Rlsed = -1;
-                    UpdateINAlloc(objIN_Trans.InvtID, objIN_Trans.SiteID, oldQty, 0);
-                }
-
-                foreach (var lot in lstIN_LotTrans)
-                {
-                    double oldQty = 0;
-
-                    oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-
-                    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private void Save_DiscItem(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscItem(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discType = data["cboDiscType"];
             var priorityPromo = data["txtPriorityPromo"];
@@ -2765,22 +2133,22 @@ namespace OM21100.Controllers
             }
 
             if (inputSeq.DiscClass == "II")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data( branches, inputSeq);
             else if (inputSeq.DiscClass == "CI")
-                Save_DiscCust(data, handle, branches, inputSeq);
+                Save_DiscCust(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "TI")
-                Save_DiscCustClass(data, handle, branches, inputSeq);
+                Save_DiscCustClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == ItemChannel)
             {
-                Save_DiscChannel(data, handle, branches, inputSeq);
+                Save_DiscChannel(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == ItemCustCate)
             {
-                Save_DiscCustCate(data, handle, branches, inputSeq);
+                Save_DiscCustCate(data, branches, inputSeq);
             }
         }
 
-        private void Save_DiscCust(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscCust(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discCustHandler = new StoreDataHandler(data["lstDiscCust"]);
             var lstDiscCust = discCustHandler.ObjectData<OM21100_pgDiscCust_Result>()
@@ -2840,11 +2208,11 @@ namespace OM21100.Controllers
 
 
             if (inputSeq.DiscClass == "CC")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data( branches, inputSeq);
             else if (inputSeq.DiscClass == "CI")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data( branches, inputSeq);
             else if (inputSeq.DiscClass == "CB")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data( branches, inputSeq);
         }
 
         private void Update_DiscCust(OM_DiscCust t, OM21100_pgDiscCust_Result s, bool isNew)
@@ -2874,7 +2242,7 @@ namespace OM21100.Controllers
             }
         }
 
-        private void Save_DiscItemClass(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscItemClass(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discItemClassHandler = new StoreDataHandler(data["lstDiscItemClass"]);
             var lstDiscItemClass = discItemClassHandler.ObjectData<OM21100_pgDiscItemClass_Result>()
@@ -2914,21 +2282,21 @@ namespace OM21100.Controllers
             }
 
             if (inputSeq.DiscClass == "PP")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
             else if (inputSeq.DiscClass == "TP")
-                Save_DiscCustClass(data, handle, branches, inputSeq);
+                Save_DiscCustClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == GItemChannel)
             {
-                Save_DiscChannel(data, handle, branches, inputSeq);
+                Save_DiscChannel(data, branches, inputSeq);
             }
             else if (inputSeq.DiscClass == GItemCustCate)
             {
-                Save_DiscCustCate(data, handle, branches, inputSeq);
+                Save_DiscCustCate(data, branches, inputSeq);
             }
 
         }
 
-        private void Save_Bundle(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_Bundle(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discType = data["cboDiscType"];
             var discBundleHandler = new StoreDataHandler(data["lstBundle"]);
@@ -2987,15 +2355,15 @@ namespace OM21100.Controllers
             }
 
             if (inputSeq.DiscClass == "BB")
-                Submit_Data(handle, branches, inputSeq);
+                Submit_Data(branches, inputSeq);
             else if (inputSeq.DiscClass == "TB")
-                Save_DiscCustClass(data, handle, branches, inputSeq);
+                Save_DiscCustClass(data, branches, inputSeq);
             else if (inputSeq.DiscClass == "CB")
-                Save_DiscCust(data, handle, branches, inputSeq);
+                Save_DiscCust(data, branches, inputSeq);
 
         }
 
-        private void Save_DiscCustCate(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscCustCate(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discItemHandler = new StoreDataHandler(data["lstDiscCustCate"]);
             var lstCustCate = discItemHandler.ObjectData<OM21100_pgDiscCustCate_Result>()
@@ -3042,10 +2410,10 @@ namespace OM21100.Controllers
                 }
             }
 
-            Submit_Data(handle, branches, inputSeq);
+            Submit_Data(branches, inputSeq);
         }
 
-        private void Save_DiscChannel(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        private void Save_DiscChannel(FormCollection data, string branches, OM_DiscSeq inputSeq)
         {
             var discItemHandler = new StoreDataHandler(data["lstDiscChannel"]);
             var lstChannel = discItemHandler.ObjectData<OM21100_pgDiscChannel_Result>()
@@ -3092,7 +2460,7 @@ namespace OM21100.Controllers
                 }
             }
 
-            Submit_Data(handle, branches, inputSeq);
+            Submit_Data(branches, inputSeq);
         }
         private void Update_DiscItemClass(OM_DiscItemClass t, OM21100_pgDiscItemClass_Result s, bool isNew)
         {
@@ -3211,15 +2579,8 @@ namespace OM21100.Controllers
                     //t.tstamp = new byte[1];
                 }
                 t.TypeUnit = s.TypeUnit;
-                t.GroupItem = s.GroupItem;
-                if (s.Priority == null)
-                {
-                    t.Priority = 0;
-                }
-                else
-                {
-                    t.Priority = s.Priority;
-                }                
+                t.GroupItem = s.GroupItem;                
+                t.Priority = s.Priority;                              
                 t.FreeITemSiteID = s.FreeITemSiteID;
                 t.FreeItemBudgetID = s.FreeItemBudgetID;
                 t.FreeItemQty = s.FreeItemQty;
@@ -3337,6 +2698,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.DiscSeqSolomon = inputDiscSeq.DiscSeqSolomon.PassNull();
             updatedDiscSeq.InvtIDSolomon = inputDiscSeq.InvtIDSolomon.PassNull();
             updatedDiscSeq.DiscPrice = inputDiscSeq.DiscPrice;
+            updatedDiscSeq.IsGetFreeItem = inputDiscSeq.IsGetFreeItem;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;
@@ -9088,90 +8450,7 @@ namespace OM21100.Controllers
                         #endregion
                         if (message == "" || message == string.Empty)
                         {
-                            _db.SaveChanges();
-
-                            //check kho để bắt đầu tạo lo
-                            foreach (var itemDiscSeq in lstOM_DiscSeqBatch)
-                            {
-                                DataAccess dal = Util.Dal();
-                                INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
-                                if (itemDiscSeq.StockPromotion == true && status == "C" && itemDiscSeq.EndDate>=DateTime.Now.ToDateShort())
-                                {
-                                    string cpny = "";
-                                    string lstinvt = "";
-                                    var objItem = _db.OM_DiscItem.Where(p => p.DiscID == itemDiscSeq.DiscID && p.DiscSeq == itemDiscSeq.DiscSeq).ToList();
-                                    foreach (OM_DiscItem objInvt in objItem)
-                                    {
-                                        lstinvt = lstinvt + objInvt.InvtID + "@#@#" + objInvt.QtyStockAdvance + ",";
-                                    }
-                                    var objCpny = _db.OM_DiscCpny.Where(p => p.DiscID == itemDiscSeq.DiscID && p.DiscSeq == itemDiscSeq.DiscSeq).ToList();
-                                    foreach (OM_DiscCpny item in objCpny)
-                                    {
-                                        cpny = cpny + item.CpnyID + ",";
-                                    }
-                                    var lstGetcheckSite = _db.OM21100_pdGetcheckSite(cpny, Current.UserName, Current.CpnyID, Current.LangID).ToList();
-
-                                    if (lstGetcheckSite != null)
-                                    {
-                                        var lsterror = "";
-                                        foreach (OM21100_pdGetcheckSite_Result cur in lstGetcheckSite)
-                                        {
-                                            if (cur.SiteID == null || cur.SiteID == "" || cur.ToSiteID == null || cur.ToSiteID == "")
-                                            {
-                                                lsterror = lsterror + cur.BranchID + ",";
-                                            }
-                                        }
-                                        if (lsterror != "")
-                                        {
-                                            throw new MessageException(MessageType.Message, "2018032211", "", new string[] { lsterror });
-                                        }
-                                        message = "";
-                                        foreach (OM21100_pdGetcheckSite_Result item in lstGetcheckSite)
-                                        {
-                                            var check = _db.OM21100_pdGetcheckQty(lstinvt, item.SiteID, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                                            if (check != null)
-                                            {
-                                                message += string.Format(Message.GetString("2018032311", null), item.SiteID, item.BranchID, check.InvtID);
-                                            }
-                                        }
-                                        if (message != "")
-                                        {
-                                            throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
-                                        }
-                                    }
-                                    SaveTrans(itemDiscSeq);
-                                    _db.SaveChanges();
-                                    var lstBatch = _db.Batches.Where(p => p.DiscID == itemDiscSeq.DiscID && p.DiscSeq == itemDiscSeq.DiscSeq).ToList();
-                                    try
-                                    {
-                                        
-                                        dal.BeginTrans(IsolationLevel.ReadCommitted);
-                                        foreach (Batch objBatch in lstBatch)
-                                        {
-                                            inventory.IN10300_Release(objBatch.BranchID, objBatch.BatNbr);
-                                        }
-                                        inventory = null;
-                                        dal.CommitTrans();
-                                    }
-                                    catch (Exception)
-                                    {
-                                        foreach (var tam in lstBatch)
-                                        {
-                                            var lstIN_Transfer = _db.IN_Transfer.Where(p=>p.BranchID==tam.BranchID && p.BatNbr==tam.BatNbr).ToList();
-                                            var lstIN_Trans = _db.IN_Trans.Where(p => p.BranchID == tam.BranchID && p.BatNbr == tam.BatNbr).ToList();
-                                            var lstIN_LotTrans = _db.IN_LotTrans.Where(p => p.BranchID == tam.BranchID && p.BatNbr == tam.BatNbr).ToList();
-                                            UpdateDataErroReleas(itemDiscSeq.DiscID, itemDiscSeq.DiscSeq, lstBatch, lstIN_Transfer, lstIN_Trans, lstIN_LotTrans, true);
-                                        }                                        
-                                        _db.SaveChanges();
-                                        throw;
-                                    }
-                                    finally
-                                    {
-                                        dal = null;
-                                        inventory = null;
-                                    }
-                                } 
-                            }                            
+                            _db.SaveChanges();                            
                         }
                         Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
                     }
@@ -9182,41 +8461,7 @@ namespace OM21100.Controllers
                 }
             }
             catch (Exception ex)
-            {
-                DataAccess dal = Util.Dal();
-                
-                foreach (var item in lstOM_DiscSeqBatch)
-                {
-                    INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
-                    try
-                    {
-                        dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        var lstBatch = _db.Batches.Where(p => p.DiscID == item.DiscID && p.DiscSeq == item.DiscSeq && p.Status == "C").ToList();
-                        foreach (Batch objBatch in lstBatch)
-                        {
-                            inventory.Issue_Cancel(objBatch.BranchID, objBatch.BatNbr, string.Empty, true);
-                        }
-                        inventory = null;
-                        dal.CommitTrans();
-                        var lstBatchStatusH = _db.Batches.Where(p => p.DiscID == item.DiscID && p.DiscSeq == item.DiscSeq && p.Status == "H").ToList();
-                        foreach (var tam in lstBatchStatusH)
-                        {
-                            var lstIN_Transfer = _db.IN_Transfer.Where(p => p.BranchID == tam.BranchID && p.BatNbr == tam.BatNbr).ToList();
-                            var lstIN_Trans = _db.IN_Trans.Where(p => p.BranchID == tam.BranchID && p.BatNbr == tam.BatNbr).ToList();
-                            var lstIN_LotTrans = _db.IN_LotTrans.Where(p => p.BranchID == tam.BranchID && p.BatNbr == tam.BatNbr).ToList();
-                            UpdateDataErroReleas(item.DiscID, item.DiscSeq, lstBatch, lstIN_Transfer, lstIN_Trans, lstIN_LotTrans, true);
-                        }   
-                        _db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        dal.RollbackTrans();
-                    }
-                    _db.OM21100_pdDelDataErroRealse(item.DiscID, item.DiscSeq, Current.UserName, Current.CpnyID, Current.LangID);
-                }
-                
-                
-
+            {                
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
                 return Json(new { success = false, messid = 9991, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
             }

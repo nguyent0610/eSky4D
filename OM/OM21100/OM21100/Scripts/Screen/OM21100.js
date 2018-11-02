@@ -858,6 +858,7 @@ var Main = {
             App.FreeITemSiteID.setVisible(HQ.hideSite);
             App.cboSolomonSite.setVisible(HQ.hideSiteSolomon);
             App.chkRegistrationOfIndustryAndTrade.setVisible(!HQ.hideReIndustryAndTrade);
+            App.chkIsGetFreeItem.setVisible(!HQ.hideGetFreeItem);
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -2330,6 +2331,7 @@ var DiscDefintion = {
                 App.cboDiscSeqSolomon.setReadOnly(false);
                 App.chkDiscPrice.setReadOnly(false);
                 App.chkRegistrationOfIndustryAndTrade.setReadOnly(false);
+                App.chkIsGetFreeItem.setReadOnly(false);
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -2359,6 +2361,7 @@ var DiscDefintion = {
                 App.cboDiscSeqSolomon.setReadOnly(true);
                 App.chkDiscPrice.setReadOnly(true);
                 App.chkRegistrationOfIndustryAndTrade.setReadOnly(true);
+                App.chkIsGetFreeItem.setReadOnly(true);
             }
 
             HQ.gridSource = 0;
@@ -5148,6 +5151,18 @@ var chkRegistrationOfIndustryAndTrade_Change = function (chk, newValue, oldValue
             HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
             chk.suspendEvents();
             App.chkRegistrationOfIndustryAndTrade.setValue(false);
+            chk.resumeEvents();
+            return false;
+        }
+    }
+};
+
+var chkIsGetFreeItem_Change = function (chk, newValue, oldValue, eOpts) {
+    if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+        if (chk.hasFocus) {
+            HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+            chk.suspendEvents();
+            App.chkIsGetFreeItem.setValue(false);
             chk.resumeEvents();
             return false;
         }

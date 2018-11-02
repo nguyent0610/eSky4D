@@ -627,12 +627,22 @@
                                             {
                                                 l.Change.Fn = "chkDiscPrice_Change";
                                             })
+
                                         , HQ.Checkbox().ID("chkRegistrationOfIndustryAndTrade")//.Hidden(true)
                                             .MarginSpec("5 5 0 180")
                                             .BoxLabel(Util.GetLang("OM21100ReIndusTrade")).DataIndex("RegistrationOfIndustryAndTrade")
                                             .Listeners(l =>
                                             {
                                                 l.Change.Fn = "chkRegistrationOfIndustryAndTrade_Change";
+                                            })
+
+
+                                            , HQ.Checkbox().ID("chkIsGetFreeItem")//.Hidden(true)
+                                            .MarginSpec("5 5 0 180")
+                                            .BoxLabel(Util.GetLang("IsGetFreeItem")).DataIndex("IsGetFreeItem")
+                                            .Listeners(l =>
+                                            {
+                                                l.Change.Fn = "chkIsGetFreeItem_Change";
                                             })
                                     )
 
