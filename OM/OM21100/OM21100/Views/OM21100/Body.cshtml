@@ -1432,6 +1432,23 @@
                         .Editor(
                                 HQ.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                         )
+                        
+                             , X.Column().Text(Util.GetLang("SiteType")).DataIndex("SiteType").Width(110).Hidden(true)
+                            .Editor(
+                                HQ.Combo().ID("cboDPIISiteType").PageSize(20).HQisPaging(true)
+                                .HQProcedure("OM21100_pcSiteType")
+                                .HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 400)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true).SelectOnFocus(true)
+                                .HQParam(new StoreParameterCollection() {
+                                 new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
+                                ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                                //.LoadData()
+                            )
+                            
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
@@ -1632,7 +1649,23 @@
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
-
+                        
+                         , X.Column().Text(Util.GetLang("SiteType")).DataIndex("SiteType").Width(110).Hidden(true)
+                            .Editor(
+                                HQ.Combo().ID("cboDPBBSiteType").PageSize(20).HQisPaging(true)
+                                .HQProcedure("OM21100_pcSiteType")
+                                .HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 400)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true).SelectOnFocus(true)
+                                .HQParam(new StoreParameterCollection() {
+                                 new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
+                                ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                                //.LoadData()
+                            )
+                            
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
@@ -1963,7 +1996,23 @@
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
-
+                        
+                             , X.Column().Text(Util.GetLang("SiteType")).DataIndex("SiteType").Width(110).Hidden(true)
+                                .Editor(
+                                    HQ.Combo().ID("cboDPPPSiteType").PageSize(20).HQisPaging(true)
+                                    .HQProcedure("OM21100_pcSiteType")
+                                    .HQColumnShow("Code,Descr")
+                                    .HQHeightWidth(400, 400)
+                                    .ValueField("Code").DisplayField("Code")
+                                    .ForceSelection(true).SelectOnFocus(true)
+                                    .HQParam(new StoreParameterCollection() {
+                                 new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
+                                ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                                    //.LoadData()
+                                )
+                            
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()

@@ -13,7 +13,7 @@ var _copy = 0;
 var _siteID = '';
 var _siteEdit = '';
 var _discSeqNew = '';
-var _branchID = '';
+var _branchID = ''; 
 var Main = {
 
     Process: {
@@ -4651,12 +4651,14 @@ var DiscDefintion = {
                     App.cboBreakBoundType.setReadOnly(false);
                 }
             }
-            if (e.field == 'BreakQtyUpper') {
+            if (e.field == 'BreakQtyUpper' || e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper') {
                 var readonly = false;
                 var lstBreakQtyUpper = App.grdDiscBreak.store.snapshot || App.grdDiscBreak.store.allData || App.grdDiscBreak.store.data;
                 if (lstBreakQtyUpper != undefined) {
                     for (var i = 0; i < lstBreakQtyUpper.length; i++) {
-                        if (lstBreakQtyUpper.items[i].data.BreakQtyUpper > 0) {
+                        if (lstBreakQtyUpper.items[i].data.BreakQtyUpper > 0 || lstBreakQtyUpper.items[i].data.BreakQty
+                            || lstBreakQtyUpper.items[i].data.BreakAmtUpper > 0 || lstBreakQtyUpper.items[i].data.BreakAmt
+                            ) {
                             readonly = true;
                         }
                     }
