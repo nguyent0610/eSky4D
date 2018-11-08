@@ -562,11 +562,18 @@ var Main = {
                     //var status = App.cboStatus.value;
                     var line = '';
                     //if (status == _holdStatus) {
+                    var checkstoSubBreakItem = false;
                     for (var i = 0; i < App.stoDiscBreak.data.length; i++) {
                         if (App.stoDiscBreak.data.items[i].data.BreakQty != 0 || App.stoDiscBreak.data.items[i].data.BreakAmt != 0) {
-                            if (App.stoDiscBreak.data.items[i].data.SubBreakQty != 0 && App.stoSubBreakItem.data.items[i].data.InvtID == '') {
-                                HQ.message.show(2018062901, [HQ.common.getLang('SubBreakItem')], '', true);
-                                return false;
+                            //if (App.stoDiscBreak.data.items[i].data.SubBreakQty != 0 && App.stoSubBreakItem.data.items[i].data.InvtID == '') {
+                            if (App.stoDiscBreak.data.items[i].data.SubBreakQty != 0) {
+                                if (App.stoSubBreakItem.data.items[0].data.InvtID != '') {
+                                    checkstoSubBreakItem = true;
+                                }
+                                if (checkstoSubBreakItem == false) {
+                                    HQ.message.show(2018062901, [HQ.common.getLang('SubBreakItem')], '', true);
+                                    return false;
+                                }
                             }
                             if (App.cboSubBreakType.getValue() == 'Q' && App.stoDiscBreak.data.items[i].data.SubBreakQty == 0) {
                                 HQ.message.show(2018062902, [HQ.common.getLang('SubBreakQty'), HQ.common.getLang('DiscBreak')], '', true);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
@@ -4643,21 +4650,22 @@ var DiscDefintion = {
                 if((e.record.data.SubBreakAmt > 0 || e.record.data.SubBreakQty > 0) && (e.record.data.BreakQty > 0 || e.record.data.BreakAmt > 0))
                 {
                     App.cboSubBreakType.setReadOnly(true);
-                    App.cboBreakBoundType.setReadOnly(true);
+                   // App.cboBreakBoundType.setReadOnly(true);
                 }
                 else
                 {
                     App.cboSubBreakType.setReadOnly(false);
-                    App.cboBreakBoundType.setReadOnly(false);
+                    //App.cboBreakBoundType.setReadOnly(false);
                 }
             }
-            if (e.field == 'BreakQtyUpper' || e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper') {
+            if (e.field == 'BreakQtyUpper' || e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper' || e.field == 'SubBreakQty' || e.field == 'SubBreakAmt') {
                 var readonly = false;
                 var lstBreakQtyUpper = App.grdDiscBreak.store.snapshot || App.grdDiscBreak.store.allData || App.grdDiscBreak.store.data;
                 if (lstBreakQtyUpper != undefined) {
                     for (var i = 0; i < lstBreakQtyUpper.length; i++) {
                         if (lstBreakQtyUpper.items[i].data.BreakQtyUpper > 0 || lstBreakQtyUpper.items[i].data.BreakQty
                             || lstBreakQtyUpper.items[i].data.BreakAmtUpper > 0 || lstBreakQtyUpper.items[i].data.BreakAmt
+                            || lstBreakQtyUpper.items[i].data.SubBreakQty > 0 || lstBreakQtyUpper.items[i].data.SubBreakAmt
                             ) {
                             readonly = true;
                         }
