@@ -4658,21 +4658,27 @@ var DiscDefintion = {
                     //App.cboBreakBoundType.setReadOnly(false);
                 }
             }
-            if (e.field == 'BreakQtyUpper' || e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper' || e.field == 'SubBreakQty' || e.field == 'SubBreakAmt') {
+            if (e.field == 'BreakQtyUpper' || e.field == 'BreakQty' || e.field == 'BreakAmt' || e.field == 'BreakAmtUpper' || e.field == 'SubBreakQty' || e.field == 'SubBreakAmt' || e.field == "SubBreakQtyUpper") {
                 var readonly = false;
+                var readonlySubBreakType = false;
                 var lstBreakQtyUpper = App.grdDiscBreak.store.snapshot || App.grdDiscBreak.store.allData || App.grdDiscBreak.store.data;
                 if (lstBreakQtyUpper != undefined) {
                     for (var i = 0; i < lstBreakQtyUpper.length; i++) {
                         if (lstBreakQtyUpper.items[i].data.BreakQtyUpper > 0 || lstBreakQtyUpper.items[i].data.BreakQty
                             || lstBreakQtyUpper.items[i].data.BreakAmtUpper > 0 || lstBreakQtyUpper.items[i].data.BreakAmt
                             || lstBreakQtyUpper.items[i].data.SubBreakQty > 0 || lstBreakQtyUpper.items[i].data.SubBreakAmt
+                            || lstBreakQtyUpper.items[i].data.SubBreakQtyUpper
                             ) {
                             readonly = true;
+                        }
+                        if (lstBreakQtyUpper.items[i].data.SubBreakAmt || lstBreakQtyUpper.items[i].data.SubBreakQtyUpper) {
+                            readonlySubBreakType = true;
                         }
                     }
                     
                 }
                 App.cboBreakBoundType.setReadOnly(readonly);
+                App.cboSubBreakType.setReadOnly(readonlySubBreakType);
             }
             if (e.field == "DiscAmtBonus" && (e.record.data.BreakAmt != 0 || e.record.data.BreakQty!=0)) {
                 if (e.record.data.DiscAmtBonus == 0) {
