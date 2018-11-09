@@ -145,6 +145,58 @@ namespace OM22500
     
             return base.ExecuteFunction<OM22500_pdConfig_Result>("OM22500_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="code">No Metadata Documentation available.</param>
+        public ObjectResult<OM22500_ppCheckDelete_Result> OM22500_ppCheckDelete(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String code)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter codeParameter;
+            if (code != null)
+            {
+                codeParameter = new ObjectParameter("Code", code);
+            }
+            else
+            {
+                codeParameter = new ObjectParameter("Code", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM22500_ppCheckDelete_Result>("OM22500_ppCheckDelete", cpnyIDParameter, userNameParameter, langIDParameter, codeParameter);
+        }
 
         #endregion
 
@@ -685,6 +737,44 @@ namespace OM22500
         private global::System.Boolean _ReasonIsShow;
         partial void OnReasonIsShowChanging(global::System.Boolean value);
         partial void OnReasonIsShowChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM22500Model", Name="OM22500_ppCheckDelete_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM22500_ppCheckDelete_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Result;
+        partial void OnResultChanging(Nullable<global::System.Int32> value);
+        partial void OnResultChanged();
 
         #endregion
 

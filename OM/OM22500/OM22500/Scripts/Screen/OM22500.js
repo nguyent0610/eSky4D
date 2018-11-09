@@ -6,6 +6,8 @@ var fieldsLangCheckRequire = ["Code", "Descr"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
+var _code = '';
+var _checkdelete = 0;
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -57,12 +59,21 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
+            App.stoCheckDelete.reload();
             if (HQ.isDelete) {
-                if (App.slmOM_ReasonCode.selected.items[0] != undefined) {
-                    if (App.slmOM_ReasonCode.selected.items[0].data.Code != "") {
-                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdOM_ReasonCode)], 'deleteData', true);
+                setTimeout(function () {
+                    if (_checkdelete == 1) {
+                        HQ.message.show(2018110960, [_code], '', true);
                     }
-                }
+                    else {
+                        if (App.slmOM_ReasonCode.selected.items[0] != undefined) {
+                            if (App.slmOM_ReasonCode.selected.items[0].data.Code != "") {
+                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdOM_ReasonCode)], 'deleteData', true);
+                            }
+                        }
+                    }
+                }, 100);
+               
             }
             break;
         case "save":
@@ -105,6 +116,7 @@ var stoBeforeLoad = function (sto) {
 };
 
 var grdOM_ReasonCode_BeforeEdit = function (editor, e) {
+    _code = e.record.data.Code;
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 
@@ -160,3 +172,10 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+
+var slmOM_ReasonCode_Select = function (slm, selRec, idx, eOpts) {
+    _code = selRec.data.Code;
+}
+var stoCheckDelete_Load = function () {
+    _checkdelete = App.stoCheckDelete.data.items[0].data.Result;
+}

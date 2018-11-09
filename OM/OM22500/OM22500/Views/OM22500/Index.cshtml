@@ -8,6 +8,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "OM22500";
     var acc = Session["OM22500"] as AccessRight;
 }
@@ -41,9 +42,21 @@
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
     
+    @(HQ.Store().ID("stoCheckDelete").HQProcedure("OM22500_ppCheckDelete")
+            .HQParam(new StoreParameterCollection()
+                {
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@Code", Value = "_code", Mode = ParameterMode.Raw }
+                }).LoadData()
+                .Listeners(lst => lst.Load.Fn = "stoCheckDelete_Load")
+    )
+
+
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        <!-- Gọi hàm Body trong OM22500Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        <!-- Gọi hàm Body trong OM22500Controller để dựng view Body.cshtml, mục đích tạo cache. -->     
         @{Html.RenderAction("Body", new { lang=Current.LangID});}   
     
 </body>

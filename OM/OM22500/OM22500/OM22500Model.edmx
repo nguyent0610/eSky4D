@@ -27,6 +27,12 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM22500_pgOM_ReasonCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM22500_ppCheckDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="OM_ReasonCode" EntityType="Self.OM_ReasonCode" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -41,6 +47,12 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM22500_ppCheckDelete" ReturnType="Collection(OM22500Model.OM22500_ppCheckDelete_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Code" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_ReasonCode">
@@ -69,6 +81,9 @@
         <ComplexType Name="OM22500_pdConfig_Result">
           <Property Type="Boolean" Name="Reasonable" Nullable="true" />
           <Property Type="Boolean" Name="ReasonIsShow" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OM22500_ppCheckDelete_Result">
+          <Property Type="Int32" Name="Result" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -109,6 +124,13 @@
               <ComplexTypeMapping TypeName="OM22500Model.OM22500_pdConfig_Result">
                 <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
                 <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM22500_ppCheckDelete" FunctionName="eBiz4DWebSysModel.Store.OM22500_ppCheckDelete" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22500Model.OM22500_ppCheckDelete_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

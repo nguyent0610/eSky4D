@@ -44,11 +44,11 @@
         })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
+            X.RowNumbererColumn().Width(40).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
             X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),
             X.CheckColumn().DataIndex("Reasonable").ID("chkReasonable").Text(Util.GetLang("OM22500Reasonable")).Align(Alignment.Center).Width(100).Editable(true),
-            X.CheckColumn().DataIndex("ReasonIsShow").ID("chkReasonIsShow").Text(Util.GetLang("OM22500ReasonIsShow")).Align(Alignment.Center).Width(100).Editable(true),                             
+            X.CheckColumn().DataIndex("ReasonIsShow").ID("chkReasonIsShow").Text(Util.GetLang("OM22500ReasonIsShow")).Align(Alignment.Center).Width(100).Editable(true),
 
             X.CommandColumn()
             .Width(150)
@@ -63,6 +63,9 @@
             .Listeners(l => l.Command.Handler = "grdOM_ReasonCode_Reject(record);")
         )
         .SelectionModel(X.RowSelectionModel().ID("slmOM_ReasonCode").Mode(SelectionMode.Multi))
+        .Listeners(lst => {
+            lst.Select.Fn = "slmOM_ReasonCode_Select";
+        })
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -74,7 +77,7 @@
                 .SelectedItems("50")
                 .Listeners(l =>
                     {
-                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                        l.Select.Fn = "HQ.grid.onPageSelect";
                     })
             )
             .Plugins(X.ProgressBarPager())
