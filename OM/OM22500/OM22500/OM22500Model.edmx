@@ -4,25 +4,32 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="OM_ReasonCode" EntityType="eBiz4DWebSysModel.Store.OM_ReasonCode" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="OM_ReasonCode">
           <Key>
             <PropertyRef Name="Code" />
           </Key>
-          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Code" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Reasonable" Type="bit" Nullable="false" />
+          <Property Name="ReasonIsShow" Type="bit" Nullable="false" />
         </EntityType>
+        <Function Name="OM22500_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM22500_pgOM_ReasonCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_ReasonCode" EntityType="Self.OM_ReasonCode" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -30,6 +37,11 @@
         <EntityContainer Name="OM22500Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="OM_ReasonCode" EntityType="OM22500Model.OM_ReasonCode" />
           <FunctionImport Name="OM22500_pgOM_ReasonCode" ReturnType="Collection(OM22500Model.OM22500_pgOM_ReasonCode_Result)" />
+          <FunctionImport Name="OM22500_pdConfig" ReturnType="Collection(OM22500Model.OM22500_pdConfig_Result)" >
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_ReasonCode">
           <Key>
@@ -44,11 +56,19 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Reasonable" Type="Boolean" Nullable="false" />
+          <Property Name="ReasonIsShow" Type="Boolean" Nullable="false" />
         </EntityType>
         <ComplexType Name="OM22500_pgOM_ReasonCode_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="Reasonable" Nullable="false" />
+          <Property Type="Boolean" Name="ReasonIsShow" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM22500_pdConfig_Result">
+          <Property Type="Boolean" Name="Reasonable" Nullable="true" />
+          <Property Type="Boolean" Name="ReasonIsShow" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -59,6 +79,8 @@
           <EntitySetMapping Name="OM_ReasonCode">
             <EntityTypeMapping TypeName="OM22500Model.OM_ReasonCode">
               <MappingFragment StoreEntitySet="OM_ReasonCode">
+                <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
+                <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -77,6 +99,16 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
+                <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM22500_pdConfig" FunctionName="eBiz4DWebSysModel.Store.OM22500_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22500Model.OM22500_pdConfig_Result">
+                <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
+                <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -96,6 +128,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

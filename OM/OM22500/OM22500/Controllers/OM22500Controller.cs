@@ -23,6 +23,18 @@ namespace OM22500.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var Reasonable = false; 
+            var ReasonIsShow = false;
+            var objConfig = _db.OM22500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                Reasonable = objConfig.Reasonable.Value && objConfig.Reasonable.HasValue;
+                ReasonIsShow = objConfig.ReasonIsShow.Value && objConfig.ReasonIsShow.HasValue;
+            }
+            ViewBag.Reasonable = Reasonable;
+            ViewBag.ReasonIsShow = ReasonIsShow;
+
+
             return View();
         }
 
@@ -110,6 +122,8 @@ namespace OM22500.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
+            t.Reasonable = s.Reasonable;
+            t.ReasonIsShow = s.ReasonIsShow;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

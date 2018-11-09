@@ -104,6 +104,47 @@ namespace OM22500
         {
             return base.ExecuteFunction<OM22500_pgOM_ReasonCode_Result>("OM22500_pgOM_ReasonCode");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM22500_pdConfig_Result> OM22500_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM22500_pdConfig_Result>("OM22500_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -134,7 +175,9 @@ namespace OM22500
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_ReasonCode CreateOM_ReasonCode(global::System.String code, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="reasonable">Initial value of the Reasonable property.</param>
+        /// <param name="reasonIsShow">Initial value of the ReasonIsShow property.</param>
+        public static OM_ReasonCode CreateOM_ReasonCode(global::System.String code, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean reasonable, global::System.Boolean reasonIsShow)
         {
             OM_ReasonCode oM_ReasonCode = new OM_ReasonCode();
             oM_ReasonCode.Code = code;
@@ -145,6 +188,8 @@ namespace OM22500
             oM_ReasonCode.LUpd_Prog = lUpd_Prog;
             oM_ReasonCode.LUpd_User = lUpd_User;
             oM_ReasonCode.tstamp = tstamp;
+            oM_ReasonCode.Reasonable = reasonable;
+            oM_ReasonCode.ReasonIsShow = reasonIsShow;
             return oM_ReasonCode;
         }
 
@@ -370,6 +415,54 @@ namespace OM22500
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Reasonable
+        {
+            get
+            {
+                return _Reasonable;
+            }
+            set
+            {
+                OnReasonableChanging(value);
+                ReportPropertyChanging("Reasonable");
+                _Reasonable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Reasonable");
+                OnReasonableChanged();
+            }
+        }
+        private global::System.Boolean _Reasonable;
+        partial void OnReasonableChanging(global::System.Boolean value);
+        partial void OnReasonableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ReasonIsShow
+        {
+            get
+            {
+                return _ReasonIsShow;
+            }
+            set
+            {
+                OnReasonIsShowChanging(value);
+                ReportPropertyChanging("ReasonIsShow");
+                _ReasonIsShow = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReasonIsShow");
+                OnReasonIsShowChanged();
+            }
+        }
+        private global::System.Boolean _ReasonIsShow;
+        partial void OnReasonIsShowChanging(global::System.Boolean value);
+        partial void OnReasonIsShowChanged();
 
         #endregion
 
@@ -379,6 +472,68 @@ namespace OM22500
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM22500Model", Name="OM22500_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM22500_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Reasonable
+        {
+            get
+            {
+                return _Reasonable;
+            }
+            set
+            {
+                OnReasonableChanging(value);
+                ReportPropertyChanging("Reasonable");
+                _Reasonable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Reasonable");
+                OnReasonableChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Reasonable;
+        partial void OnReasonableChanging(Nullable<global::System.Boolean> value);
+        partial void OnReasonableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ReasonIsShow
+        {
+            get
+            {
+                return _ReasonIsShow;
+            }
+            set
+            {
+                OnReasonIsShowChanging(value);
+                ReportPropertyChanging("ReasonIsShow");
+                _ReasonIsShow = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReasonIsShow");
+                OnReasonIsShowChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ReasonIsShow;
+        partial void OnReasonIsShowChanging(Nullable<global::System.Boolean> value);
+        partial void OnReasonIsShowChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -395,11 +550,15 @@ namespace OM22500
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM22500_pgOM_ReasonCode_Result CreateOM22500_pgOM_ReasonCode_Result(global::System.String code, global::System.Byte[] tstamp)
+        /// <param name="reasonable">Initial value of the Reasonable property.</param>
+        /// <param name="reasonIsShow">Initial value of the ReasonIsShow property.</param>
+        public static OM22500_pgOM_ReasonCode_Result CreateOM22500_pgOM_ReasonCode_Result(global::System.String code, global::System.Byte[] tstamp, global::System.Boolean reasonable, global::System.Boolean reasonIsShow)
         {
             OM22500_pgOM_ReasonCode_Result oM22500_pgOM_ReasonCode_Result = new OM22500_pgOM_ReasonCode_Result();
             oM22500_pgOM_ReasonCode_Result.Code = code;
             oM22500_pgOM_ReasonCode_Result.tstamp = tstamp;
+            oM22500_pgOM_ReasonCode_Result.Reasonable = reasonable;
+            oM22500_pgOM_ReasonCode_Result.ReasonIsShow = reasonIsShow;
             return oM22500_pgOM_ReasonCode_Result;
         }
 
@@ -478,6 +637,54 @@ namespace OM22500
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Reasonable
+        {
+            get
+            {
+                return _Reasonable;
+            }
+            set
+            {
+                OnReasonableChanging(value);
+                ReportPropertyChanging("Reasonable");
+                _Reasonable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Reasonable");
+                OnReasonableChanged();
+            }
+        }
+        private global::System.Boolean _Reasonable;
+        partial void OnReasonableChanging(global::System.Boolean value);
+        partial void OnReasonableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ReasonIsShow
+        {
+            get
+            {
+                return _ReasonIsShow;
+            }
+            set
+            {
+                OnReasonIsShowChanging(value);
+                ReportPropertyChanging("ReasonIsShow");
+                _ReasonIsShow = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReasonIsShow");
+                OnReasonIsShowChanged();
+            }
+        }
+        private global::System.Boolean _ReasonIsShow;
+        partial void OnReasonIsShowChanging(global::System.Boolean value);
+        partial void OnReasonIsShowChanged();
 
         #endregion
 

@@ -47,6 +47,8 @@
             X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
             X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),
+            X.CheckColumn().DataIndex("Reasonable").ID("chkReasonable").Text(Util.GetLang("OM22500Reasonable")).Align(Alignment.Center).Width(100).Editable(true),
+            X.CheckColumn().DataIndex("ReasonIsShow").ID("chkReasonIsShow").Text(Util.GetLang("OM22500ReasonIsShow")).Align(Alignment.Center).Width(100).Editable(true),                             
 
             X.CommandColumn()
             .Width(150)
@@ -93,7 +95,9 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("Code"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                    X.BooleanFilter().DataIndex("Reasonable"),
+                    X.BooleanFilter().DataIndex("ReasonIsShow")
                 )
         )
     )

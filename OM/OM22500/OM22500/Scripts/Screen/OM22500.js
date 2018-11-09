@@ -25,6 +25,8 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();
+    App.chkReasonable.setVisible(HQ.Reasonable);
+    App.chkReasonIsShow.setVisible(HQ.ReasonIsShow);
 };
 
 var menuClick = function (command) {
