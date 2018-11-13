@@ -30,13 +30,13 @@ namespace OM24100
         {
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";////192.168.130.4
-            Current.DBSys = "KIDO_eSky4DSys";
+            Current.DBSys = "KIDOTraining_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM24100"] = acc;
-            Session["DBApp"] = Current.DBApp = "KIDO_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "KIDOTraining_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";

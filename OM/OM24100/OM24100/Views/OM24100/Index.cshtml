@@ -12,6 +12,7 @@
     ViewBag.Title = "OM24100";
     var acc = Session["OM24100"] as AccessRight;
     var HQ = Html.HQ();
+    var googleAPIKey = "AIzaSyDsIdoRqgq9lYr8sBdp7sz7O8_4Nc96_Mg";
 }
 <!DOCTYPE html>
 <html>
@@ -22,10 +23,9 @@
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
         <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
         <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/screen/OM24100.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM24100.js?"+DateTime.Now.ToString("yyyyMMddHHmmss"))' type="text/javascript"></script>
 
-
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1KCqJiFRTtXsU2UxG3Zf7D55Gjft7JJI&sensor=false&libraries=drawing"></script>
+        <script src='@Url.Content("https://maps.googleapis.com/maps/api/js?key=" + googleAPIKey + "&libraries=drawing")' type="text/javascript"></script>
         <script src="~/Scripts/Screen/OM30400_map_contextMenu.js"></script>
 
         <script type="text/javascript">

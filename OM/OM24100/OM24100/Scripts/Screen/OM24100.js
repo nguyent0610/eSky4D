@@ -719,7 +719,7 @@ var Process = {
 
         if (record.data.Lat && record.data.Lng) {
             App.imgMarkerOld_Suggest.setImageUrl(
-                "https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C"
+                "https://maps.googleapis.com/maps/api/staticmap?key=" + googleAPIKey + "&zoom=16&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C"
                 + record.data.Lat + ","
                 + record.data.Lng);
         }
@@ -728,7 +728,7 @@ var Process = {
         }
 
         App.imgMarkerNew_Suggest.setImageUrl(
-            "https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C"
+            "https://maps.googleapis.com/maps/api/staticmap?key=" + googleAPIKey + "&zoom=16&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C"
             + newLat + "," + newLng);
         App.winSuggest.show();
     },
