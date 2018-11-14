@@ -96,7 +96,7 @@ namespace OM24100.Controllers
         public ActionResult LoadMCP(string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit)
-        {
+        {            
             var planVisit = _db.OM24100_pgMCP(Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit).ToList();
@@ -117,8 +117,7 @@ namespace OM24100.Controllers
                 {
                     foreach (var selCust in lstSelCust)
                     {
-                        var custLoc = _db.AR_CustomerLocation.FirstOrDefault(p => p.CustID == selCust.CustId
-                            && p.BranchID == selCust.BranchID);
+                        var custLoc = _db.AR_CustomerLocation.FirstOrDefault(p => p.CustID == selCust.CustId && p.BranchID == selCust.BranchID);
                         if (custLoc != null)
                         {
                             if (custLoc.tstamp.ToHex() == selCust.tstamp.ToHex())
