@@ -53,7 +53,7 @@
             .Flex(1)
             .Editor(Html.X()
                 .TextField()
-                .MaxLength(10)
+                .MaxLength(30)
                 .EnforceMaxLength(true))
         ,X.Column()
                 .Text(Util.GetLang("Descr")) // Diễn giãi
@@ -67,7 +67,7 @@
                     
         ,X.Column()
             .Text(Util.GetLang("AR21100_ChannelType")) // Loại kênh
-            .ID("AR21100ChannelType")
+            .ID("colChannelType")
             .DataIndex("Type")
             .Flex(1)
             .Renderer("renderTypeName")

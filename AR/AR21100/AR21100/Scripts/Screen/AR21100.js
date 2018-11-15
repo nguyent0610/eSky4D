@@ -117,6 +117,7 @@ var checkLoad = function () {
     _Source += 1;
     if (_Source == _maxSource) {
         _Source = 0;
+        HQ.isFirstLoad = true;
         App.stoChannel.reload();
     }
 };
@@ -128,7 +129,7 @@ var firstLoad = function () {
     
     if (HQ.channelTypeView == false)
     {
-        App.AR21100ChannelType.hide();
+        App.colChannelType.hide();
         keys = ["Code"];
         fieldsCheckRequire = ["Code", "Descr"];
         fieldsLangCheckRequire = ["Code", "Descr"];
@@ -138,7 +139,7 @@ var firstLoad = function () {
         keys = ['Code'];
         fieldsCheckRequire = ["Code", "Descr", "Type"];
         fieldsLangCheckRequire = ["Code", "Descr", "Type"];
-        App.AR21100ChannelType.show();
+        App.colChannelType.show();
     }
     checkLoad();
 }
@@ -149,6 +150,7 @@ var stoChanged = function (sto) {
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
+    debugger
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'AR21100');
