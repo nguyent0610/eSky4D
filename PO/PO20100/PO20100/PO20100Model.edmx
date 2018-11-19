@@ -28,6 +28,8 @@
           <Property Name="QtyBreak" Type="float" Nullable="false" />
           <Property Name="Disc" Type="float" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KidoTraining_eSky4DApp.dbo.PO_PriceCpny' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PO_PriceCpny">
           <Key>
             <PropertyRef Name="PriceID" />
@@ -77,6 +79,10 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="PriceID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PO20100_piUOM_InvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvtID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FromUnit" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="PO20100_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -84,8 +90,13 @@
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="PO_Price" EntityType="Self.PO_Price" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_PriceHeader" EntityType="Self.PO_PriceHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[PO_PriceCpny].[PriceID] AS [PriceID], 
+[PO_PriceCpny].[CpnyID] AS [CpnyID]
+FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -120,7 +131,11 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="PO20100_pcUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_pcUOM_InvtID_Result)">
-          <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_piUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_piUOM_InvtID_Result)">
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="FromUnit" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="PO_Price">
@@ -222,6 +237,11 @@
           <Property Type="String" Name="StkWt" Nullable="true" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="PO20100_pcUOM_InvtID_Result">
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="PO20100_piUOM_InvtID_Result">
           <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
           <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
           <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
@@ -352,6 +372,15 @@
           <FunctionImportMapping FunctionImportName="PO20100_pcUOM_InvtID" FunctionName="eBiz4DWebSysModel.Store.PO20100_pcUOM_InvtID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="PO20100Model.PO20100_pcUOM_InvtID_Result">
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_piUOM_InvtID" FunctionName="eBiz4DWebSysModel.Store.PO20100_piUOM_InvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_piUOM_InvtID_Result">
                 <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
                 <ScalarProperty Name="ClassId" ColumnName="ClassId" />
                 <ScalarProperty Name="InvtId" ColumnName="InvtId" />

@@ -733,10 +733,15 @@ namespace PO20100.Controllers
                                 errorUnitNull += (i + 1).ToString() + ", ";
                                 flagCheck = true;
                             }
-                            else if (_db.PO20100_pcUOM_InvtID(InvtID).Where(p => p.FromUnit == Unit).Count() == 0)
+                            else
                             {
-                                errorUnit += (i + 1).ToString() + ", ";
-                                flagCheck = true;
+                                var lstUOM = _db.PO20100_piUOM_InvtID(InvtID, Unit).ToList();
+                                if (!lstUOM.Any())
+                                {
+                                    errorUnit += (i + 1).ToString() + ", ";
+                                    flagCheck = true;
+                                }
+                              
                             }
 
 

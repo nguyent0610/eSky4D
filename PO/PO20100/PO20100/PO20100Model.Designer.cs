@@ -357,6 +357,36 @@ namespace PO20100
     
             return base.ExecuteFunction<PO20100_pcUOM_InvtID_Result>("PO20100_pcUOM_InvtID", invtIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="fromUnit">No Metadata Documentation available.</param>
+        public ObjectResult<PO20100_piUOM_InvtID_Result> PO20100_piUOM_InvtID(global::System.String invtID, global::System.String fromUnit)
+        {
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter fromUnitParameter;
+            if (fromUnit != null)
+            {
+                fromUnitParameter = new ObjectParameter("FromUnit", fromUnit);
+            }
+            else
+            {
+                fromUnitParameter = new ObjectParameter("FromUnit", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<PO20100_piUOM_InvtID_Result>("PO20100_piUOM_InvtID", invtIDParameter, fromUnitParameter);
+        }
 
         #endregion
 
@@ -2274,6 +2304,111 @@ namespace PO20100
         private global::System.String _CpnyName;
         partial void OnCpnyNameChanging(global::System.String value);
         partial void OnCpnyNameChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="PO20100Model", Name="PO20100_piUOM_InvtID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class PO20100_piUOM_InvtID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PO20100_piUOM_InvtID_Result object.
+        /// </summary>
+        /// <param name="fromUnit">Initial value of the FromUnit property.</param>
+        /// <param name="classId">Initial value of the ClassId property.</param>
+        /// <param name="invtId">Initial value of the InvtId property.</param>
+        public static PO20100_piUOM_InvtID_Result CreatePO20100_piUOM_InvtID_Result(global::System.String fromUnit, global::System.String classId, global::System.String invtId)
+        {
+            PO20100_piUOM_InvtID_Result pO20100_piUOM_InvtID_Result = new PO20100_piUOM_InvtID_Result();
+            pO20100_piUOM_InvtID_Result.FromUnit = fromUnit;
+            pO20100_piUOM_InvtID_Result.ClassId = classId;
+            pO20100_piUOM_InvtID_Result.InvtId = invtId;
+            return pO20100_piUOM_InvtID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String FromUnit
+        {
+            get
+            {
+                return _FromUnit;
+            }
+            set
+            {
+                OnFromUnitChanging(value);
+                ReportPropertyChanging("FromUnit");
+                _FromUnit = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("FromUnit");
+                OnFromUnitChanged();
+            }
+        }
+        private global::System.String _FromUnit;
+        partial void OnFromUnitChanging(global::System.String value);
+        partial void OnFromUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassId
+        {
+            get
+            {
+                return _ClassId;
+            }
+            set
+            {
+                OnClassIdChanging(value);
+                ReportPropertyChanging("ClassId");
+                _ClassId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ClassId");
+                OnClassIdChanged();
+            }
+        }
+        private global::System.String _ClassId;
+        partial void OnClassIdChanging(global::System.String value);
+        partial void OnClassIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtId
+        {
+            get
+            {
+                return _InvtId;
+            }
+            set
+            {
+                OnInvtIdChanging(value);
+                ReportPropertyChanging("InvtId");
+                _InvtId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtId");
+                OnInvtIdChanged();
+            }
+        }
+        private global::System.String _InvtId;
+        partial void OnInvtIdChanging(global::System.String value);
+        partial void OnInvtIdChanged();
 
         #endregion
 
