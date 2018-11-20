@@ -32,16 +32,19 @@ namespace SI20700.Controllers
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
   
             bool country = false;
+            bool isDublicateState = false;
             var obj = _db.SI20700_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (obj != null)
             {
                 country = obj.Country.HasValue && obj.Country.Value;
+                isDublicateState = obj.isDublicateState.HasValue && obj.isDublicateState.Value;
             }
             ViewBag.CountryView = country;
+            ViewBag.isDublicateState = isDublicateState;
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -80,12 +83,17 @@ namespace SI20700.Controllers
                     if (curItem.Country.PassNull() == "" && curItem.State.PassNull() == "") continue;
 
                     var State = _db.SI_State.Where(p => p.Country.ToLower() == curItem.Country.ToLower() && p.State.ToLower() == curItem.State.ToLower()).FirstOrDefault();
-
+                    bool checkdel = _db.SI20700_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, curItem.Country, curItem.State).FirstOrDefault().ToBool();
                     if (State != null)
                     {
                         if (State.tstamp.ToHex() == curItem.tstamp.ToHex())
                         {
-                            Update_SI_State(State, curItem, false);
+                            if (checkdel == false)
+                            {
+                                Update_SI_State(State, curItem, false);
+                            }
+                            else
+                                throw new MessageException(MessageType.Message, "2018092501", "", new string[] { Util.GetLang("SI20700_Country") + "-" + Util.GetLang("SI20700_State"), curItem.Country + "-" + curItem.State });
                         }
                         else
                         {
@@ -785,6 +793,48 @@ else
             return _logMessage;
         }
         #endregion
-
+        [HttpPost]
+        public ActionResult CheckDelete(FormCollection data)
+        {
+            try
+            {
+                string lstIndexRow = data["lstIndexColum"];
+                string lstDataCheck = data["lstCheck"];
+                string lstDataCheckState = data["lstCheckState"];
+                string errorDelete = "";
+                string rowError = "";
+                int key = 0;
+                string check = lstDataCheck;
+                string checkState = lstDataCheckState;
+                string[] lstDelete = check.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstDeleteState = checkState.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstRow = lstIndexRow.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lstDelete.Count(); i++)
+                {
+                    bool tam = _db.SI20700_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, lstDelete[i], lstDeleteState[i]).FirstOrDefault().Value;
+                    if (tam)
+                    {
+                        errorDelete = errorDelete + lstDelete[i]+"-"+lstDeleteState[i]  + ",";
+                        rowError = rowError + lstRow[i] + ",";
+                        key = 1;
+                    }
+                }
+                if (key == 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    string message = string.Format(Message.GetString("2018092503", null), Util.GetLang("SI20700_Country") + "-" + Util.GetLang("SI20700_State"), errorDelete, rowError);
+                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }

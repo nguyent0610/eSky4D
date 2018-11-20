@@ -316,6 +316,69 @@ namespace SI20700
     
             return base.ExecuteFunction<SI20700_pdConfig_Result>("SI20700_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="country">No Metadata Documentation available.</param>
+        /// <param name="state">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SI20700_ppCheckDelete(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String country, global::System.String state)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter countryParameter;
+            if (country != null)
+            {
+                countryParameter = new ObjectParameter("Country", country);
+            }
+            else
+            {
+                countryParameter = new ObjectParameter("Country", typeof(global::System.String));
+            }
+    
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SI20700_ppCheckDelete", userNameParameter, cpnyIDParameter, langIDParameter, countryParameter, stateParameter);
+        }
 
         #endregion
 
@@ -1638,6 +1701,30 @@ namespace SI20700
         private Nullable<global::System.Boolean> _Country;
         partial void OnCountryChanging(Nullable<global::System.Boolean> value);
         partial void OnCountryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isDublicateState
+        {
+            get
+            {
+                return _isDublicateState;
+            }
+            set
+            {
+                OnisDublicateStateChanging(value);
+                ReportPropertyChanging("isDublicateState");
+                _isDublicateState = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isDublicateState");
+                OnisDublicateStateChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isDublicateState;
+        partial void OnisDublicateStateChanging(Nullable<global::System.Boolean> value);
+        partial void OnisDublicateStateChanged();
 
         #endregion
 

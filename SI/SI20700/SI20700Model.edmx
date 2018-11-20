@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SI_Country">
           <Key>
             <PropertyRef Name="CountryID" />
@@ -75,6 +75,13 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="SI20700_ppCheckDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Country" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SI_Country" EntityType="Self.SI_Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SI_State" EntityType="Self.SI_State" Schema="dbo" store:Type="Tables" />
@@ -108,6 +115,13 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SI20700_ppCheckDelete" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_State">
@@ -149,6 +163,7 @@
           </ComplexType>
         <ComplexType Name="SI20700_pdConfig_Result">
           <Property Type="Boolean" Name="Country" Nullable="true" />
+          <Property Type="Boolean" Name="isDublicateState" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SI20700_pdConfigContry_Result">
           <Property Type="Boolean" Name="Country" Nullable="true" />
@@ -306,9 +321,11 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="SI20700Model.SI20700_pdConfig_Result">
                 <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="isDublicateState" ColumnName="isDublicateState" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI20700_ppCheckDelete" FunctionName="eBiz4DWebSysModel.Store.SI20700_ppCheckDelete" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

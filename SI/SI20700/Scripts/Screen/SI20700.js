@@ -150,7 +150,17 @@ var grdDet_BeforeEdit = function (editor, e) {
 //};
 
 var grdDet_ValidateEdit = function (item, e) {
-    return checkValidateEdit(App.grdDet, e, keys);
+    if (HQ.isDublicateState) {
+        if (checkValidateEdit(App.grdDet, e, keys)) {
+            return false;
+        } else {
+            var keys1 = ['State'];
+            return checkValidateEdit(App.grdDet, e, keys1);
+
+        }
+    }
+    else return checkValidateEdit(App.grdDet, e, keys);
+   
 };
 
 var grdDet_Reject = function (record) {
@@ -182,11 +192,42 @@ var save = function () {
         });
     }
 };
+var checkDeleteData = function (indexColum, check, checkState) {
 
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI20700/CheckDelete',
+            params: {
+                lstIndexColum: indexColum,
+                lstCheck: check,
+                lstCheckState: checkState
+            },
+            success: function (msg, data) {
+                App.grdIN_ProductClass.deleteSelected();
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdDet.deleteSelected();
-        frmChange();
+        //App.grdDet.deleteSelected();
+        //frmChange();
+        var indexcolum = '';
+        var check = '';
+        var checkState = '';
+        var lstSelete = App.grdDet.selModel.selected;
+        for (var i = 0; i < lstSelete.length; i++) {
+            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+            check = check + lstSelete.items[i].data.Country + ",";
+            checkState = checkState + lstSelete.items[i].data.State + ",";
+        }
+        checkDeleteData(indexcolum, check, checkState);
     }
 };
 
