@@ -149,11 +149,41 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdSYS_Role.deleteSelected();
-        frmChange();
+        var indexcolum = '';
+        var check = '';
+        var lstSelete = App.grdSYS_Role.selModel.selected;
+        for (var i = 0; i < lstSelete.length; i++) {
+            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+            check = check + lstSelete.items[i].data.RoleID + ",";
+        }
+        checkDeleteData(indexcolum, check);
+    }
+    //if (item == "yes") {
+    //    App.grdSYS_Role.deleteSelected();
+    //    frmChange();
+    //}
+};
+var checkDeleteData = function (indexColum, check) {
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA02800/CheckDelete',
+            params: {
+                lstIndexColum: indexColum,
+                lstCheck: check
+            },
+            success: function (msg, data) {
+                App.grdSYS_Role.deleteSelected();
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
     }
 };
-
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;

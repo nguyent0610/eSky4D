@@ -104,6 +104,58 @@ namespace SA02800
         {
             return base.ExecuteFunction<SA02800_pgSYS_Role_Result>("SA02800_pgSYS_Role");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="roleID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SA02800_ppCheckDelete(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String roleID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter roleIDParameter;
+            if (roleID != null)
+            {
+                roleIDParameter = new ObjectParameter("RoleID", roleID);
+            }
+            else
+            {
+                roleIDParameter = new ObjectParameter("RoleID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SA02800_ppCheckDelete", userNameParameter, cpnyIDParameter, langIDParameter, roleIDParameter);
+        }
 
         #endregion
 

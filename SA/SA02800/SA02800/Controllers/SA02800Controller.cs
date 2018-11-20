@@ -32,7 +32,7 @@ namespace SA02800.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -75,12 +75,17 @@ namespace SA02800.Controllers
                     if (curLang.RoleID.PassNull() == "") continue;
 
                     var lang = _db.SYS_Role.Where(p => p.RoleID.ToLower() == curLang.RoleID.ToLower()).FirstOrDefault();
-
+                    bool checkdel = _db.SA02800_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, curLang.RoleID).FirstOrDefault().ToBool();
                     if (lang != null)
                     {
                         if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {
-                            Update_Language(lang, curLang, false);
+                            if (checkdel == false)
+                            {
+                                Update_Language(lang, curLang, false);
+                            }
+                            else
+                                throw new MessageException(MessageType.Message, "2018092501", "", new string[] { Util.GetLang("RoleID"), curLang.RoleID });
                         }
                         else
                         {
@@ -122,6 +127,46 @@ namespace SA02800.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+        [HttpPost]
+        public ActionResult CheckDelete(FormCollection data)
+        {
+            try
+            {
+                string lstIndexRow = data["lstIndexColum"];
+                string lstDataCheck = data["lstCheck"];
+                string errorDelete = "";
+                string rowError = "";
+                int key = 0;
+                string check = lstDataCheck;
 
+                string[] lstDelete = check.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstRow = lstIndexRow.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lstDelete.Count(); i++)
+                {
+                    bool tam = _db.SA02800_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, lstDelete[i]).FirstOrDefault().Value;
+                    if (tam)
+                    {
+                        errorDelete = errorDelete + lstDelete[i] + ",";
+                        rowError = rowError + lstRow[i] + ",";
+                        key = 1;
+                    }
+                }
+                if (key == 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    string message = string.Format(Message.GetString("2018092503", null), Util.GetLang("RoleID"), errorDelete, rowError);
+                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }
