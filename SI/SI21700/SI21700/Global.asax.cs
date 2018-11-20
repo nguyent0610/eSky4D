@@ -40,7 +40,7 @@ namespace SI21700
             Session["DBApp"] = Current.DBApp = "ECO_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
         }
     }

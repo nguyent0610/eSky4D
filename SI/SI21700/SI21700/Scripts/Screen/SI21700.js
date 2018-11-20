@@ -1,8 +1,8 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 //var screenNbr = 'SI21700';
-var keys = ['Country', 'District', 'State'];
+var keys = ['State'];
 var fieldsCheckRequire = ["Country", "State", "District", "Name"];
-var fieldsLangCheckRequire = ["Country", "State", "District", "Name"];
+var fieldsLangCheckRequire = ["SI21700_Country", "SI21700_State", "SI21700_District", "SI21700_Name"];
 
 var _Source = 0;
 var _maxSource = 1;
@@ -46,15 +46,15 @@ var menuClick = function (command) {
                 HQ.isFirstLoad = true;
                 App.stoSI_District.reload();
             }
-            var record = HQ.store.findRecord(App.stoData, keys, ['Country', 'State']);
+            var record = HQ.store.findRecord(App.stoData, keys, ['State']);
             if (!record) {
-                HQ.store.insertBlank(App.stoData, keys);
+                HQ.store.insertBlank(App.stoData, ['State']);
             }
             break;
         case "new":
             if (HQ.isInsert) {
                 debugger
-                HQ.grid.insert(App.grdSI_District, keys);
+                HQ.grid.insert(App.grdSI_District, ['State']);
             }
             break;
         case "delete":
@@ -94,13 +94,13 @@ var firstLoad = function () {
 
         keys = ["State", "District"];
         fieldsCheckRequire = ["State", "District", "Name"];
-        fieldsLangCheckRequire = ["State", "District", "Name"];
+        fieldsLangCheckRequire = ["SI21700_State", "SI21700_District", "SI21700_Name"];
         App.Country.hide();
     }
     else {
-        keys = ['Country', 'State', "District"];
+        keys = ['Country', 'State'];
         fieldsCheckRequire = ["Country", "State", "District", "Name"];
-        fieldsLangCheckRequire = ["Country", "State", "District", "Name"];
+        fieldsLangCheckRequire = ["SI21700_Country", "SI21700_State", "SI21700_District", "SI21700_Name"];
         App.Country.show();
     }
     checkLoad();
@@ -119,7 +119,7 @@ var stoSI_District_Load = function (sto) {
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            HQ.store.insertBlank(sto, ['State']);
         }
         HQ.isFirstLoad = false; //sto load cuoi se su dung
     }
@@ -148,24 +148,7 @@ var grdSI_District_Reject = function (record) {
     frmChange();
 };
 
-//var cboCountry_Change = function () {
-//    App.cboState.getStore().load(function () {
-//        var curRecord = App.frmMain.getRecord();
-//        if (curRecord != undefined)
-//            if (curRecord.data.State) {
-//                App.cboState.setValue(curRecord.data.State);
-//            }
-//        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-//        if (!dt) {
-//            //curRecord.data.State = '';
-//            App.cboState.setValue("");
-//        }
-//    });
-//};
-//////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-////Process Data
-////Function menuClick
+
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -192,6 +175,24 @@ var deleteData = function (item) {
         frmChange();
     }
 };
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        var indexcolum = '';
+        var check = '';
+        var lstCountry = '';
+        var lstState = '';
+        var lstDistrict = '';
+        var lstSelete = App.grdSI_District.selModel.selected;
+        for (var i = 0; i < lstSelete.length; i++) {
+            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+            lstCountry = check + lstSelete.items[i].data.Country + ",";
+            lstState = check + lstSelete.items[i].data.State + ",";
+            lstDistrict = check + lstSelete.items[i].data.District + ",";
+        }
+        checkDeleteData(indexcolum, lstCountry, lstState, lstDistrict);
+    }
+};
 /////////////////////////////////////////
 ////////////////////////////////////////
 //Other Function
@@ -200,6 +201,30 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoSI_District.reload();
+    }
+};
+
+var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict) {
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI21700/CheckDelete',
+            params: {
+                lstIndexColum: indexColum,
+                lstCountry: lstCountry,
+                lstState: lstState,
+                lstDistrict: lstDistrict
+            },
+            success: function (msg, data) {
+                App.grdSI_District.deleteSelected();
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
     }
 };
 

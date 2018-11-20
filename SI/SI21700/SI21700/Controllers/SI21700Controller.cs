@@ -115,10 +115,16 @@ namespace SI21700.Controllers
         {
             if (isNew)
             {
-                t.Country = s.Country;
+                if(s.Country=="")
+                {
+                    t.Country = "VN";
+                }
+                else
+                {
+                    t.Country = s.Country;
+                }
                 t.State = s.State;
                 t.District = s.District;
-
                 t.Crtd_Datetime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
@@ -129,6 +135,56 @@ namespace SI21700.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
+
+        [HttpPost]
+        public ActionResult CheckDelete(FormCollection data)
+        {
+            try
+            {
+                string lstIndexRow = data["lstIndexColum"];
+                string lstCountry = data["lstCountry"];
+                string lstState = data["lstState"];
+                string lstDistrict = data["lstDistrict"];
+                string errorCountry = "";
+                string errorState = "";
+                string errorDistrict = "";
+                string rowError = "";
+                int key = 0;
+                string[] lstIndexRow1 = lstIndexRow.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstCountry1 = lstCountry.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstState1 = lstState.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstDistrict1 = lstDistrict.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lstDistrict1.Count(); i++)
+                {
+                    bool tam = _db.SI21700_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, lstCountry1[i], lstState1[i], lstDistrict1[i]).FirstOrDefault().Value;
+                    if (tam)
+                    {
+                        errorCountry = errorCountry + lstCountry1[i] + ",";
+                        errorState = errorState + lstState1[i] + ",";
+                        errorDistrict = errorDistrict + lstDistrict1[i] + ",";
+                        rowError = rowError + lstIndexRow1[i] + ",";
+                        key = 1;
+                    }
+                }
+                if (key == 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    string message = string.Format(Message.GetString("2018112011", null), errorCountry, errorState, errorDistrict, rowError);
+                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
 
 #region <!--Import-->
         [HttpPost]
@@ -187,25 +243,17 @@ namespace SI21700.Controllers
                                 Coltexts = new List<string>(){"Country","CountryName","State","DescrState","District","Name"};
                             }
 
-                            for (int i = 4 ; i <= workSheet.Cells.MaxColumn ; i++ )
+                            for (int i = 3 ; i <= workSheet.Cells.MaxColumn ; i++ )
                             {
                                 bool flagCheck = false;
-                                if(country == false)
-                                {
-                                    State       = workSheet.Cells[i, Coltexts.IndexOf("State")].StringValue.PassNull();
-                                    DescrState  = workSheet.Cells[i, Coltexts.IndexOf("DescrState")].StringValue.PassNull();
-                                    District    = workSheet.Cells[i, Coltexts.IndexOf("District")].StringValue.PassNull();
-                                    Name        = workSheet.Cells[i, Coltexts.IndexOf("Name")].StringValue.PassNull();
-                                }
-                                else
+                                if(country)
                                 {
                                     Country     = workSheet.Cells[i, Coltexts.IndexOf("Country")].StringValue.PassNull();
-                                    CountryName = workSheet.Cells[i, Coltexts.IndexOf("CountryName")].StringValue.PassNull();
-                                    State       = workSheet.Cells[i, Coltexts.IndexOf("State")].StringValue.PassNull();
-                                    DescrState  = workSheet.Cells[i, Coltexts.IndexOf("DescrState")].StringValue.PassNull();
-                                    District    = workSheet.Cells[i, Coltexts.IndexOf("District")].StringValue.PassNull();
-                                    Name        = workSheet.Cells[i, Coltexts.IndexOf("Name")].StringValue.PassNull();
                                 }
+                                State = workSheet.Cells[i, Coltexts.IndexOf("State")].StringValue.PassNull();
+                                DescrState = workSheet.Cells[i, Coltexts.IndexOf("DescrState")].StringValue.PassNull();
+                                District = workSheet.Cells[i, Coltexts.IndexOf("District")].StringValue.PassNull();
+                                Name = workSheet.Cells[i, Coltexts.IndexOf("Name")].StringValue.PassNull();
                                 if (State == string.Empty && District == string.Empty)
                                 {
                                     continue;
