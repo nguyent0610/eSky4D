@@ -38,17 +38,17 @@ namespace AR10400
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR10400"] = acc;
-            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["CpnyID"] = Current.CpnyID = "VIETUC";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
     }

@@ -175,6 +175,7 @@ var waitcboBatNbrForInsert = function () {
         App.storeFormTop.insert(0, record);
         App.frmTop.getForm().loadRecord(App.storeFormTop.getAt(0));
     }
+    setValueBranchID();
     App.cboDocType.setValue("PP");
     App.txtDocDate.setValue(time);
     App.storeGrid1.reload();
@@ -195,8 +196,7 @@ var setStatusValueH = function () {
 function Save() {
 
     App.frmTop.getForm().updateRecord();
-
-    if (App.frm.isValid()) {
+    if (HQ.form.checkRequirePass(App.frm)) {
         App.frm.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'AR10400/Save',
@@ -242,15 +242,7 @@ function Save() {
                 HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
             }
         });
-    } else {
-        var fields = App.frm.getForm().getFields().each(
-                function (item) {
-                    if (!item.isValid()) {
-                        alert(item);
-                    }
-                }
-            );
-    }
+    } 
 }
 
 var AfterSaveWaitBatNbrStoreReload = function (data) {
@@ -458,16 +450,12 @@ var loadDataAutoHeaderTop = function () {
 
 var cboBatNbr_Change = function (sender, e) {
     if (e != "") {
-        //App.cboCustId.enable(true);
-        //App.cboDocType.enable(true);
         App.storeFormTop.reload();
         App.storeFormBot.reload();
         App.cboHandle.setValue(App.cboHandle.store.data.items[0].data.Code);
         App.cboCustId.setReadOnly(true);
         App.cboDocType.setReadOnly(true);
         App.txtDocDate.setReadOnly(true);
-        //App.cboCustId.disable(true);
-        //App.cboDocType.disable(true);
     }
 };
 //ham nay giong ham ChangeWhenSelectCheckBoxGrid1 chi la doi ten cho phu hop 
@@ -522,21 +510,33 @@ var cboStatus_Change = function () {
 var Focus2_Change = function (sender, e) {
 
     _focusrecord = 2;
+    if (App.cboStatus.getValue() === "C") {
+        return false;
+    }
 };
 
 var Focus1_Change = function (sender, e) {
-
     _focusrecord = 1;
+
+    if (App.cboStatus.getValue() === "C") {
+        return false;
+    }
 };
 
 var Focus3_Change = function (sender, e) {
 
     _focusrecord = 3;
+    if (App.cboStatus.getValue() === "C") {
+        return false;
+    }
 };
 
 var setValueBranchID = function () {
     App.txtBranchID.setValue(HQ.cpnyID);
-
+    App.frm.isValid();
+    if (App.storeFormTop.data.items.length == 0) {
+        setTimeout(function() { waitcboBatNbrForInsert(); }, 1000);
+    }
 };
 
 var checkRequire = function (items) {
@@ -586,8 +586,6 @@ var setReadOnly = function () {
 
 
 
-        App.grdAdjusting.disable(true);
-        App.grdAdjusted.disable(true);
     } else {
         App.cboHandle.setReadOnly(false);
 
@@ -597,9 +595,6 @@ var setReadOnly = function () {
         App.cboDocType.setReadOnly(false);
 
 
-
-        App.grdAdjusting.enable(true);
-        App.grdAdjusted.enable(true);
     }
 };
 
@@ -666,11 +661,8 @@ var AdjustedCheckEveryRow_Change = function (item, Value, newValue) {
 //khi CustId thay doi
 var cboCustId_Change = function () {
     if (App.cboCustId.value != null && App.cboDocType.value != null) {
-        //if (App.cboDocType.value == "AD") {
         App.storeGrid2.reload();
-        //} else if (App.cboDocType.value == "PP") {
         App.storeGrid1.reload();
-        //}
         setTimeout(function () { waitstoreGrid2Reload(); }, 1000);
     }
 };

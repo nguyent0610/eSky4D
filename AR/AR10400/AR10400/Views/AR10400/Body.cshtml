@@ -47,9 +47,8 @@
                    //Bat.No
                     HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("AR10400_pcBatch")
                     .HQColumnShow("BatNbr,TotAmt,Descr,Status").DisplayField("BatNbr").ValueField("BatNbr").Editable(false)
-                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.ForceSelection(true)
-                    .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
+                    .HQDBSys(false)
                     .HQParam(new StoreParameterCollection()
                     {
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -167,7 +166,7 @@
                                 ,HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AR10400_pcDocType")
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("AdjgDocType").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
-                                .HQDBSys(false).HQValue("PP",false)
+                                .HQDBSys(false)//.HQValue("PP",false)
                                 //.MaxLength(30).EnforceMaxLength(true)
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
