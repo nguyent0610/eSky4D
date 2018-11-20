@@ -44,8 +44,10 @@
                  })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40)
+            X.RowNumbererColumn()
+            .Width(40)
             , X.Column()
+                .Flex(1)
                 .Text(Util.GetLang("SI21900_Zone")) // Mã Miền
                 .DataIndex("Zone")
                     .Editor(HQ.Combo()
@@ -53,6 +55,7 @@
                         .HQProcedure("SI21900_pcZone")
                         .HQColumnShow("Code,Descr").DataIndex("Zone")
                         .HQHeightWidth(400, 300)
+                        
                         .ValueField("Code").DisplayField("Code")
                         .SelectOnFocus(true).ForceSelection(true)
                         .LoadData()
@@ -67,14 +70,15 @@
                         )
 
             , X.Column()
-                .Text(Util.GetLang("SI21900_ZoneDescr")) // Tên Miền
+                .Text(Util.GetLang("ProgramCode")) // Tên Miền
                 .DataIndex("ZoneDescr")
-                .Width(150)
+                .Flex(1)
                  
             ,X.Column()
                 .ID("Territory")
                 .Text(Util.GetLang("SI21900_Territory")) // Mã Vùng Bán Hàng
-                .DataIndex("Territory").Width(150)
+                .DataIndex("Territory")
+                .Flex(1)
                         .Editor(Html.X()
                             .TextField()
                             .MaxLength(10)
@@ -83,7 +87,7 @@
             ,X.Column()
                 .Text(Util.GetLang("SI21900_Descr")) // Tên Vùng Bán Hàng
                 .DataIndex("Descr")
-                .Width(150)
+                .Flex(1)
                     .Editor(Html.X()
                         .TextField()
                         .MaxLength(200)
@@ -105,7 +109,7 @@
             //            .Renderer("renderDistance")       
                             
             ,X.CommandColumn()
-                .Width(150)
+                .Width(100)
                 .Commands(
                     X.GridCommand()
                     .Text(Util.GetLang("Reject"))
@@ -117,6 +121,7 @@
             .Listeners(l => l.Command.Handler = "grdTerritory_Reject(record);")
         )
         .SelectionModel(X.RowSelectionModel().ID("slmTerritory").Mode(SelectionMode.Multi))
+            .Listeners(lst => lst.Select.Fn = "slmTerritory_Select")
         .BottomBar(
             X.PagingToolbar()
             .Items(

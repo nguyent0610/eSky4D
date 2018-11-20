@@ -1,12 +1,13 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['Territory'];
+var keys = ['Territory', "Zone"];
 var fieldsCheckRequire = ["Territory", "Descr","Zone"];
 var fieldsLangCheckRequire = ["Territory", "Descr","Zone"];
 
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
-
+var _delete = 0;
+var _Territory = '';
 
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
@@ -52,11 +53,21 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
+            App.stocheckDelete.reload();
+            HQ.common.showBusy(true, HQ.common.getLang("loadingData"))
             if (HQ.isDelete) {
                 if (App.slmTerritory.selected.items[0] != undefined) {
-                    if (App.slmTerritory.selected.items[0].data.RoleID != "") {
-                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdTerritory)], 'deleteData', true);
-                    }
+                    setTimeout(function () {
+                        if (_delete == 1) {
+                            HQ.message.show(2018112060, [_Territory], 'deleteData', true);
+                        }
+                        else {
+                            if (App.slmTerritory.selected.items[0].data.RoleID != "") {
+                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdTerritory)], 'deleteData', true);
+                            }
+                        }
+                        HQ.common.showBusy(false);
+                    }, 1000)
                 }
             }
             break;
@@ -87,7 +98,7 @@ var firstLoad = function () {
 
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoTerritory);
-    HQ.common.changeData(HQ.isChange, 'SA02800');//co thay doi du lieu gan * tren tab title header
+    HQ.common.changeData(HQ.isChange, 'SI21900');//co thay doi du lieu gan * tren tab title header
 };
 
 var stoBeforeLoad = function (sto) {
@@ -110,6 +121,7 @@ var stoTerritory_Load = function (sto) {
 };
 
 var grdTerritory_BeforeEdit = function (editor, e) {
+    _Territory = e.record.data.Territory;
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
     if (e.field == 'Zone')
         App.cboZone.store.clearFilter();
@@ -121,7 +133,7 @@ var grdTerritory_Edit = function (item, e) {
 };
 
 var grdTerritory_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdTerritory, e, keys);
+    return checkValidateEdit(App.grdTerritory, e, keys);
 };
 
 var grdTerritory_Reject = function (record) {
@@ -189,3 +201,61 @@ function refresh(item) {
 var renderDistance = function (value) {
     return Ext.util.Format.number(value, '0,000.00');
 };
+
+
+/////
+var checkDuplicate = function (grd, row, keys) {
+    var found = false;
+    var store = grd.getStore();
+    if (keys == undefined) keys = row.record.idProperty.split(',');
+    var allData = store.snapshot || store.allData || store.data;
+    for (var i = 0; i < allData.items.length; i++) {
+        var record = allData.items[i];
+        var data = '';
+        var rowdata = '';
+        for (var jkey = 0; jkey < keys.length; jkey++) {
+            if (record.data[keys[jkey]] != undefined) {
+                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                if (row.field == keys[jkey])
+                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                else
+                    rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
+            }
+        }
+        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            break;
+        };
+    }
+    return found;
+}
+
+
+
+var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar)
+{
+    debugger
+    if (keys.indexOf(e.field) != -1) {
+        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+        if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+        if (isCheckSpecialChar) {
+            if (e.value)
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+        }
+        if (checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
+
+    }
+}
+var stocheckDelete_Load = function () {
+    _delete = App.stocheckDelete.data.items[0].data.Result;
+}
+var slmTerritory_Select = function (slm, selRec, idx, eOpts) {
+    _Territory = selRec.data.Territory;
+}
