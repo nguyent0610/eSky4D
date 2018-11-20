@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SI20700.SI20700Entities" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAEAAAAAAACAgABAABBAgAAACAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SI20700.SI_State" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ESIEGYAQhQAAYgCAQAIgBQggBBsEUgimgEAGlCEIAEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SI20700.SI20700_pcLoadCountryAll_Result" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAEAAAAAAAAAAAAAAAAAABABBAQAAAAACABEAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SI20700.SI20700_pcLoadTerritory_Result" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAEAQAAAAAgQACAAAIAAAAgABAAQACAAAAAEAAIAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SI20700.SI20700_pdConfig_Result" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAIAAAAAAIAAAAgAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SI20700.SI20700_pgLoadState_Result" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIEAQAABAAAQACAQAIAAAAgAJIAQICAoEAAFiEIAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

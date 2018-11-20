@@ -1,0 +1,201 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI20700;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+    X.Viewport()
+    .Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+            .ID("frmMain")
+            .BodyPadding(0)
+            .KeyMap(Util.SetupKeyMap())
+            .TopBar(Util.SetupToolbar(new AbstractComponent[]
+                {
+                    X.FileUploadField()
+                        .ID("btnImport")
+                        .ButtonText("Import")
+                        .ButtonOnly(true)
+                        .Icon(Icon.BookAdd)
+                        .Listeners(p=>{p.Change.Fn = "btnImport_Click";})  
+                   , X.Button()
+                        .ID("btnExport")
+                        .Text(Util.GetLang("Export"))
+                        .Icon(Icon.ArrowTurnRight)
+                        .Listeners(p=>{p.Click.Fn = "btnExport_Click";})
+                }
+             , "Print", true, "menuClick"))
+            .Layout(LayoutType.Fit)
+            .Items(
+                ////Thiet ke giao dien o day
+                X.GridPanel()
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdDet")
+                .Store(
+                    X.Store()
+                        .ID("stoData")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(SI20700_pgLoadState_Result), "mdlSI20700_pgLoadState", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+                        .Listeners(l =>
+                            {
+                                l.BeforeLoad.Fn = "stoBeforeLoad";
+                                l.Load.Fn = "stoData_Load";
+                                l.Update.Fn = "frmChange";             
+                            })
+                       )
+            .Listeners(p =>
+                {
+                    p.BoxReady.Handler = "firstLoad();";
+                })
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                , X.Column()
+                        .Text(Util.GetLang("SI20700_Country")) //Đất nước -- ẩn hiện config
+                        .DataIndex("Country").ID("Country")
+                        .Flex(1)
+                            .Editor(
+                                HQ.Combo()
+                                .ID("cboCountry")
+                                .Name("cboCountry")
+                                .HQProcedure("SI20700_pcLoadCountryAll")
+                                .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
+                                .Width(300).HQHeightWidth(500, 400)
+                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                .LoadData()
+                            )
+                ,X.Column()
+                        .Text(Util.GetLang("SI20700_Territory")) // Mã vùng bán hàng
+                        .DataIndex("Territory")
+                        .Flex(1)
+                                .Editor(
+                                    HQ.Combo()
+                                        .ID("cboTerritory")
+                                        .Name("cboTerritory")
+                                        .HQProcedure("SI20700_pcLoadTerritory")
+                                        .HQColumnShow("Territory,DescrTerritory")
+                                        .DisplayField("Territory")
+                                        .ValueField("Territory")
+                                        .Width(300)
+                                        .HQHeightWidth(500, 400)
+                                        .AllowBlank(true)
+                                        .ForceSelection(true)
+                                        .HQDBSys(false)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .Listeners(lst =>
+                                            {
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        .HQParam(new StoreParameterCollection()
+                                            {
+                                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                            })
+                                        .LoadData())
+                , X.Column()
+                        .ID("DescrTerritory")
+                        .Text(Util.GetLang("DescrTerritory")) // Tên Vùng Bán Hàng
+                        .DataIndex("DescrTerritory")
+                        .Flex(1)
+                                     
+                ,X.Column()
+                    .ID("State")
+                    .Text(Util.GetLang("SI20700_State")) // Mã Tỉnh/Thành Phố
+                    .DataIndex("State")
+                    .Flex(1)
+                    .Editor(Html.X()
+                                .TextField()
+                                .MaxLength(10)
+                                .EnforceMaxLength(true)
+                                    //.Listeners(lst =>
+                                    //{
+                                    //    lst.Change.Fn = "State_edit";
+                                    //})
+                                    )
+                    
+                ,X.Column()
+                    //.Text(Util.GetLang("Descr")) //Tên Tỉnh/Thành Phố
+                    .Text(Util.GetLang("SI20700_Descr"))
+                    .DataIndex("Descr")
+                    .Flex(1)
+                        .Editor(Html.X()
+                            .TextField()
+                            .MaxLength(30)
+                            .EnforceMaxLength(true)      
+                            )                               
+                ,X.CommandColumn()
+                    .Width(80)
+                    .Commands(
+                        X.GridCommand()
+                            .Text(Util.GetLang("Reject")) 
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdDet_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";                   
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    
+                    ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                 //   ls.Edit.Fn = "grdDet_Edit";  
+                    ls.Edit.Fn = "grdTerritoryClassDetail_Edit";
+                    ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
+
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("Country"),
+                        X.StringFilter().DataIndex("State"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.StringFilter().DataIndex("Territory"),
+                        X.StringFilter().DataIndex("DescrTerritory")
+                            )
+                    )
+                    .Listeners(lst =>
+                        {
+                            lst.Activate.Handler = "HQ.focus = 'grdTerritoryClassDetail_Edit';";
+                        })
+        )
+    )
+)
