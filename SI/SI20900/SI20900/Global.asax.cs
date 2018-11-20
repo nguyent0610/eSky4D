@@ -30,14 +30,14 @@ namespace SI20900
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "HOANGSAD";
+            Current.DBSys = "ECO_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SI20900"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ECO_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "en";

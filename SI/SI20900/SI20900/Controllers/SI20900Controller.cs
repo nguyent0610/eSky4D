@@ -113,5 +113,46 @@ namespace SI20900.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
+        [HttpPost]
+        public ActionResult CheckDelete(FormCollection data)
+        {
+            try
+            {
+                string lstIndexRow = data["lstIndexColum"];
+                string lstTax = data["lstTax"];
+                string errorTax = "";
+                string rowError = "";
+                int key = 0;
+                string[] lstIndexRow1 = lstIndexRow.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstTax1 = lstTax.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lstTax1.Count(); i++)
+                {
+                    bool tam = _db.SI20900_ppCheckDelete(Current.UserName, Current.CpnyID, Current.LangID, lstTax1[i]).FirstOrDefault().Value;
+                    if (tam)
+                    {
+                        errorTax = errorTax + lstTax1[i] + ",";
+                        rowError = rowError + lstIndexRow1[i] + ",";
+                        key = 1;
+                    }
+                }
+                if (key == 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    string message = string.Format(Message.GetString("2018112012", null), errorTax, rowError);
+                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
     }
 }

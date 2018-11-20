@@ -155,10 +155,39 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdTaxCat.deleteSelected();
-        frmChange();
+        var indexcolum = '';
+        var lstTax = '';
+        var lstSelete = App.grdTaxCat.selModel.selected;
+        for (var i = 0; i < lstSelete.length; i++) {
+            indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+            lstTax = lstTax + lstSelete.items[i].data.CatID + ",";
+        }
+        checkDeleteData(indexcolum, lstTax);
     }
 };
+
+var checkDeleteData = function (indexcolum, lstTax) {
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI20900/CheckDelete',
+            params: {
+                lstIndexColum: indexcolum,
+                lstTax: lstTax
+            },
+            success: function (msg, data) {
+                App.grdTaxCat.deleteSelected();
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
 
 ///////////////////////////////////////////////
 //////////////////////////////////////////////

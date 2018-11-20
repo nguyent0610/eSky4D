@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -44,25 +44,44 @@
                  })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-            X.Column().ID("CatID").Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true)),
-            X.CommandColumn()
-            .Width(150)
-            .Commands(
-                X.GridCommand()
-                .Text(Util.GetLang("Reject"))
-                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                .CommandName("reject")
-                .Icon(Icon.ArrowUndo)
-            )
+            X.RowNumbererColumn().Width(40)
+            ,X.Column()
+                .ID("CatID")
+                .Text(Util.GetLang("SI20900_Code")) // Mã số
+                .DataIndex("CatID")
+                .Width(150)
+                .Editor(Html.X()
+                        .TextField()
+                        .MaxLength(10)
+                        .EnforceMaxLength(true))
+            
+            ,X.Column()
+                .Text(Util.GetLang("SI20900_Descr")) // Diễn giải
+                .DataIndex("Descr")
+                .Width(150)
+                .Editor(Html.X()
+                        .TextField()
+                        .MaxLength(30)
+                        .EnforceMaxLength(true))
+            
+            ,X.CommandColumn()              //Reject
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
             .Listeners(l => l.Command.Handler = "grdTaxCat_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmTaxCat").Mode(SelectionMode.Multi))
-        .BottomBar(
+        .SelectionModel(
+        X.RowSelectionModel()
+            .ID("slmTaxCat")
+            .Mode(SelectionMode.Multi))
+            .BottomBar(
             X.PagingToolbar()
             .Items(
                 X.Label("Page size:"),
