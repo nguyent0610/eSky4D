@@ -11896,7 +11896,8 @@ namespace IN10400
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="barCode">Initial value of the BarCode property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
-        public static IN10400_pgAdjustmentLoad_Result CreateIN10400_pgAdjustmentLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double cnvFact, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.String barCode, global::System.String isChanged)
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
+        public static IN10400_pgAdjustmentLoad_Result CreateIN10400_pgAdjustmentLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double cnvFact, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.String barCode, global::System.String isChanged, global::System.String whseLoc)
         {
             IN10400_pgAdjustmentLoad_Result iN10400_pgAdjustmentLoad_Result = new IN10400_pgAdjustmentLoad_Result();
             iN10400_pgAdjustmentLoad_Result.BatNbr = batNbr;
@@ -11920,6 +11921,7 @@ namespace IN10400
             iN10400_pgAdjustmentLoad_Result.LUpd_User = lUpd_User;
             iN10400_pgAdjustmentLoad_Result.BarCode = barCode;
             iN10400_pgAdjustmentLoad_Result.IsChanged = isChanged;
+            iN10400_pgAdjustmentLoad_Result.WhseLoc = whseLoc;
             return iN10400_pgAdjustmentLoad_Result;
         }
 
@@ -12842,7 +12844,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String WhseLoc
         {
@@ -12854,7 +12856,7 @@ namespace IN10400
             {
                 OnWhseLocChanging(value);
                 ReportPropertyChanging("WhseLoc");
-                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                _WhseLoc = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("WhseLoc");
                 OnWhseLocChanged();
             }
@@ -12862,6 +12864,30 @@ namespace IN10400
         private global::System.String _WhseLoc;
         partial void OnWhseLocChanging(global::System.String value);
         partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> QtyAvail
+        {
+            get
+            {
+                return _QtyAvail;
+            }
+            set
+            {
+                OnQtyAvailChanging(value);
+                ReportPropertyChanging("QtyAvail");
+                _QtyAvail = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QtyAvail");
+                OnQtyAvailChanged();
+            }
+        }
+        private Nullable<global::System.Double> _QtyAvail;
+        partial void OnQtyAvailChanging(Nullable<global::System.Double> value);
+        partial void OnQtyAvailChanged();
 
         #endregion
 

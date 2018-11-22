@@ -690,7 +690,8 @@
           <Property Type="String" Name="BarCode" Nullable="false" MaxLength="30" />
           <Property Type="Double" Name="StkQty" Nullable="true" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
+          <Property Type="Double" Name="QtyAvail" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_ItemLoc">
           <Key>
@@ -1282,6 +1283,7 @@
                 <ScalarProperty Name="StkQty" ColumnName="StkQty" />
                 <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
                 <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1748,7 +1750,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="76" DisplayType="false" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" DisplayType="false" >
         <EntityTypeShape EntityType="IN10400Model.IN_Setup" Width="1.5" PointX="3.3846883417035869" PointY="30.485882430563628" />
         <EntityTypeShape EntityType="IN10400Model.IN_UnitConversion" Width="1.5" PointX="0.5" PointY="24.875" />
         <EntityTypeShape EntityType="IN10400Model.IN_ItemLoc" Width="1.5" PointX="5.375" PointY="0.75" />

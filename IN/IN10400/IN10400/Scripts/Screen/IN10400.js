@@ -1742,7 +1742,7 @@ var getQtyAvail = function (row) {
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID','WhseLoc'], [row.data.InvtID, row.data.SiteID,row.data.WhseLoc]);
     var cnvFact = row.data.CnvFact === 0 ? 1 : row.data.CnvFact;
     if (!Ext.isEmpty(site)) {         
-        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID,row.data.WhseLoc, "")) / cnvFact, 0));
+        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((site.QtyAvail) / cnvFact, 0));
         row.data.QtyAvail = HQ.util.mathRound((site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID, row.data.WhseLoc, "")) / cnvFact, 0);
     }
     else {
@@ -1760,11 +1760,12 @@ var calculateInvtTotal = function (invtID, siteID,whseLoc, lineRef) {
     //        qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
     //    }
     //});
-    App.stoOldTrans.each(function (item) {
-        if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc==whseLoc) {
-            qtyOld += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
-        }
-    });
+
+    //App.stoOldTrans.each(function (item) {
+    //    if (item.data.InvtID == invtID && item.data.SiteID == siteID && item.data.WhseLoc==whseLoc) {
+    //        qtyOld += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+    //    }
+    //});
     if (qty == qtyOld)
         return 0;
     return qty + qtyOld;
