@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Channel">
           <Key>
             <PropertyRef Name="Code" />
@@ -36,6 +36,12 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="AR21100_ppCheckDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="AR_Channel" EntityType="Self.AR_Channel" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -63,6 +69,12 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21100_ppCheckDelete" ReturnType="Collection(AR21100Model.AR21100_ppCheckDelete_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Code" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_Channel">
@@ -93,6 +105,9 @@
           </ComplexType>
         <ComplexType Name="AR21100_pdConfig_Result">
           <Property Type="Boolean" Name="ChanelType" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR21100_ppCheckDelete_Result">
+          <Property Type="Boolean" Name="Result" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -139,6 +154,13 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR21100Model.AR21100_pdConfig_Result">
                 <ScalarProperty Name="ChanelType" ColumnName="ChanelType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21100_ppCheckDelete" FunctionName="eBiz4DWebSysModel.Store.AR21100_ppCheckDelete" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21100Model.AR21100_ppCheckDelete_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

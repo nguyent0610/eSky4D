@@ -8,6 +8,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "AR21100";
     var acc = Session["AR21100"] as AccessRight;
 }
@@ -43,6 +44,18 @@
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
     
+
+    @(HQ.Store().ID("stocheckDelete").HQProcedure("AR21100_ppCheckDelete")
+            .HQParam(new StoreParameterCollection()
+                {
+                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                     new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                     new StoreParameter() { Name = "@Code", Value = "_Channel", Mode = ParameterMode.Raw }
+                }).LoadData()
+                .Listeners(lst => lst.Load.Fn = "stocheckDelete_Load")
+    )
+
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong AR21100Controller để dựng view Body.cshtml, mục đích tạo cache. -->            

@@ -2,7 +2,8 @@
 
 var keys ;
 var fieldsCheckRequire ;
-var fieldsLangCheckRequire ;
+var fieldsLangCheckRequire;
+var _Channel = '';
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -24,8 +25,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdChannel);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoChannel.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isFirstLoad = true;
+                App.stoChannel.reload();
+            }
+           
             break;
         case "new":
             if (HQ.isInsert) {
@@ -33,11 +40,20 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
+            App.stocheckDelete.reload();
             if (HQ.isDelete) {
                 if (App.slmChannel.selected.items[0] != undefined) {
-                    if (App.slmChannel.selected.items[0].data.Code != "") {
-                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdChannel)], 'deleteData', true);
-                    }
+                    setTimeout(function () {
+                        if (_delete == 1) {
+                            HQ.message.show(2018112060, [_Channel], 'deleteData', true);
+                        }
+                        else {
+                            if (App.slmChannel.selected.items[0].data.Code != "") {
+                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdChannel)], 'deleteData', true);
+                            }
+                        }
+                        HQ.common.showBusy(false);
+                    }, 1000)
                 }
             }
             break;
@@ -60,7 +76,9 @@ var menuClick = function (command) {
     }
 
 };
+
 var grdChannel_BeforeEdit = function (editor, e) {
+    _Channel = e.record.data.Code;
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdChannel_Edit = function (item, e) {
@@ -102,7 +120,13 @@ var deleteData = function (item) {
     }
 };
 
-
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoChannel.reload();
+    }
+};
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
@@ -150,7 +174,6 @@ var stoChanged = function (sto) {
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    debugger
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'AR21100');
@@ -176,7 +199,12 @@ var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) 
     }
 };
 /////////////////////////////////////////////////////////////////////////
-
+var stocheckDelete_Load = function () {
+    _delete = App.stocheckDelete.data.items[0].data.Result;
+}
+var slmTerritory_Channel = function (slm, selRec, idx, eOpts) {
+    _Channel = selRec.data.Code;
+}
 
 
 

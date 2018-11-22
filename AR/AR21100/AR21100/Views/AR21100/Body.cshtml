@@ -108,6 +108,7 @@
             .Listeners(l => l.Command.Handler = "grdChannel_Reject(record);")
         )
         .SelectionModel(X.RowSelectionModel().ID("slmChannel").Mode(SelectionMode.Multi))
+            .Listeners(lst => lst.Select.Fn = "slmTerritory_Channel")
         .BottomBar(
             X.PagingToolbar()
             .Items(
