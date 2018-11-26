@@ -509,6 +509,7 @@ var HQ = {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
                                 if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
+                                    debugger
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }

@@ -2529,6 +2529,58 @@ namespace OM21100
     
             return base.ExecuteFunction("OM21100_ppPromotionsCopy", cpnyIDParameter, userNameParameter, langIDParameter, discIDOldParameter, discSeqOldParameter, discIDNewParameter, discSeqNewParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="discID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_pdCheckDiscSeq_Result> OM21100_pdCheckDiscSeq(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String discID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter discIDParameter;
+            if (discID != null)
+            {
+                discIDParameter = new ObjectParameter("DiscID", discID);
+            }
+            else
+            {
+                discIDParameter = new ObjectParameter("DiscID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM21100_pdCheckDiscSeq_Result>("OM21100_pdCheckDiscSeq", cpnyIDParameter, userNameParameter, langIDParameter, discIDParameter);
+        }
 
         #endregion
 
@@ -10952,6 +11004,85 @@ namespace OM21100
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_pdCheckDiscSeq_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_pdCheckDiscSeq_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_pdCheckDiscSeq_Result object.
+        /// </summary>
+        /// <param name="discID">Initial value of the DiscID property.</param>
+        /// <param name="discSeq">Initial value of the DiscSeq property.</param>
+        public static OM21100_pdCheckDiscSeq_Result CreateOM21100_pdCheckDiscSeq_Result(global::System.String discID, global::System.String discSeq)
+        {
+            OM21100_pdCheckDiscSeq_Result oM21100_pdCheckDiscSeq_Result = new OM21100_pdCheckDiscSeq_Result();
+            oM21100_pdCheckDiscSeq_Result.DiscID = discID;
+            oM21100_pdCheckDiscSeq_Result.DiscSeq = discSeq;
+            return oM21100_pdCheckDiscSeq_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                OnDiscIDChanging(value);
+                ReportPropertyChanging("DiscID");
+                _DiscID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscID");
+                OnDiscIDChanged();
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeq
+        {
+            get
+            {
+                return _DiscSeq;
+            }
+            set
+            {
+                OnDiscSeqChanging(value);
+                ReportPropertyChanging("DiscSeq");
+                _DiscSeq = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscSeq");
+                OnDiscSeqChanged();
+            }
+        }
+        private global::System.String _DiscSeq;
+        partial void OnDiscSeqChanging(global::System.String value);
+        partial void OnDiscSeqChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_pdCheckOrderDisc_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -11466,30 +11597,6 @@ namespace OM21100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> HideDiscSeqSolomon
-        {
-            get
-            {
-                return _HideDiscSeqSolomon;
-            }
-            set
-            {
-                OnHideDiscSeqSolomonChanging(value);
-                ReportPropertyChanging("HideDiscSeqSolomon");
-                _HideDiscSeqSolomon = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("HideDiscSeqSolomon");
-                OnHideDiscSeqSolomonChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _HideDiscSeqSolomon;
-        partial void OnHideDiscSeqSolomonChanging(Nullable<global::System.Boolean> value);
-        partial void OnHideDiscSeqSolomonChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public Nullable<global::System.Boolean> HideInvtIDSolomon
         {
             get
@@ -11652,6 +11759,54 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideGetFreeItem;
         partial void OnHideGetFreeItemChanging(Nullable<global::System.Boolean> value);
         partial void OnHideGetFreeItemChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckDiscSeq
+        {
+            get
+            {
+                return _CheckDiscSeq;
+            }
+            set
+            {
+                OnCheckDiscSeqChanging(value);
+                ReportPropertyChanging("CheckDiscSeq");
+                _CheckDiscSeq = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckDiscSeq");
+                OnCheckDiscSeqChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckDiscSeq;
+        partial void OnCheckDiscSeqChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideDiscSeqSolomon
+        {
+            get
+            {
+                return _HideDiscSeqSolomon;
+            }
+            set
+            {
+                OnHideDiscSeqSolomonChanging(value);
+                ReportPropertyChanging("HideDiscSeqSolomon");
+                _HideDiscSeqSolomon = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideDiscSeqSolomon");
+                OnHideDiscSeqSolomonChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideDiscSeqSolomon;
+        partial void OnHideDiscSeqSolomonChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideDiscSeqSolomonChanged();
 
         #endregion
 

@@ -85,7 +85,8 @@ namespace OM21100.Controllers
                 , hideSite = false
                 , hideSiteSolomon = false
                 , hideReIndustryAndTrade = false
-                , hideGetFreeItem = false;
+                , hideGetFreeItem = false
+                , checkDiscSeq = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -114,6 +115,7 @@ namespace OM21100.Controllers
                 hideSiteSolomon = objConfig.HideSiteSolomon.HasValue && objConfig.HideSiteSolomon.Value;
                 hideReIndustryAndTrade = objConfig.HideReIndustryAndTrade.HasValue && objConfig.HideReIndustryAndTrade.Value;
                 hideGetFreeItem = objConfig.HideGetFreeItem  ?? false;
+                checkDiscSeq = objConfig.CheckDiscSeq.HasValue && objConfig.CheckDiscSeq.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -140,6 +142,7 @@ namespace OM21100.Controllers
             ViewBag.hideSiteSolomon = hideSiteSolomon;
             ViewBag.hideReIndustryAndTrade = hideReIndustryAndTrade;
             ViewBag.hideGetFreeItem = hideGetFreeItem;
+            ViewBag.checkDiscSeq = checkDiscSeq;
             return View();
         }
 
@@ -187,6 +190,12 @@ namespace OM21100.Controllers
             var promotionsCopy = _db.OM21100_pgPromotionsCopy(Current.UserName, Current.CpnyID, Current.LangID, discID).ToList();
             return this.Store(promotionsCopy);
         }
+
+        public ActionResult GetCheckDiscSeq(string discID)
+        {
+            var lstData = _db.OM21100_pdCheckDiscSeq(Current.CpnyID, Current.UserName, Current.LangID, discID).ToList();
+            return this.Store(lstData);
+        }
         
         [DirectMethod]
         public ActionResult OM21100GetTreeBranch(string panelID)
@@ -207,7 +216,6 @@ namespace OM21100.Controllers
             node.Checked = false;
 
             lstAllNode = _db.OM21100_ptTreeNode(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-
 
             var maxLevel = lstAllNode.Max(x => x.LevelID);
             var lstFirst = lstAllNode.Where(x => x.LevelID == maxLevel).ToList();

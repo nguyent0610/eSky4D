@@ -54,6 +54,7 @@
             HQ.hideSiteSolomon = HQ.util.toBool('@ViewBag.hideSiteSolomon');
             HQ.hideReIndustryAndTrade = HQ.util.toBool('@ViewBag.hideReIndustryAndTrade');
             HQ.hideGetFreeItem = HQ.util.toBool('@ViewBag.hideGetFreeItem');
+            HQ.checkDiscSeq = HQ.util.toBool('@ViewBag.checkDiscSeq');
         </script>
 
         <title>@ViewBag.Title</title>
@@ -245,6 +246,24 @@
                 l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoDiscItemClass
+        )
+
+        @(X.Store().ID("stoCheckDiscSeq")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM21100_pdCheckDiscSeq_Result), "mdlCheckDiscSeq", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetCheckDiscSeq", "OM21100")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+            })
         )
         
         @X.GridFilters() <!--Khi cache cho grid-->

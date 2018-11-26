@@ -411,6 +411,12 @@
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="OM21100_pdCheckDiscSeq" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="DiscID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM21100_pdCheckOrderDisc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DiscID" Type="varchar" Mode="In" />
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
@@ -925,6 +931,12 @@
             <Parameter Name="DiscIDNew" Mode="In" Type="String" />
             <Parameter Name="DiscSeqNew" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="OM21100_pdCheckDiscSeq" ReturnType="Collection(OM21100Model.OM21100_pdCheckDiscSeq_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="DiscID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
           <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
@@ -1375,7 +1387,6 @@
           <Property Type="Boolean" Name="HideBreakBoundType" Nullable="true" />
           <Property Type="Boolean" Name="HideConvertDiscAmtToFreeItem" Nullable="true" />
           <Property Type="Boolean" Name="HideDiscAmtBonus" Nullable="true" />
-          <Property Type="Boolean" Name="HideDiscSeqSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideInvtIDSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideDiscPrice" Nullable="true" />
           <Property Type="Boolean" Name="HideCopy" Nullable="true" />
@@ -1383,6 +1394,8 @@
           <Property Type="Boolean" Name="HideSiteSolomon" Nullable="true" />
           <Property Type="Boolean" Name="HideReIndustryAndTrade" Nullable="true" />
           <Property Type="Boolean" Name="HideGetFreeItem" Nullable="true" />
+          <Property Type="Boolean" Name="CheckDiscSeq" Nullable="true" />
+          <Property Type="Boolean" Name="HideDiscSeqSolomon" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM21100_pdGetDataShipment_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -1649,6 +1662,10 @@
           <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="16" />
           <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="16" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="OM21100_pdCheckDiscSeq_Result">
+          <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="DiscSeq" Nullable="false" MaxLength="10" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2191,7 +2208,6 @@
                 <ScalarProperty Name="HideBreakBoundType" ColumnName="HideBreakBoundType" />
                 <ScalarProperty Name="HideConvertDiscAmtToFreeItem" ColumnName="HideConvertDiscAmtToFreeItem" />
                 <ScalarProperty Name="HideDiscAmtBonus" ColumnName="HideDiscAmtBonus" />
-                <ScalarProperty Name="HideDiscSeqSolomon" ColumnName="HideDiscSeqSolomon" />
                 <ScalarProperty Name="HideInvtIDSolomon" ColumnName="HideInvtIDSolomon" />
                 <ScalarProperty Name="HideDiscPrice" ColumnName="HideDiscPrice" />
                 <ScalarProperty Name="HideCopy" ColumnName="HideCopy" />
@@ -2199,6 +2215,8 @@
                 <ScalarProperty Name="HideSiteSolomon" ColumnName="HideSiteSolomon" />
                 <ScalarProperty Name="HideReIndustryAndTrade" ColumnName="HideReIndustryAndTrade" />
                 <ScalarProperty Name="HideGetFreeItem" ColumnName="HideGetFreeItem" />
+                <ScalarProperty Name="CheckDiscSeq" ColumnName="CheckDiscSeq" />
+                <ScalarProperty Name="HideDiscSeqSolomon" ColumnName="HideDiscSeqSolomon" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2513,6 +2531,14 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM21100_ppPromotionsCopy" FunctionName="eBiz4DWebAppModel.Store.OM21100_ppPromotionsCopy" />
+          <FunctionImportMapping FunctionImportName="OM21100_pdCheckDiscSeq" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdCheckDiscSeq">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_pdCheckDiscSeq_Result">
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

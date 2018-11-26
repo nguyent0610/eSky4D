@@ -742,6 +742,36 @@ var Main = {
             }
         },
 
+        checkDiscSeq: function (item) {
+            if (item == 'no') {
+                App.cboDiscSeq.setValue('');
+                App.stoSubBreakItem.reload();
+                App.chkAutoFreeItem.enable();
+                App.chkDonateGroupProduct.enable();
+                App.chkConvertDiscAmtToFreeItem.enable();
+                App.stoDiscSeqInfo.reload();
+                var enddate = new Date(1900, 01, 1);
+                App.dteEndDate.setMinValue(enddate);
+                App.colQtyLimit.hide();
+                App.colPerStockAdvance.hide();
+                App.colQtyStockAdvance.hide();
+            }
+            else {
+                if (HQ.util.passNull(App.cboDiscSeq.getValue()) != _seqLoad) {
+                    App.chkAutoFreeItem.enable();
+                    App.chkDonateGroupProduct.enable();
+                    App.chkConvertDiscAmtToFreeItem.enable();
+                    App.stoDiscSeqInfo.reload();
+                    var enddate = new Date(1900, 01, 1);
+                    App.dteEndDate.setMinValue(enddate);
+                    App.colQtyLimit.hide();
+                    App.colPerStockAdvance.hide();
+                    App.colQtyStockAdvance.hide();
+                }
+                App.stoSubBreakItem.reload();
+            }
+        },
+
         deleteDisc: function (item) {
             if (item == 'yes') {
                 if (HQ.isDelete) {
@@ -2408,6 +2438,7 @@ var DiscDefintion = {
             //App.cboDiscSeq.store.clearFilter();
             if (HQ.util.passNull(cbo.getValue()) != _discLoad && !cbo.hasFocus) {
                 App.stoDiscInfo.reload();
+                App.stoCheckDiscSeq.reload();
                 App.cboDiscSeq.store.load(function () {
                     if (App.cboDiscSeq.store.getCount()) {
                         var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
@@ -2434,6 +2465,7 @@ var DiscDefintion = {
 
         cboDiscID_select: function (cbo, newValue, oldValue, eOpts) {
             App.stoDiscInfo.reload();
+            App.stoCheckDiscSeq.reload();
             App.cboDiscSeq.store.load(function () {
                 if (App.cboDiscSeq.store.getCount()) {
                     var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
@@ -2723,6 +2755,27 @@ var DiscDefintion = {
                 //App.chkDonateGroupProduct.enable();
             }
             App.stoSubBreakItem.reload();
+        },
+
+        cboDiscSeq_Blur: function (cbo, newValue, oldValue, eOpts) {
+            var obj = HQ.store.findInStore(App.stoCheckDiscSeq, ['DiscSeq'], [App.cboDiscSeq.getValue()]);
+            if (obj != undefined && HQ.checkDiscSeq) {
+                HQ.message.show(2018112611, [App.cboDiscSeq.getValue()], 'Main.Process.checkDiscSeq', true);
+            }
+            else {
+                if (HQ.util.passNull(cbo.getValue()) != _seqLoad && !cbo.hasFocus) {
+                    App.chkAutoFreeItem.enable();
+                    App.chkDonateGroupProduct.enable();
+                    App.chkConvertDiscAmtToFreeItem.enable();
+                    App.stoDiscSeqInfo.reload();
+                    var enddate = new Date(1900, 01, 1);
+                    App.dteEndDate.setMinValue(enddate);
+                    App.colQtyLimit.hide();
+                    App.colPerStockAdvance.hide();
+                    App.colQtyStockAdvance.hide();
+                }
+                App.stoSubBreakItem.reload();
+            }            
         },
 
         cboDiscSeq_select: function (cbo, newValue, oldValue, eOpts) {
