@@ -271,6 +271,7 @@
           <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
           <Property Type="Boolean" Name="allowOwer" Nullable="true" />
           <Property Type="Boolean" Name="ShowCountSiteID" Nullable="true" />
+          <Property Type="Boolean" Name="AllowExcel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SA00000_pgCompanyAddr_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -461,6 +462,7 @@
                 <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
                 <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
                 <ScalarProperty Name="ShowCountSiteID" ColumnName="ShowCountSiteID" />
+                <ScalarProperty Name="AllowExcel" ColumnName="AllowExcel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

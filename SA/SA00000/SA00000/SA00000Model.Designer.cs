@@ -2474,6 +2474,30 @@ namespace SA00000
         private Nullable<global::System.Boolean> _ShowCountSiteID;
         partial void OnShowCountSiteIDChanging(Nullable<global::System.Boolean> value);
         partial void OnShowCountSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowExcel
+        {
+            get
+            {
+                return _AllowExcel;
+            }
+            set
+            {
+                OnAllowExcelChanging(value);
+                ReportPropertyChanging("AllowExcel");
+                _AllowExcel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowExcel");
+                OnAllowExcelChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowExcel;
+        partial void OnAllowExcelChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowExcelChanged();
 
         #endregion
 

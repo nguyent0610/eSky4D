@@ -54,6 +54,10 @@ var firstLoad = function () {
     App.btnSalesState.setVisible(HQ.showSalesState);
     App.btnSalesDistrict.setVisible(HQ.showSalesState);
     App.txtSalesStateDescr.setVisible(HQ.showSalesState);
+
+    App.btnImport.setVisible(HQ.showExcel);
+    App.btnExport.setVisible(HQ.showExcel);
+
     App.txtSalesDistrictDescr.allowBlank = !HQ.showSalesState;
     App.txtSalesStateDescr.allowBlank = !HQ.showSalesState;
     App.cboOwner.allowBlank = !HQ.allowOwer;
@@ -950,4 +954,52 @@ var cboBranchOld_Change = function() {
     App.cboSlsperID.store.reload();
     App.cboTDisplayID.store.reload();
     App.cboAccumulatedID.store.reload();
+}
+
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'SA00000/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+          
+        },
+        success: function (msg, data) {
+            var filePath = data.result.filePath;
+            if (filePath) {
+                window.location = "SA00000/Download?filePath=" + filePath + "&fileName=data_";
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+            HQ.common.showBusy(false);
+        }
+    });
+
+}
+
+var btnImport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: HQ.common.getLang("WaitMsg"),
+        url: 'SA00000/Import',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        success: function (msg, data) {
+            HQ.common.showBusy(false);
+
+            if (this.result.data.message) {
+                HQ.message.show('2013103001', [this.result.data.message], '', true);
+            }
+            else {
+                HQ.message.process(msg, data, true);
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+            App.btnImport.reset();
+            HQ.common.showBusy(false);
+        }
+    });
 }
