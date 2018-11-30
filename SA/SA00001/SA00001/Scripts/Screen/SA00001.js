@@ -148,9 +148,18 @@ var menuClick = function (command) {
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
-    App.frmMain.isValid();
+    
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    checkLoad();    
+    checkLoad();
+    if (HQ.showCreditChkRule) {
+        App.CreditChkRuleDescr.show();
+        //App.cboCheckCreditRule.allowBlank = false;
+    }
+    else {
+        App.CreditChkRuleDescr.hide();
+        //App.cboCheckCreditRule.allowBlank = true;
+    }
+    App.frmMain.isValid();
 };
 
 var frmChange = function () {
@@ -371,10 +380,15 @@ var btnEdit_Click = function (record) {
         App.tabDetail.child('#pnlProcess').tab.hide();
     }
 
-    //App.stoForm.reload();
-    //HQ.isFirstLoad = true;
-    //frmChange();
-    //key = true;
+    if (HQ.showCreditChkRule) {
+        App.cboCheckCreditRule.show();
+        App.cboCheckCreditRule.allowBlank = false;
+    }
+    else {
+        App.cboCheckCreditRule.hide();
+        App.cboCheckCreditRule.allowBlank = true;
+    }
+    App.cboCheckCreditRule.isValid();
 };
 
 var btnLocationCancel_Click = function () {
@@ -1185,4 +1199,18 @@ var btnAdd_Click = function () {
 
 var btnCancel_Click = function () {
     App.winUsers.hide();
+};
+
+var creditChkRule_render = function (value) {
+    var record = HQ.store.findRecord(App.cboCreditChkRulegrd.store, ["Code"], [value]);
+    return (record) ? record.data.Descr : value;
+};
+
+var stringCreditChkRule = function (record) {
+    if (this.dataIndex == 'State') {
+        App.cboCreditChkRulegrd.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboCreditChkRulegrd.store, "Code", "Descr");
+    }
+
+    return HQ.grid.filterString(record, this);
 };

@@ -49,6 +49,7 @@
           <Property Name="CountSiteID" Type="int" />
           <Property Name="DateStopUsing" Type="datetime" />
           <Property Name="ReasonStopUsing" Type="nvarchar(max)" />
+          <Property Name="CreditChkRule" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -253,6 +254,7 @@
           <Property Type="Boolean" Name="allowOwer" Nullable="true" />
           <Property Type="Int32" Name="ShowProccess" Nullable="false" />
           <Property Type="Boolean" Name="CountSiteID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowCreditChkRule" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SA00001_pgLoadUsers_Result">
           <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
@@ -294,6 +296,8 @@
           <Property Type="String" Name="SAManager" Nullable="true" />
           <Property Type="DateTime" Name="DateStopUsing" Nullable="true" Precision="23" />
           <Property Type="String" Name="ReasonStopUsing" Nullable="true" />
+          <Property Type="String" Name="CreditChkRule" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="CreditChkRuleDescr" Nullable="true" MaxLength="16" />
         </ComplexType>
         <EntityType Name="SYS_Company">
           <Key>
@@ -339,6 +343,7 @@
           <Property Name="CountSiteID" Type="Int32" />
           <Property Name="DateStopUsing" Type="DateTime" Precision="3" />
           <Property Name="ReasonStopUsing" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreditChkRule" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -435,6 +440,7 @@
                 <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
                 <ScalarProperty Name="ShowProccess" ColumnName="ShowProccess" />
                 <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
+                <ScalarProperty Name="ShowCreditChkRule" ColumnName="ShowCreditChkRule" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -485,12 +491,15 @@
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
                 <ScalarProperty Name="DateStopUsing" ColumnName="DateStopUsing" />
                 <ScalarProperty Name="ReasonStopUsing" ColumnName="ReasonStopUsing" />
+                <ScalarProperty Name="CreditChkRule" ColumnName="CreditChkRule" />
+                <ScalarProperty Name="CreditChkRuleDescr" ColumnName="CreditChkRuleDescr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="SYS_Company">
             <EntityTypeMapping TypeName="SA00001Model.SYS_Company">
               <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="CreditChkRule" ColumnName="CreditChkRule" />
                 <ScalarProperty Name="ReasonStopUsing" ColumnName="ReasonStopUsing" />
                 <ScalarProperty Name="DateStopUsing" ColumnName="DateStopUsing" />
                 <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />

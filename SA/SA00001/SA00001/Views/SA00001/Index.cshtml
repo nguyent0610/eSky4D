@@ -38,8 +38,8 @@
         HQ.allowOwer = HQ.util.toBool('@ViewBag.allowOwer');
         HQ.CountSiteID = HQ.util.toBool('@ViewBag.CountSiteID');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
-
-        HQ.allowProccess = parseInt('@ViewBag.AllowProccess');
+        HQ.showCreditChkRule = HQ.util.toBool('@ViewBag.showCreditChkRule');
+        HQ.allowProccess = parseInt('@ViewBag.AllowProccess'); 
     </script>  
     <title>@ViewBag.Title</title>
 </head>

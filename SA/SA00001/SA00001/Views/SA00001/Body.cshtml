@@ -63,24 +63,12 @@
                 ,X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(100)
                 // 
         //Them Ngay ngung su dung
-                    , X.DateColumn().Text(Util.GetLang("SA00001DateStop")).DataIndex("DateStopUsing").Width(100)
-                    , X.Column().Text(Util.GetLang("SA00001ReasonStop")).DataIndex("ReasonStopUsing").Width(100)
-                
-                //,X.Column().Text(Util.GetLang("Address1")).DataIndex("Address1").Width(200)            
+                , X.DateColumn().Text(Util.GetLang("SA00001DateStop")).DataIndex("DateStopUsing").Width(100)
+                , X.Column().Text(Util.GetLang("SA00001ReasonStop")).DataIndex("ReasonStopUsing").Width(100)         
 
-                    , X.Column().DataIndex("SAManager").Hidden(true)
+                , X.Column().DataIndex("SAManager").Hidden(true)
 
-                    , X.Column().Text(Util.GetLang("tableHD")).DataIndex("tableHD").Width(200)  
-
-                //,X.Column().Text(Util.GetLang("tableTA")).DataIndex("tableTA").Width(200)  
-
-                //,X.Column().Text(Util.GetLang("Station")).DataIndex("Station").Width(200)
-
-                //,X.Column().Text(Util.GetLang("BrandQSR")).DataIndex("BrandQSR").Width(200)        
-
-                //,X.Column().Text(Util.GetLang("IP")).DataIndex("IP").Width(200)  
-
-                //,X.Column().Text(Util.GetLang("Port")).DataIndex("Port").Width(200)  
+                , X.Column().Text(Util.GetLang("tableHD")).DataIndex("tableHD").Width(200)  
 
                 ,X.Column().Text(Util.GetLang("Tel")).DataIndex("Tel").Width(100)
 
@@ -116,20 +104,18 @@
 
                 ,X.Column().Text(Util.GetLang("Email")).DataIndex("Email").Width(200)//.Hidden(true)
 
-                ,X.Column().Text(Util.GetLang("SA00001OWNER")).DataIndex("Owner").Width(200).Hidden(true)
+                ,X.Column().Text(Util.GetLang("SA00001OWNER")).DataIndex("Owner").Width(110).Hidden(true)
 
-                ,X.Column().Text(Util.GetLang("Plant")).DataIndex("Plant").Width(200).Hidden(true)
+                ,X.Column().Text(Util.GetLang("Plant")).DataIndex("Plant").Width(110).Hidden(true)
 
-                ,X.Column().Text(Util.GetLang("Deposit")).DataIndex("Deposit").Width(200)//.Hidden(true)
+                ,X.Column().Text(Util.GetLang("Deposit")).DataIndex("Deposit").Width(110)//.Hidden(true)
 
-                ,X.Column().Text(Util.GetLang("CreditLimit")).DataIndex("CreditLimit").Width(200)//.Hidden(true)
+                ,X.Column().Text(Util.GetLang("CreditLimit")).DataIndex("CreditLimit").Width(110)//.Hidden(true)
 
-                ,X.Column().Text(Util.GetLang("MaxValue")).DataIndex("MaxValue").Width(200).Hidden(true)
+                ,X.Column().Text(Util.GetLang("MaxValue")).DataIndex("MaxValue").Width(110).Hidden(true)
 
-                //,X.Column().Text(Util.GetLang("Lat")).DataIndex("lat").Width(150)
-
-                //,X.Column().Text(Util.GetLang("Lng")).DataIndex("lng").Width(150)
-
+                , X.Column().Text(Util.GetLang("CreditChkRule")).DataIndex("CreditChkRuleDescr").Width(110).ID("CreditChkRuleDescr")
+                   
                 , X.CommandColumn().Width(130)
                 .Commands(
                     X.GridCommand()
@@ -193,7 +179,8 @@
                         X.StringFilter().DataIndex("Plant"),
                         X.NumericFilter().DataIndex("Deposit"),
                         X.NumericFilter().DataIndex("CreditLimit"),
-                        X.StringFilter().DataIndex("Tel")
+                        X.StringFilter().DataIndex("Tel"),
+                        X.StringFilter().DataIndex("CreditChkRuleDescr")
                     )
             )
 
@@ -246,7 +233,7 @@
                                         ,HQ.TextBox().ID("txtCpnyName").Name("txtCpnyName").HQLangCode("CpnyName").DataIndex("CpnyName").MaxLength(200).EnforceMaxLength(true).Width(315).AllowBlank(false)
                                     )
 
-                                ,X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                                ,X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0")
                                     .Items(
                                      HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("SA00001_pcStatus").HQDBSys(true).LabelWidth(130)
                                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status").ForceSelection(true)
@@ -529,6 +516,29 @@
                                     , HQ.NumberField().ID("CountSiteID").Name("CountSiteID").HQLangCode("SA00001CountSiteID").MarginSpec("5 0 0 0").Width(600).MinValue(0).MaxValue(4).DecimalPrecision(0).AllowBlank(false).LabelWidth(130)
 
                                     , HQ.NumberField().ID("MaxValue").Name("MaxValue").HQLangCode("SA0000MaxValue").MarginSpec("5 0 20 0").Width(600).MinValue(0).DecimalPrecision(0).Hidden(true).LabelWidth(130)
+                                    
+                                    , HQ.Combo().ID("cboCheckCreditRule")
+                                        .HQLangCode("CreditChkRule").MarginSpec("5 5 0 0").Name("CreditChkRule").LabelWidth(130)
+                                        .HQProcedure("SA00001_pcCreditChkRule").HQColumnShow("Code,Descr").Width(600)
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .ForceSelection(true)
+                                        .AllowBlank(false)
+                                        .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },                                            
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                        .LoadData()
+                                        .Listeners(lst =>
+                                        {
+                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        })
+                                    
+                                    
+                                    
+                                    
                                 )
                             )
                        )

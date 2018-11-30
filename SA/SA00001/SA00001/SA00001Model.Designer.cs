@@ -1506,6 +1506,30 @@ namespace SA00001
         private global::System.String _ReasonStopUsing;
         partial void OnReasonStopUsingChanging(global::System.String value);
         partial void OnReasonStopUsingChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CreditChkRule
+        {
+            get
+            {
+                return _CreditChkRule;
+            }
+            set
+            {
+                OnCreditChkRuleChanging(value);
+                ReportPropertyChanging("CreditChkRule");
+                _CreditChkRule = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CreditChkRule");
+                OnCreditChkRuleChanged();
+            }
+        }
+        private global::System.String _CreditChkRule;
+        partial void OnCreditChkRuleChanging(global::System.String value);
+        partial void OnCreditChkRuleChanged();
 
         #endregion
 
@@ -2873,6 +2897,30 @@ namespace SA00001
         private Nullable<global::System.Boolean> _CountSiteID;
         partial void OnCountSiteIDChanging(Nullable<global::System.Boolean> value);
         partial void OnCountSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowCreditChkRule
+        {
+            get
+            {
+                return _ShowCreditChkRule;
+            }
+            set
+            {
+                OnShowCreditChkRuleChanging(value);
+                ReportPropertyChanging("ShowCreditChkRule");
+                _ShowCreditChkRule = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowCreditChkRule");
+                OnShowCreditChkRuleChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowCreditChkRule;
+        partial void OnShowCreditChkRuleChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowCreditChkRuleChanged();
 
         #endregion
 
@@ -3883,6 +3931,54 @@ namespace SA00001
         private global::System.String _ReasonStopUsing;
         partial void OnReasonStopUsingChanging(global::System.String value);
         partial void OnReasonStopUsingChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CreditChkRule
+        {
+            get
+            {
+                return _CreditChkRule;
+            }
+            set
+            {
+                OnCreditChkRuleChanging(value);
+                ReportPropertyChanging("CreditChkRule");
+                _CreditChkRule = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CreditChkRule");
+                OnCreditChkRuleChanged();
+            }
+        }
+        private global::System.String _CreditChkRule;
+        partial void OnCreditChkRuleChanging(global::System.String value);
+        partial void OnCreditChkRuleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CreditChkRuleDescr
+        {
+            get
+            {
+                return _CreditChkRuleDescr;
+            }
+            set
+            {
+                OnCreditChkRuleDescrChanging(value);
+                ReportPropertyChanging("CreditChkRuleDescr");
+                _CreditChkRuleDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CreditChkRuleDescr");
+                OnCreditChkRuleDescrChanged();
+            }
+        }
+        private global::System.String _CreditChkRuleDescr;
+        partial void OnCreditChkRuleDescrChanging(global::System.String value);
+        partial void OnCreditChkRuleDescrChanged();
 
         #endregion
 

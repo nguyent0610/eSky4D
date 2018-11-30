@@ -32,7 +32,7 @@ namespace SA00001.Controllers
             bool allowAddress2 = false;
             bool allowOwer = false;
             bool CountSiteID = false;
-
+            bool showCreditChkRule = false;
 
             var objConfig = _db.SA00001_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -42,7 +42,7 @@ namespace SA00001.Controllers
                 allowAddress2= objConfig.allowAddress2.HasValue ? objConfig.allowAddress2.Value : false;
                 allowOwer = objConfig.allowOwer.HasValue ? objConfig.allowOwer.Value : false;
                 CountSiteID = objConfig.CountSiteID.HasValue ? objConfig.CountSiteID.Value : false;
-
+                showCreditChkRule = objConfig.ShowCreditChkRule.HasValue ? objConfig.ShowCreditChkRule.Value : false;
                 ViewBag.AllowProccess = objConfig.ShowProccess;
             }
 
@@ -51,6 +51,7 @@ namespace SA00001.Controllers
             ViewBag.allowAddress2 = allowAddress2;
             ViewBag.allowOwer = allowOwer;
             ViewBag.CountSiteID = CountSiteID;
+            ViewBag.showCreditChkRule = showCreditChkRule;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -249,6 +250,7 @@ namespace SA00001.Controllers
             t.CountSiteID = s.CountSiteID;
             t.DateStopUsing = s.DateStopUsing;
             t.ReasonStopUsing = s.ReasonStopUsing;
+            t.CreditChkRule = s.CreditChkRule;
 
         }
 
