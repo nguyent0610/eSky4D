@@ -117,7 +117,7 @@
                     .Text(Util.GetLang("SI21700_DescrState"))
                     .DataIndex("DescrState")
                         .Flex(1)
-// Quận
+// Mã Quận
                 , X.Column().Text(Util.GetLang("SI21700_District")) 
                     .DataIndex("District")
                         .Flex(1) 
@@ -148,6 +148,7 @@
                         .Listeners(l => { l.Command.Handler = "grdSI_District_Reject(record);"; })
             )
             .SelectionModel(X.RowSelectionModel().ID("slmSI_District").Mode(SelectionMode.Multi))
+            .Listeners(ls => ls.Select.Fn ="grdSI_District_Select")
             .BottomBar(
                 X.PagingToolbar()
                 .Items(
@@ -169,8 +170,7 @@
                     ls.BeforeEdit.Fn = "grdSI_District_BeforeEdit";
                     ls.Edit.Fn = "grdSI_District_Edit";
                     ls.Edit.Fn = "grdStateClassDetail_Edit";
-                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit";  
-                                    
+                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit"; 
                 })
             )
             .Features(

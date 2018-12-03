@@ -57,6 +57,7 @@ namespace SI21700.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_District"]);
                 ChangeRecords<SI21700_pgLoadDistrict_Result> lstSI_District = dataHandler.BatchObjectData<SI21700_pgLoadDistrict_Result>();
+
                 foreach (SI21700_pgLoadDistrict_Result deleted in lstSI_District.Deleted)
                 {
                     if (lstSI_District.Created.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).Count() > 0)
@@ -79,9 +80,7 @@ namespace SI21700.Controllers
                 foreach (SI21700_pgLoadDistrict_Result curDistrict in lstSI_District.Created)
                 {
                     if (curDistrict.Country.PassNull() == "" && curDistrict.State.PassNull() == "" && curDistrict.District.PassNull() == "") continue;
-
                     var District = _db.SI_District.Where(p => p.Country.ToLower() == curDistrict.Country.ToLower() && p.State.ToLower() == curDistrict.State.ToLower() && p.District.ToLower() == curDistrict.District.ToLower()).FirstOrDefault();
-
                     if (District != null)
                     {
                         if (District.tstamp.ToHex() == curDistrict.tstamp.ToHex())
@@ -140,8 +139,20 @@ namespace SI21700.Controllers
         [HttpPost]
         public ActionResult CheckDelete(FormCollection data)
         {
+            string District = data["District"];
+            List<SI_Ward> lstSI_Ward = new List<SI_Ward>();// khai báo dữ liệu bảng
+            List<SI_RightsByDataGeography> lstSI_RightsByDataGeography = new List<SI_RightsByDataGeography>(); // khai báo dữ liệu bảng
+            
             try
             {
+                lstSI_Ward = _db.SI_Ward.ToList();
+                lstSI_RightsByDataGeography = _db.SI_RightsByDataGeography.ToList();
+                var record = lstSI_Ward.Where(p => p.District == District).FirstOrDefault(); // Lấy District của Grid so sánh database
+               // var record2 = lstSI_RightsByDataGeography.Where(p => p.District == District).FirstOrDefault();
+                if (record != null)
+                {
+                    throw new MessageException(MessageType.Message, "2018113050");
+                }
                 string lstIndexRow = data["lstIndexColum"];
                 string lstCountry = data["lstCountry"];
                 string lstState = data["lstState"];
@@ -205,6 +216,7 @@ namespace SI21700.Controllers
                 string errorCountry = string.Empty;
                 string errorCountryduplicate = string.Empty;
                 string errorStateduplicate = string.Empty;
+                string errorHaveData = string.Empty;
                 string errorState = string.Empty;
                 string errorDistrict = string.Empty;
                 string errorDistrictRegex = string.Empty;
@@ -295,9 +307,15 @@ namespace SI21700.Controllers
                                         flagCheck = true;
                                     }
                                 }
-                                if (_db.SI_State.FirstOrDefault(p => p.State == State) != null)// Phải trùng //State
+                                if (_db.SI_State.FirstOrDefault(p => p.State != State) == null)// Phải trùng //State
                                 {
                                     errorStateduplicate += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                var record2 = lstSI_District.Where(p => p.State == State && p.District == District).FirstOrDefault();
+                                if(record2 != null)
+                                {
+                                    errorHaveData += (i + 1).ToString() + ",";
                                     flagCheck = true;
                                 }
                                 
@@ -330,6 +348,7 @@ namespace SI21700.Controllers
                             message += errorName == "" ? "" : string.Format(Message.GetString("2018102401", null), Util.GetLang("SI21700_Name"), errorName);
                             message += errorCountryduplicate == "" ? "" : string.Format(Message.GetString("2018102402", null), Util.GetLang("SI21700_Country"), errorCountryduplicate);
                             message += errorStateduplicate == "" ? "" : string.Format(Message.GetString("2018102402", null), Util.GetLang("SI21700_State"), errorStateduplicate);  //không được nhập ký tự đặc biệt
+                            message += errorHaveData == "" ? "" : string.Format(Message.GetString("2018102404", null), Util.GetLang("SI21700_District"), errorHaveData);
                             message += errorDistrictRegex == "" ? "" : string.Format(Message.GetString("2018102403", null), Util.GetLang("SI21700_District"), errorDistrictRegex);
                                         
                             if (message == "" || message == string.Empty)

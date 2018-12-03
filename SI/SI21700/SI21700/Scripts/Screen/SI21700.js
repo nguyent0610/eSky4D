@@ -1,6 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 //var screenNbr = 'SI21700';
 var keys = ['State'];
+var _District = "";
 var fieldsCheckRequire = ["Country", "State", "District", "Name"];
 var fieldsLangCheckRequire = ["SI21700_Country", "SI21700_State", "SI21700_District", "SI21700_Name"];
 
@@ -129,9 +130,13 @@ var stoSI_District_Load = function (sto) {
         HQ.common.showBusy(false);
     }
 };
-
+var grdSI_District_Select = function (slm, selRec, idx, eOpts)
+{
+    debugger
+    _District = selRec.data.District;
+}
 var grdSI_District_BeforeEdit = function (editor, e) {
-    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;   
 };
 
 var grdSI_District_Edit = function (item, e) {
@@ -169,12 +174,6 @@ var save = function () {
     }
 };
 
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdSI_District.deleteSelected();
-        frmChange();
-    }
-};
 
 var deleteData = function (item) {
     if (item == "yes") {
@@ -183,14 +182,16 @@ var deleteData = function (item) {
         var lstCountry = '';
         var lstState = '';
         var lstDistrict = '';
+        var District = '';
         var lstSelete = App.grdSI_District.selModel.selected;
         for (var i = 0; i < lstSelete.length; i++) {
             indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
             lstCountry = check + lstSelete.items[i].data.Country + ",";
             lstState = check + lstSelete.items[i].data.State + ",";
             lstDistrict = check + lstSelete.items[i].data.District + ",";
+            District = check + lstSelete.items[i].data.District;
         }
-        checkDeleteData(indexcolum, lstCountry, lstState, lstDistrict);
+        checkDeleteData(indexcolum, lstCountry, lstState, lstDistrict, District);
     }
 };
 /////////////////////////////////////////
@@ -204,18 +205,19 @@ function refresh(item) {
     }
 };
 
-var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict) {
-
+var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict, District) {
+    debugger
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI21700/CheckDelete',
             params: {
-                lstIndexColum: indexColum,
+                indexColum: indexcolum,
                 lstCountry: lstCountry,
                 lstState: lstState,
-                lstDistrict: lstDistrict
+                lstDistrict: lstDistrict,
+                District : District
             },
             success: function (msg, data) {
                 App.grdSI_District.deleteSelected();
@@ -269,6 +271,7 @@ var btnImport_Click = function (sender, e) {
                 else {
                     HQ.message.process(msg, data, true);
                 }
+                App.stoSI_District.reload();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
