@@ -444,13 +444,13 @@ namespace IN10200.Controllers
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnt"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(data["cboWhseLoc"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10200_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
-                List<IN10200_pgIssueLoad_Result> lstDetail = _app.IN10200_pgIssueLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
+                List<IN10200_pgIssueLoad_Result> lstDetail = _app.IN10200_pgIssueLoad(data["BatNbr"].PassNull(), branchID, "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
                 masterData.Cells.ImportDataTable(dt, true, 1, 26, false);
 
