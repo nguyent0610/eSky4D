@@ -23,6 +23,7 @@
           <Property Name="Unit" Type="nvarchar" MaxLength="15" />
           <Property Name="Price" Type="float" />
           <Property Name="DiscCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscountPct" Type="float" />
         </EntityType>
         <EntityType Name="IN_Kit">
           <Key>
@@ -81,12 +82,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="IN20800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN20800Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="IN20800_pgLoadIN_Kit" ReturnType="Collection(IN20800Model.IN20800_pgLoadIN_Kit_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="KitID" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="IN20800_pdConfig" ReturnType="Collection(IN20800Model.IN20800_pdConfig_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -110,23 +105,20 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="IN_Kit" EntityType="IN20800Model.IN_Kit" />
+          <FunctionImport Name="IN20800_pgLoadIN_Kit" ReturnType="Collection(IN20800Model.IN20800_pgLoadIN_Kit_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="KitID" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="IN_Component" EntityType="IN20800Model.IN_Component" />
         </EntityContainer>
-        <ComplexType Name="IN20800_pgLoadIN_Kit_Result">
-          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
-          <Property Type="Double" Name="ComponentQty" Nullable="false" />
-          <Property Type="String" Name="Unit" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-          <Property Type="Double" Name="Price" Nullable="true" />
-          <Property Type="String" Name="DiscCode" Nullable="false" MaxLength="10" />
-        </ComplexType>
         <ComplexType Name="IN20800_pdConfig_Result">
           <Property Type="Boolean" Name="Price" Nullable="true" />
           <Property Type="Boolean" Name="Pack" Nullable="true" />
           <Property Type="Boolean" Name="ShowPriceType" Nullable="true" />
           <Property Type="Boolean" Name="ShowCheckDuration" Nullable="true" />
+          <Property Type="Boolean" Name="ShowDiscountPct" Nullable="true" />
         </ComplexType>
         <ComplexType Name="IN20800_pdCheckKit_Result">
           <Property Type="Boolean" Name="CheckKit" Nullable="true" />
@@ -155,6 +147,17 @@
           <Property Name="FromDate" Type="DateTime" Precision="0" />
           <Property Name="ToDate" Type="DateTime" Precision="0" />
         </EntityType>
+        <ComplexType Name="IN20800_pgLoadIN_Kit_Result">
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="ComponentQty" Nullable="false" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="Price" Nullable="true" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="DiscCode" Nullable="false" MaxLength="10" />
+          <Property Type="Double" Name="DiscountPct" Nullable="true" />
+        </ComplexType>
         <EntityType Name="IN_Component">
           <Key>
             <PropertyRef Name="KitID" />
@@ -173,6 +176,7 @@
           <Property Name="Unit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" />
           <Property Name="DiscCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscountPct" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -180,20 +184,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN20800Entities" >
-          <FunctionImportMapping FunctionImportName="IN20800_pgLoadIN_Kit" FunctionName="eBiz4DWebSysModel.Store.IN20800_pgLoadIN_Kit">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pgLoadIN_Kit_Result">
-                <ScalarProperty Name="KitID" ColumnName="KitID" />
-                <ScalarProperty Name="ComponentID" ColumnName="ComponentID" />
-                <ScalarProperty Name="ComponentQty" ColumnName="ComponentQty" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="DiscCode" ColumnName="DiscCode" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN20800_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdConfig">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdConfig_Result">
@@ -201,6 +191,7 @@
                 <ScalarProperty Name="Pack" ColumnName="Pack" />
                 <ScalarProperty Name="ShowPriceType" ColumnName="ShowPriceType" />
                 <ScalarProperty Name="ShowCheckDuration" ColumnName="ShowCheckDuration" />
+                <ScalarProperty Name="ShowDiscountPct" ColumnName="ShowDiscountPct" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -241,9 +232,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20800_pgLoadIN_Kit" FunctionName="eBiz4DWebSysModel.Store.IN20800_pgLoadIN_Kit">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pgLoadIN_Kit_Result">
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+                <ScalarProperty Name="ComponentID" ColumnName="ComponentID" />
+                <ScalarProperty Name="ComponentQty" ColumnName="ComponentQty" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="DiscCode" ColumnName="DiscCode" />
+                <ScalarProperty Name="DiscountPct" ColumnName="DiscountPct" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="IN_Component">
             <EntityTypeMapping TypeName="IN20800Model.IN_Component">
               <MappingFragment StoreEntitySet="IN_Component">
+                <ScalarProperty Name="DiscountPct" ColumnName="DiscountPct" />
                 <ScalarProperty Name="DiscCode" ColumnName="DiscCode" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />

@@ -32,6 +32,7 @@ namespace IN20800.Controllers
             bool Pack = false;
             bool showPricetype = false;
             bool showCheckDuration = false;
+            bool showDiscountPct = false;
             var objConfig = _db.IN20800_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -39,11 +40,13 @@ namespace IN20800.Controllers
                 Pack = objConfig.Pack.HasValue ? objConfig.Pack.Value : false;
                 showPricetype = objConfig.ShowPriceType.HasValue ? objConfig.ShowPriceType.Value:false;
                 showCheckDuration = objConfig.ShowCheckDuration.HasValue ? objConfig.ShowCheckDuration.Value : false;
+                showDiscountPct = objConfig.ShowDiscountPct.HasValue ? objConfig.ShowDiscountPct.Value : false;
             }
             ViewBag.showPricetype = showPricetype;
             ViewBag.Price = Price;
             ViewBag.Pack = Pack;
             ViewBag.showCheckDuration = showCheckDuration;
+            ViewBag.showDiscountPct = showDiscountPct;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -258,7 +261,7 @@ namespace IN20800.Controllers
             t.ComponentQty = s.ComponentQty;
             t.Unit = s.Unit;
             t.Price = s.Price;
-
+            t.DiscountPct = s.DiscountPct;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

@@ -125,58 +125,6 @@ namespace IN20800
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="kitID">No Metadata Documentation available.</param>
-        public ObjectResult<IN20800_pgLoadIN_Kit_Result> IN20800_pgLoadIN_Kit(global::System.String cpnyID, global::System.String userID, Nullable<global::System.Int16> langID, global::System.String kitID)
-        {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            ObjectParameter kitIDParameter;
-            if (kitID != null)
-            {
-                kitIDParameter = new ObjectParameter("KitID", kitID);
-            }
-            else
-            {
-                kitIDParameter = new ObjectParameter("KitID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<IN20800_pgLoadIN_Kit_Result>("IN20800_pgLoadIN_Kit", cpnyIDParameter, userIDParameter, langIDParameter, kitIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
         public ObjectResult<IN20800_pdConfig_Result> IN20800_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
@@ -357,6 +305,58 @@ namespace IN20800
             }
     
             return base.ExecuteFunction<IN20800_ptKitID_Result>("IN20800_ptKitID", cpnyIDParameter, userIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="kitID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20800_pgLoadIN_Kit_Result> IN20800_pgLoadIN_Kit(global::System.String cpnyID, global::System.String userID, Nullable<global::System.Int16> langID, global::System.String kitID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter kitIDParameter;
+            if (kitID != null)
+            {
+                kitIDParameter = new ObjectParameter("KitID", kitID);
+            }
+            else
+            {
+                kitIDParameter = new ObjectParameter("KitID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN20800_pgLoadIN_Kit_Result>("IN20800_pgLoadIN_Kit", cpnyIDParameter, userIDParameter, langIDParameter, kitIDParameter);
         }
 
         #endregion
@@ -729,6 +729,30 @@ namespace IN20800
         private global::System.String _DiscCode;
         partial void OnDiscCodeChanging(global::System.String value);
         partial void OnDiscCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> DiscountPct
+        {
+            get
+            {
+                return _DiscountPct;
+            }
+            set
+            {
+                OnDiscountPctChanging(value);
+                ReportPropertyChanging("DiscountPct");
+                _DiscountPct = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscountPct");
+                OnDiscountPctChanged();
+            }
+        }
+        private Nullable<global::System.Double> _DiscountPct;
+        partial void OnDiscountPctChanging(Nullable<global::System.Double> value);
+        partial void OnDiscountPctChanged();
 
         #endregion
 
@@ -1295,6 +1319,30 @@ namespace IN20800
         private Nullable<global::System.Boolean> _ShowCheckDuration;
         partial void OnShowCheckDurationChanging(Nullable<global::System.Boolean> value);
         partial void OnShowCheckDurationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowDiscountPct
+        {
+            get
+            {
+                return _ShowDiscountPct;
+            }
+            set
+            {
+                OnShowDiscountPctChanging(value);
+                ReportPropertyChanging("ShowDiscountPct");
+                _ShowDiscountPct = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowDiscountPct");
+                OnShowDiscountPctChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowDiscountPct;
+        partial void OnShowDiscountPctChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowDiscountPctChanged();
 
         #endregion
 
@@ -1434,6 +1482,30 @@ namespace IN20800
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Double> Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Price;
+        partial void OnPriceChanging(Nullable<global::System.Double> value);
+        partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String Descr
         {
             get
@@ -1480,30 +1552,6 @@ namespace IN20800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Price
-        {
-            get
-            {
-                return _Price;
-            }
-            set
-            {
-                OnPriceChanging(value);
-                ReportPropertyChanging("Price");
-                _Price = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Price");
-                OnPriceChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Price;
-        partial void OnPriceChanging(Nullable<global::System.Double> value);
-        partial void OnPriceChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String DiscCode
@@ -1524,6 +1572,30 @@ namespace IN20800
         private global::System.String _DiscCode;
         partial void OnDiscCodeChanging(global::System.String value);
         partial void OnDiscCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> DiscountPct
+        {
+            get
+            {
+                return _DiscountPct;
+            }
+            set
+            {
+                OnDiscountPctChanging(value);
+                ReportPropertyChanging("DiscountPct");
+                _DiscountPct = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscountPct");
+                OnDiscountPctChanged();
+            }
+        }
+        private Nullable<global::System.Double> _DiscountPct;
+        partial void OnDiscountPctChanging(Nullable<global::System.Double> value);
+        partial void OnDiscountPctChanged();
 
         #endregion
 

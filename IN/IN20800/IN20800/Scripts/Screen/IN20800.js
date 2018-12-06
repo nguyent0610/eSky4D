@@ -50,6 +50,13 @@ var firstLoad = function () {
     else {
         App.chkDuration.setVisible(false);
     }
+
+    if (HQ.showDiscountPct) {
+        App.colDiscountPct.show();
+    }
+    else {
+        App.colDiscountPct.hide();
+    }
     //App.txtKitName.setReadOnly(true);
     //HQ.common.showBusy(false);
 };

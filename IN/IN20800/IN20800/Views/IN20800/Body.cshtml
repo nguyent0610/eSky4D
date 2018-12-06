@@ -262,6 +262,8 @@
                     .LoadData()
                 )
                 
+                , X.NumberColumn().Text(Util.GetLang("IN20800DiscountPct")).DataIndex("DiscountPct").ID("colDiscountPct").Width(150).Format("0,000.00").Editor(Html.X().NumberField().MinValue(0).MaxValue(100)).Align(Alignment.Right)
+                
                 , X.CommandColumn()
                 .Width(150)
                 .Commands(
@@ -309,6 +311,9 @@
                         X.StringFilter().DataIndex("ComponentID"),
                         X.StringFilter().DataIndex("Descr"),
                         X.NumericFilter().DataIndex("ComponentQty"),
+                        X.NumericFilter().DataIndex("DiscountPct"),
+                        X.StringFilter().DataIndex("DiscCode"),
+                        X.NumericFilter().DataIndex("Price"),
                         X.StringFilter().DataIndex("Unit")
                             )
                     )
