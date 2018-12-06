@@ -255,6 +255,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\AR10400\Index.cshtml" />
     <Content Include="Views\AR10400\Body.cshtml" />
+    <Content Include="Views\AR10400\Popup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

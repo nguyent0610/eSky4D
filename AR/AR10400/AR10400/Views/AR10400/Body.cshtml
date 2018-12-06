@@ -55,8 +55,10 @@
                         new StoreParameter() { Name = "@ScreenNbr", Value = ViewBag.Title, Mode = ParameterMode.Value }
                     })
                     .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                         {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                             lst.Change.Fn = "cboBatNbr_Change";
 
                         })
@@ -100,18 +102,16 @@
                         .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection()
-                    {
-                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.value", Mode = ParameterMode.Raw },
-                        //@Role nay sua sau
-                        
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    })
+                        {
+                            new StoreParameter() { Name = "@Status", Value = "App.cboStatus.value", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
                         .LoadData()
                         .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
 
-                            })
+                        })
 
                         , HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
                         .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
@@ -147,7 +147,7 @@
                                 
 
                                 //CustID (customer ID)
-                             HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR10400_pcCustomer")
+                             HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR10400_pcCustomer").ForceSelection(true)
                             .HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId").DataIndex("CustID")
                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                             .HQDBSys(false)
@@ -155,20 +155,21 @@
                              {
                                 new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                              })
+                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .LoadData()
                             .Listeners(lst =>
                                 {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                     lst.Change.Fn = "cboCustId_Change";
                                 })   
 
 
                                 //Doctype     
-                                ,HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AR10400_pcDocType")
+                                ,HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AR10400_pcDocType").ForceSelection(true)
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("AdjgDocType").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false)//.HQValue("PP",false)
-                                //.MaxLength(30).EnforceMaxLength(true)
-                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -176,7 +177,7 @@
                                 .LoadData()
                                 .Listeners(lst =>
                                     {
-                                        //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                         lst.Change.Fn = "cboDocType_Change";
                                         //lst.Focus.Fn = "Focus1_Change";
                                     })
@@ -264,16 +265,14 @@
                                     .Frame(true)
                                     .AnchorHorizontal("100%")
                                     .AnchorVertical("100%")
-                                    //.Height(320)
-                                    //.Width(1400)
-                                    //.Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                        
                                     .Title(Util.GetLang("ASSIGNINGDOC"))
                                     .RenderTo("contentCenter")
                                     .AutoScroll(true)
                                     .View(X.GridView().TrackOver(false))
                                     .ID("grdAdjusting").SetAutoScroll(true)
                                     .StoreID("storeGrid1")
-                                    //.Hidden(true)
+          
                                     .SortableColumns(false)
                                     .Listeners(l =>
                                             {
@@ -282,16 +281,7 @@
                                                 l.BeforeEdit.Fn = "Focus1_Change";
                                                 l.CellClick.Fn = "Focus1_Change";
                                             })
-                                    //.Features(
-                                    //               Html.X().GridFilters()//Filter
-                                    //                   .Local(true)
-                                    //                       .Filters(
-                                    //                            Html.X().StringFilter().DataIndex("CpnyID"),
-                                    //                            Html.X().StringFilter().DataIndex("CpnyName")
-
-                                                                                             //                       )
-
-                                                                                             //           )       
+                     
                                     .ColumnModel(
                                         Html.X().RowNumbererColumn().ID("RowNumber1")
 
@@ -302,9 +292,9 @@
                                                 .Listeners(l => l.Change.Fn = "AdjustingCheckAll_Change")//bat thay doi khi check vao o tren header
                                                 )
                                                 .Listeners(l => l.CheckChange.Fn = "AdjustingCheckEveryRow_Change") // bat thay doi khi check vao tung o ben duoi
-                                                
-                                                
-                                                , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format("dd-MM-yyyy")
+
+
+                                                    , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format(Current.FormatDate)
                                                 .Editor(Html.X().DateField().ID("txtDocDateGrid1").Format("dd-MM-yyyy").Editable(false)
                                                 .Listeners(lst =>
                                                 {
@@ -318,24 +308,25 @@
 
                                               , Html.X().Column().ID("txtBatNbrGrid1").Text(Util.GetLang("BatNbr")).DataIndex("BatNbr").Width(150)
                                               .Editor(Html.X().TextField())
-                                              
-                                              , Html.X().Column().ID("txtRefNbrGrid1").Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Width(150)
+
+                                            , Html.X().Column().ID("txtRefNbrGrid1").Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Width(150)
                                               .Editor(Html.X().TextField())
-                                              
-                                              , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid1").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150)
-                                            .Editor(Html.X().TextField()
+
+                                            , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid1").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150).Align(Alignment.Right)
+                                            .Editor(
+                                                X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                             .Listeners(lst =>
                                                 {
                                                     lst.Change.Fn = "txtPaymentGrid1_change";
                                                 })
                                             )
+
+
+                                            , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid1").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150).Align(Alignment.Right)
+                                            .Editor(X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0))
                                             
-                                            
-                                              , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid1").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150)
-                                            .Editor(Html.X().TextField())
-                                            
-                                            , Html.X().Column().ID("txtCustIDGrid1").Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
-                                              .Editor(Html.X().TextField())
+                                            , Html.X().Column().ID("txtCustIDGrid1").Text(Util.GetLang("CustID")).DataIndex("CustId").Width(150)
+                                              //.Editor(Html.X().TextField())
                                               
                                               , Html.X().Column().ID("txtDescrGrid1").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                                               .Editor(Html.X().TextField())
@@ -363,11 +354,11 @@
                                     {
                                         l.Command.Handler = "grd_Reject(record);";
                                     })
-                                //ngoac ket thuc ColumnModel
+                   
                                  )
                                  .SelectionModel(Html.X().RowSelectionModel().ID("slmGrid1").Mode(SelectionMode.Multi))
                                   .Plugins(
-                                    Html.X()//Cho phep edit )
+                                    Html.X()
                                         .CellEditing()
                                         .ClicksToEdit(1)
                                         .Listeners(ls =>
@@ -379,23 +370,36 @@
 
                                         })
                                 //ngoac ket thuc Plugin        
-                                )
+                                )          
+                                .Features(
+                                    X.GridFilters()
+                                        .Local(true)
+                                        .Filters(
+                                            X.BooleanFilter().DataIndex("Selected")
+                                            , X.DateFilter().DataIndex("DocDate")
+                                            , X.StringFilter().DataIndex("InvcNbr")
+                                            , X.StringFilter().DataIndex("BatNbr")
+                                            , X.StringFilter().DataIndex("RefNbr")
+                                            , X.NumericFilter().DataIndex("Payment")
+                                            , X.NumericFilter().DataIndex("DocBal")
+                                            , X.StringFilter().DataIndex("CustId")
+                                            , X.StringFilter().DataIndex("Descr")
+                                            )
+                                        )
 
                                 , Html.X().GridPanel()
                                      .Layout(LayoutType.Fit)
                                     .Frame(true)
                                      .AnchorHorizontal("100%")
                                     .AnchorVertical("100%")
-                                    //.Height(320)
-                                    //.Width(1400)
-                                    //.Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                            
                                     .Title(Util.GetLang("ASSIGNEDDOC"))
                                     .RenderTo("contentCenter")
                                     .AutoScroll(true)
                                     .View(X.GridView().TrackOver(false))
                                     .ID("grdAdjusted").SetAutoScroll(true)
                                     .StoreID("storeGrid2")
-                                    //.Hidden(true)
+                       
                                     .SortableColumns(false)
                                     .Listeners(l =>
                                             {
@@ -404,16 +408,6 @@
                                                 l.BeforeEdit.Fn = "Focus2_Change";
                                                 l.CellClick.Fn = "Focus2_Change";
                                             })
-                                    //.Features(
-                                    //               Html.X().GridFilters()//Filter
-                                    //                   .Local(true)
-                                    //                       .Filters(
-                                    //                            Html.X().StringFilter().DataIndex("CpnyID"),
-                                    //                            Html.X().StringFilter().DataIndex("CpnyName")
-
-                                                                                             //                       )
-
-                                                                                             //           )       
                                         .ColumnModel(
                                         Html.X().RowNumbererColumn().ID("RowNumber2")
 
@@ -424,9 +418,9 @@
                                                 .Listeners(l => l.Change.Fn = "AdjustedCheckAll_Change")  //bat thay doi khi check vao o tren header
                                                 )
                                                 .Listeners(l => l.CheckChange.Fn = "AdjustedCheckEveryRow_Change") // bat thay doi khi check vao tung o ben duoi
-                                                
-                                                , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format("dd-MM-yyyy")
-                                                .Editor(Html.X().DateField().ID("txtDocDateGrid2").Format("dd-MM-yyyy").Editable(false)
+
+                                                    , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format(Current.FormatDate)
+                                                .Editor(Html.X().DateField().ID("txtDocDateGrid2").Format(Current.FormatDate).Editable(false)
                                                 .Listeners(lst =>
                                                 {
 
@@ -442,19 +436,19 @@
                                               
                                               , Html.X().Column().ID("txtRefNbrGrid2").Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Width(150)
                                               .Editor(Html.X().TextField())
-                                              
-                                              , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid2").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150)
-                                            .Editor(Html.X().TextField()
+
+                                            , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid2").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150).Align(Alignment.Right)
+                                            .Editor(X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                             .Listeners(lst =>
                                                 {
                                                     lst.Change.Fn = "txtPaymentGrid2_change";
                                                 })
                                             )
-                                              , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid12").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150)
-                                            .Editor(Html.X().TextField())
-                                            
-                                            , Html.X().Column().ID("txtCustIDGrid2").Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
-                                              .Editor(Html.X().TextField())
+                                            , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid12").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150).Align(Alignment.Right)
+                                            .Editor(X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0))
+
+                                                , Html.X().Column().ID("txtCustIDGrid2").Text(Util.GetLang("CustID")).DataIndex("CustId").Width(150)
+                                              //.Editor(Html.X().TextField())
                                               
                                               , Html.X().Column().ID("txtDescrGrid2").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                                               .Editor(Html.X().TextField())
@@ -498,26 +492,26 @@
 
                                         })
                         //ngoac ket thuc Plugin        
-                                )
-                                
-                                
-                                
-                                
-                                
+                                )          .Features(
+                                    X.GridFilters()
+                                        .Local(true)
+                                        .Filters(
+                                            X.BooleanFilter().DataIndex("Selected")
+                                            , X.DateFilter().DataIndex("DocDate")
+                                            , X.StringFilter().DataIndex("InvcNbr")
+                                            , X.StringFilter().DataIndex("BatNbr")
+                                            , X.StringFilter().DataIndex("RefNbr")
+                                            , X.NumericFilter().DataIndex("Payment")
+                                            , X.NumericFilter().DataIndex("DocBal")
+                                            , X.StringFilter().DataIndex("CustId")
+                                            , X.StringFilter().DataIndex("Descr")
+                                        )
+                                    )
                             //ngoac ket thuc tat ca tab
                             )
-         
                             //ngoac ngoai TabGrid bao gom Grid cua ca 2 tab
                             )
-     
-                    
                 )
-
                 )
-
-
-
-
-
     )
  

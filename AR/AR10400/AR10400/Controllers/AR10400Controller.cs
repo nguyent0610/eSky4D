@@ -18,10 +18,16 @@ namespace AR10400.Controllers
     {
         string screenNbr = "AR10400";
         AR10400Entities _db = Util.CreateObjectContext<AR10400Entities>(false);
-        
 
-        public ActionResult Index()
+
+        public ActionResult Index(string branchID)
         {
+            if (branchID == null)
+            {
+                return View("Popup");
+            }
+
+            ViewBag.BranchID = branchID;
             return View();
         }
 
@@ -44,8 +50,7 @@ namespace AR10400.Controllers
 
         public ActionResult GetDataGrid1(String batNbr,String branchID, String custID,String docType)
         {
-            var lst = _db.AR10400_pgLoadGridAdjg(batNbr, branchID, custID, docType);
-
+            var lst = _db.AR10400_pgLoadGridAdjg(batNbr, branchID, custID, docType).ToList();
             return this.Store(lst);
         }
 
@@ -71,11 +76,7 @@ namespace AR10400.Controllers
 
             var docDate = data["txtDocDate"];
             var toAmt = data["txtCuryCrTot"];
-            //var tmpGridChangeOrNot = 0;
-            ////var invcDate = data["txtInvcDate"];
-
-
-            //var batNbrIfNull = 0;
+ 
             var tmpBatNbr = "";
 
 
@@ -101,7 +102,7 @@ namespace AR10400.Controllers
             foreach (Batch createdForm in lstheaderTop.Created)
             {
                 
-                var objHeaderBatNbr = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr).FirstOrDefault();
+                var objHeaderBatNbr = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr);
                 if (objHeaderBatNbr == null)
                 {
                     objHeaderBatNbr = new Batch();
@@ -109,7 +110,6 @@ namespace AR10400.Controllers
                     objHeaderBatNbr.Module = "AR";
                     objHeaderBatNbr.BatNbr = functionBatNbrIfNull(branchID); //ham tu dong tao ra BatNbr
                     objHeaderBatNbr.Descr = createdForm.Descr;
-
 
                     tmpBatNbr = objHeaderBatNbr.BatNbr;
 
@@ -337,19 +337,9 @@ namespace AR10400.Controllers
                         }
                     }
                ////ngoac dong dk branchID != null
-               // }
-               // else  // branchID == null tuc tao moi
-               // {
-
-
-               // }
+    
 
             }
-
-
-
-
-
 
 
 
@@ -389,29 +379,6 @@ namespace AR10400.Controllers
             _db.SaveChanges();
             return this.Direct();
         }
-
-        //[DirectMethod]
-        //public ActionResult DeleteFormBotAP_Doc(string refNbr, string batNbr, string branchID)
-        //{
-        //    var recordBotAP_Doc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr);
-
-        //    if (recordBotAP_Doc != null)
-        //    {
-        //        _db.AP_Doc.DeleteObject(recordBotAP_Doc);
-        //        var recordGridTrans = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
-        //        if (recordGridTrans != null)
-        //        {
-        //            for (int i = 0; i < recordGridTrans.Count; i++)
-        //            {
-        //                _db.AP_Trans.DeleteObject(recordGridTrans[i]);
-        //            }
-        //        }
-        //    }
-        //    _db.SaveChanges();
-        //    return this.Direct();
-        //}
-
-
 
 
 
