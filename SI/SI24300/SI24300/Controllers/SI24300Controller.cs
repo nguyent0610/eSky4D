@@ -13,6 +13,7 @@ using System.Text;
 using HQFramework.DAL;
 using System.Drawing;
 using Aspose.Cells;
+using System.Text.RegularExpressions;
 namespace SI24300.Controllers
 {
     [DirectController]
@@ -181,6 +182,7 @@ namespace SI24300.Controllers
                                         flagCheck = true;
                                     }
                                 }
+                                
                                 if (district == "")
                                 {
                                     errorDistrict += (i + 1).ToString() + ",";
@@ -332,6 +334,7 @@ namespace SI24300.Controllers
                     string.Format("{0}", Util.GetLang("ExSI24300")),
                     TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
                 SheetData.Cells.Merge(0, 0, 1, 6);
+                Range range;
                 #endregion
                 for (int colIdx = 0; colIdx < ColTexts.Count; colIdx++)
                 {
@@ -353,6 +356,40 @@ namespace SI24300.Controllers
                     }
                  
                 }
+
+                StyleFlag flag1 = new StyleFlag();
+                Style colStyleCrush = SheetData.Cells[allColumns.IndexOf("State")].GetStyle();
+                colStyleCrush.Font.Color = Color.Black;
+                colStyleCrush.IsLocked = false;
+                colStyleCrush.Number = 49;
+                flag1.FontColor = true;
+                flag1.NumberFormat = true;
+                flag1.Locked = true;
+                range = SheetData.Cells.CreateRange(Getcell(allColumns.IndexOf("State")) + 2, Getcell(allColumns.IndexOf("State")) + 10000);
+                range.ApplyStyle(colStyleCrush, flag1);
+
+                flag1 = new StyleFlag();
+                colStyleCrush = SheetData.Cells[allColumns.IndexOf("District")].GetStyle();
+                colStyleCrush.Font.Color = Color.Black;
+                colStyleCrush.IsLocked = false;
+                colStyleCrush.Number = 49;
+                flag1.FontColor = true;
+                flag1.NumberFormat = true;
+                flag1.Locked = true;
+                range = SheetData.Cells.CreateRange(Getcell(allColumns.IndexOf("District")) + 2, Getcell(allColumns.IndexOf("District")) + 10000);
+                range.ApplyStyle(colStyleCrush, flag1);
+
+                flag1 = new StyleFlag();
+                colStyleCrush = SheetData.Cells[allColumns.IndexOf("Ward")].GetStyle();
+                colStyleCrush.Font.Color = Color.Black;
+                colStyleCrush.IsLocked = false;
+                colStyleCrush.Number = 49;
+                flag1.FontColor = true;
+                flag1.NumberFormat = true;
+                flag1.Locked = true;
+                range = SheetData.Cells.CreateRange(Getcell(allColumns.IndexOf("Ward")) + 2, Getcell(allColumns.IndexOf("Ward")) + 10000);
+                range.ApplyStyle(colStyleCrush, flag1);
+
                 SheetData.Cells.Columns[allColumns.IndexOf("State")].Width = 20;
                 SheetData.Cells.Columns[allColumns.IndexOf("District")].Width = 30;
                 SheetData.Cells.Columns[allColumns.IndexOf("Ward")].Width = 20;
@@ -400,6 +437,34 @@ namespace SI24300.Controllers
             }
             c.SetStyle(style);
         }
-      
+        private string Getcell(int column)
+        {
+            bool flag = false;
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string cell = "";
+            while (column / 26 >= 1)
+            {
+                cell += ABC.Substring((column / 26) - 1, 1);
+                column = column - 26;
+                flag = true;
+
+            }
+            if (column % 26 != 0)
+            {
+                cell += ABC.Substring(column % 26, 1);
+            }
+            else
+            {
+                if (column % 26 == 0)
+                {
+                    //if (flag)
+                    //{
+                    cell += ABC.Substring(0, 1);
+                }
+            }
+
+            return cell;
+        }
+
     }
 }

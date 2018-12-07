@@ -154,7 +154,7 @@ var grdSI_Ward_ValidateEdit = function (item, e) {
         state = e.value;
         App.cboDistrict.store.reload();
     }
-    return HQ.grid.checkValidateEdit(App.grdSI_Ward, e, keys);
+    return checkValidateEdit(App.grdSI_Ward, e, keys);
 };
 
 var grdSI_Ward_Reject = function (record) {
@@ -255,3 +255,47 @@ function refresh(item) {
         App.stoSI_Ward.reload();
     }
 };
+var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {
+    if (keys.indexOf(e.field) != -1) {
+        var regex = /^(\w*(\d|[a-zA-Z]|[\_@()!#$%^&()~`+-=]))*$/;
+        if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+        if (isCheckSpecialChar) {
+            if (e.value)
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+        }
+        if (checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
+
+    }
+};
+var checkDuplicate = function (grd, row, keys) {
+    var found = false;
+    var store = grd.getStore();
+    if (keys == undefined) keys = row.record.idProperty.split(',');
+    var allData = store.snapshot || store.allData || store.data;
+    for (var i = 0; i < allData.items.length; i++) {
+        var record = allData.items[i];
+        var data = '';
+        var rowdata = '';
+        for (var jkey = 0; jkey < keys.length; jkey++) {
+            if (record.data[keys[jkey]] != undefined) {
+                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                if (row.field == keys[jkey])
+                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                else
+                    rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
+            }
+        }
+        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            break;
+        };
+    }
+    return found;
+}
