@@ -2048,11 +2048,11 @@ namespace OM21100.Controllers
 
             foreach (var deleted in lstDiscCustClassChange.Deleted)
             {
-                var deletedDiscItem = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.ClassID);
-                if (deletedDiscItem != null)
+                var deletedDiscCustClass = _db.OM_DiscCustClass.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.ClassID == deleted.ClassID);
+                if (deletedDiscCustClass != null)
                 {
-                    _db.OM_DiscItem.DeleteObject(deletedDiscItem);
+                    _db.OM_DiscCustClass.DeleteObject(deletedDiscCustClass);
                 }
             }
 
