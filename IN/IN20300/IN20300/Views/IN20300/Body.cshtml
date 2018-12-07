@@ -28,7 +28,7 @@
             X.Panel()
             .Region(Region.North)
             .ID("frmLeft")
-            
+
             .Items(
                     X.Container().Layout(LayoutType.HBox)
                     .Items(
@@ -47,10 +47,10 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();}";
                         })
                         .LoadData()
-                    
-                         ,HQ.Checkbox().Name("AllowedSales").HQLangCode("IN20300AllowedSales").MarginSpec("5 0 0 5").ID("chkAllowedSales")
+
+                         , HQ.Checkbox().Name("AllowedSales").HQLangCode("IN20300AllowedSales").MarginSpec("5 0 0 5").ID("chkAllowedSales")
                     )
-                    ,X.Container().Layout(LayoutType.HBox)
+                    , X.Container().Layout(LayoutType.HBox)
                     .Items(
                          HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
                         .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
@@ -66,11 +66,11 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Change.Fn = "cboSiteId_Change";
-                                    lst.Select.Fn = "cboSiteId_Select";        
+                                    lst.Select.Fn = "cboSiteId_Select";
                                 })
-                        ,HQ.Checkbox().Name("Public").HQLangCode("IN20300Active").MarginSpec("5 0 0 5")        
-                                
-                     )       
+                        , HQ.Checkbox().Name("Public").HQLangCode("IN20300Active").MarginSpec("5 0 0 5")
+
+                     )
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").AllowBlank(false)
                             .Width(500).MarginSpec("0 0 5 0").MaxLength(200).EnforceMaxLength(true).DataIndex("Name")
 
@@ -88,8 +88,12 @@
                         .LoadData()
                         .Listeners(lst =>
                             {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";  
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
+                    , HQ.NumberField().ID("txtPrioritize").DecimalPrecision(0).HQLangCode("IN20300Prioritize").DataIndex("Prioritize").MinValue(0)
+                    .Listeners(lst => {
+                        lst.Blur.Fn = "txtPrioritize_Blur";
+                    })
 
             )
         , X.TabPanel()
@@ -108,13 +112,13 @@
                         .Items(
                             HQ.TextBox().ID("txtWhKeeper").Name("txtWhKeeper").HQLangCode("WhKeeper").DataIndex("WhKeeper")
                                 .MaxLength(200).EnforceMaxLength(true).MarginSpec("5 0 0 0").Width(350)
-                                
+
                             , HQ.TextBox().ID("txtAddress1").Name("txtAddress1").HQLangCode("Address1").DataIndex("Addr1")
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
-                                
+
                             , HQ.TextBox().ID("txtAddress2").Name("txtAddress2").HQLangCode("Address2").DataIndex("Addr2")
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
-                                
+
                             , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("IN20300_pcCountry")
                             .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
@@ -127,7 +131,7 @@
                                 lst.Change.Fn = "cboCountry_Changed";
                                 lst.Focus.Handler = "this.forceSelection = true;";
                             })
-                            // cboCountry                    
+        // cboCountry                    
 
                             , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("IN20300_pcStateByCountry")
                             .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
@@ -181,102 +185,103 @@
                             }) // cboDistrict
                             , HQ.TextBox().ID("txtZipCode").Name("txtZipCode").HQLangCode("Zip Code").DataIndex("Zip")
                                 .MaxLength(10).EnforceMaxLength(true).MarginSpec("5 0 0 0").HQControlFocus("").Width(350)
-                                .Listeners(lst => {
-                                
-                            })
+                                .Listeners(lst =>
+                                {
+
+                                })
                             , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax")
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
-                                 
+
                             , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
-                                
-                            , HQ.TextBox().ID("txtEmailAddr").Name("txtEmailAddr").HQLangCode("EmailAddr").DataIndex("EmailAddress")                             
+
+                            , HQ.TextBox().ID("txtEmailAddr").Name("txtEmailAddr").HQLangCode("EmailAddr").DataIndex("EmailAddress")
                             .Width(350).MarginSpec("5 0 0 0").MaxLength(300).EnforceMaxLength(true)
-                            
+
                         )
                     )
                 )
-                
+
             //, X.Panel()
-            //        .ID("tabCpny")
-            //        .Layout(LayoutType.Border)
-            //        .Region(Region.Center)
-            //        .Hidden(true)
-            //        .Title(Util.GetLang("AppComp"))
-            //        .Padding(5)
-            //        .CloseAction(CloseAction.Hide)
-            //        .Items(
-            //            X.GridPanel()
-            //                .Frame(true)
-            //                .Region(Region.Center)
-            //                .AnchorHorizontal("100%")
-            //                .AnchorVertical("100%")
-            //                .Scroll(ScrollMode.Both)
-            //                .ID("grdCompany")
-            //                .StoreID("stoCompany")
-            //                .ColumnModel(
-            //                                X.RowNumbererColumn()
-            //                                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(120)
-            //                                                    .Editor(HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-            //                                                            .HQLangCode("CpnyID").HQDBSys(false).HQProcedure("IN20300_pcCpnybyUsername")
-            //                                                            .HQColumnShow("CpnyID,CpnyName")
-            //                                                            .DisplayField("CpnyID")
-            //                                                            .ValueField("CpnyID")
-            //                                                            .HQHeightWidth(400, 300)
-            //                                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-            //                                                            .HQParam(new StoreParameterCollection()
-            //                                                            {
-            //                                                                new StoreParameter() { Name = "@username", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
-            //                                                            })
-            //                                                            .Listeners(lst =>
-            //                                                            {
-            //                                                                //lst.Change.Fn = "cboCpnyID_Changed";
-            //                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-            //                                                                lst.Focus.Fn = "grdCpny_focus";
-            //                                                            })
-            //                                                            .LoadData()
+        //        .ID("tabCpny")
+        //        .Layout(LayoutType.Border)
+        //        .Region(Region.Center)
+        //        .Hidden(true)
+        //        .Title(Util.GetLang("AppComp"))
+        //        .Padding(5)
+        //        .CloseAction(CloseAction.Hide)
+        //        .Items(
+        //            X.GridPanel()
+        //                .Frame(true)
+        //                .Region(Region.Center)
+        //                .AnchorHorizontal("100%")
+        //                .AnchorVertical("100%")
+        //                .Scroll(ScrollMode.Both)
+        //                .ID("grdCompany")
+        //                .StoreID("stoCompany")
+        //                .ColumnModel(
+        //                                X.RowNumbererColumn()
+        //                                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(120)
+        //                                                    .Editor(HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+        //                                                            .HQLangCode("CpnyID").HQDBSys(false).HQProcedure("IN20300_pcCpnybyUsername")
+        //                                                            .HQColumnShow("CpnyID,CpnyName")
+        //                                                            .DisplayField("CpnyID")
+        //                                                            .ValueField("CpnyID")
+        //                                                            .HQHeightWidth(400, 300)
+        //                                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+        //                                                            .HQParam(new StoreParameterCollection()
+        //                                                            {
+        //                                                                new StoreParameter() { Name = "@username", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+        //                                                            })
+        //                                                            .Listeners(lst =>
+        //                                                            {
+        //                                                                //lst.Change.Fn = "cboCpnyID_Changed";
+        //                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+        //                                                                lst.Focus.Fn = "grdCpny_focus";
+        //                                                            })
+        //                                                            .LoadData()
 
             //                                                            )
-            //                                , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyID").Width(150)
-            //                                .Renderer("renderCpnyName")
-            //                                .Listeners(lst =>
-            //                                                            {                                                                            
-            //                                                                lst.Focus.Fn = "grdCpny_focus";
-            //                                                            })
-            //                                , X.CommandColumn().Width(120).Commands(X.GridCommand().Text(Util.GetLang("Reject"))
-            //                                                                                                .ToolTip(t =>
-            //                                                                                                {
-            //                                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
-            //                                                                                                })
-            //                                                                                                .CommandName("reject")
-            //                                                                                                .Icon(Icon.ArrowUndo)
-            //                                                                                        )
-            //                                                                                        .PrepareToolbar(t =>
-            //                                                                                        {
-            //                                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-            //                                                                                        })
-            //                                                                                        .Listeners(l =>
-            //                                                                                        {
-            //                                                                                            l.Command.Handler = "record.reject();";
-            //                                                                                            l.Focus.Fn = "grdCpny_focus";
-            //                                                                                        })
-            //                            )
-            //                    .Listeners(lst =>
-            //                    {
-            //                        lst.Edit.Fn = "grdCompany_Edit";
-            //                        lst.BeforeEdit.Fn = "grdCompany_BeforeEdit";
-            //                        lst.ValidateEdit.Fn = "grdCompany_ValidateEdit";
-            //                        lst.Focus.Fn = "grdCpny_focus";
-            //                        lst.ItemClick.Handler = "focus = '1'";
-            //                    })
-            //                    .SelectionModel(X.RowSelectionModel().ID("SelectModelIN20300_pcCpnybyUsername").Mode(SelectionMode.Multi))
-            //                .Plugins(X.CellEditing().ClicksToEdit(1))//Cho phep edit )                                 
-            //        )
-            //        .Listeners(lst =>
-            //                    {                                    
-            //                        lst.Focus.Fn = "grdCpny_focus";                                                                        
-            //                    })
-            //// Tabpanel
+        //                                , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyID").Width(150)
+        //                                .Renderer("renderCpnyName")
+        //                                .Listeners(lst =>
+        //                                                            {                                                                            
+        //                                                                lst.Focus.Fn = "grdCpny_focus";
+        //                                                            })
+        //                                , X.CommandColumn().Width(120).Commands(X.GridCommand().Text(Util.GetLang("Reject"))
+        //                                                                                                .ToolTip(t =>
+        //                                                                                                {
+        //                                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
+        //                                                                                                })
+        //                                                                                                .CommandName("reject")
+        //                                                                                                .Icon(Icon.ArrowUndo)
+        //                                                                                        )
+        //                                                                                        .PrepareToolbar(t =>
+        //                                                                                        {
+        //                                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+        //                                                                                        })
+        //                                                                                        .Listeners(l =>
+        //                                                                                        {
+        //                                                                                            l.Command.Handler = "record.reject();";
+        //                                                                                            l.Focus.Fn = "grdCpny_focus";
+        //                                                                                        })
+        //                            )
+        //                    .Listeners(lst =>
+        //                    {
+        //                        lst.Edit.Fn = "grdCompany_Edit";
+        //                        lst.BeforeEdit.Fn = "grdCompany_BeforeEdit";
+        //                        lst.ValidateEdit.Fn = "grdCompany_ValidateEdit";
+        //                        lst.Focus.Fn = "grdCpny_focus";
+        //                        lst.ItemClick.Handler = "focus = '1'";
+        //                    })
+        //                    .SelectionModel(X.RowSelectionModel().ID("SelectModelIN20300_pcCpnybyUsername").Mode(SelectionMode.Multi))
+        //                .Plugins(X.CellEditing().ClicksToEdit(1))//Cho phep edit )                                 
+        //        )
+        //        .Listeners(lst =>
+        //                    {                                    
+        //                        lst.Focus.Fn = "grdCpny_focus";                                                                        
+        //                    })
+        //// Tabpanel
 
         )
     )

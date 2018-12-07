@@ -8,6 +8,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "IN20300";
     var acc = Session["IN20300"] as AccessRight;
 }
@@ -33,6 +34,7 @@
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.allowedSales = HQ.util.toBool('@ViewBag.allowedSales');
+        HQ.prioritize = HQ.util.toBool('@ViewBag.prioritize');
         //HQ.isUpdate = false;
         //HQ.isInsert = true;
         //HQ.isDelete = true;
@@ -68,7 +70,17 @@
                 l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";                   
             })
-      )           
+      )  
+        @(HQ.Store().ID("stoCheckPrioritize").HQProcedure("IN20300_ppCheckPrioritize")
+            .HQParam(new StoreParameterCollection()
+                {
+                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                }).LoadData())
+
+         
         @{Html.RenderAction("Body", new { lang=Current.LangID});}   
     
 </body>

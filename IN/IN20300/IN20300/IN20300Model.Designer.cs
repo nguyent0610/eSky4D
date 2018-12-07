@@ -273,6 +273,58 @@ namespace IN20300
     
             return base.ExecuteFunction<IN20300_pdConfig_Result>("IN20300_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20300_ppCheckPrioritize_Result> IN20300_ppCheckPrioritize(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN20300_ppCheckPrioritize_Result>("IN20300_ppCheckPrioritize", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter);
+        }
 
         #endregion
 
@@ -304,7 +356,8 @@ namespace IN20300
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="hOCreate">Initial value of the HOCreate property.</param>
-        public static IN_Site CreateIN_Site(global::System.String siteId, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean hOCreate)
+        /// <param name="prioritize">Initial value of the Prioritize property.</param>
+        public static IN_Site CreateIN_Site(global::System.String siteId, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean hOCreate, global::System.Int32 prioritize)
         {
             IN_Site iN_Site = new IN_Site();
             iN_Site.SiteId = siteId;
@@ -316,6 +369,7 @@ namespace IN20300
             iN_Site.LUpd_User = lUpd_User;
             iN_Site.tstamp = tstamp;
             iN_Site.HOCreate = hOCreate;
+            iN_Site.Prioritize = prioritize;
             return iN_Site;
         }
 
@@ -901,6 +955,30 @@ namespace IN20300
         private Nullable<global::System.Boolean> _AllowedSales;
         partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowedSalesChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Prioritize
+        {
+            get
+            {
+                return _Prioritize;
+            }
+            set
+            {
+                OnPrioritizeChanging(value);
+                ReportPropertyChanging("Prioritize");
+                _Prioritize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Prioritize");
+                OnPrioritizeChanged();
+            }
+        }
+        private global::System.Int32 _Prioritize;
+        partial void OnPrioritizeChanging(global::System.Int32 value);
+        partial void OnPrioritizeChanged();
 
         #endregion
 
@@ -1109,6 +1187,135 @@ namespace IN20300
         private Nullable<global::System.Boolean> _AllowedSales;
         partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowedSalesChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Prioritize
+        {
+            get
+            {
+                return _Prioritize;
+            }
+            set
+            {
+                OnPrioritizeChanging(value);
+                ReportPropertyChanging("Prioritize");
+                _Prioritize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Prioritize");
+                OnPrioritizeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Prioritize;
+        partial void OnPrioritizeChanging(Nullable<global::System.Boolean> value);
+        partial void OnPrioritizeChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20300Model", Name="IN20300_ppCheckPrioritize_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20300_ppCheckPrioritize_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN20300_ppCheckPrioritize_Result object.
+        /// </summary>
+        /// <param name="siteId">Initial value of the SiteId property.</param>
+        /// <param name="prioritize">Initial value of the Prioritize property.</param>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        public static IN20300_ppCheckPrioritize_Result CreateIN20300_ppCheckPrioritize_Result(global::System.String siteId, global::System.Int32 prioritize, global::System.String cpnyID)
+        {
+            IN20300_ppCheckPrioritize_Result iN20300_ppCheckPrioritize_Result = new IN20300_ppCheckPrioritize_Result();
+            iN20300_ppCheckPrioritize_Result.SiteId = siteId;
+            iN20300_ppCheckPrioritize_Result.Prioritize = prioritize;
+            iN20300_ppCheckPrioritize_Result.CpnyID = cpnyID;
+            return iN20300_ppCheckPrioritize_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SiteId
+        {
+            get
+            {
+                return _SiteId;
+            }
+            set
+            {
+                OnSiteIdChanging(value);
+                ReportPropertyChanging("SiteId");
+                _SiteId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SiteId");
+                OnSiteIdChanged();
+            }
+        }
+        private global::System.String _SiteId;
+        partial void OnSiteIdChanging(global::System.String value);
+        partial void OnSiteIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Prioritize
+        {
+            get
+            {
+                return _Prioritize;
+            }
+            set
+            {
+                OnPrioritizeChanging(value);
+                ReportPropertyChanging("Prioritize");
+                _Prioritize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Prioritize");
+                OnPrioritizeChanged();
+            }
+        }
+        private global::System.Int32 _Prioritize;
+        partial void OnPrioritizeChanging(global::System.Int32 value);
+        partial void OnPrioritizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                OnCpnyIDChanging(value);
+                ReportPropertyChanging("CpnyID");
+                _CpnyID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CpnyID");
+                OnCpnyIDChanged();
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
 
         #endregion
 
@@ -1130,12 +1337,14 @@ namespace IN20300
         /// <param name="siteId">Initial value of the SiteId property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="hOCreate">Initial value of the HOCreate property.</param>
-        public static IN20300_ppIN_Site_Result CreateIN20300_ppIN_Site_Result(global::System.String siteId, global::System.Byte[] tstamp, global::System.Boolean hOCreate)
+        /// <param name="prioritize">Initial value of the Prioritize property.</param>
+        public static IN20300_ppIN_Site_Result CreateIN20300_ppIN_Site_Result(global::System.String siteId, global::System.Byte[] tstamp, global::System.Boolean hOCreate, global::System.Int32 prioritize)
         {
             IN20300_ppIN_Site_Result iN20300_ppIN_Site_Result = new IN20300_ppIN_Site_Result();
             iN20300_ppIN_Site_Result.SiteId = siteId;
             iN20300_ppIN_Site_Result.tstamp = tstamp;
             iN20300_ppIN_Site_Result.HOCreate = hOCreate;
+            iN20300_ppIN_Site_Result.Prioritize = prioritize;
             return iN20300_ppIN_Site_Result;
         }
 
@@ -1574,6 +1783,30 @@ namespace IN20300
         private Nullable<global::System.Boolean> _AllowedSales;
         partial void OnAllowedSalesChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowedSalesChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Prioritize
+        {
+            get
+            {
+                return _Prioritize;
+            }
+            set
+            {
+                OnPrioritizeChanging(value);
+                ReportPropertyChanging("Prioritize");
+                _Prioritize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Prioritize");
+                OnPrioritizeChanged();
+            }
+        }
+        private global::System.Int32 _Prioritize;
+        partial void OnPrioritizeChanging(global::System.Int32 value);
+        partial void OnPrioritizeChanged();
 
         #endregion
 

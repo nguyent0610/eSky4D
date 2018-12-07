@@ -16,6 +16,7 @@ var checkLoad = function (sto) {
         _Source = 0;
         App.stoIN_Site.reload();
         App.chkAllowedSales.setVisible(HQ.allowedSales);
+        App.txtPrioritize.setVisible(HQ.prioritize);
         HQ.common.showBusy(false);
     }
 };
@@ -101,6 +102,7 @@ var cboBranchID_Change = function (sender, value) {
     SiteId = '';
     if (sender.valueModels != null) {
         App.cboSiteId.store.reload();
+        App.stoCheckPrioritize.reload();
     }
 };
 
@@ -303,3 +305,12 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+var txtPrioritize_Blur = function () {
+    if (App.txtPrioritize.getValue() != 0) {
+        var record = HQ.store.findInStore(App.stoCheckPrioritize, ["Prioritize"], [App.txtPrioritize.getValue()]);
+        if (record != undefined) {
+            App.txtPrioritize.setValue(0);
+            HQ.message.show(2018120760, [App.cboSiteId.getValue(), record.SiteId], '', true);
+        }
+    }
+}

@@ -26,12 +26,15 @@ namespace IN20300.Controllers
         public ActionResult Index()
         {
             var allowedSales = false;
+            var prioritize = false;
             var objConfig = _db.IN20300_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 allowedSales = objConfig.AllowedSales.Value && objConfig.AllowedSales.HasValue;
+                prioritize = objConfig.Prioritize.Value && objConfig.Prioritize.HasValue;
             }
             ViewBag.allowedSales = allowedSales;
+            ViewBag.prioritize = prioritize;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -169,7 +172,7 @@ namespace IN20300.Controllers
             t.Fax = s.Fax;
             t.SiteType = s.SiteType;
             t.AllowedSales = s.AllowedSales;
-
+            t.Prioritize = s.Prioritize;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

@@ -33,6 +33,7 @@
           <Property Name="HOCreate" Type="bit" Nullable="false" />
           <Property Name="SiteType" Type="varchar" MaxLength="2" />
           <Property Name="AllowedSales" Type="bit" />
+          <Property Name="Prioritize" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -56,6 +57,12 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN20300_ppCheckPrioritize" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN20300_ppIN_Site" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -91,6 +98,12 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="IN20300_ppCheckPrioritize" ReturnType="Collection(IN20300Model.IN20300_ppCheckPrioritize_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -115,6 +128,7 @@
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
           <Property Type="String" Name="SiteType" Nullable="true" MaxLength="2" />
           <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
+          <Property Type="Int32" Name="Prioritize" Nullable="false" />
         </ComplexType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -152,9 +166,16 @@
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
           <Property Type="String" Name="SiteType" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="AllowedSales" Type="Boolean" />
+          <Property Name="Prioritize" Type="Int32" Nullable="false" />
         </EntityType>
         <ComplexType Name="IN20300_pdConfig_Result">
           <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
+          <Property Type="Boolean" Name="Prioritize" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN20300_ppCheckPrioritize_Result">
+          <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="Prioritize" Nullable="false" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -191,6 +212,7 @@
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -206,6 +228,7 @@
           <EntitySetMapping Name="IN_Site">
             <EntityTypeMapping TypeName="IN20300Model.IN_Site">
               <MappingFragment StoreEntitySet="IN_Site">
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
                 <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
@@ -237,6 +260,16 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN20300Model.IN20300_pdConfig_Result">
                 <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20300_ppCheckPrioritize" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckPrioritize">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20300Model.IN20300_ppCheckPrioritize_Result">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
