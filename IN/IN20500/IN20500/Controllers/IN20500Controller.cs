@@ -135,8 +135,6 @@ namespace IN20500.Controllers
 
                 StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstCpny"]);
                 var lstCpny = dataHandler2.ObjectData<IN20500_pgIN_InvtCpny_Result>();
-                //StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstCpny"]);
-                //ChangeRecords<IN20500_pgIN_InvtCpny_Result> lstCpny = dataHandler2.BatchObjectData<IN20500_pgIN_InvtCpny_Result>();
 
                 #region Save IN_Inventory
                 var header = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == InvtID);
@@ -311,35 +309,6 @@ namespace IN20500.Controllers
                         _db.IN_InvtCpny.AddObject(objCpny);
                     }
                 }
-
-                //foreach (IN20500_pgIN_InvtCpny_Result deleted in lstCpny.Deleted)
-                //{
-                //    var objDelete = _db.IN_InvtCpny.Where(p => p.InvtID == InvtID
-                //                                            && p.CpnyID == deleted.CpnyID).FirstOrDefault();
-                //    if (objDelete != null)
-                //    {
-                //        _db.IN_InvtCpny.DeleteObject(objDelete);
-                //    }
-                //}
-
-                //lstCpny.Created.AddRange(lstCpny.Updated);
-
-                //foreach (IN20500_pgIN_InvtCpny_Result curLang in lstCpny.Created)
-                //{
-                //    if (InvtID.PassNull() == "" || curLang.CpnyID.PassNull() == "") continue;
-
-                //    var lang = _db.IN_InvtCpny.FirstOrDefault(p => p.InvtID.ToLower() == InvtID.ToLower()
-                //                                                    && p.CpnyID.ToLower() == curLang.CpnyID.ToLower());
-
-                //    if (lang == null)
-                //    {
-                //        lang = new IN_InvtCpny();
-                //        lang.ResetET();
-                //        lang.InvtID = InvtID;
-                //        lang.CpnyID = curLang.CpnyID;
-                //        _db.IN_InvtCpny.AddObject(lang);
-                //    }
-                //}
                 #endregion
 
                 
@@ -413,21 +382,19 @@ namespace IN20500.Controllers
             t.StkWtUnit = s.StkWtUnit;
             t.Style = s.Style;
             t.TaxCat = s.TaxCat;
+            t.KitType = s.KitType;
             t.ValMthd = s.ValMthd;
             t.VendID1 = s.VendID1;
             t.VendID2 = s.VendID2;
             t.LotSerRcptAuto = s.LotSerRcptAuto;
             t.GiftPoint = s.GiftPoint;
-
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = _userName;
-        
+            t.LUpd_User = _userName;        
             if (Handle == string.Empty || Handle == "N")
                 t.ApproveStatus = Status;
             else
                 t.ApproveStatus = Handle;
-
             t.CnvFact = s.CnvFact > 0 ? s.CnvFact : 1;
             t.VideoModifiedDate = s.VideoModifiedDate;
             t.ImageModifiedDate = s.ImageModifiedDate;
@@ -443,7 +410,6 @@ namespace IN20500.Controllers
             me.ToUnit = t.StkUnit;
             me.MultDiv = "M";
             me.CnvFact = 1;
-
             me.LUpd_DateTime = DateTime.Now;
             me.LUpd_Prog = _screenNbr;
             me.LUpd_User = _userName;
@@ -531,7 +497,6 @@ namespace IN20500.Controllers
         {
             var root = new Node() { };
             var nodeType = "I";
-
             var hierarchy = new SI_Hierarchy()
             {
                 RecordID = 0,
@@ -596,9 +561,7 @@ namespace IN20500.Controllers
         [DirectMethod]
         public ActionResult PlayMedia(string fileVideo)
         {
-            //var pathMedia = PathVideo + "\\" + fileVideo;
             var pathMedia = string.Format(@"{0}{1}", PathVideo, fileVideo);
-            //var pathMedia = ".mp4";
             string typeMedia = pathMedia.ToLower().Contains("mp4") ? "type='video/mp4'" : "type='video/wmv'";
             Ext.Net.Window win = new Window
             {
@@ -782,8 +745,6 @@ namespace IN20500.Controllers
                     string pOUnitNull = string.Empty;
                     string sOUnitNull = string.Empty;
                     string taxCatNull = string.Empty;
-
-
                     string invtID = string.Empty;
                     string descr = string.Empty;
                     string classID = string.Empty;
@@ -879,8 +840,7 @@ namespace IN20500.Controllers
                         {
                             taxCatNull += (i + 1) + ", ";
                             flagCheck = true;
-                        }
-                        
+                        }                        
 
                         #endregion
 
@@ -903,7 +863,6 @@ namespace IN20500.Controllers
                                 obj.DfltSOUnit = sOUnit;
                                 obj.TaxCat = taxCat;
                                 obj.StkUnit = stkUnit;
-
                                 obj.NodeID = classID;
                                 obj.NodeLevel = 2;
                                 obj.ParentRecordID = 1;
@@ -953,8 +912,6 @@ namespace IN20500.Controllers
                                 obj.Brand = "";
                                 obj.ProGroup = "";
                                 obj.ProType = "";
-
-
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
@@ -974,15 +931,11 @@ namespace IN20500.Controllers
                                 obj.DfltPOUnit = pOUnit;
                                 obj.DfltSOUnit = sOUnit;
                                 obj.TaxCat = taxCat;
-
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
-
                             }
-
-                        }
-                       
+                        }                      
 
                         #endregion
                     }
@@ -1037,10 +990,11 @@ namespace IN20500.Controllers
             Cell cell;
             Worksheet sheet = workbook.Worksheets[0];
             Worksheet masterData = workbook.Worksheets[1];
+            DataAccess dal = Util.Dal();
 
             sheet.Name = Util.GetLang("IN20500NameSheet");
             masterData.Name = "MasterData";
-            DataAccess dal = Util.Dal();
+            
             #region header info
             // Header text columns
             sheet.AutoFitColumns();
@@ -1066,8 +1020,7 @@ namespace IN20500.Controllers
 
             string formulaProductClass = "=MasterData!$A$2:$A$" + (dtProductClass.Rows.Count + 2);
             Validation validation = GetValidation(ref sheet, formulaProductClass, "Chọn Nhóm", "Mã Nhóm này không tồn tại");
-            validation.AddArea(GetCellArea(1, dtProductClass.Rows.Count + 100, colTexts.IndexOf("ClassID")));
-   
+            validation.AddArea(GetCellArea(1, dtProductClass.Rows.Count + 100, colTexts.IndexOf("ClassID")));   
             
             pc = new ParamCollection();
             pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
@@ -1079,8 +1032,7 @@ namespace IN20500.Controllers
 
             string formulaType = "=MasterData!$D$2:$D$" + (dtType.Rows.Count + 2);
             validation = GetValidation(ref sheet, formulaType, "Chọn Loại ", "Mã Loại  này không tồn tại");
-            validation.AddArea(GetCellArea(1, dtType.Rows.Count + 100, colTexts.IndexOf("Type")));            
-
+            validation.AddArea(GetCellArea(1, dtType.Rows.Count + 100, colTexts.IndexOf("Type")));
 
             pc = new ParamCollection();
             pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
@@ -1094,7 +1046,6 @@ namespace IN20500.Controllers
             validation = GetValidation(ref sheet, formulaSource, "Chọn Nguồn", "Mã Nguồn này không tồn tại");
             validation.AddArea(GetCellArea(1, dtSource.Rows.Count + 100, colTexts.IndexOf("Source")));   
             
-            
             pc = new ParamCollection();
             pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
             pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
@@ -1105,8 +1056,7 @@ namespace IN20500.Controllers
 
             string formulaValMthd = "=MasterData!$J$2:$J$" + (dtValMthd.Rows.Count + 2);
             validation = GetValidation(ref sheet, formulaValMthd, "Chọn Phương Pháp Tính Giá", "Mã Phương Pháp Tính Giá này không tồn tại");
-            validation.AddArea(GetCellArea(1, dtValMthd.Rows.Count + 100, colTexts.IndexOf("ValMthd")));
-           
+            validation.AddArea(GetCellArea(1, dtValMthd.Rows.Count + 100, colTexts.IndexOf("ValMthd")));           
             
             pc = new ParamCollection();
             pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
@@ -1118,8 +1068,7 @@ namespace IN20500.Controllers
 
             string formulaLotSerTrack = "=MasterData!$L$2:$L$" + (dtLotSerTrack.Rows.Count + 2);
             validation = GetValidation(ref sheet, formulaLotSerTrack, "", "Mã này không tồn tại");
-            validation.AddArea(GetCellArea(1, dtLotSerTrack.Rows.Count + 100, colTexts.IndexOf("LotSerTrack"))); 
-            
+            validation.AddArea(GetCellArea(1, dtLotSerTrack.Rows.Count + 100, colTexts.IndexOf("LotSerTrack")));             
             
             pc = new ParamCollection();
             pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
@@ -1171,8 +1120,6 @@ namespace IN20500.Controllers
             validation = GetValidation(ref sheet, formulaTax, "Chọn Loại Thuế", "Mã Loại Thuế Bán này không tồn tại");
             validation.AddArea(GetCellArea(1, dtTax.Rows.Count + 100, colTexts.IndexOf("TaxCat")));
 
-
-
             sheet.Cells.SetRowHeight(0, 30);
 
             sheet.Protect(ProtectionType.All);
@@ -1217,7 +1164,6 @@ namespace IN20500.Controllers
             range = sheet.Cells.CreateRange(GetCell(allColumns.IndexOf("TaxCat")) + 2, GetCell(allColumns.IndexOf("TaxCat")) + 1000);
             range.SetStyle(style);
 
-
             workbook.Save(stream, SaveFormat.Xlsx);
             stream.Flush();
             stream.Position = 0;
@@ -1226,8 +1172,6 @@ namespace IN20500.Controllers
             {
                 FileDownloadName = string.Format("{0}.xlsx", Util.GetLang("IN20500_excel"))
             };
-
-
         }
 
         private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle, bool isBackground, bool isWrapsTex)
@@ -1282,8 +1226,6 @@ namespace IN20500.Controllers
         {
             return new List<string>() { "InvtID", "Descr", "ClassID", "Type",  "Source", "ValMthd", "LotSerTrack", "StkUnit", "POUnit", "SOUnit", "TaxCat" };
         }
-
-
         private string GetCell(int column) // Hàm bị sai khi lấy vị trí column AA
         {
             if (column == 0)
@@ -1298,7 +1240,6 @@ namespace IN20500.Controllers
                 cell += ABC.Substring((column / 26) - 1, 1);
                 column = column - 26;
                 flag = true;
-
             }
             if (column % 26 != 0)
             {
@@ -1311,11 +1252,7 @@ namespace IN20500.Controllers
                     cell += ABC.Substring(0, 1);
                 }
             }
-
             return cell;
-        }
-
-
-        
+        }        
     }
 }

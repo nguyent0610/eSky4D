@@ -838,11 +838,11 @@
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="85" >
         <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="2.75" PointY="4.375" />
+        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="5.375" PointY="3.125" />
         <EntityTypeShape EntityType="IN20500Model.IN_UnitConversion" Width="1.5" PointX="9.375" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="7.375" PointY="5.75" />
         <EntityTypeShape EntityType="IN20500Model.IN_InvtCpny" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowHandle" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowHandle" Width="1.5" PointX="1.375" PointY="6.5" />
       </Diagram>
     </Diagrams>
   </Designer>
