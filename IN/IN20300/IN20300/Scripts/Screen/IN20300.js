@@ -8,7 +8,6 @@ var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
 
-
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -111,6 +110,7 @@ var cboBranchID_Select = function (sender, value) {
     SiteId = '';
     if (sender.valueModels != null && !App.stoIN_Site.loading) {
         App.cboSiteId.store.reload();
+        App.stoCheckPrioritize.reload();
     }
 };
 
@@ -118,6 +118,7 @@ var cboSiteId_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null) {
         App.stoIN_Site.reload();
+        App.stoCheckPrioritize.reload();
     }
 };
 
@@ -305,12 +306,14 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-var txtPrioritize_Blur = function () {
+var txtPrioritize_Blur = function (a,b,c) {
     if (App.txtPrioritize.getValue() != 0) {
-        var record = HQ.store.findInStore(App.stoCheckPrioritize, ["Prioritize"], [App.txtPrioritize.getValue()]);
-        if (record != undefined) {
-            App.txtPrioritize.setValue(0);
-            HQ.message.show(2018120760, [App.cboSiteId.getValue(), record.SiteId], '', true);
+        if (App.stoIN_Site.data.items[0].modified.Prioritize != undefined) {
+            var record = HQ.store.findInStore(App.stoCheckPrioritize, ["Prioritize"], [App.txtPrioritize.getValue()]);
+            if (record != undefined) {
+                App.txtPrioritize.setValue(0);
+                HQ.message.show(2018120760, [App.cboSiteId.getValue(), record.SiteId], '', true);
+            }
         }
     }
 }
