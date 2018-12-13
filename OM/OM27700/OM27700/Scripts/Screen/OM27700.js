@@ -570,12 +570,7 @@ var Store = {
         HQ.isNew = false;
         if (sto.getCount() == 0) {
             var newDisplay = Ext.create("App.mdlOM_Accumulated", {
-                FromDate: HQ.dateNow,
-                ToDate: HQ.dateNow,
-                RegisForm: HQ.dateNow,
-                RegisTo: HQ.dateNow,
-                Status: _beginStatus,
-                DisplayType: 'L'
+                Status: _beginStatus
             });
             HQ.store.insertRecord(sto, [], newDisplay, true);
             HQ.isNew = true;
@@ -1390,8 +1385,10 @@ var Event = {
                         if (lstLevel != undefined) {
                             for (var i = 0 ; i < lstLevel.length; i++) {
                                 if (lstLevel.items[i].data.Descr != "") {
-                                    if (lstLevel.items[i].data.LevelTo < lstLevel.items[i].data.LevelFrom) {
-                                        line += Number(i + 1) + ", ";
+                                    if (lstLevel.items[i].data.LevelTo > 0) {
+                                        if (lstLevel.items[i].data.LevelTo < lstLevel.items[i].data.LevelFrom) {
+                                            line += Number(i + 1) + ", ";
+                                        }
                                     }
                                 }
                             }
