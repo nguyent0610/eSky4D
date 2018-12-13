@@ -147,7 +147,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="97" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="94" >
         <EntityTypeShape EntityType="IN20100Model.IN_UnitConversion" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>

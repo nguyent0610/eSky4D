@@ -115,8 +115,17 @@
                         .LoadData()
                 ),
             X.Column().Text(Util.GetLang("ToUnit")).DataIndex("ToUnit")
-                    .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
-            
+                   // .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
+                .Editor(
+                    HQ.Combo().ID("cboToUnit").HQProcedure("IN20100_pcFromUnit")
+                        .HQColumnShow("Code").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                ),
             X.Column().Text(Util.GetLang("MultDiv")).DataIndex("MultDiv")//.Renderer("MultDivchange")
             .Editor(
                 HQ.Combo().ID("cboMultDiv").Name("cboMultDiv").HQProcedure("IN20100_pcLoadMultDiv")

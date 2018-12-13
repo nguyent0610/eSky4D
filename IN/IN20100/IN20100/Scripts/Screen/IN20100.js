@@ -221,6 +221,7 @@ var grdUnitConversion_Edit = function (item, e) {
             e.record.set('Descr', '*');
             e.record.set('CnvFact', 1);
             App.cboFromUnit.forceSelection = false;
+            App.cboToUnit.forceSelection = false;
         }
         if (e.value == '2') {
             e.record.set('InvtID', '*');
@@ -228,6 +229,7 @@ var grdUnitConversion_Edit = function (item, e) {
             e.record.set('ClassID', '');
             e.record.set('CnvFact', 1);
             App.cboFromUnit.forceSelection = true;
+            App.cboToUnit.forceSelection = true;
         }
         if (e.value == '3') {
             e.record.set('InvtID', '');
@@ -235,6 +237,7 @@ var grdUnitConversion_Edit = function (item, e) {
             e.record.set('ClassID', '*');
             e.record.set('CnvFact', 1);
             App.cboFromUnit.forceSelection = true;
+            App.cboToUnit.forceSelection = true;
         }
     }
     HQ.grid.checkInsertKey(App.grdUnitConversion, e, keys);
