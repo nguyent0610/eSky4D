@@ -28,8 +28,6 @@
           <Property Name="QtyBreak" Type="float" Nullable="false" />
           <Property Name="Disc" Type="float" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'KidoTraining_eSky4DApp.dbo.PO_PriceCpny' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PO_PriceCpny">
           <Key>
             <PropertyRef Name="PriceID" />
@@ -90,13 +88,8 @@ warning 6002: The table/view 'KidoTraining_eSky4DApp.dbo.PO_PriceCpny' does not 
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="PO_Price" EntityType="Self.PO_Price" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_PriceHeader" EntityType="Self.PO_PriceHeader" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[PO_PriceCpny].[PriceID] AS [PriceID], 
-[PO_PriceCpny].[CpnyID] AS [CpnyID]
-FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -113,7 +106,6 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="PO_PriceCpny" EntityType="PO20100Model.PO_PriceCpny" />
           <FunctionImport Name="PO20100_pgGetPOPriceCpny" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpny_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -131,12 +123,13 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="PO20100_pcUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_pcUOM_InvtID_Result)">
-            <Parameter Name="InvtID" Mode="In" Type="String" />
+          <Parameter Name="InvtID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PO20100_piUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_piUOM_InvtID_Result)">
             <Parameter Name="InvtID" Mode="In" Type="String" />
             <Parameter Name="FromUnit" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="PO_PriceCpny" EntityType="PO20100Model.PO_PriceCpny" />
         </EntityContainer>
         <EntityType Name="PO_Price">
           <Key>
@@ -197,14 +190,6 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
           <Property Type="Boolean" Name="hidebtnCopy" Nullable="true" />
           <Property Type="Boolean" Name="hideChkPublic" Nullable="true" />
         </ComplexType>
-        <EntityType Name="PO_PriceCpny">
-          <Key>
-            <PropertyRef Name="PriceID" />
-            <PropertyRef Name="CpnyID" />
-          </Key>
-          <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-        </EntityType>
         <ComplexType Name="PO20100_pgGetPOPriceCpny_Result">
           <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -246,6 +231,14 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
           <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
           <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
         </ComplexType>
+        <EntityType Name="PO_PriceCpny">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -318,14 +311,6 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="PO_PriceCpny">
-            <EntityTypeMapping TypeName="PO20100Model.PO_PriceCpny">
-              <MappingFragment StoreEntitySet="PO_PriceCpny">
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCpny" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCpny">
             <ResultMapping>
               <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCpny_Result">
@@ -387,6 +372,14 @@ FROM [dbo].[PO_PriceCpny] AS [PO_PriceCpny]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PO_PriceCpny">
+            <EntityTypeMapping TypeName="PO20100Model.PO_PriceCpny">
+              <MappingFragment StoreEntitySet="PO_PriceCpny">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

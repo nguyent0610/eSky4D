@@ -178,7 +178,7 @@
                         .LoadData()
                     )
                     , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(120).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).DecimalPrecision(0).AllowExponential(false)).Align(Alignment.Right).StyleSpec("text-align:left")
-                    , X.NumberColumn().Text(Util.GetLang("Price")).DataIndex("Price").Width(120).Format(formatNumber).Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).AllowExponential(false).DecimalPrecision(decimalPrecision)).Align(Alignment.Right).StyleSpec("text-align:left")
+                    , X.NumberColumn().Text(Util.GetLang("PO20100Price")).DataIndex("Price").Width(120).Format(formatNumber).Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).AllowExponential(false).DecimalPrecision(decimalPrecision)).Align(Alignment.Right).StyleSpec("text-align:left")
                     , X.NumberColumn().Text(Util.GetLang("Disc")).DataIndex("Disc").Width(150).Format("00.00").Editor(X.NumberField().MaskRe(@"/[0-9-,-/ ]/")).Align(Alignment.Right).StyleSpec("text-align:left")
 
                     , X.CommandColumn().Width(150)
