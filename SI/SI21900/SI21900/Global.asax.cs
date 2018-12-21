@@ -31,13 +31,13 @@ namespace SI21900
         {
             Current.Authorize = false;
 			Current.Server = "HOANGSAD";
-            Current.DBSys = "ECO_eSky4DSys";
+            Current.DBSys = "KidoTraining_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SI21900"] = acc;
-            Session["DBApp"] = Current.DBApp = "ECO_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
 			Session["CpnyID"] = Current.CpnyID = "18247";
             Session["Language"] = Current.Language = "vi";

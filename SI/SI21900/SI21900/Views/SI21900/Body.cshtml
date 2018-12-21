@@ -55,18 +55,22 @@
                         .HQProcedure("SI21900_pcZone")
                         .HQColumnShow("Code,Descr").DataIndex("Zone")
                         .HQHeightWidth(400, 300)
-                        
                         .ValueField("Code").DisplayField("Code")
                         .SelectOnFocus(true).ForceSelection(true)
-                        .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                            ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                            ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        })
                         .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
-                                    lst.Change.Fn = "cboZone_Change";
-                                    lst.Select.Fn = "cboZone_Change";
+                            {
+                                lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
+                                lst.Change.Fn = "cboZone_Change";
+                                lst.Select.Fn = "cboZone_Change";
 
-                                })
+                            })
+                                .LoadData()
                         )
 
             , X.Column()
@@ -92,21 +96,21 @@
                         .TextField()
                         .MaxLength(200)
                         .EnforceMaxLength(true))
-                    
-            
-                    
-            //,X.Column()
-            //    .Text(Util.GetLang("Distance"))
-            //    .DataIndex("Distance")
-            //    .Width(150)
-            //    .ID("txtDistance")
-            //    .Editor(Html.X()
-            //            .NumberField()
-            //            .MinValue(0)
-            //            .DecimalPrecision(2)
-            //            .MaxValue(99999999.99)
-            //            .AllowExponential(false))
-            //            .Renderer("renderDistance")       
+
+
+
+                , X.Column()
+                    .Text(Util.GetLang("Distance"))
+                    .DataIndex("Distance")
+                    .Width(150)
+                    .ID("txtDistance")
+                    .Editor(Html.X()
+                            .NumberField()
+                            .MinValue(0)
+                            .DecimalPrecision(2)
+                            .MaxValue(99999999.99)
+                            .AllowExponential(false))
+                            .Renderer("renderDistance")       
                             
             ,X.CommandColumn()
                 .Width(100)
