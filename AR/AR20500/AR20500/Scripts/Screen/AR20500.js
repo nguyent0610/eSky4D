@@ -1457,7 +1457,8 @@ var renderIndexPG = function (value, metaData, record, rowIndex, colIndex, store
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {
-            Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
+            Gmap.Process.navMapCenterByLocation(record[0].data.LatLocation, record[0].data.LngLocation, record.index + 1);
+            GmapPDA.Process.navMapCenterByLocationPDA(record[0].data.Lat, record[0].data.Lng, record.index + 1)
             //displayImage(App.imgImages, record[0].data.ImageFileName);// get image theo binary
             //displayImage(App.imgImages1, record[0].data.BusinessPic);// get image theo binary
         }
@@ -1789,7 +1790,7 @@ var GmapPDA = {
             GmapPDA.DeclarePDA.stopMarkersPDA = [];
         },
 
-        navMapCenterByLocation: function (lat, lng, id) {
+        navMapCenterByLocationPDA: function (lat, lng, id) {
             var selectedMarker;
             var myLatlng = new google.maps.LatLng(lat, lng);
             GmapPDA.DeclarePDA.mapPDA.setCenter(myLatlng);

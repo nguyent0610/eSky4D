@@ -147,6 +147,9 @@ namespace AR20500.Controllers
                 showOUnit = objConfig.ShowOUnit;
                 showMobile = objConfig.ShowMobile;
                 isShowTerritory = objConfig.IsShowTerritory ?? false;
+                hideMarketRoute = objConfig.HideMarketRoute.HasValue && objConfig.HideMarketRoute.Value;
+                LimitedYear = objConfig.LimitedYear.ToInt() + 1;
+                hideTime = objConfig.HideTime.HasValue && objConfig.HideTime.Value;
             }
             else
             {
@@ -176,17 +179,11 @@ namespace AR20500.Controllers
             ViewBag.showOUnit = showOUnit;
             ViewBag.showMobile = showMobile;
             ViewBag.IsShowTerritory = isShowTerritory;
-            #endregion
-            var obj = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-            if (obj != null)
-            {
-                hideMarketRoute = obj.HideMarketRoute.HasValue && obj.HideMarketRoute.Value;
-                LimitedYear = objConfig.LimitedYear.ToInt() + 1;
-                hideTime = objConfig.HideTime.HasValue && objConfig.HideTime.Value;
-            }
             ViewBag.hideMarketRoute = hideMarketRoute;
             ViewBag.limitedYear = LimitedYear;
             ViewBag.hideTime = hideTime;
+            #endregion
+            
             return View();
         }
 
@@ -318,7 +315,7 @@ namespace AR20500.Controllers
                                 continue; 
                             }
 
-                            if (item.NewCustID.PassNull() != string.Empty && objNew.UpdateType != 1)
+                            if (item.NewCustID.PassNull() != string.Empty && objNew.UpdateType != 1 && objNew.UpdateType!=4)
                             {
                                 continue;
                             }
@@ -591,7 +588,6 @@ namespace AR20500.Controllers
                     objNew.Date2 = DateTime.Now;
                 }
             }
-
         }
 
         private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic,bool askApprove)
