@@ -377,7 +377,8 @@ namespace AR20500.Controllers
                                 // Update AR_NewCustomerInfor
                                 Update_NewCust(ref objNew, item);
                                 objNew.Startday = fromDate;
-                                objNew.Endday = toDate;                  
+                                objNew.Endday = toDate;
+                                objNew.Status = handle;
                                 // Update Customer                               
                                 if (objCust == null)
                                 {
@@ -406,6 +407,9 @@ namespace AR20500.Controllers
                                 loc.Crtd_User = loc.LUpd_User = Current.UserName;
                                 loc.Lng = item.Lng.Value;
                                 loc.Lat = item.Lat.Value;
+                                loc.LUpd_Datetime = DateTime.Now;
+                                loc.LUpd_Prog = _screenNbr;
+                                loc.LUpd_User = _userName;
                                 // Địa chỉ
                                 AR_SOAddress objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(x => x.CustId == objCust.CustId && x.BranchID == objCust.BranchID);
                                 if (objAR_SOAddress == null)
@@ -418,6 +422,15 @@ namespace AR20500.Controllers
                                     objAR_SOAddress.CustId = objCust.CustId;
                                 }
                                 Update_SOAddress(ref objAR_SOAddress, objCust);
+
+                                AR_CustomerInforGPS objAR_CustomerInforGPS = _db.AR_CustomerInforGPS.FirstOrDefault(x => x.CustID == objCust.CustId && x.BranchID == objCust.BranchID);
+                                if (objAR_CustomerInforGPS != null)
+                                {
+                                    objAR_CustomerInforGPS.UpdateGPS = false;
+                                    objAR_CustomerInforGPS.LUpd_DateTime = DateTime.Now;
+                                    objAR_CustomerInforGPS.LUpd_Prog = _screenNbr;
+                                    objAR_CustomerInforGPS.LUpd_User = _userName;
+                                }
 
                                 // KH mới thì cập nhật MCP
                                 if (item.UpdateType == 0)
@@ -588,6 +601,9 @@ namespace AR20500.Controllers
                     objNew.Date2 = DateTime.Now;
                 }
             }
+            objNew.LUpd_Datetime = DateTime.Now;
+            objNew.LUpd_Prog = _screenNbr;
+            objNew.LUpd_User = _userName;
         }
 
         private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic,bool askApprove)
@@ -797,6 +813,9 @@ namespace AR20500.Controllers
             objCust.Market = item.Market;
             objCust.BillDistrict = item.District;
             objCust.BillMarket = item.Market;
+            objCust.LUpd_Datetime = DateTime.Now;
+            objCust.LUpd_Prog = _screenNbr;
+            objCust.LUpd_User = _userName;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {

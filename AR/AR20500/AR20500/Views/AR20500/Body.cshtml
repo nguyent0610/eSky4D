@@ -623,7 +623,7 @@
                             )
 
 
-                         , X.Column().Text(Util.GetLang("SubRouteID")).DataIndex("SubRouteID").Renderer("renderSubRouteID")
+                         , X.Column().Text(Util.GetLang("SubRouteID")).DataIndex("SubRouteID").Renderer("renderSubRouteID").ID("colSubRouteID")
                             .Editor(
                                 HQ.Combo().ID("cboColSubRoute").HQProcedure("AR20500_pcSubRoute")
                                 .HQColumnShow("SubRouteID,WeekOfVisit,Descr").DisplayField("Descr").ValueField("SubRouteID")
@@ -649,7 +649,7 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 })
                             )
-                        , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Renderer("renderWeekofVisit")
+                        , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Renderer("renderWeekofVisit").ID("colWeekofVisit")
                             .Width(150)
                             .Editor(
                                 HQ.Combo().ID("cboColWeekofVisit").HQProcedure("AR20500_pcWeekofVisit")//.HQAutoLoad(false)
@@ -685,7 +685,7 @@
                         , X.NumberColumn().Text(Util.GetLang("VisitsPerDay")).DataIndex("VisitsPerDay").Format("0,000").Align(Alignment.Right).StyleSpec("text-align:left").Hidden(true)
                         .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)).Width(150)
 
-                        , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200).Renderer("renderReason")
+                        , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200).Renderer("renderReason").ID("ColReason")
                         .Editor(
                             HQ.Combo().ID("cboColReason").HQProcedure("AR20500_pcReason")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")

@@ -200,6 +200,7 @@ var ColCheck_HeaderPG_Change = function (value) {
 var btnProcess_Click = function () {
     if (App.cboUpdateType.getValue() == 0 || App.cboUpdateType.getValue() == 1 || App.cboUpdateType.getValue() == 4) {
         var count = 0;
+        var line = "";
         App.grdCust.store.clearFilter();
         var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
         for (var i = 0; i < allData.length ; i++) {
@@ -207,10 +208,26 @@ var btnProcess_Click = function () {
             if (data.ColCheck) {
                 count++;
             }
+            if (data.AllowEdit == 4) {
+                line += (i + 1) + ", ";
+            }
         }
         if (count == 0) {
             HQ.message.show(718);
         }
+        if (App.cboUpdateType.getValue() == 0) {
+            if (line != "" && App.cboStatus.getValue() == "O" && App.cboHandle.getValue() == "A") {
+                HQ.message.show(2018122560, [line], "", true);
+                return;
+            }
+        }
+        if (App.cboUpdateType.getValue() == 1) {
+            if (line != "" && App.cboStatus.getValue() == "O" && App.cboHandle.getValue() == "A") {
+                HQ.message.show(2018122560, [line], "", true);
+                return;
+            }
+        }
+       
         if (App.cboHandle.getValue() && count > 0) {
             var erroState = "";
             var erroDistrict = "";
@@ -1458,7 +1475,10 @@ var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {
             Gmap.Process.navMapCenterByLocation(record[0].data.LatLocation, record[0].data.LngLocation, record.index + 1);
-            GmapPDA.Process.navMapCenterByLocationPDA(record[0].data.Lat, record[0].data.Lng, record.index + 1)
+            if (App.cboUpdateType.getValue() == 4) {
+                GmapPDA.Process.navMapCenterByLocationPDA(record[0].data.Lat, record[0].data.Lng, record.index + 1);
+            }
+            
             //displayImage(App.imgImages, record[0].data.ImageFileName);// get image theo binary
             //displayImage(App.imgImages1, record[0].data.BusinessPic);// get image theo binary
         }
@@ -1512,7 +1532,7 @@ var cboUpdateType_Change = function () {
     }
     if (App.cboUpdateType.getValue() == 0) {     
         HQ.grid.show(App.grdCust, _hideColumn);
-    } else if (App.cboUpdateType.getValue() == 1) {
+    } else if (App.cboUpdateType.getValue() == 1 || App.cboUpdateType.getValue() == 4) {
         HQ.grid.hide(App.grdCust, _hideColumn);
     }
     
@@ -1526,6 +1546,7 @@ var cboUpdateType_Change = function () {
         if (App.map_canvas_header != undefined) {
             App.map_canvas_header.show();
         }
+        App.ColReason.hide();
     }
     else {
         App.map_canvasPDA.setVisible(false);
@@ -1534,6 +1555,7 @@ var cboUpdateType_Change = function () {
         if (App.map_canvas_header != undefined) {
             App.map_canvas_header.hide();
         }
+        App.ColReason.show();
     }
     showSubRoute(App.cboUpdateType.getValue());
     Ext.resumeLayouts();
@@ -2114,16 +2136,34 @@ var btnExport_Click = function () {
 var btnSave_Click = function () {
     var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
     var count = 0;
+    var line = "";
     for (var i = 0; i < allData.length ; i++) {
         var data = allData.items[i].data;
         if (data.ColCheck) {
             count++;
+        }
+        if (data.AllowEdit == 4) {
+            line += (i + 1) + ", ";
         }
     }
     if (count == 0) {
         HQ.message.show(718);
         return false;
     }
+    if (App.cboUpdateType.getValue() == 0) {
+        if (line != "" && App.cboStatus.getValue() == "A") {
+            HQ.message.show(2018122560, [line], "", true);
+            return;
+        }
+    }
+    if (App.cboUpdateType.getValue() == 1) {
+        if (line != "" && (App.cboStatus.getValue() == "A" || App.cboStatus.getValue() == "D")) {
+            HQ.message.show(2018122560, [line], "", true);
+            return;
+        }
+    }
+   
+   
     var showMess = false;
     var objEditBusinessPic = HQ.store.findRecord(App.stoCust, ['ColCheck', 'EditBusinessPic'], [true, true]);
     if (objEditBusinessPic) {
