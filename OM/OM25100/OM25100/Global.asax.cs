@@ -29,16 +29,16 @@ namespace OM25100
         protected void Session_Start(object sender, EventArgs e)
         {
            Current.Authorize = false;
-           Current.Server = "TRUONGSAD";
+           Current.Server = "PHUQUOCD";
             Current.FormatDate = "dd-MM.yyyy";
-            Current.DBSys = "FranciaBeauty_eSky4DSys";
+            Current.DBSys = "eSky4DChevronVNSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM25100"] = acc;
-            Session["DBApp"] = Current.DBApp = "FranciaBeauty_eSky4DApp";
-			Session["UserName"] = Current.UserName = "admin";
+            Session["DBApp"] = Current.DBApp = "eSky4DChevronVNApp";
+            Session["UserName"] = Current.UserName = "FLSR05";
             Session["CpnyID"] = Current.CpnyID = "XPDNA0001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;

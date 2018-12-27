@@ -689,6 +689,7 @@
         <ComplexType Name="OM25100_piBranchID_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="AllowImport" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM25100_piClassID_Result">
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
@@ -1142,6 +1143,7 @@
               <ComplexTypeMapping TypeName="OM25100Model.OM25100_piBranchID_Result">
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="AllowImport" ColumnName="AllowImport" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

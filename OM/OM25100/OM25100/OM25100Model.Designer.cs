@@ -8892,6 +8892,30 @@ namespace OM25100
         private global::System.String _CpnyName;
         partial void OnCpnyNameChanging(global::System.String value);
         partial void OnCpnyNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowImport
+        {
+            get
+            {
+                return _AllowImport;
+            }
+            set
+            {
+                OnAllowImportChanging(value);
+                ReportPropertyChanging("AllowImport");
+                _AllowImport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowImport");
+                OnAllowImportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowImport;
+        partial void OnAllowImportChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowImportChanged();
 
         #endregion
 

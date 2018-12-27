@@ -47,7 +47,7 @@ namespace OM25100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -1249,6 +1249,7 @@ namespace OM25100.Controllers
                         string errorCycleCheckSeleted = string.Empty;
                         string errorBranchID = string.Empty;
                         string errorBranchIDnotExists = string.Empty;
+                        string errBranchByUser = string.Empty;
                         string errorTargetFormat = string.Empty;
                         string errorClassID = string.Empty;
                         string errorClassIDnotExists = string.Empty;
@@ -1437,6 +1438,15 @@ namespace OM25100.Controllers
                                     errorBranchIDnotExists += (i + 1).ToString() + ",";
                                     flagCheck = true;
                                     flagBranchID = true;
+                                }
+                                else
+                                {
+                                    if (objBranch.AllowImport == false)
+                                    {
+                                        errBranchByUser += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        flagBranchID = true;
+                                    }
                                 }
                             }
 
@@ -2061,6 +2071,7 @@ namespace OM25100.Controllers
                         message += errorCycleCheckSeleted == "" ? "" : string.Format(Message.GetString("20180704", null), "Cycle", errorCycleCheckSeleted);
                         message += errorBranchID == "" ? "" : string.Format(Message.GetString("2016091412", null), "BranchID", errorBranchID);
                         message += errorBranchIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "BranchID", errorBranchIDnotExists);
+                        message += errBranchByUser == "" ? "" : string.Format(Message.GetString("2018122751", null), "BranchID", errBranchByUser, Current.UserName);
                         message += errorTargetFormat == "" ? "" : string.Format(Message.GetString("2016091415", null), "Target", errorTargetFormat);
                         message += errorClassID == "" ? "" : string.Format(Message.GetString("2016091412", null), "ClassID", errorClassID);
                         message += errorClassIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "ClassID", errorClassIDnotExists);
