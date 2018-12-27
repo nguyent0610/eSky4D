@@ -400,11 +400,12 @@ namespace AR20500.Controllers
                                     loc = new AR_CustomerLocation();
                                     loc.BranchID = objCust.BranchID;
                                     loc.CustID = objCust.CustId;
+                                    loc.Crtd_Datetime = loc.LUpd_Datetime = DateTime.Now;
+                                    loc.Crtd_Prog = loc.LUpd_Prog = _screenNbr;
+                                    loc.Crtd_User = loc.LUpd_User = Current.UserName;
                                     _db.AR_CustomerLocation.AddObject(loc);
                                 }                               
-                                loc.Crtd_Datetime = loc.LUpd_Datetime = DateTime.Now;
-                                loc.Crtd_Prog = loc.LUpd_Prog = _screenNbr;
-                                loc.Crtd_User = loc.LUpd_User = Current.UserName;
+                                
                                 loc.Lng = item.Lng.Value;
                                 loc.Lat = item.Lat.Value;
                                 loc.LUpd_Datetime = DateTime.Now;
@@ -420,6 +421,9 @@ namespace AR20500.Controllers
                                     objAR_SOAddress.BranchID = objCust.BranchID;
                                     objAR_SOAddress.ShipToId = "DEFAULT";
                                     objAR_SOAddress.CustId = objCust.CustId;
+                                    objAR_SOAddress.Crtd_DateTime = objCust.Crtd_Datetime;
+                                    objAR_SOAddress.Crtd_Prog = objCust.Crtd_Prog;
+                                    objAR_SOAddress.Crtd_User = objCust.Crtd_User;
                                 }
                                 Update_SOAddress(ref objAR_SOAddress, objCust);
 
@@ -825,9 +829,7 @@ namespace AR20500.Controllers
             
             objAR_SOAddress.City = objCust.City;
             objAR_SOAddress.Country = objCust.Country;
-            objAR_SOAddress.Crtd_DateTime = objCust.Crtd_Datetime;
-            objAR_SOAddress.Crtd_Prog = objCust.Crtd_Prog;
-            objAR_SOAddress.Crtd_User = objCust.Crtd_User;
+          
             
             objAR_SOAddress.Descr = objCust.CustName;
             objAR_SOAddress.District = objCust.District;

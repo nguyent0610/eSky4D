@@ -208,7 +208,7 @@ var btnProcess_Click = function () {
             if (data.ColCheck) {
                 count++;
             }
-            if (data.AllowEdit == 4) {
+            if (data.AllowEdit == 4 && data.ColCheck == true) {
                 line += (i + 1) + ", ";
             }
         }
@@ -2142,7 +2142,8 @@ var btnSave_Click = function () {
         if (data.ColCheck) {
             count++;
         }
-        if (data.AllowEdit == 4) {
+        if (data.AllowEdit == 4 && data.ColCheck == true) {
+            
             line += (i + 1) + ", ";
         }
     }
