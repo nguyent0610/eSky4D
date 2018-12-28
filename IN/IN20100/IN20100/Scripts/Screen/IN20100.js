@@ -272,6 +272,8 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 HQ.isChange = false;
+                App.cboFromUnit.store.reload();
+                App.cboToUnit.store.reload();
                 refresh("yes");
             },
             failure: function (msg, data) {
