@@ -38,7 +38,7 @@ namespace PO20100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "KidoTraining_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

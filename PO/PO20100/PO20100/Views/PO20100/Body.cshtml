@@ -352,6 +352,8 @@
                         .LoadData()
                     )
                     , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Flex(1).Renderer("renderBranchName")
+                    , X.Column().ID("ColCpnyType").Text(Util.GetLang("PO20100CpnyType")).DataIndex("CpnyType").Flex(1)//.Renderer("renderBranchName")
+                    
                     , X.CommandColumn().Width(130)
                     .Commands(
                         X.GridCommand()
@@ -414,6 +416,9 @@
                 lss.Render.Fn = "pnl_render";
             })
         )
+        .Listeners(ls=>{
+            ls.TabChange.Fn = "pnlPO_PriceCpny_Active";
+        })
     )// frmMain
 )
 )

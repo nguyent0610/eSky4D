@@ -86,6 +86,11 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="PO20700_pgPO_ReasonCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="PO_Price" EntityType="Self.PO_Price" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" Schema="dbo" store:Type="Tables" />
@@ -98,19 +103,10 @@
         <EntityContainer Name="PO20100Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="PO_Price" EntityType="PO20100Model.PO_Price" />
           <EntitySet Name="PO_PriceHeader" EntityType="PO20100Model.PO_PriceHeader" />
-          <FunctionImport Name="PO20100_pgGetPOPrice" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPrice_Result)">
-          <Parameter Name="PriceID" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="PO20100_pdConfig" ReturnType="Collection(PO20100Model.PO20100_pdConfig_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
-          <FunctionImport Name="PO20100_pgGetPOPriceCpny" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpny_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="PriceID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PO20100_ptTreeNode" ReturnType="Collection(PO20100Model.PO20100_ptTreeNode_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -130,6 +126,20 @@
             <Parameter Name="FromUnit" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="PO_PriceCpny" EntityType="PO20100Model.PO_PriceCpny" />
+          <FunctionImport Name="PO20700_pgPO_ReasonCode" ReturnType="Collection(PO20100Model.PO20700_pgPO_ReasonCode_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPrice" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPrice_Result)">
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPriceCpny" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpny_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="PO_Price">
           <Key>
@@ -173,27 +183,12 @@
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Double" Name="Disc" />
         </EntityType>
-        <ComplexType Name="PO20100_pgGetPOPrice_Result">
-          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="UOM" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="400" />
-          <Property Type="Double" Name="QtyBreak" Nullable="false" />
-          <Property Type="Double" Name="Price" Nullable="false" />
-          <Property Type="Double" Name="Disc" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="PO20100_pdConfig_Result">
           <Property Type="Int32" Name="DecimalPrecision" Nullable="true" />
           <Property Type="Boolean" Name="NoPriceCalculation" Nullable="true" />
           <Property Type="Boolean" Name="hidebtnCopy" Nullable="true" />
           <Property Type="Boolean" Name="hideChkPublic" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="PO20100_pgGetPOPriceCpny_Result">
-          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="hideCpnyType" Nullable="true" />
         </ComplexType>
         <ComplexType Name="PO20100_ptTreeNode_Result">
           <Property Type="String" Name="Code" Nullable="true" MaxLength="30" />
@@ -201,6 +196,7 @@
           <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="LevelID" Nullable="true" />
           <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="PO20100_pcInventoryActive_Result">
           <Property Type="String" Name="BarCode" Nullable="true" MaxLength="30" />
@@ -239,6 +235,30 @@
           <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
+        <ComplexType Name="PO20700_pgPO_ReasonCode_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="Reasonable" Nullable="false" />
+          <Property Type="Boolean" Name="ReasonIsShow" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPrice_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UOM" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="400" />
+          <Property Type="Double" Name="QtyBreak" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Double" Name="Disc" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPriceCpny_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -286,21 +306,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPrice" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPrice">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPrice_Result">
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="UOM" ColumnName="UOM" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Disc" ColumnName="Disc" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PO20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.PO20100_pdConfig" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="PO20100Model.PO20100_pdConfig_Result">
@@ -308,15 +313,7 @@
                 <ScalarProperty Name="NoPriceCalculation" ColumnName="NoPriceCalculation" />
                 <ScalarProperty Name="hidebtnCopy" ColumnName="hidebtnCopy" />
                 <ScalarProperty Name="hideChkPublic" ColumnName="hideChkPublic" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCpny" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCpny">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCpny_Result">
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="hideCpnyType" ColumnName="hideCpnyType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -328,6 +325,7 @@
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="LevelID" ColumnName="LevelID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -380,6 +378,42 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO20700_pgPO_ReasonCode" FunctionName="eBiz4DWebSysModel.Store.PO20700_pgPO_ReasonCode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20700_pgPO_ReasonCode_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
+                <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPrice" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPrice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPrice_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="UOM" ColumnName="UOM" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Disc" ColumnName="Disc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCpny" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCpny">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCpny_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

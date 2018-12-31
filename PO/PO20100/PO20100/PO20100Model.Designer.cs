@@ -148,25 +148,6 @@ namespace PO20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="priceID">No Metadata Documentation available.</param>
-        public ObjectResult<PO20100_pgGetPOPrice_Result> PO20100_pgGetPOPrice(global::System.String priceID)
-        {
-            ObjectParameter priceIDParameter;
-            if (priceID != null)
-            {
-                priceIDParameter = new ObjectParameter("PriceID", priceID);
-            }
-            else
-            {
-                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<PO20100_pgGetPOPrice_Result>("PO20100_pgGetPOPrice", priceIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -203,58 +184,6 @@ namespace PO20100
             }
     
             return base.ExecuteFunction<PO20100_pdConfig_Result>("PO20100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="priceID">No Metadata Documentation available.</param>
-        public ObjectResult<PO20100_pgGetPOPriceCpny_Result> PO20100_pgGetPOPriceCpny(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String priceID)
-        {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            ObjectParameter priceIDParameter;
-            if (priceID != null)
-            {
-                priceIDParameter = new ObjectParameter("PriceID", priceID);
-            }
-            else
-            {
-                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<PO20100_pgGetPOPriceCpny_Result>("PO20100_pgGetPOPriceCpny", cpnyIDParameter, userNameParameter, langIDParameter, priceIDParameter);
         }
     
         /// <summary>
@@ -386,6 +315,118 @@ namespace PO20100
             }
     
             return base.ExecuteFunction<PO20100_piUOM_InvtID_Result>("PO20100_piUOM_InvtID", invtIDParameter, fromUnitParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<PO20700_pgPO_ReasonCode_Result> PO20700_pgPO_ReasonCode(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<PO20700_pgPO_ReasonCode_Result>("PO20700_pgPO_ReasonCode", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="priceID">No Metadata Documentation available.</param>
+        public ObjectResult<PO20100_pgGetPOPrice_Result> PO20100_pgGetPOPrice(global::System.String priceID)
+        {
+            ObjectParameter priceIDParameter;
+            if (priceID != null)
+            {
+                priceIDParameter = new ObjectParameter("PriceID", priceID);
+            }
+            else
+            {
+                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<PO20100_pgGetPOPrice_Result>("PO20100_pgGetPOPrice", priceIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="priceID">No Metadata Documentation available.</param>
+        public ObjectResult<PO20100_pgGetPOPriceCpny_Result> PO20100_pgGetPOPriceCpny(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String priceID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter priceIDParameter;
+            if (priceID != null)
+            {
+                priceIDParameter = new ObjectParameter("PriceID", priceID);
+            }
+            else
+            {
+                priceIDParameter = new ObjectParameter("PriceID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<PO20100_pgGetPOPriceCpny_Result>("PO20100_pgGetPOPriceCpny", cpnyIDParameter, userNameParameter, langIDParameter, priceIDParameter);
         }
 
         #endregion
@@ -1944,6 +1985,30 @@ namespace PO20100
         private Nullable<global::System.Boolean> _hideChkPublic;
         partial void OnhideChkPublicChanging(Nullable<global::System.Boolean> value);
         partial void OnhideChkPublicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> hideCpnyType
+        {
+            get
+            {
+                return _hideCpnyType;
+            }
+            set
+            {
+                OnhideCpnyTypeChanging(value);
+                ReportPropertyChanging("hideCpnyType");
+                _hideCpnyType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("hideCpnyType");
+                OnhideCpnyTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _hideCpnyType;
+        partial void OnhideCpnyTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnhideCpnyTypeChanged();
 
         #endregion
 
@@ -2304,6 +2369,30 @@ namespace PO20100
         private global::System.String _CpnyName;
         partial void OnCpnyNameChanging(global::System.String value);
         partial void OnCpnyNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyType
+        {
+            get
+            {
+                return _CpnyType;
+            }
+            set
+            {
+                OnCpnyTypeChanging(value);
+                ReportPropertyChanging("CpnyType");
+                _CpnyType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CpnyType");
+                OnCpnyTypeChanged();
+            }
+        }
+        private global::System.String _CpnyType;
+        partial void OnCpnyTypeChanging(global::System.String value);
+        partial void OnCpnyTypeChanged();
 
         #endregion
 
@@ -2543,6 +2632,185 @@ namespace PO20100
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyType
+        {
+            get
+            {
+                return _CpnyType;
+            }
+            set
+            {
+                OnCpnyTypeChanging(value);
+                ReportPropertyChanging("CpnyType");
+                _CpnyType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CpnyType");
+                OnCpnyTypeChanged();
+            }
+        }
+        private global::System.String _CpnyType;
+        partial void OnCpnyTypeChanging(global::System.String value);
+        partial void OnCpnyTypeChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="PO20100Model", Name="PO20700_pgPO_ReasonCode_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class PO20700_pgPO_ReasonCode_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PO20700_pgPO_ReasonCode_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="reasonable">Initial value of the Reasonable property.</param>
+        /// <param name="reasonIsShow">Initial value of the ReasonIsShow property.</param>
+        public static PO20700_pgPO_ReasonCode_Result CreatePO20700_pgPO_ReasonCode_Result(global::System.String code, global::System.Byte[] tstamp, global::System.Boolean reasonable, global::System.Boolean reasonIsShow)
+        {
+            PO20700_pgPO_ReasonCode_Result pO20700_pgPO_ReasonCode_Result = new PO20700_pgPO_ReasonCode_Result();
+            pO20700_pgPO_ReasonCode_Result.Code = code;
+            pO20700_pgPO_ReasonCode_Result.tstamp = tstamp;
+            pO20700_pgPO_ReasonCode_Result.Reasonable = reasonable;
+            pO20700_pgPO_ReasonCode_Result.ReasonIsShow = reasonIsShow;
+            return pO20700_pgPO_ReasonCode_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Reasonable
+        {
+            get
+            {
+                return _Reasonable;
+            }
+            set
+            {
+                OnReasonableChanging(value);
+                ReportPropertyChanging("Reasonable");
+                _Reasonable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Reasonable");
+                OnReasonableChanged();
+            }
+        }
+        private global::System.Boolean _Reasonable;
+        partial void OnReasonableChanging(global::System.Boolean value);
+        partial void OnReasonableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ReasonIsShow
+        {
+            get
+            {
+                return _ReasonIsShow;
+            }
+            set
+            {
+                OnReasonIsShowChanging(value);
+                ReportPropertyChanging("ReasonIsShow");
+                _ReasonIsShow = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReasonIsShow");
+                OnReasonIsShowChanged();
+            }
+        }
+        private global::System.Boolean _ReasonIsShow;
+        partial void OnReasonIsShowChanging(global::System.Boolean value);
+        partial void OnReasonIsShowChanged();
 
         #endregion
 

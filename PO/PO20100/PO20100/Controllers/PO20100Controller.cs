@@ -35,20 +35,23 @@ namespace PO20100.Controllers
             bool noPriceCalculation = false;
             bool hidebtnCopy = false;
             bool hideChkPublic = false;
+            bool hideCpnyType = false;
             var objConfig = _db.PO20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();            
             if (objConfig != null)
             {
                 noPriceCalculation = objConfig.NoPriceCalculation.HasValue && objConfig.NoPriceCalculation.Value;
                 hidebtnCopy = objConfig.hidebtnCopy.HasValue && objConfig.hidebtnCopy.Value;
                 hideChkPublic = objConfig.hideChkPublic.HasValue && objConfig.hideChkPublic.Value;
+                hideCpnyType = objConfig.hideCpnyType.HasValue && objConfig.hideCpnyType.Value;
             }
             ViewBag.hidebtnCopy = hidebtnCopy;
             ViewBag.noPriceCalculation = noPriceCalculation;
             ViewBag.hideChkPublic = hideChkPublic;
+            ViewBag.hideCpnyType = hideCpnyType;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -377,6 +380,7 @@ namespace PO20100.Controllers
 
             tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CpnyType", ModelFieldType.String));
 
             tree.Border = false;
             tree.RootVisible = true;
@@ -448,6 +452,7 @@ namespace PO20100.Controllers
             node.Text = objNode.Descr;
             node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = objNode.Type, Mode = Ext.Net.ParameterMode.Value });
             node.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyType", Value = objNode.CpnyType, Mode = Ext.Net.ParameterMode.Value });
             node.Icon = objNode.LevelID != 0 ? icon : Ext.Net.Icon.Folder;
             node.Leaf = objNode.LevelID == 0;// true;
             node.IconCls = "tree-node-noicon";

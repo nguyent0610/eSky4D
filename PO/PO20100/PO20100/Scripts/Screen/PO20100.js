@@ -13,7 +13,7 @@ var _invtID = '';
 var listImport;
 var _msgImport;
 var _dataImport;
-
+var count = 0;
 //////////////////////////////////////////////////////////////////////
 
 var loadSourceCombo = function () {
@@ -258,6 +258,7 @@ var firstLoad = function () {
     //HQ.isFirstLoad = true;
     // App.frmMain.isValid();
     App.btnCopy.setVisible(!HQ.hidebtnCopy);
+    
     if (HQ.hideChkPublic) {
         App.Public.setValue(true);
         App.Public.setVisible(false);
@@ -439,9 +440,11 @@ var grdPO_PriceCpny_Edit = function (item, e) {
         var selectedRecord = App.cboCpnyID.store.findRecord("BranchID", e.value);
         if (selectedRecord) {
             e.record.set("CpnyName", selectedRecord.data.BranchName);
+            e.record.set("CpnyType", selectedRecord.data.CpnyType);
         }
         else {
             e.record.set("CpnyName", "");
+            e.record.set("CpnyType", "");
         }
     }
     frmChange();
@@ -647,6 +650,7 @@ var btnAddAll_click = function (btn, e, eOpts) {
                     if (!record) {
                         record = App.stoPO_PriceCpny.getAt(App.grdPO_PriceCpny.store.getCount() - 1);
                         record.set('CpnyID', node.data.RecID);
+                        record.set('CpnyType', node.data.CpnyType);
                     }
                 }
             });
@@ -679,6 +683,7 @@ var btnAdd_click = function (btn, e, eOpts) {
                     if (!record) {
                         record = App.stoPO_PriceCpny.getAt(App.grdPO_PriceCpny.store.getCount() - 1);
                         record.set('CpnyID', node.attributes.RecID);
+                        record.set('CpnyType', node.attributes.CpnyType);
                     }
                 }
             });
@@ -1288,4 +1293,12 @@ var checkDuplicate = function (grd, row, keys) {
         };
     }
     return found;
+}
+var pnlPO_PriceCpny_Active = function (tabItem) {
+
+    //if (tabItem.activeTab.id = "pnlPO_PriceCpny" && count == 0) {
+        App.ColCpnyType.setVisible(!HQ.hideCpnyType);
+       // count = 1;
+    //}
+    
 }
