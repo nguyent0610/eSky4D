@@ -20,7 +20,7 @@
         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
             X.FileUploadField()
                 .ID("btnImport")
-                .ButtonText("Import")
+                .ButtonText(Util.GetLang("IN20500Import"))
                 .ButtonOnly(true)
                 .Icon(Icon.BookAdd)
                 .Listeners(p=>{
@@ -28,7 +28,7 @@
                 })          
             , X.Button()
                 .ID("btnExport")
-                .Text(Util.GetLang("Export"))
+                .Text(Util.GetLang("IN20500Export"))
                 .Icon(Icon.ArrowTurnRight)
                 .Listeners(p=>{
                     p.Click.Fn = "btnExport_Click";

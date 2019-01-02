@@ -74,6 +74,7 @@ namespace IN20500.Controllers
         }     
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var isHideChkPublic = false;
             var DfltValMthd = false;
