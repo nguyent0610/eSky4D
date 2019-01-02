@@ -1271,6 +1271,7 @@ var btnImport_Click = function () {
                 HQ.message.process(msg, data, true);
             }
             refresh("yes");
+            App.cboInvtID.store.reload();
         },
         failure: function (msg, data) {
             HQ.message.process(msg, data, true);

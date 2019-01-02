@@ -763,15 +763,15 @@ namespace IN20500.Controllers
                         bool flagCheck = false;
                         invtID = workSheet.Cells[i, colTexts.IndexOf("InvtID")].StringValue.Trim();
                         descr = workSheet.Cells[i, colTexts.IndexOf("Descr")].StringValue.Trim();
-                        classID = workSheet.Cells[i, colTexts.IndexOf("ClassID")].StringValue.Trim();
-                        type = workSheet.Cells[i, colTexts.IndexOf("Type")].StringValue.Trim();
-                        source = workSheet.Cells[i, colTexts.IndexOf("Source")].StringValue.Trim();
-                        valMthd = workSheet.Cells[i, colTexts.IndexOf("ValMthd")].StringValue.Trim();
-                        lotSerTrack = workSheet.Cells[i, colTexts.IndexOf("LotSerTrack")].StringValue.Trim();
-                        stkUnit = workSheet.Cells[i, colTexts.IndexOf("StkUnit")].StringValue.Trim();
-                        pOUnit = workSheet.Cells[i, colTexts.IndexOf("POUnit")].StringValue.Trim();
-                        sOUnit = workSheet.Cells[i, colTexts.IndexOf("SOUnit")].StringValue.Trim();
-                        taxCat = workSheet.Cells[i, colTexts.IndexOf("TaxCat")].StringValue.Trim();
+                        classID = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("ClassID")].StringValue.Trim());
+                        type = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("Type")].StringValue.Trim());
+                        source = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("Source")].StringValue.Trim());
+                        valMthd = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("ValMthd")].StringValue.Trim());
+                        lotSerTrack = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("LotSerTrack")].StringValue.Trim());
+                        stkUnit = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("StkUnit")].StringValue.Trim());
+                        pOUnit = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("POUnit")].StringValue.Trim());
+                        sOUnit = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("SOUnit")].StringValue.Trim());
+                        taxCat = GetCodeFromExcel(workSheet.Cells[i, colTexts.IndexOf("TaxCat")].StringValue.Trim());
 
                         #endregion
 
@@ -1225,6 +1225,15 @@ namespace IN20500.Controllers
         private List<string> HeaderExcel()
         {
             return new List<string>() { "InvtID", "Descr", "ClassID", "Type",  "Source", "ValMthd", "LotSerTrack", "StkUnit", "POUnit", "SOUnit", "TaxCat" };
+        }
+        private string GetCodeFromExcel(string codeDescr)
+        {
+            int index = codeDescr.IndexOf("-");
+            if (index > 0)
+            {
+                return codeDescr.Substring(0, index).Trim();
+            }
+            return codeDescr.Trim();
         }
         private string GetCell(int column) // Hàm bị sai khi lấy vị trí column AA
         {
