@@ -199,7 +199,7 @@ var menuClick = function (command) {
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoCpny, keysTab, fieldsCheckRequireTab, fieldsLangCheckRequireTab)) {
-                    if (HQ.util.checkSpecialChar(App.cboInvtID.getValue()) == false) {
+                    if (checkSpecialChar(App.cboInvtID.getValue()) == false) {
                         HQ.message.show(20140811, App.cboInvtID.fieldLabel);
                         App.cboInvtID.focus();
                         App.cboInvtID.selectText();
@@ -319,7 +319,17 @@ var stoLoad = function (sto) {
         App.txtGiftPoint.hide();
 };
 
-
+var checkSpecialChar = function (value) {
+    var regex = /^(\w*(\d|[a-zA-Z]))(\w|[\.-])*$/
+    if (!HQ.util.passNull(value.toString()).match(regex))
+        return false;
+    for (var i = 0, n = value.length; i < n; i++) {
+        if (value.charCodeAt(i) > 127) {
+            return false;
+        }
+    }
+    return true;
+};
 var checkLotSerial = function (type) {
     //App.txtDfltLotSerFxdVal.setReadOnly(false);
     if (type == 'D') {
