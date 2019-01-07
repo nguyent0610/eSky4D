@@ -375,6 +375,7 @@
           <Property Type="Boolean" Name="GiftPoint" Nullable="true" />
           <Property Type="Boolean" Name="IsShowBarCode" Nullable="true" />
           <Property Type="Boolean" Name="IsShowImportExport" Nullable="true" />
+          <Property Type="Boolean" Name="HiddenBK" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_UnitConversion">
           <Key>
@@ -668,6 +669,7 @@
                 <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
                 <ScalarProperty Name="IsShowBarCode" ColumnName="IsShowBarCode" />
                 <ScalarProperty Name="IsShowImportExport" ColumnName="IsShowImportExport" />
+                <ScalarProperty Name="HiddenBK" ColumnName="HiddenBK" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

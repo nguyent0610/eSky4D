@@ -82,6 +82,7 @@ namespace IN20500.Controllers
             var isShowBarCode = false;
             var isShowKitType = false;
             var isShowImport = false;
+            var isBachKhang = false;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
             var objConfigHideShow = _db.IN20500_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null && objConfig.IntVal == 1)
@@ -95,6 +96,7 @@ namespace IN20500.Controllers
                 isShowBarCode = objConfigHideShow.IsShowBarCode ?? false;
                 isShowKitType = objConfigHideShow.KitType ?? false;
                 isShowImport = objConfigHideShow.IsShowImportExport ?? false;
+                isBachKhang = objConfigHideShow.HiddenBK ?? false;
             }
             ViewBag.isHideChkPublic = isHideChkPublic;
             ViewBag.DfltValMthd = DfltValMthd;
@@ -102,6 +104,7 @@ namespace IN20500.Controllers
             ViewBag.IsShowBarCode = isShowBarCode;
             ViewBag.IsShowKitType = isShowKitType;
             ViewBag.IsShowImport = isShowImport;
+            ViewBag.IsBachKhang = isBachKhang;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -197,11 +200,15 @@ namespace IN20500.Controllers
                                 if (Path.GetExtension(files[i].FileName).ToLower().Contains("jpg") || Path.GetExtension(files[i].FileName).ToLower().Contains("png") || Path.GetExtension(files[i].FileName).ToLower().Contains("gif"))
                                 {
                                     // Xoa file cu di
-                                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
-                                    if (System.IO.File.Exists(oldPath))
+                                    if (header.Picture.PassNull() != "")
                                     {
-                                        System.IO.File.Delete(oldPath);
+                                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
+                                        if (System.IO.File.Exists(oldPath))
+                                        {
+                                            System.IO.File.Delete(oldPath);
+                                        }
                                     }
+                                    
 
                                     // Upload file moi
                                     string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
@@ -217,11 +224,15 @@ namespace IN20500.Controllers
                                          Path.GetExtension(files[i].FileName).ToLower().Contains("doc"))
                                 {
                                     // Xoa file cu di
-                                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
-                                    if (System.IO.File.Exists(oldPath))
+                                    if (header.Media.PassNull() != "")
                                     {
-                                        System.IO.File.Delete(oldPath);
+                                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
+                                        if (System.IO.File.Exists(oldPath))
+                                        {
+                                            System.IO.File.Delete(oldPath);
+                                        }
                                     }
+                                   
 
                                     // Upload file moi
                                     string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
@@ -236,23 +247,31 @@ namespace IN20500.Controllers
                     if (!string.IsNullOrWhiteSpace(header.Picture) && string.IsNullOrWhiteSpace(curHeader.Picture))
                     {
                         // Xoa file cu di
-                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
-                        if (System.IO.File.Exists(oldPath))
+                        if (header.Picture.PassNull() != "")
                         {
-                            System.IO.File.Delete(oldPath);
+                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                System.IO.File.Delete(oldPath);
+                            }
+                            DeleteFileInZip(header.Picture, FilePath);
+                            header.Picture = string.Empty;
                         }
-                        DeleteFileInZip(header.Picture, FilePath);
-                        header.Picture = string.Empty;
+                        
                     }
                     if (!string.IsNullOrWhiteSpace(header.Media) && string.IsNullOrWhiteSpace(curHeader.Media))
                     {
                         // Xoa file cu di
-                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
-                        if (System.IO.File.Exists(oldPath))
+                        if (header.Media.PassNull() != "")
                         {
-                            System.IO.File.Delete(oldPath);
+                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                System.IO.File.Delete(oldPath);
+                            }
+                            header.Media = string.Empty;
                         }
-                        header.Media = string.Empty;
+                      
                     }
                 }
                 else
@@ -680,19 +699,28 @@ namespace IN20500.Controllers
 
 
                     // Xoa file cu di
-                    var oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Picture);
-                    if (System.IO.File.Exists(oldPath))
+                    if (objInvtID.Picture.PassNull() != "")
                     {
-                        System.IO.File.Delete(oldPath);
+                        var oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Picture);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
                     }
+                   
 
 
                     // Xoa file cu di
-                    oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Media);
-                    if (System.IO.File.Exists(oldPath))
+                    if (objInvtID.Media.PassNull()!="")
                     {
-                        System.IO.File.Delete(oldPath);
+                        var oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Media);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+
                     }
+                  
 
                     _db.SaveChanges();
                     return Json(new { success = true });

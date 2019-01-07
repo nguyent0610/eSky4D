@@ -84,6 +84,23 @@ var firstLoad = function () {
     App.btnExport.setVisible(HQ.isShowImport);
     App.btnImport.setVisible(HQ.isShowImport);
     App.txtBarCode.setVisible(HQ.isShowBarCode);
+    
+    if (HQ.isBachKhang) {
+        App.cboStyle.setVisible(true);
+        App.cboStyle.allowBlank = false;
+        App.tabDetail.child('#pnlLotSerial').tab.hide();
+        App.tabDetail.child('#pnlCpnyID').tab.hide();
+        App.tabDetail.child('#pnlAttribute').tab.hide();
+    }
+    else {
+        App.cboStyle.setVisible(false);
+        App.cboStyle.allowBlank = true;
+        App.tabDetail.child('#pnlLotSerial').tab.show();
+        App.tabDetail.child('#pnlCpnyID').tab.show();
+        App.tabDetail.child('#pnlAttribute').tab.show();
+    }
+    App.cboStyle.isValid();
+    
 };
 
 var setView = function () {

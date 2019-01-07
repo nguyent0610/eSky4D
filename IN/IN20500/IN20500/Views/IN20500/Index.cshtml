@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/IN20500.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN20500.js?"+DateTime.Now.ToString("yyyyMMddHHmmss"))' type="text/javascript"></script>
 
     <style>
         .x-grid-row-over .x-grid-cell-inner {
@@ -45,6 +45,7 @@
     HQ.isShowBarCode = HQ.util.toBool('@ViewBag.IsShowBarCode');
     HQ.KitType = HQ.util.toBool('@ViewBag.IsShowKitType');
     HQ.isShowImport = HQ.util.toBool('@ViewBag.IsShowImport');
+    HQ.isBachKhang = HQ.util.toBool('@ViewBag.IsBachKhang');
     </script>  
     <title>@ViewBag.Title</title>
 </head>

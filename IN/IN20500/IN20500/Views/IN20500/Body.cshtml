@@ -394,7 +394,20 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Focus.Handler = "this.forceSelection = true;";  
-                            }) 
+                            })
+
+                        , HQ.Combo().ID("cboStyle").Name("cboStyle").HQLangCode("IN20500UnitShip").DataIndex("Style")
+                        .HQProcedure("IN20500_pcStyle").HQColumnShow("Code,Class")
+                        .DisplayField("Class").ValueField("Code").AllowBlank(false)
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection = true;";
+                            lst.Change.Handler = "App.cboStyleHidden.setValue(App.cboStyle.getValue())";
+                        })    
                     )
                     
                     , X.Container().Layout(LayoutType.VBox).MinWidth(240)
@@ -459,7 +472,7 @@
                 })
 
                 , X.Panel().ID("pnlAttribute")         //////////////Tab Attribute//////////////
-                .Title(Util.GetLang("Attribute"))
+                .Title(Util.GetLang("Attribute"))//.Hidden(true)
                 .Layout(LayoutType.HBox).AutoScroll(true)
                 .Items(
                     X.Container().Layout(LayoutType.VBox)
@@ -469,19 +482,19 @@
                             
                         , HQ.TextBox().ID("txtSize").Name("txtSize").HQLangCode("Size").DataIndex("Size")
                             .Width(300).MaxLength(50).EnforceMaxLength(true).MarginSpec("5 0 0 0")
-                            
-                        , HQ.Combo().ID("cboStyle").Name("cboStyle").HQLangCode("Style").DataIndex("Style")
-                            .HQProcedure("IN20500_pcStyle").HQColumnShow("Ma,Nganh")
-                            .DisplayField("Nganh").ValueField("Ma")
-                            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                            .LoadData()
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";
-                            })
-                            
+                        
+                        , HQ.Combo().ID("cboStyleHidden").Name("cboStyleHidden").HQLangCode("Style").DataIndex("Style")
+                        .HQProcedure("IN20500_pcStyle").HQColumnShow("Code,Class")
+                        .DisplayField("Class").ValueField("Code").AllowBlank(false)
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection = true;";
+                        })       
+                                
                         , HQ.NumberField().ID("txtStkVol").Name("txtStkVol").HQLangCode("StkVol").DataIndex("StkVol")
                             .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
                             .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
@@ -577,7 +590,7 @@
                 })
 
                 , X.Panel().ID("pnlLotSerial")         //////////////Tab Lot//////////////
-                .Title(Util.GetLang("LotSerial"))
+                .Title(Util.GetLang("LotSerial"))//.Hidden(true)
                 .Layout(LayoutType.VBox).AutoScroll(true)
                 .Items(
                     X.Container().Layout(LayoutType.HBox)
@@ -706,7 +719,7 @@
                     lss.Render.Handler = "HQ.common.control_render(this,'header')";
                 })
 
-                , X.Panel().ID("pnlCpnyID")  //////////////Tab Cpny//////////////
+                , X.Panel().ID("pnlCpnyID")//.Hidden(true)  //////////////Tab Cpny//////////////
                 .Title(Util.GetLang("CpnyID"))
                 .Layout(LayoutType.Border)
                 .Items(

@@ -4518,6 +4518,30 @@ namespace IN20500
         private Nullable<global::System.Boolean> _IsShowImportExport;
         partial void OnIsShowImportExportChanging(Nullable<global::System.Boolean> value);
         partial void OnIsShowImportExportChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HiddenBK
+        {
+            get
+            {
+                return _HiddenBK;
+            }
+            set
+            {
+                OnHiddenBKChanging(value);
+                ReportPropertyChanging("HiddenBK");
+                _HiddenBK = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HiddenBK");
+                OnHiddenBKChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HiddenBK;
+        partial void OnHiddenBKChanging(Nullable<global::System.Boolean> value);
+        partial void OnHiddenBKChanged();
 
         #endregion
 
