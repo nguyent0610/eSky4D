@@ -140,8 +140,7 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Focus.Handler = "this.forceSelection = true;";
-                    })
-                                    
+                    })                                   
                     ,HQ.TextBox().ID("txtZip").Name("txtZip").HQLangCode("ZIP").MaskRe(@"/[0-9-,.*#()+/; ]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true).DataIndex("Zip")
                                     
