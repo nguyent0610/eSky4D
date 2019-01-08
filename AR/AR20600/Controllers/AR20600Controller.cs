@@ -112,7 +112,7 @@ namespace AR20600.Controllers
             d.TaxId01 = s.TaxId01;
             d.TaxId02 = s.TaxId02;
             d.TaxId03 = s.TaxId03;
-
+            d.NoteAddr = s.NoteAddr;
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = _screenNbr;
             d.LUpd_User = Current.UserName;

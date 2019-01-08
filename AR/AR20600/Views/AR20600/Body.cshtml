@@ -150,6 +150,9 @@
                                     
                     ,HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("FAX").MaskRe(@"/[0-9-,.*#()+/; ]/")
                     .Width(300).MarginSpec("5 0 5 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Fax")
+                    
+                    ,HQ.TextBox().ID("txtNoteAddr").Name("txtNoteAddr").HQLangCode("NOTEADDR")
+                    .Width(300).MarginSpec("5 0 5 0").MaxLength(500).EnforceMaxLength(true).DataIndex("NoteAddr")
             ) //frmLeft
             , X.Panel()
             .Layout(LayoutType.Anchor)
