@@ -39,13 +39,13 @@ namespace IN20300
 
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "VietUc_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN20300"] = acc;
-            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "VietUc_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "040100001";
             Session["Language"] = Current.Language = "vi";

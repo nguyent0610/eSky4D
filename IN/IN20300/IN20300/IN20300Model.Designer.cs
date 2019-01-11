@@ -239,47 +239,6 @@ namespace IN20300
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN20300_pdConfig_Result> IN20300_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<IN20300_pdConfig_Result>("IN20300_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         public ObjectResult<IN20300_ppCheckPrioritize_Result> IN20300_ppCheckPrioritize(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID)
         {
@@ -325,6 +284,47 @@ namespace IN20300
     
             return base.ExecuteFunction<IN20300_ppCheckPrioritize_Result>("IN20300_ppCheckPrioritize", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20300_pdConfig_Result> IN20300_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN20300_pdConfig_Result>("IN20300_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -356,8 +356,7 @@ namespace IN20300
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="hOCreate">Initial value of the HOCreate property.</param>
-        /// <param name="prioritize">Initial value of the Prioritize property.</param>
-        public static IN_Site CreateIN_Site(global::System.String siteId, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean hOCreate, global::System.Int32 prioritize)
+        public static IN_Site CreateIN_Site(global::System.String siteId, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean hOCreate)
         {
             IN_Site iN_Site = new IN_Site();
             iN_Site.SiteId = siteId;
@@ -369,7 +368,6 @@ namespace IN20300
             iN_Site.LUpd_User = lUpd_User;
             iN_Site.tstamp = tstamp;
             iN_Site.HOCreate = hOCreate;
-            iN_Site.Prioritize = prioritize;
             return iN_Site;
         }
 
@@ -937,6 +935,30 @@ namespace IN20300
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Prioritize
+        {
+            get
+            {
+                return _Prioritize;
+            }
+            set
+            {
+                OnPrioritizeChanging(value);
+                ReportPropertyChanging("Prioritize");
+                _Prioritize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Prioritize");
+                OnPrioritizeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Prioritize;
+        partial void OnPrioritizeChanging(Nullable<global::System.Int32> value);
+        partial void OnPrioritizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public Nullable<global::System.Boolean> AllowedSales
         {
             get
@@ -959,26 +981,26 @@ namespace IN20300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 Prioritize
+        public global::System.String WhNote
         {
             get
             {
-                return _Prioritize;
+                return _WhNote;
             }
             set
             {
-                OnPrioritizeChanging(value);
-                ReportPropertyChanging("Prioritize");
-                _Prioritize = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Prioritize");
-                OnPrioritizeChanged();
+                OnWhNoteChanging(value);
+                ReportPropertyChanging("WhNote");
+                _WhNote = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhNote");
+                OnWhNoteChanged();
             }
         }
-        private global::System.Int32 _Prioritize;
-        partial void OnPrioritizeChanging(global::System.Int32 value);
-        partial void OnPrioritizeChanged();
+        private global::System.String _WhNote;
+        partial void OnWhNoteChanging(global::System.String value);
+        partial void OnWhNoteChanged();
 
         #endregion
 
@@ -1337,14 +1359,12 @@ namespace IN20300
         /// <param name="siteId">Initial value of the SiteId property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="hOCreate">Initial value of the HOCreate property.</param>
-        /// <param name="prioritize">Initial value of the Prioritize property.</param>
-        public static IN20300_ppIN_Site_Result CreateIN20300_ppIN_Site_Result(global::System.String siteId, global::System.Byte[] tstamp, global::System.Boolean hOCreate, global::System.Int32 prioritize)
+        public static IN20300_ppIN_Site_Result CreateIN20300_ppIN_Site_Result(global::System.String siteId, global::System.Byte[] tstamp, global::System.Boolean hOCreate)
         {
             IN20300_ppIN_Site_Result iN20300_ppIN_Site_Result = new IN20300_ppIN_Site_Result();
             iN20300_ppIN_Site_Result.SiteId = siteId;
             iN20300_ppIN_Site_Result.tstamp = tstamp;
             iN20300_ppIN_Site_Result.HOCreate = hOCreate;
-            iN20300_ppIN_Site_Result.Prioritize = prioritize;
             return iN20300_ppIN_Site_Result;
         }
 
@@ -1787,9 +1807,9 @@ namespace IN20300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 Prioritize
+        public Nullable<global::System.Int32> Prioritize
         {
             get
             {
@@ -1804,9 +1824,33 @@ namespace IN20300
                 OnPrioritizeChanged();
             }
         }
-        private global::System.Int32 _Prioritize;
-        partial void OnPrioritizeChanging(global::System.Int32 value);
+        private Nullable<global::System.Int32> _Prioritize;
+        partial void OnPrioritizeChanging(Nullable<global::System.Int32> value);
         partial void OnPrioritizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhNote
+        {
+            get
+            {
+                return _WhNote;
+            }
+            set
+            {
+                OnWhNoteChanging(value);
+                ReportPropertyChanging("WhNote");
+                _WhNote = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhNote");
+                OnWhNoteChanged();
+            }
+        }
+        private global::System.String _WhNote;
+        partial void OnWhNoteChanging(global::System.String value);
+        partial void OnWhNoteChanged();
 
         #endregion
 

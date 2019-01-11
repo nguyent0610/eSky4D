@@ -32,8 +32,9 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="HOCreate" Type="bit" Nullable="false" />
           <Property Name="SiteType" Type="varchar" MaxLength="2" />
+          <Property Name="Prioritize" Type="int" />
           <Property Name="AllowedSales" Type="bit" />
-          <Property Name="Prioritize" Type="int" Nullable="false" />
+          <Property Name="WhNote" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -57,12 +58,6 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="IN20300_ppCheckPrioritize" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="UserName" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-          <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN20300_ppIN_Site" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -92,18 +87,18 @@
             <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
-          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
-          <FunctionImport Name="IN20300_pdConfig" ReturnType="Collection(IN20300Model.IN20300_pdConfig_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="IN20300_ppCheckPrioritize" ReturnType="Collection(IN20300Model.IN20300_ppCheckPrioritize_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="IN20300_pdConfig" ReturnType="Collection(IN20300Model.IN20300_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -128,7 +123,8 @@
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
           <Property Type="String" Name="SiteType" Nullable="true" MaxLength="2" />
           <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
-          <Property Type="Int32" Name="Prioritize" Nullable="false" />
+          <Property Type="Int32" Name="Prioritize" Nullable="true" />
+          <Property Type="String" Name="WhNote" Nullable="true" MaxLength="300" />
         </ComplexType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -138,45 +134,46 @@
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="IN_Site">
-          <Key>
-            <PropertyRef Name="SiteId" />
-          </Key>
-          <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Name" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="WhKeeper" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="EmailAddress" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="Public" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="Boolean" Name="HOCreate" Nullable="false" />
-          <Property Type="String" Name="SiteType" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="AllowedSales" Type="Boolean" />
-          <Property Name="Prioritize" Type="Int32" Nullable="false" />
-        </EntityType>
-        <ComplexType Name="IN20300_pdConfig_Result">
-          <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
-          <Property Type="Boolean" Name="Prioritize" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="IN20300_ppCheckPrioritize_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
           <Property Type="Int32" Name="Prioritize" Nullable="false" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
         </ComplexType>
+        <ComplexType Name="IN20300_pdConfig_Result">
+          <Property Type="Boolean" Name="AllowedSales" Nullable="true" />
+          <Property Type="Boolean" Name="Prioritize" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="IN_Site">
+          <Key>
+            <PropertyRef Name="SiteId" />
+          </Key>
+          <Property Name="SiteId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="WhKeeper" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Addr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Addr2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="District" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Public" Type="Boolean" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="HOCreate" Type="Boolean" Nullable="false" />
+          <Property Name="SiteType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Prioritize" Type="Int32" />
+          <Property Name="AllowedSales" Type="Boolean" />
+          <Property Name="WhNote" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -213,6 +210,7 @@
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
                 <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
+                <ScalarProperty Name="WhNote" ColumnName="WhNote" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -225,11 +223,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20300_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20300Model.IN20300_pdConfig_Result">
+                <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="IN_Site">
             <EntityTypeMapping TypeName="IN20300Model.IN_Site">
               <MappingFragment StoreEntitySet="IN_Site">
-                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
+                <ScalarProperty Name="WhNote" ColumnName="WhNote" />
                 <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
+                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
                 <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -256,23 +263,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN20300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20300_pdConfig" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20300Model.IN20300_pdConfig_Result">
-                <ScalarProperty Name="AllowedSales" ColumnName="AllowedSales" />
-                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN20300_ppCheckPrioritize" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckPrioritize">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20300Model.IN20300_ppCheckPrioritize_Result">
-                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
-                <ScalarProperty Name="Prioritize" ColumnName="Prioritize" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -294,9 +284,9 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="64" >
         <EntityTypeShape EntityType="IN20300Model.IN_SiteCpny" Width="1.5" PointX="6.0195799889134154" PointY="3.2059676662115231" />
-        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="3.4275804289745073" PointY="22.198606739844479" />
+        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
