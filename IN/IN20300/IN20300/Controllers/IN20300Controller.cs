@@ -39,7 +39,7 @@ namespace IN20300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -173,6 +173,7 @@ namespace IN20300.Controllers
             t.SiteType = s.SiteType;
             t.AllowedSales = s.AllowedSales;
             t.Prioritize = s.Prioritize;
+            t.WhNote = s.WhNote;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
