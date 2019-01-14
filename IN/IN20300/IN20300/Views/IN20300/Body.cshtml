@@ -150,7 +150,7 @@
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                 }) // cboState
 
-                                , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("IN20300_pcCityByCountryState")
+                                , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("IN20300_pcCityByCountryState").Hidden(true)
                                 .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("City")
                                 .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                                 .HQDBSys(false).HQAutoLoad(false)
