@@ -51,7 +51,7 @@
         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
             X.FileUploadField()
             .ID("btnImport")
-            .ButtonText("ImportTemplate")
+            .ButtonText(Util.GetLang("Import"))
             .ButtonOnly(true)
             .Icon(Icon.BookAdd)
             .Listeners(p=>{
@@ -83,7 +83,7 @@
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BudgetID"))
                     .MinChars(0).TypeAhead(false)
                     .ValueField("BudgetID").DisplayField("BudgetID")
-                    .LabelWidth(100).Width(260).MaxLength(10).EnforceMaxLength(true)
+                    .LabelWidth(130).Width(300).MaxLength(10).EnforceMaxLength(true)
                     .FieldLabel(Util.GetLang("BudgetID"))
                     .QueryMode(DataLoadMode.Remote)
                     .QueryDelay(1000)
@@ -120,6 +120,7 @@
                     .StoreID("stoBudget")
                     .Listeners(p => { 
                         p.Change.Fn = "cboBudgetID_Change";
+                        p.Blur.Fn = "cboBudgetID_Blur";
                         p.TriggerClick.Handler = "if (index == 0) { this.clearValue(); defaultOnNew();}";
                     })
                     
@@ -128,7 +129,7 @@
                         
                     , HQ.Combo().ID("cboStatus").Name("Status").DataIndex("Status")
                     .HQLangCode("Status").AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "Status"))  
-                    .LabelWidth(100).Width(220).MarginSpec("5 0 0 0")
+                    .LabelWidth(130).Width(300).MarginSpec("5 0 0 0")
                     .ForceSelection(true).MinChars(1).TypeAhead(true)
                     .ValueField("Code").DisplayField("Descr")
                     .HQProcedure("OM20300_pcStatus")
@@ -142,8 +143,9 @@
 
                     , HQ.Combo().ID("cboHandle").Name("Handle").DataIndex("Handle")
                     .HQLangCode("Handle").AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "Handle"))
-                    .LabelWidth(105).Width(220).MarginSpec("5 0 0 0")
+                    .LabelWidth(130).Width(300).MarginSpec("5 0 0 0")
                     .ForceSelection(true).MinChars(1).TypeAhead(true)
+                    .HQColumnShow("Code,Descr")
                     .ValueField("Code").DisplayField("Descr")
                     .HQProcedure("OM20300_pcHandle")
                     .HQParam(new StoreParameterCollection() {
@@ -166,8 +168,9 @@
                 .Items(
                     HQ.Combo().ID("cboAllocType").Name("AllocType").DataIndex("AllocType")
                     .HQLangCode("AllocType").AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "AllocType"))
-                    .LabelWidth(100).Width(260)
+                    .LabelWidth(130).Width(300)
                     .ForceSelection(true).MinChars(1).TypeAhead(true)
+                    .HQColumnShow("Code,Descr")
                     .ValueField("Code").DisplayField("Descr")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>{
@@ -183,8 +186,9 @@
                     .HQLangCode("ApplyTo").AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "ApplyTo"))
                     .HQProcedure("OM20300_pcApplyTo")
                     .HQParam(new StoreParameterCollection() { new StoreParameter("langID","HQ.langID",ParameterMode.Raw) })
-                    .LabelWidth(100).Width(220)
+                    .LabelWidth(130).Width(300)
                     .ForceSelection(true).MinChars(1).TypeAhead(true)
+                    .HQColumnShow("Code,Descr")
                     .ValueField("Code").DisplayField("Descr")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => {
@@ -197,7 +201,7 @@
                     , X.NumberField().ID("txtQtyAmtTotal").Name("QtyAmtTotal").DataIndex("QtyAmtTotal")
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "TotalBudget"))
                     .FieldLabel(Util.GetLang("TotalBudget"))
-                    .MinValue(0).LabelWidth(105).Width(220).DecimalPrecision(0)
+                    .MinValue(0).LabelWidth(130).Width(300).DecimalPrecision(0)
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "txtQtyAmtTotal_Change";
@@ -213,14 +217,16 @@
                     X.DateField().ID("txtRvsdDate").Name("RvsdDate").DataIndex("RvsdDate")
                     .FieldLabel(Util.GetLang("RvsdDate"))
                     .BlankText(Util.GetLangPrefix("INput", "RvsdDate")).AllowBlank(false)
-                    .Width(260).LabelWidth(100)
-                    .MinDate(new DateTime(2000, 1, 1)).MaxDate(new DateTime(2100, 1, 1))
+                    .Width(300).LabelWidth(130)
+                    //.MinDate(new DateTime(2018,10,18))
+                    .MaxDate(new DateTime(2100, 1, 1))
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
+                        .Listeners(lst => lst.Change.Fn = "txtRvsdDate_Change")
 
                     , X.NumberField().ID("txtQtyAmtAlloc").DataIndex("QtyAmtAlloc").Name("QtyAmtAlloc")
                     .FieldLabel(Util.GetLang("Alloc")).DecimalPrecision(0)
                     .AllowBlank(false).MinValue(0)
-                    .LabelWidth(100).Width(220)
+                    .LabelWidth(130).Width(300)
                     .Listeners(lst =>{
                         lst.Change.Fn = "txtQtyAmtAlloc_Change";
                     })
@@ -228,7 +234,7 @@
 
                     , X.NumberField().ID("txtQtyAmtFree").Name("QtyAmtFree").DataIndex("QtyAmtFree")
                     .FieldLabel(Util.GetLang("FreeAlloc")).AllowBlank(false)
-                    .LabelWidth(105).Width(220).DecimalPrecision(0)
+                    .LabelWidth(130).Width(300).DecimalPrecision(0)
                     .MinValue(0)
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
 
@@ -238,14 +244,14 @@
                 .Layout(LayoutType.HBox)
                 .Items(
                     X.TextField().ID("txtDescr").Name("Descr").DataIndex("Descr")
-                    .LabelWidth(100).Width(480).MaxLength(250).EnforceMaxLength(true)
+                    .LabelWidth(130).Width(600).MaxLength(250).EnforceMaxLength(true)
                     .BlankText(Util.GetLang("Descr")).AllowBlank(false)
                     .FieldLabel(Util.GetLang("Descr"))
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
                     
                     , X.Checkbox().ID("chkActive").Name("Active").DataIndex("Active")
                     .BoxLabel(Util.GetLang("Active"))
-                    .MarginSpec("0 0 0 110")
+                    .MarginSpec("0 0 0 135")
                     .LabelWidth(50).Width(150)
                     .LabelAlign(LabelAlign.Right)
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
@@ -262,6 +268,7 @@
                 X.Panel().ID("pnlInventory")
                 .Region(Region.North).Flex(1)
                 .Layout(LayoutType.Border)
+                .Title(Util.GetLang("OM20300Inventory"))
                 .Items(
                     X.GridPanel().ID("grdBudgetFree").Region(Region.Center).Flex(1)
                     .Scroll(ScrollMode.Both)
@@ -284,7 +291,7 @@
                         X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
 
                         , X.Column().DataIndex("FreeItemID").Sortable(false)
-                        .Width(150).Text(Util.GetLang("InvtID"))
+                        .Width(150).Text(Util.GetLang("InvtID")).ID("colFreeItemID")
                         .Editor(
                             HQ.Combo().ID("cboInvtID").HQProcedure("OM20300_pcInventory")
                             .HQColumnShow("InvtID,Descr").ValueField("InvtID").DisplayField("InvtID")
@@ -304,8 +311,7 @@
                             .LoadData()
                         )
 
-                        , X.Column().DataIndex("Descr").Sortable(false)
-                        .Flex(1)
+                        , X.Column().DataIndex("Descr").Sortable(false).Width(250)
                         .Text(Util.GetLang("Descr"))
 
                         , X.Column().DataIndex("UnitDesc").Sortable(false)
@@ -331,7 +337,7 @@
                         lst.BeforeEdit.Fn = "grdBudgetFree_BeforeEdit";
                         lst.SelectionChange.Fn = "grdBudgetFree_SelectionChange";
                     })
-                    .SelectionModel(X.RowSelectionModel().ID("smlBudgetInvt").Mode(SelectionMode.Multi))
+                    .SelectionModel(X.RowSelectionModel().ID("smlBudgetInvt").Mode(SelectionMode.Multi)).Listeners(lst => lst.Select.Fn = "smlBudgetInvt_Select")
                     .View(X.GridView().TrackOver(false))
                     .BottomBar(
                         X.PagingToolbar()
@@ -350,6 +356,18 @@
                         .Plugins(X.ProgressBarPager())
                     )
                     .Plugins(X.CellEditing().ClicksToEdit(1))
+                        .Features(
+                            X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("FreeItemID"),
+                                X.StringFilter().DataIndex("Descr"),
+                                X.StringFilter().DataIndex("UnitDesc"),
+                                X.NumericFilter().DataIndex("QtyAmtAlloc"),
+                                X.NumericFilter().DataIndex("QtyAmtSpent"),
+                                X.NumericFilter().DataIndex("QtyAmtAvail")
+                            )
+                        )
                 )
                 
                 //, X.BoxSplitter().ID("splitCompany").Region(Region.Center)
@@ -357,6 +375,7 @@
                 , X.Panel().ID("pnlCompany")
                 .Region(Region.Center).Flex(1)
                 .Layout(LayoutType.Border)
+                .Title(Util.GetLang("OM20300Company"))
                 .Items(
                     X.GridPanel().ID("grdBudgetCompany").Flex(1).Region(Region.Center)
                     .Scroll(ScrollMode.Both)
@@ -401,7 +420,7 @@
                             .LoadData()
                         )
                         , X.Column().DataIndex("CpnyID").Sortable(false)
-                        .Width(150).Text(Util.GetLang("CpnyID"))
+                        .Width(150).Text(Util.GetLang("CpnyID")).ID("colCpnyID")
                         .Editor(
                             HQ.Combo().ID("cboCompany").HQProcedure("OM20300_pcBranch")
                             .HQColumnShow("BranchID,BranchName")
@@ -424,8 +443,8 @@
                             .LoadData()
                         )
 
-                        , X.Column().DataIndex("CpnyName").Sortable(false)
-                        .Flex(1).Text(Util.GetLang("CpnyName"))
+                        , X.Column().DataIndex("CpnyName").Sortable(false).Width(250)
+                        .Text(Util.GetLang("CpnyName"))
 
                         , X.Column().DataIndex("QtyAmtAlloc").Renderer("renderQtyAmt").Sortable(false)
                         .Width(150).Text(Util.GetLang("Budget")).Align(Alignment.Right)
@@ -446,7 +465,7 @@
                         lst.BeforeEdit.Fn = "grdBudgetCompany_BeforeEdit";
                         lst.SelectionChange.Fn = "grdBudgetCompany_SelectionChange";
                     })
-                    .SelectionModel(X.RowSelectionModel().ID("smlBudgetCompany").Mode(SelectionMode.Multi))
+                        .SelectionModel(X.RowSelectionModel().ID("smlBudgetCompany").Mode(SelectionMode.Multi)).Listeners(lst => lst.Select.Fn = "smlBudgetCompany_Select")
                     .View(X.GridView().TrackOver(false))
                     .BottomBar(
                         X.PagingToolbar()
@@ -465,6 +484,19 @@
                         .Plugins(X.ProgressBarPager())
                     )
                     .Plugins(X.CellEditing().ClicksToEdit(1))
+                         .Features(
+                            X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.ListFilter().DataIndex("FreeItemID"),
+                                X.StringFilter().DataIndex("Territory"),
+                                X.StringFilter().DataIndex("CpnyID"),
+                                X.StringFilter().DataIndex("CpnyName"),
+                                X.NumericFilter().DataIndex("QtyAmtAlloc"),
+                                X.NumericFilter().DataIndex("QtyAmtSpent"),
+                                X.NumericFilter().DataIndex("QtyAmtAvail")
+                            )
+                        )
                 )
                 
                 //, X.BoxSplitter().ID("splitCompany2").Region(Region.Center)
@@ -472,6 +504,7 @@
                 , X.Panel().ID("pnlCust")
                 .Region(Region.South).Flex(1)
                 .Layout(LayoutType.Border)
+                .Title(Util.GetLang("OM20300Customer"))
                 .Items(
                     X.GridPanel().ID("grdCust").Flex(1).Region(Region.Center)
                     .Scroll(ScrollMode.Both)
@@ -483,6 +516,7 @@
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("budgetID", "App.cboBudgetID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("allocType", "App.cboAllocType.getValue()", ParameterMode.Raw));
                         })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetListBudgetAlloc")))
                         .Listeners(l =>
@@ -493,7 +527,7 @@
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
 
-                        , X.Column().DataIndex("ObjID").Sortable(false)
+                        , X.Column().DataIndex("ObjID").Sortable(false).ID("colObjID")
                         .Width(150).Text(Util.GetLang("CustID"))
                         .Editor(
                             HQ.Combo().ID("cboCustID").HQProcedure("OM20300_pcCustomer")
@@ -503,7 +537,9 @@
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw),
                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                new StoreParameter("@BranchID","_branchID", ParameterMode.Raw),
+                                new StoreParameter("@AllocType","App.cboAllocType.getValue()", ParameterMode.Raw),
                             })                            
                             .ValueField("CustID").DisplayField("CustID")                            
                             .Listeners(lst =>
@@ -515,8 +551,8 @@
                             .LoadData()
                         )
 
-                        , X.Column().DataIndex("Descr").Sortable(false)
-                        .Flex(1).Text(Util.GetLang("CustName"))
+                        , X.Column().DataIndex("Descr").Sortable(false).ID("colDescr").Width(250)
+                        .Text(Util.GetLang("CustName"))
 
                         , X.Column().DataIndex("QtyAmtAlloc").Renderer("renderQtyAmt").Sortable(false)
                         .Width(150).Text(Util.GetLang("Budget")).Align(Alignment.Right)
@@ -524,6 +560,9 @@
 
                         , X.Column().DataIndex("QtyAmtSpent").Align(Alignment.Right).Sortable(false)
                         .Width(150).Text(Util.GetLang("Spent")).Renderer("renderQtyAmt")
+                        
+                        , X.Column().DataIndex("QtyAmtAvail").Align(Alignment.Right).Sortable(false)
+                        .Width(150).Text(Util.GetLang("BudgetResidual")).Renderer("renderQtyAmt")
 
                     )
                     .SelectionModel(X.RowSelectionModel().ID("smlCust").Mode(SelectionMode.Multi))
@@ -553,6 +592,19 @@
                         lst.ValidateEdit.Fn = "grdBudgetCust_ValidateEdit";
                         lst.BeforeEdit.Fn = "grdBudgetCust_BeforeEdit";
                     })
+                         .Features(
+                            X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.ListFilter().DataIndex("CpnyID"),
+                                X.ListFilter().DataIndex("FreeItemID"),
+                                X.StringFilter().DataIndex("ObjID"),
+                                X.StringFilter().DataIndex("Descr"),
+                                X.NumericFilter().DataIndex("QtyAmtAlloc"),
+                                X.NumericFilter().DataIndex("QtyAmtSpent"),
+                                X.NumericFilter().DataIndex("QtyAmtAvail")
+                            )
+                        )
                 )
                 
             
@@ -580,7 +632,9 @@
           X.Container().Layout(LayoutType.VBox).MarginSpec("5 20 5 15")
       .Items(
         HQ.Checkbox().ID("chkAmount").HQLangCode("Amount")
-        ,HQ.Checkbox().ID("chkQuantity").HQLangCode("Quantity")  
+            .Listeners(lst => lst.Change.Fn = "chkAmount_Change")
+        ,HQ.Checkbox().ID("chkQuantity").HQLangCode("Quantity")
+            .Listeners(lst => lst.Change.Fn = "chkQuantity_Change") 
           )
      ,X.Container().Layout(LayoutType.HBox)
      .Items(

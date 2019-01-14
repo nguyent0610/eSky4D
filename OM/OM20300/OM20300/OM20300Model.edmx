@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OM20300Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="OM20300Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="HO_PendingTasks">
           <Key>
             <PropertyRef Name="TaskID" />
@@ -101,6 +101,11 @@
           <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProGroup" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ImageModifiedDate" Type="datetime" />
+          <Property Name="VideoModifiedDate" Type="datetime" />
+          <Property Name="CnvFact" Type="float" />
+          <Property Name="KitType" Type="bit" Nullable="false" />
+          <Property Name="GiftPoint" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_PPAlloc">
           <Key>
@@ -134,7 +139,7 @@
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="ApplyTo" Type="char" MaxLength="1" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="30" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="RvsdDate" Type="smalldatetime" Nullable="false" />
           <Property Name="QtyAmtFree" Type="float" Nullable="false" />
           <Property Name="QtyAmtTotal" Type="float" Nullable="false" />
@@ -256,6 +261,7 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Zone" Type="varchar" MaxLength="10" />
+          <Property Name="Distance" Type="float" />
         </EntityType>
         <Function Name="OM20300_pcBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -285,7 +291,11 @@
           <Parameter Name="parm2" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="OM20300_pgAlloc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BudgetID" Type="varchar" Mode="In" />
+          <Parameter Name="AllocType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM20300_pgCpny" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BudgetID" Type="varchar" Mode="In" />
@@ -324,7 +334,11 @@
           <EntitySet Name="HO_PendingTasks" EntityType="OM20300Model.HO_PendingTasks" />
           <EntitySet Name="SI_Territory" EntityType="OM20300Model.SI_Territory" />
           <FunctionImport Name="OM20300_pgAlloc" ReturnType="Collection(OM20300Model.OM20300_pgAlloc_Result)">
-          <Parameter Name="BudgetID" Mode="In" Type="String" />
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BudgetID" Mode="In" Type="String" />
+            <Parameter Name="AllocType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="OM20300_pgCpny" ReturnType="Collection(OM20300Model.OM20300_pgCpny_Result)">
             <Parameter Name="BudgetID" Mode="In" Type="String" />
@@ -523,6 +537,7 @@
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Distance" Type="Double" />
         </EntityType>
         <ComplexType Name="OM20300_pgAlloc_Result">
           <Property Type="String" Name="BudgetID" Nullable="false" MaxLength="10" />
@@ -577,7 +592,7 @@
           <Property Type="Boolean" Name="Active" Nullable="false" />
           <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ApplyTo" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="RvsdDate" Nullable="false" Precision="0" />
           <Property Type="Double" Name="QtyAmtFree" Nullable="false" />
           <Property Type="Double" Name="QtyAmtTotal" Nullable="false" />
@@ -695,6 +710,11 @@
           <Property Name="Brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ProGroup" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CnvFact" Type="Double" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
+          <Property Name="GiftPoint" Type="Double" Nullable="false" />
         </EntityType>
         <ComplexType Name="OM20300_pcBranchID_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -846,6 +866,7 @@
           <EntitySetMapping Name="SI_Territory">
             <EntityTypeMapping TypeName="OM20300Model.SI_Territory">
               <MappingFragment StoreEntitySet="SI_Territory">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
@@ -992,6 +1013,11 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="OM20300Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
+                <ScalarProperty Name="KitType" ColumnName="KitType" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
+                <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
                 <ScalarProperty Name="ProType" ColumnName="ProType" />
                 <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
                 <ScalarProperty Name="Brand" ColumnName="Brand" />

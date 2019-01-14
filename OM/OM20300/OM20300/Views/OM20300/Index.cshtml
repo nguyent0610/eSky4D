@@ -36,7 +36,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    @(X.ResourceManager().Theme(Theme.Gray))
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Default" : Current.Theme.PassNull())))
     
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   

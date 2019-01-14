@@ -421,9 +421,9 @@ namespace OM20300.Controllers
             var lstInvt = _app.OM20300_pgInvtAlloc(budgetID, Current.CpnyID).ToList();
             return this.Store(lstInvt, lstInvt.Count);
         }
-        public ActionResult GetListBudgetAlloc(string budgetID)
+        public ActionResult GetListBudgetAlloc(string budgetID, string allocType)
         {
-            var lstAlloc = _app.OM20300_pgAlloc(budgetID).ToList();
+            var lstAlloc = _app.OM20300_pgAlloc(Current.CpnyID,Current.UserName,Current.LangID,budgetID,allocType).ToList();
             return this.Store(lstAlloc, lstAlloc.Count);
         }
         public ActionResult GetListBudgetCompany(string budgetID)
@@ -956,8 +956,8 @@ namespace OM20300.Controllers
                 Worksheet SheetDataAM = workbook.Worksheets[0];
                 SheetDataAM.Name = "AM";
                 workbook.Worksheets.Add();
-                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGET ID"), TextAlignmentType.Center, TextAlignmentType.Left);
-                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCH ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGETID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCHID"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["C1"], Util.GetLang("TOTALEx"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["D1"], Util.GetLang("ALLOCATED"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["E1"], Util.GetLang("DESCRIPTION"), TextAlignmentType.Center, TextAlignmentType.Left);               
@@ -971,7 +971,7 @@ namespace OM20300.Controllers
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Amount_JJVN.xlsx" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Amount.xlsx" };
             }
             catch (Exception ex)
             {
@@ -994,10 +994,10 @@ namespace OM20300.Controllers
                 Worksheet SheetDataAM = workbook.Worksheets[0];
                 SheetDataAM.Name = "QT";
                 workbook.Worksheets.Add();
-                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGET ID"), TextAlignmentType.Center, TextAlignmentType.Left);
-                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCH ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGETID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCHID"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["C1"], Util.GetLang("TOTALEx"), TextAlignmentType.Center, TextAlignmentType.Left);
-                SetCellValueGrid(SheetDataAM.Cells["D1"], Util.GetLang("FREE ITEM ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["D1"], Util.GetLang("FREE ITEMID"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["E1"], Util.GetLang("UNITEx"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["F1"], Util.GetLang("ALLOCATED"), TextAlignmentType.Center, TextAlignmentType.Left);
                 SetCellValueGrid(SheetDataAM.Cells["G1"], Util.GetLang("DESCRIPTION"), TextAlignmentType.Center, TextAlignmentType.Left);
@@ -1013,7 +1013,7 @@ namespace OM20300.Controllers
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Quantity_JJVN.xlsx" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Quantity.xlsx" };
             }
             catch (Exception ex)
             {
