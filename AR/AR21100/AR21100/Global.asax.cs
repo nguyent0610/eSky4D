@@ -38,7 +38,7 @@ namespace AR21100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "ECO_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;

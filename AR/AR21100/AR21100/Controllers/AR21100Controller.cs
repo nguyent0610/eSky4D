@@ -20,7 +20,7 @@ namespace AR21100.Controllers
         private string _screenNbr = "AR21100";
         private string _userName = Current.UserName;
         AR21100Entities _db = Util.CreateObjectContext<AR21100Entities>(false);
-
+        private JsonResult _logMessage;
         public ActionResult Index()
         {
 
@@ -67,13 +67,25 @@ namespace AR21100.Controllers
 
                 lstChannel.Created.AddRange(lstChannel.Updated);
 
+                bool flagCheck = true;
+                string errorcheck = string.Empty;
+                string message = string.Empty;
+
                 foreach (AR21100_pgLoadChannel_Result curChannel in lstChannel.Created)
                 {
                     if (curChannel.Code.PassNull() == "") continue;
-
                     var Channel = _db.AR_Channel.Where(p => p.Code.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
-
-
+                    var check_Salesperson = _db.AR_Salesperson.Where(p => p.Channel.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
+                    var check_Inventory = _db.IN_Inventory.Where(p => p.Channel.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
+                    var check_Customer = _db.AR_Customer.Where(p => p.Channel.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
+                    var check_User = _db.vs_User.Where(p => p.Channel.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
+                    if (check_Salesperson != null || check_Inventory != null || check_Customer != null || check_User != null)
+                    {
+                        errorcheck += (curChannel.Code) + ", ";
+                        flagCheck = true;
+                     //   
+                    }
+                   
                     if (Channel != null)
                     {
                         if (Channel.tstamp.ToHex() == curChannel.tstamp.ToHex()) // luôn bắt code
@@ -92,16 +104,24 @@ namespace AR21100.Controllers
                         _db.AR_Channel.AddObject(Channel);
                     }
                 }
-
-                _db.SaveChanges();
-
-                return Json(new { success = true });
+                message = errorcheck == "" ? "" : string.Format(Message.GetString("2018082851", null), errorcheck.TrimEnd(','), Util.GetLang("SI24100QuestID"));
+                if (string.IsNullOrEmpty(message))
+                {
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "2018121755", "", new string[] { errorcheck.TrimEnd(',') });
+                }
+                Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
+               // return Json(new { success = true });
             }
             catch (Exception ex)
             {
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
+            return _logMessage;
         }
 
         private void Update_AR_Channel(AR_Channel t, AR21100_pgLoadChannel_Result s, bool isNew)

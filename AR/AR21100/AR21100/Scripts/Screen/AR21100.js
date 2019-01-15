@@ -26,7 +26,8 @@ var menuClick = function (command) {
             break;
         case "refresh":
             if (HQ.isChange) {
-                HQ.message.show(20150303, '', 'refresh');
+
+                HQ.message.show(20150303, '', 'refresh')
             }
             else {
                 HQ.isFirstLoad = true;
@@ -44,13 +45,10 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 if (App.slmChannel.selected.items[0] != undefined) {
                     setTimeout(function () {
-                        if (_delete == 1) {
-                            HQ.message.show(2018112060, [_Channel], 'deleteData', true);
-                        }
-                        else {
+                        
                             if (App.slmChannel.selected.items[0].data.Code != "") {
                                 HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdChannel)], 'deleteData', true);
-                            }
+                            
                         }
                         HQ.common.showBusy(false);
                     }, 1000)
@@ -62,6 +60,7 @@ var menuClick = function (command) {
                 if (HQ.store.checkRequirePass(App.stoChannel, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
+               // App.stoChannel.reload();
             }
             break;
         case "print":
@@ -75,18 +74,9 @@ var menuClick = function (command) {
             break;
     }
 
-};
+}
 
-var grdChannel_BeforeEdit = function (editor, e) {
-    _Channel = e.record.data.Code;
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdChannel_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdChannel, e, keys);
-};
-var grdChannel_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdChannel, e, keys);
-};
+
 var grdChannel_Reject = function (record) {
     
     HQ.grid.checkReject(record, App.grdChannel);
@@ -104,7 +94,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                menuClick("refresh");
+                App.stoChannel.reload();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -115,6 +105,10 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
+        if (_delete == 1) {
+            HQ.message.show(2018112060, [_Channel], 'deleteData', true);
+            return false;
+        }
         App.grdChannel.deleteSelected();
         stoChanged(App.stoChannel);
     }
@@ -183,12 +177,20 @@ var stoLoad = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
+    HQ.store.insertBlank(App.stoChannel, ['Code']);
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-
+var checkinsertBlank = function (item, e)
+{
+   // HQ.grid.checkInsertKey(App.grdChannel, e, keys);
+    var record = HQ.store.findRecord(App.stoChannel, keys, ['']);
+    if (!record) {
+        HQ.store.insertBlank(App.stoChannel, ['Code']);
+    }
+}
 var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) {    
     var record = App.cboChannelType.findRecord("Code", value);
     if (record) {
@@ -201,13 +203,27 @@ var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) 
 /////////////////////////////////////////////////////////////////////////
 var stocheckDelete_Load = function () {
     _delete = App.stocheckDelete.data.items[0].data.Result;
+    checkinsertBlank();
 }
 var slmTerritory_Channel = function (slm, selRec, idx, eOpts) {
+    
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     _Channel = selRec.data.Code;
+    App.stocheckDelete.reload();
+
 }
 
 
-
+var grdChannel_BeforeEdit = function (editor, e) {
+    _Channel = e.record.data.Code;
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdChannel_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdChannel, e, keys);
+};
+var grdChannel_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdChannel, e, keys);
+};
 
 
 

@@ -33,7 +33,7 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChannel"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
+            //    l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
                 l.Update.Fn = "stoChanged";                 
             })
@@ -50,35 +50,34 @@
             .ID("Code")
             .Text(Util.GetLang("AR21100_Code")) // mã kênh bán hàng
             .DataIndex("Code")
-            .Flex(1)
+            .Width(150)
             .Editor(Html.X()
-                .TextField()
-                .MaxLength(10)
-                .EnforceMaxLength(true))
+            .TextField()
+            .MaxLength(10)
+            .EnforceMaxLength(true))
         ,X.Column()
                 .Text(Util.GetLang("Descr")) // Diễn giãi
-                .Flex(1)
                 .DataIndex("Descr")
-                .Width(150)
+                .Width(250)
                 .Editor(Html.X()
-                    .TextField()
-                    .MaxLength(200)
-                    .EnforceMaxLength(true))
+                .TextField()
+                .MaxLength(200)
+                .EnforceMaxLength(true))
                     
         ,X.Column()
             .Text(Util.GetLang("AR21100_ChannelType")) // Loại kênh
             .ID("colChannelType")
             .DataIndex("Type")
-            .Flex(1)
+            .Width(150)
             .Renderer("renderTypeName")
-            .Editor(HQ.Combo()
+            .Editor(
+                HQ.Combo()
                 .ID("cboChannelType")
                 .Name("cboChannelType")
                 .HQProcedure("AR21100_pcChannelType")
                 .HQColumnShow("Code,Descr")
                 .DisplayField("Descr")
                 .ValueField("Code")
-                .Width(300)
                 .HQHeightWidth(500, 400)
                 .ForceSelection(true)
                 .HQParam(new StoreParameterCollection() 
