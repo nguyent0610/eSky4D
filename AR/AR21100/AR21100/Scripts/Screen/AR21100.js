@@ -173,11 +173,19 @@ var stoLoad = function (sto) {
     HQ.common.changeData(HQ.isChange, 'AR21100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            var record = HQ.store.findInStore(sto, keys, ['']);
+            if (record == undefined) {
+                HQ.store.insertBlank(sto, keys);
+            }
+            
         }
         HQ.isFirstLoad = false;
     }
-    HQ.store.insertBlank(App.stoChannel, ['Code']);
+    var record = HQ.store.findInStore(App.stoChannel, ['Code'], ['']);
+    if (record == undefined) {
+        HQ.store.insertBlank(App.stoChannel, ['Code']);
+    }
+    
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
