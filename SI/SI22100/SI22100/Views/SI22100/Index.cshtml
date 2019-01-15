@@ -1,0 +1,71 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI22100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "SI22100";
+    var acc = Session["SI22100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình SI22100.js tùy theo màn hình đổi lại -->
+<head>
+    <meta name="viewport" content="width=device-width" />
+   <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/SI22100.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+       
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');   
+
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+  
+         @(
+            X.Store().ID("stoQuestionList")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(SI_QuestList), "mdlQuestionList", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetQuestionList", "SI22100"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+
+                ps.Add(new StoreParameter("questListID", "App.cboQuestListID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="stoQuestionList_Load" )
+        )
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong SI22100Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+    
+</body>
+</html>
+ 
