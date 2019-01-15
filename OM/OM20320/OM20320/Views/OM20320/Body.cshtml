@@ -1,0 +1,1239 @@
+<title>qrqwerqw</title>@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20320;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(Html.X()
+        .Viewport()
+        .Layout(LayoutType.Fit)
+        .Items(
+             X.FormPanel()
+                    .ID("frmFirst") //Form First
+                    .BodyPadding(0)
+                    .TrackResetOnLoad(true)
+                    .KeyMap(Util.SetupKeyMap())
+                    .Layout(LayoutType.Border)
+                    .TopBar(Util.SetupToolbar("print,save", true, "menuFirstClick"))
+                    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
+                    .Items
+                    (
+                        X.TabPanel()
+                            .Region(Region.North)
+                           .Items
+                           (
+                                X.Panel()
+                                    .Title(Util.GetLang("FilterCondition")) // Điều Kiện Lọc
+                                    .Region(Region.North)
+                                    .Layout(LayoutType.HBox)
+                                    .MarginSpec("5 0 10 0")
+                                    .Items
+                                    (
+                                         HQ.Combo()
+                                            .ID("cboTypeAccumulation")
+                                            .Name("cboTypeAccumulation")
+                                            .HQLangCode("OM20320TypeAcc")
+                                            .HQProcedure("OM20320_pcTypeAccumulated") // Loại Tích Lũy
+                                            .HQColumnShow("Code,Descr")
+                                            .DisplayField("Descr")
+                                            .ForceSelection(true)
+                                            .DataIndex("Type")
+                                            .ValueField("Code")
+                                            .Width(300)
+                                            .HQHeightWidth(400, 180)
+                                            .MarginSpec("5 0 0 0")
+                                            .HQParam(new StoreParameterCollection()
+                                            {
+                                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+
+                                            })
+                                            .Listeners(lst =>
+                                            {
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .LoadData()
+                                        , HQ.Combo()
+                                            .ID("cboStatusFilter")
+                                            .Name("cboStatusFilter")
+                                            .HQLangCode("Status") // Trạng thái
+                                            .HQProcedure("OM20320_pcStatus")
+                                            .ForceSelection(true)
+                                            .HQColumnShow("Code,Descr")
+                                            .DisplayField("Descr")
+                                            .ValueField("Code")
+                                            .Width(300)
+                                            .HQHeightWidth(400, 180)
+                                            .MarginSpec("5 0 0 0")
+                                            .DataIndex("Status")
+                                            .HQParam(new StoreParameterCollection()
+                                            {
+                                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            })
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                lst.Change.Handler = "App.cboHandle.store.reload();";
+                                            })
+                                            .LoadData()
+                                        , HQ.Button()
+                                            .ToolTip(Util.GetLang("btnLoadData")) // Đọc dữ liệu
+                                            .HQLangCode("LoadData")
+                                            .Width(140)
+                                            .Icon(Icon.ArrowRefresh)
+                                            .MarginSpec("5 0 0 20")
+                                            .Listeners(p => p.Click.Fn = "btnLoadData_Click")
+                                    )
+                           )//end Điều Kiện Lọc
+                       , X.TabPanel()
+                           .Layout(LayoutType.Border)
+                           .Region(Region.Center)
+                           .Items
+                           (
+                                X.Panel()
+                                    .Title(Util.GetLang("OM20320_Result")) //Kết Qủa
+                                    .Layout(LayoutType.Fit)
+                                    .Items
+                                    (
+                                        X.GridPanel()
+                                            .Scroll(ScrollMode.Both)
+                                            .ID("grdOM_Accumulated")
+                                            .View(X.GridView()
+                                            .TrackOver(true))
+                                            .Store
+                                            (
+                                                X.Store()
+                                                    .PageSize(50)
+                                                    .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGrid"))).AutoLoad(false)
+                                                    .ID("stoOM_Accumulated")
+                                                    .Model(Util.GenerateModel(typeof(OM20320_pgLoadGrid_Result), "mdlOM_AccumulatedGr", "")) /// mdlSalesperson
+                                                    .Parameters(ps =>
+                                                    {
+                                                        ps.Add(new StoreParameter("type", "App.cboTypeAccumulation.getValue()", ParameterMode.Raw));
+                                                        ps.Add(new StoreParameter("status", "App.cboStatusFilter.getValue()", ParameterMode.Raw));
+
+                                                    })
+                                                    .Listeners(l =>
+                                                    {
+                                                        l.Load.Fn = "stoAR_SalespersonLoad";
+                                                    })
+                                            )
+                                            .SortableColumns(false)
+                                            .ColumnModel
+                                            (
+                                                X.RowNumbererColumn().Text(Util.GetLang("OM20320Numer")).Width(40)
+                                                , X.CommandColumn()
+                                                    .Text(Util.GetLang("OM20320_Change"))
+                                                    .Align(Alignment.Center)
+                                                    .Width(50)
+                                                    .Commands
+                                                    (
+                                                        X.GridCommand().Icon(Icon.BookEdit).CommandName("Edit_Click") //Edit
+                                                    )
+                                                    .Listeners(l =>
+                                                    l.Command.Handler = "btnEdit_Click(record);"
+                                                    )
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320_ProgramID")) // Mã Chương Trình
+                                                    .DataIndex("AccumulateID")
+                                                    .Width(100)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320_Descr")) //Diễn Giải
+                                                    .DataIndex("Descr")
+                                                    .Width(150)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320TypeAcc")) //Loại Tích Lũy
+                                                    .DataIndex("TypeDescr")
+                                                    .Width(150)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320_ApplyTo"))//Áp Dụng Cho
+                                                    .DataIndex("ApplyforDescr")
+                                                    .Width(90)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320_CheckBy")) //Kiểm Tra Theo
+                                                    .DataIndex("BreakByDescr")
+                                                    .Width(90)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("OM20320_MonthYear")) //Tháng/Chu kì/Năm
+                                                    .DataIndex("CycleNbr")
+                                                    .Width(120)
+                                                , X.DateColumn()
+                                                    .Text(Util.GetLang("OM20320_FromDay"))// Từ Ngày
+                                                    .DataIndex("FromDate")
+                                                    .Format(Current.FormatDate)
+                                                    .Width(90)
+                                                , X.DateColumn()
+                                                    .Text(Util.GetLang("OM20320_ToDay")) // Đến ngày
+                                                    .DataIndex("ToDate")
+                                                    .Format(Current.FormatDate)
+                                                    .Width(90)
+                                                , X.CheckColumn()
+                                                    .Text(Util.GetLang("OM20320_Using"))// Đang sử dụng
+                                                    .DataIndex("Active")
+                                                    .Width(90)
+                                                , X.Column()
+                                                    .Text(Util.GetLang("Status")) // Trạng Thái
+                                                    .DataIndex("StatusDescr")
+                                                    .Width(100)
+                                           )
+                                            .SelectionModel(X.RowSelectionModel().ID("slmGrid").Mode(SelectionMode.Multi)).Listeners(lst => { lst.Select.Fn = "slmGrid_Select"; })
+                                            .BottomBar
+                                            (
+                                                X.PagingToolbar()
+                                                .Items(
+                                                    X.Label("Page size:"),
+                                                    X.ToolbarSpacer(10),
+                                                    X.ComboBox()
+                                                    .Width(80)
+                                                    .Items("1", "2", "10", "20", "30", "50")
+                                                    .SelectedItems("50")
+                                                    .Listeners(l =>
+                                                        {
+                                                            l.Select.Fn = "HQ.grid.onPageSelect";
+                                                        })
+                                                )
+                                                .Plugins(X.ProgressBarPager())
+                                            )
+                                            .Plugins
+                                            (
+                                                X.CellEditing()
+                                                .ClicksToEdit(1)
+                                                .Listeners(ls =>
+                                                {
+
+                                                })
+                                            )
+                                            .Features
+                                            (
+                                                X.GridFilters()
+                                                    .Local(true)
+                                                    .Filters
+                                                    (
+                                                        X.StringFilter().DataIndex("AccumulateID"),
+                                                        X.StringFilter().DataIndex("Descr"),
+                                                        X.StringFilter().DataIndex("TypeDescr"),
+                                                        X.StringFilter().DataIndex("ApplyforDescr"),
+                                                        X.StringFilter().DataIndex("BreakByDescr"),
+                                                        X.StringFilter().DataIndex("CycleNbr"),
+                                                        X.StringFilter().DataIndex("FromDate"),
+                                                        X.StringFilter().DataIndex("ToDate"),
+                                                        X.BooleanFilter().DataIndex("Active"),
+                                                        X.StringFilter().DataIndex("StatusDescr")
+                                                    )
+                                            )
+                                    )
+                           )
+                    )//end Form Fist
+        //Form Main
+            , X.FormPanel()
+                .ID("frmMain")
+                .Hidden(true)
+                .Closable(true)
+                .CloseAction(CloseAction.Hide) //closeClick Form Main
+                .BodyPadding(0)
+                .TrackResetOnLoad(true)
+                .KeyMap(Util.SetupKeyMap())
+                .Layout(LayoutType.Border)
+                .AutoScroll(true)
+                .TopBar(Util.SetupToolbar("print,new", false, "menuMainClick"))
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+                .Listeners(l =>
+                {
+                    l.BeforeClose.Fn = "btnHome_Click";
+                    l.FieldChange.Fn = "frmChange";
+                })
+                .Items(
+                    X.TabPanel()
+                    .Region(Region.North)
+                    .Items
+                    (
+                        X.Panel()
+                            .Title(Util.GetLang("OM20320DefaultInfo")) //Thông Tin Mặc Định
+                            .Region(Region.North)
+                            .Layout(LayoutType.VBox)
+                            .AutoScroll(true)
+                            .MarginSpec("5 0 5 0")
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'ProgramID')";
+                            })
+                            .Items
+                                (
+                                        X.Container()
+                                            .Layout(LayoutType.HBox)
+                                            .MarginSpec("5 10 0 0")
+                                            .Region(Region.North)
+                                            .Items
+                                            (
+                                                    HQ.TextBox()
+                                                        .ID("txtProgramID")
+                                                        .Name("txtProgramID")
+                                                        .EnforceMaxLength(true)
+                                                        .MaxLength(50)
+                                                        .HQLangCode("OM20320_ProgramID") //Mã Chương Trình
+                                                        .Width(400)
+                                                        .AllowBlank(false)
+                                                        .Listeners(l =>
+                                                        {
+                                                             l.Change.Fn = "txtProgramID_ChangeClick";
+                                                           
+                                                        })
+                                                    , HQ.TextBox()
+                                                        .ID("txtDescr")
+                                                        .Name("txtDescr")
+                                                        .HQLangCode("OM20320_Descr")
+                                                       // .DataIndex("Descr")
+                                                        .Width(800)
+                                                        .AllowBlank(false)
+                                                        .MaxLength(200)
+                                                        .EnforceMaxLength(true)
+                                            )
+                                        , X.Container()
+                                            .Layout(LayoutType.HBox)
+                                            .MarginSpec("5 10 0 0")
+                                            .Region(Region.North)
+                                            .Items
+                                            (
+                                                HQ.Combo()
+                                                    .ID("cboTypeAccumulationMain")
+                                                    .Name("TypeAccumulation")
+                                                    .HQLangCode("cboTypeAccumulation")
+                                                    .HQProcedure("OM20320_pcTypeAccumulated") // Loại Tích Lũy
+                                                    .HQColumnShow("Code,Descr")
+                                                    .DisplayField("Descr")
+                                                    .ForceSelection(true)
+                                                   // .DataIndex("Type")
+                                                    .ValueField("Code")
+                                                    .Width(400)
+                                                    .HQHeightWidth(400, 180)
+                                                    .AllowBlank(false)
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
+                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .Listeners(lst =>
+                                                    {
+                                                   //     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                        lst.TriggerClick.Fn = "cboTypeAccumulationMain_TriggerClick";
+                                                        lst.Change.Fn = "cboTypeAccumulationMain_Change";
+                                                    })
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .LoadData()
+                                                , HQ.Combo()
+                                                    .ID("cboMonthYear")
+                                                    .Name("cboMonthYear")
+                                                    .HQLangCode("OM20320_MonthYear") // Tháng/Chu Kỳ/Năm
+                                                    .HQProcedure("OM20320_CycleNbr")
+                                                   // .DataIndex("CycleNbr")
+                                                    .ForceSelection(true)
+                                                    .HQColumnShow("TypeAccumulateAll")
+                                                    .DisplayField("TypeAccumulateAll")
+                                                    .ValueField("TypeAccumulateAll")
+                                                    .Width(400)
+                                                    .AllowBlank(false)
+                                                    .MaxLength(200)
+                                                    .EnforceMaxLength(true)
+                                                    .ReadOnly(true)
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
+                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@TypeAccumulate", Value = "App.cboTypeAccumulationMain.getValue()", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .Listeners(lst =>
+                                                    {
+                                                      //  lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); grdMonthYear_Edit();}";
+                                                        lst.TriggerClick.Fn = "grdMonthYear_TriggerClick";
+                                                        lst.Change.Fn = "grdMonthYear_Edit";
+                                                    })
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .LoadData()
+                                                , HQ.Combo()
+                                                    .ID("cboStatus")
+                                                    .Name("cboStatus")
+                                                    .HQLangCode("Status")  // Trạng Thái
+                                                    .HQProcedure("OM20320_pcStatus")
+                                                    .HQColumnShow("Descr")
+                                                    .DisplayField("Descr")
+                                                    .ValueField("Code")
+                                                    .ReadOnly(true)
+                                                    .DataIndex("Status")
+                                                    .ForceSelection(true)
+                                                    .Width(400)
+                                                    .AllowBlank(false)
+                                                    .MaxLength(200)
+                                                    .EnforceMaxLength(true)
+        //.ReadOnly(true)
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
+                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@UserName", Value = "HQ.UserName", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                     //   new StoreParameter() { Name = "@TypeAccumulate", Value = "App.cboTypeAccumulationMain.getValue()", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                        .Listeners(lst =>
+                                                        {
+                                                            lst.Change.Handler = "App.cboHandle.store.reload();";
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                        })
+                                                    .LoadData()
+                                            )
+                                        , X.Container()
+                                            .Margin(0)
+                                            .Layout(LayoutType.HBox)
+                                            .MarginSpec("5 10 0 0")
+                                            .Items
+                                            (
+                                                HQ.Combo()
+                                                    .ForceSelection(true)
+                                                    .ID("cboApplyTo")
+                                                    .Name("ApplyTo")
+                                                    .HQLangCode("OM20320_ApplyTo") // Áp dụng cho 
+                                                    .HQProcedure("OM20320_pcApplyFor")
+                                                    .HQColumnShow("Descr")
+                                                    .DisplayField("Descr")
+                                                    .ValueField("Code")
+                                                   // .DataIndex("ApplyFor")
+                                                    .Width(400)
+                                                    .AllowBlank(false)
+                                                    .HQHeightWidth(400, 180)
+                                                    .HQParam(new StoreParameterCollection()
+                                                {
+                                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                })
+                                                    .Listeners(lst =>
+                                                    {
+                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                    })
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .LoadData()
+                                                , HQ.DateField()
+                                                    .ID("dtpFromDay")
+                                                    .Name("FromDay")
+                                                    .Format(Current.FormatDate)
+                                                    .HQLangCode("OM20320_FromDay") // Từ Ngày
+                                                   // .DataIndex("FromDay")
+                                                    .Width(400)
+                                                    .AllowBlank(false)
+                                                    .MaxLength(200)
+                                                    .Listeners(lst =>
+                                                    {
+                                                        lst.Change.Fn = "dtpFromDay_Change";
+                                                    })
+                                                , HQ.Combo()
+                                                    .Name("cboHandle")
+                                                    .ForceSelection(true)
+                                                    .ID("cboHandle")
+                                                    .HQLangCode("Handle") // Xử lý [OM20320_pcHandle]
+                                                    .HQProcedure("OM20320_pcHandle")
+                                                    .HQColumnShow("Descr")
+                                                    .DisplayField("Descr")
+                                                    .ValueField("ToStatus")
+                                                    .Width(400)
+                                                    .MaxLength(200)
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
+                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .LoadData()
+
+                                            )
+                                        , X.Container()
+                                            .Layout(LayoutType.HBox)
+                                            .MarginSpec("5 10 10 0")
+                                            .Items
+                                            (
+                                                HQ.Combo()
+                                                    .ID("cboCheckSalesBy")
+                                                    .ForceSelection(true)
+                                                    .Name("cboCheckSalesBy")
+                                                    .HQLangCode("OM20320CheckSalesBy") // Kiểm tra doanh số Theo
+                                                    .HQProcedure("OM20320_pcCheckSalesBy")
+                                                    .HQColumnShow("Descr")
+                                                    .DisplayField("Descr")
+                                                   // .DataIndex("BreakBy")
+                                                    .ValueField("Code")
+                                                    .Width(400)
+                                                    .AllowBlank(false)
+                                                    .HQHeightWidth(400, 180)
+                                                    .HQParam(new StoreParameterCollection()
+                                                        {
+                                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                        })
+                                                        .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Change.Fn = "grdCheckSalesBy_Edit";
+                                                        })
+                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                        .LoadData()
+                                                    , HQ.DateField()
+                                                        .ID("dtpToDay")
+                                                        .Name("ToDay")
+                                                        .Format(Current.FormatDate)
+                                                        .HQLangCode("OM20320_ToDay") // Đến ngày
+                                                        .Width(400)
+                                                        .AllowBlank(false)
+                                                        .MaxLength(200)
+                                                        
+                                                    , HQ.Checkbox()
+                                                        .ID("ckbUsing")
+                                                        .Name("Using")
+                                                        .MarginSpec("0 0 0 206")
+                                                        .HQLangCode("OM20320_Using") // Đang sử dụng
+                                            )
+                                    )
+                    )//end Thông Tin Mặc Định 
+                            , X.TabPanel()
+                                .Region(Region.Center)
+                                .Listeners(x =>
+                                {
+                                    x.Render.Handler = "HQ.common.control_render(this,'ApllyCust')";
+                                })
+                               .Items
+                               (
+                                    X.Panel()
+                                        .ID("tabApplyCust")
+                                        .Title(Util.GetLang("OM20320ApplyCust")) //Áp dụng cho khách hàng
+                                        .Layout(LayoutType.Border)
+                                        .Region(Region.Center)
+                                        .Items
+                                        (
+                                            X.Panel()
+                                                .ID("treeApplyCustommerID")//////////////TreeBranch/////////
+                                                .Region(Region.West)
+                                                .Width(400)
+                                                .Layout(LayoutType.Fit)
+                                                .MinWidth(150).Split(true).AutoScroll(true)
+                                                .DirectEvents(de =>
+                                                {
+                                                   // de.AfterRender.ExtraParams.Add(new Parameter("typeAccumulation", App.cboTypeAccumulationMain.value));
+
+                                                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeApplyCustommerID"));
+                                                    de.AfterRender.Url = Url.Action("OM20320GetTreeData");
+                                                    de.AfterRender.CleanRequest = true;
+                                                    de.AfterRender.Method = HttpMethod.POST;
+                                                    de.AfterRender.Success = " App.treeApplyCustommer.getRootNode().expand();";
+                                                    de.AfterRender.Timeout = 60000;
+                                                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                                    de.AfterRender.EventMask.ShowMask = true;
+                                                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                                    de.AfterRender.EventMask.MinDelay = 500;
+                                                })
+                                                .BottomBar
+                                                (
+                                                    X.Toolbar()
+                                                    .Items
+                                                    (
+                                                        X.ToolbarFill()
+                                                        , HQ.Button()
+                                                            .HQLangCode("Expand")
+                                                            .Icon(Icon.BulletTogglePlus)
+                                                            .Handler("App.treeApplyCustommer.expandAll();")
+                                                        , X.ToolbarSpacer()
+                                                        , X.ToolbarSeparator()
+                                                        , X.ToolbarSpacer()
+                                                        , HQ.Button()
+                                                            .HQLangCode("Collapse")
+                                                            .Icon(Icon.BulletToggleMinus)
+                                                            .Handler("App.treeApplyCustommer.collapseAll();")
+                                                        , X.ToolbarFill()
+                                                    )
+                                                )
+                                        , X.Panel()
+                                            .Region(Region.Center)
+                                            .Flex(1)
+                                            .Layout(LayoutType.VBox)
+                                            .MinWidth(50)
+                                            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                                            .Items
+                                            (
+                                                HQ.Button()
+                                                    .ID("btnAddAll")
+                                                    .ToolTip(Util.GetLang("AddAll"))
+                                                    .HQLangCode("AddAll")
+                                                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                                                    .Handler("btnAddAllCust_click")
+
+                                                , HQ.Button()
+                                                    .ID("btnAdd")
+                                                    .ToolTip(Util.GetLang("Add"))
+                                                    .HQLangCode("Add")
+                                                    .Icon(Icon.PlayGreen)
+                                                    .MarginSpec("5 5 0 5")
+                                                    .Handler("btnAddCust_click")
+
+                                                , HQ.Button().ID("btnDel")
+                                                    .ToolTip(Util.GetLang("Del"))
+                                                    .HQLangCode("Del")
+                                                    .Icon(Icon.ReverseGreen)
+                                                    .MarginSpec("5 5 0 5")
+                                                    .Handler("btnDelCust_click")
+
+                                                , HQ.Button().ID("btnDelAll")
+                                                    .ToolTip(Util.GetLang("DelAll"))
+                                                    .HQLangCode("DelAll")
+                                                    .Icon(Icon.RewindGreen)
+                                                    .MarginSpec("5 5 0 5")
+                                                    .Handler("btndeleteAllCust_click")
+                                            )
+                                        , X.Panel()
+                                            .Region(Region.East)
+                                            .MinWidth(250)
+                                            .Split(true)
+                                            .AutoScroll(true)
+                                            .Flex(3)
+                                            .Layout(LayoutType.Fit)
+                                            .Items
+                                            (
+                                                                X.GridPanel()
+                                                                        .ID("grdAccumulatedManage")
+                                                                        .Hidden(true)
+                                                                        .Store
+                                                                        (
+                                                                            X.Store()
+                                                                                .ID("stoAccumulatedManage")
+                                                                                .Model(Util.GenerateModel(typeof(OM20320_pgAccumulatedManage_Result), "mdlSI20700_pgAccumulatedManage", ""))
+                                                                                .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridAccumulatedManage")))//.AutoLoad(true)
+                                                                        ),
+                                                                  X.GridPanel()
+                                                                            .ID("grdAccumulatedReward")
+                                                                            .Hidden(true)
+                                                                            .Store
+                                                                            (
+                                                                                X.Store()
+                                                                                    .ID("stoAccumulatedReward")
+                                                                                    .Model(Util.GenerateModel(typeof(OM20320_pgAccumulatedReward_Result), "mdlSI20700_pgAccumulatedReward", ""))
+                                                                                    .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridAccumulatedReward")))//.AutoLoad(true)
+                                                                            ),
+                                                X.GridPanel()
+                                                    .Scroll(ScrollMode.Both)
+                                                    .View(X.GridView().TrackOver(true))
+                                                    .ID("grdCust")
+                                                    .Store
+                                                    (
+                                                        X.Store()
+                                                            .ID("stoData")
+                                                            .PageSize(50)
+                                                            .Model(Util.GenerateModel(typeof(OM20320_pgApplyCust_Result), "mdlSI20700_pgLoadCust", ""))
+                                                            .Parameters(ps =>
+                                                            {
+                                                                ps.Add(new StoreParameter("AccumulateID", "App.txtProgramID.getValue()", ParameterMode.Raw));
+                                                                ps.Add(new StoreParameter("typeAccumulated", "App.cboTypeAccumulationMain.getValue()", ParameterMode.Raw));
+                                                            })
+                                                            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridApplyCust"))).AutoLoad(false)
+                                                            .Listeners(l =>
+                                                            {
+                                                                l.Load.Fn = "stoApplyCust_Load";
+                                                            })
+                                                    )
+                                                    .SortableColumns(false)
+                                                    .ColumnModel
+                                                    (
+                                                         X.RowNumbererColumn().Width(40)
+                                                         , X.Column()
+                                                            .ID("CustID")
+                                                            .DataIndex("CustID")
+                                                            .Text(Util.GetLang("CustID")) // Mã Khách Hàng
+                                                            .Width(100)
+                                                           // .AllowBlank(true)
+                                                            .Editor
+                                                            (
+                                                                HQ.Combo()
+                                                                    .ID("cboCustID")
+                                                                    .HQProcedure("OM20320_pcApplyCustID")
+                                                                    .HQColumnShow("CustID,CustName").DataIndex("CustID")
+                                                                    .AllowBlank(false)
+                                                                    .HQHeightWidth(400, 300)
+                                                                    .ValueField("CustID").DisplayField("CustID")
+                                                                    .SelectOnFocus(true)
+                                                                    .ForceSelection(true)
+                                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                    .Listeners(lst =>
+                                                                    {
+                                                                        lst.TriggerClick.Handler = " { this.clearValue();}";
+                                                                    //    lst.Change.Fn = "cboCustID_Change";
+                                                                    })
+                                                                    .HQParam(new StoreParameterCollection()
+                                                                {
+                                                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                                })
+                                                                    .LoadData()
+                                                            )
+                                                        , X.Column()
+                                                            .Text(Util.GetLang("OM20320ERPID")) // Mã ERP
+                                                            .DataIndex("RefCustID")
+                                                            .Width(80)
+                                                        , X.Column()
+                                                            .Text(Util.GetLang("CustName")) // Tên Khách Hàng
+                                                            .DataIndex("CustName")
+                                                            .Width(250)
+                                                        , X.Column()
+                                                            .Text(Util.GetLang("OM20320TypeNT")) //Loại Hình NT
+                                                            .DataIndex("PharmacyType")
+                                                            .Width(90)
+                                                        , X.Column()
+                                                            .Text(Util.GetLang("OM20320_Chain")) // Chuổi
+                                                            .DataIndex("Chain")
+                                                            .Width(70)
+                                                        , X.Column()
+                                                            .Text(Util.GetLang("OM20320TypeCompound")) // Loại Hợp Đồng
+                                                            .DataIndex("ContractType")
+                                                            .Width(100)
+                                                        , X.CommandColumn()
+                                                            .Width(70)
+                                                            .Commands
+                                                            (
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdCust_Reject(record);")
+                                                    )
+                                                    .SelectionModel(X.RowSelectionModel().ID("slmCust").Mode(SelectionMode.Multi))
+                                                    .BottomBar
+                                                    (
+                                                        X.PagingToolbar()
+                                                        .Items
+                                                        (
+                                                            X.Label("Page size:"),
+                                                            X.ToolbarSpacer(10),
+                                                            X.ComboBox()
+                                                            .Width(80)
+                                                            .Items("1", "2", "10", "20", "30", "50")
+                                                            .SelectedItems("50")
+                                                            .Listeners(l =>
+                                                                {
+                                                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                                                })
+                                                        )
+                                                        .Plugins(X.ProgressBarPager())
+                                                    )
+                                                    .Plugins
+                                                    (
+                                                        X.CellEditing()
+                                                        .ClicksToEdit(1)
+                                                        .Listeners(ls =>
+                                                        {
+                                                            ls.BeforeEdit.Fn = "grdCust_BeforeEdit";
+                                                            ls.Edit.Fn = "grdCust_Edit";
+                                                        })
+                                                    )
+                                                    .Features
+                                                    (
+                                                        X.GridFilters()
+                                                            .Local(true)
+                                                            .Filters
+                                                            (
+                                                                X.StringFilter().DataIndex("CustID"),
+                                                                X.StringFilter().DataIndex("RefCustID"),
+                                                                X.StringFilter().DataIndex("CustName"),
+                                                                X.StringFilter().DataIndex("PharmacyType"),
+                                                                X.NumericFilter().DataIndex("Chain"),
+                                                                X.NumericFilter().DataIndex("Descr")
+                                                            )
+                                                    )
+                                                )
+                                            )
+                                        , X.TabPanel().ID("pnlDetailCTTL")
+                                            .Title(Util.GetLang("OrderList")) //Thông Tin Chi Tiết CTTL
+                                            .Layout(LayoutType.Fit)
+                                            .Split(true)
+                                            .AutoScroll(true)
+                                            .Listeners(p => { p.Activate.Fn = "pnlDetailCTTL_Active"; })
+                                            .Items
+                                            (
+                                                X.Panel()
+                                                    .ID("TabApplyCustommer")
+                                                    .Title(Util.GetLang("OM20320Reality")) //% Thực Trạng
+                                                    .Layout(LayoutType.Border)
+                                                    .Region(Region.Center)
+                                                    .Split(true)
+                                                    .AutoScroll(true)
+                                                    .Items
+                                                    (
+                                                        X.Panel()
+                                                            .Region(Region.North).Flex(1)
+                                                            .Layout(LayoutType.Fit)
+                                                          //  .Collapsible(true)
+                                                            .AutoScroll(true)
+                                                            .Split(true)
+                                                            .Items
+                                                            (
+                                                                X.GridPanel()
+                                                                    .ID("grdReality")
+                                                                    .Scroll(ScrollMode.Both)
+                                                                    .View(X.GridView().TrackOver(true))
+                                                                    .Store
+                                                                    (
+                                                                        X.Store()
+                                                                            .ID("stoLoadGridReality")
+                                                                            .PageSize(50)
+                                                                            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridReality"))).AutoLoad(false)
+                                                                            .Model(Util.GenerateModel(typeof(OM20320_pgReality_Result), "mdlSI20700_pgLoadState", ""))
+                                                                            .Parameters(ps =>
+                                                                            {
+                                                                                ps.Add(new StoreParameter("AccumulateID", "App.txtProgramID.getValue()", ParameterMode.Raw));
+
+                                                                            })
+                                                                            .Listeners(l =>
+                                                                            {
+                                                                                
+                                                                                l.BeforeLoad.Handler = "this.HQFieldKeys=['LineRef'];";
+                                                                                l.Load.Fn = "grdReality_Load";
+                                                                            })
+                                                                     )
+                                                                    .SortableColumns(false)
+                                                                    .ColumnModel
+                                                                    (
+                                                                        X.RowNumbererColumn().Width(40)
+                                                                        , X.NumberColumn()
+                                                                            .ID("FromPercent")
+                                                                            .DataIndex("FromPercent")
+                                                                            .Text(Util.GetLang("OM20320FromPercent")) //Từ %
+                                                                            .Width(150)
+                                                                            .Editor(X.NumberField().DecimalPrecision(2))
+                                                                            .Format("0,000.00")
+                                                                            .Align(Alignment.Right)
+                                                                            .StyleSpec("text-align:left")
+                                                                        , X.NumberColumn()
+                                                                            .DataIndex("ToPercent")
+                                                                            .Text(Util.GetLang("OM20320ToPercent")) // Đến %
+                                                                            .Width(150)
+                                                                            .Editor(X.NumberField().DecimalPrecision(2))
+                                                                            .Format("0,000.00")
+                                                                            .Align(Alignment.Right)
+                                                                            .StyleSpec("text-align:left")
+                                                                        , X.CommandColumn()
+                                                                            .Width(150)
+                                                                            .Commands
+                                                                            (
+                                                                                X.GridCommand()
+                                                                                .Text(Util.GetLang("Reject"))
+                                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                                .CommandName("reject")
+                                                                                .Icon(Icon.ArrowUndo)
+                                                                            )
+                                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                                            .Listeners(l => l.Command.Handler = "grdReality_Reject(record);")
+
+                                                                    )
+                                                                    .SelectionModel(
+                                                                        X.RowSelectionModel()
+                                                                        .ID("slmReality")
+                                                                        .Mode(SelectionMode.Single)
+                                                                        .Listeners(x =>
+                                                                        {
+                                                                            //Change grid Thuc trang
+                                                                            x.Select.Fn = "slmReality_select";
+                                                                        })
+                                                                    )
+                                                                    .Plugins(
+                                                                        X.CellEditing()
+                                                                        .ClicksToEdit(1)
+                                                                        .Listeners(ls =>
+                                                                        {
+                                                                            ls.BeforeEdit.Fn = "grdReality_BeforeEdit";
+                                                                            ls.Edit.Fn = "grdReality_Edit";
+                                                                        })
+                                                                    )
+                                                                    .BottomBar
+                                                                    (
+                                                                        X.PagingToolbar()
+                                                                        .Items(
+                                                                            X.Label("Page size:"),
+                                                                            X.ToolbarSpacer(10),
+                                                                            X.ComboBox()
+                                                                            .Width(80)
+                                                                            .Items("1", "2", "10", "20", "30", "50")
+                                                                            .SelectedItems("50")
+                                                                            .Listeners(l =>
+                                                                                {
+                                                                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                                                                })
+                                                                        )
+                                                                        .Plugins(X.ProgressBarPager())
+                                                                    )
+                                                            )
+                                                    , X.TabPanel()
+                                                        .Region(Region.Center)
+                                                        .Split(true)
+                                                        .AutoScroll(true)
+                                                        .ID("tabReward")
+                                                        .Layout(LayoutType.Fit)
+                                                        .Items
+                                                        (
+                                                            X.Panel()
+                                                                .Region(Region.Center)
+                                                                .ID("tabBonusLevel")
+                                                                .Title(Util.GetLang("OM20320BonusLevel")) //Mức Thưởng Theo Bậc Thang
+                                                                .Items(
+                                                                     X.GridPanel()
+                                                                        .Scroll(ScrollMode.Both)
+                                                                        .Height(110)
+                                                                        .ID("GrdAccuAmt")
+                                                                        .View(X.GridView().TrackOver(true))
+                                                                        .Store
+                                                                        (
+                                                                            X.Store()
+                                                                                .PageSize(50)
+                                                                                .ID("stoAccuAmt")
+                                                                                .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridAccuAmt"))).AutoLoad(false)
+                                                                                .Model(Util.GenerateModel(typeof(OM20320_pgAccuAmt_Result), "OM20320_pgAccuAmt", ""))
+                                                                                .Parameters(ps =>
+                                                                                {
+                                                                                    ps.Add(new StoreParameter("AccumulateID", "App.txtProgramID.getValue()", ParameterMode.Raw));
+
+                                                                                })
+                                                                                .Listeners(l =>
+                                                                                {
+                                                                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['From'];";
+                                                                                    //    l.Load.Fn = "grdAccuAmt_Load";  
+                                                                                })
+                                                                        )
+                                                                        .SortableColumns(false)
+                                                                        .SelectionModel(X.RowSelectionModel().ID("slmAccuAmt").Mode(SelectionMode.Multi))
+                                                                        .ColumnModel
+                                                                        (
+                                                                          //  X.RowNumbererColumn().Width(40)
+                                                                            X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).DataIndex("Line")
+                                                                            , X.NumberColumn()
+                                                                                .ID("FromID")
+                                                                                .Text(Util.GetLang("0M21102_From"))
+                                                                                .DataIndex("From")
+                                                                                .Format("0,000.00")
+                                                                                .Align(Alignment.Right)
+                                                                                .StyleSpec("text-align:left")
+                                                                                .Width(150)
+                                                                                .Editor(X.NumberField())
+                                                                            , X.NumberColumn()
+                                                                                .Text(Util.GetLang("OM20320_To"))
+                                                                                .Format("0,000.00")
+                                                                                .Align(Alignment.Right)
+                                                                                .StyleSpec("text-align:left")
+                                                                                .DataIndex("To")
+                                                                                .Width(150)
+                                                                                .Editor(X.NumberField())
+                                                                            , X.Column()
+                                                                                .Text(Util.GetLang("OM20320_Step"))
+                                                                                .DataIndex("Pct")
+                                                                                .Width(170)
+                                                                                .Editor(X.NumberField())
+                                                                            , X.CommandColumn()
+                                                                                .Width(150)
+                                                                                .Commands
+                                                                                (
+                                                                                    X.GridCommand()
+                                                                                    .Text(Util.GetLang("Reject"))
+                                                                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                                    .CommandName("reject")
+                                                                                    .Icon(Icon.ArrowUndo)
+                                                                                )
+                                                                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                                                .Listeners(l => l.Command.Handler = "grdAccuAmt_Reject(record);")
+                                                                        )
+                                                                        .Plugins
+                                                                        (
+                                                                            X.CellEditing()
+                                                                            .ClicksToEdit(1)
+                                                                            .Listeners(ls =>
+                                                                            {
+                                                                                ls.BeforeEdit.Fn = "grdAccuAmt_BeforeEdit";
+                                                                                ls.ValidateEdit.Fn = "grdAccuAmt_ValidateEdit";
+                                                                                ls.Edit.Fn = "grdAccuAmt_Edit";
+                                                                            })
+                                                                        )
+                                                                        .Features
+                                                                        (
+                                                                            X.GridFilters()
+                                                                                .Local(true)
+                                                                                .Filters
+                                                                                (
+                                                                                    X.ListFilter().DataIndex("LineRef"), // giá trị Filter theo % Thực trạng
+                                                                                    X.StringFilter().DataIndex("InvtID"),
+                                                                                    X.StringFilter().DataIndex("Descr"),
+                                                                                    X.StringFilter().DataIndex("Unit"),
+                                                                                    X.StringFilter().DataIndex("Percent")
+                                                                                )
+                                                                        )
+                                                                        .BottomBar
+                                                                        (
+                                                                            X.PagingToolbar()
+                                                                            .Items(
+                                                                                X.Label("Page size:"),
+                                                                                X.ToolbarSpacer(10),
+                                                                                X.ComboBox()
+                                                                                .Width(80)
+                                                                                .Items("1", "2", "10", "20", "30", "50")
+                                                                                .SelectedItems("50")
+                                                                                .Listeners(l =>
+                                                                                    {
+                                                                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                                                                    })
+                                                                            )
+                                                                            .Plugins(X.ProgressBarPager())
+                                                                        )
+                                                                )
+                                                            , X.Panel()
+                                                                .Hidden(true)
+                                                                .ID("tabProduct")
+                                                                .Region(Region.Center)
+                                                                .Split(true)
+                                                                .AutoScroll(true)
+                                                                .Title(Util.GetLang("Product")) //Sản phẩm
+                                                                .Layout(LayoutType.Border)
+                                                                .Items
+                                                                (
+                                                                        X.Panel() // tree view grdReality_Edit
+                                                                        .ID("treeProductID")//////////////TreeBranch/////////
+                                                                        .Region(Region.West).Flex(2)
+                                                                        .Layout(LayoutType.Fit)
+                                                                        .MinWidth(150).Split(true).AutoScroll(true)
+                                                                        .DirectEvents(de =>
+                                                                        {
+                                                                            de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeProductID"));
+                                                                            de.AfterRender.Url = Url.Action("OM20320GettreeProduct");
+                                                                            de.AfterRender.CleanRequest = true;
+                                                                            de.AfterRender.Method = HttpMethod.POST;
+                                                                            de.AfterRender.Success = " App.treeProduct.getRootNode().expand();";
+                                                                            de.AfterRender.Timeout = 60000;
+                                                                            de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                                                            de.AfterRender.EventMask.ShowMask = true;
+                                                                            de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                                                            de.AfterRender.EventMask.MinDelay = 500;
+                                                                        })
+                                                                        .BottomBar
+                                                                        (
+                                                                            X.Toolbar()
+                                                                            .Items
+                                                                            (
+                                                                                X.ToolbarFill()
+                                                                                , HQ.Button().ID("btnExpandInvt")
+                                                                                .HQLangCode("Expand")
+                                                                                .Handler("App.treeProduct.expandAll();")
+                                                                                .Icon(Icon.BulletTogglePlus)
+                                                                                , X.ToolbarSpacer()
+                                                                                , X.ToolbarSeparator()
+                                                                                , X.ToolbarSpacer()
+                                                                                , HQ.Button().ID("btnCollapseInvt")
+                                                                                .HQLangCode("Collapse")
+                                                                                .Handler("App.treeProduct.collapseAll();")
+                                                                                .Icon(Icon.BulletToggleMinus)
+                                                                                , X.ToolbarFill()
+                                                                            )
+                                                                        )
+                                                                    , X.Panel()
+                                                                        .Region(Region.Center)
+                                                                        .Width(200)
+                                                                        .ID("PnlBtnProduct")
+                                                                        .Layout(LayoutType.VBox)
+                                                                        .MinWidth(50)
+                                                                        .Split(true)
+                                                                        .AutoScroll(true)
+                                                                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                                                                        .Items
+                                                                            (
+                                                                                HQ.Button()
+                                                                                    .ToolTip(Util.GetLang("AddAll")).ID("btnAddAllInvtID")
+                                                                                    .HQLangCode("AddAll")
+                                                                                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                                                                                    .Handler("btnAddAllProduct_click")
+
+                                                                                , HQ.Button()
+                                                                                    .ToolTip(Util.GetLang("Add")).ID("btnAddInvtID")
+                                                                                    .HQLangCode("Add")
+                                                                                    .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                                                                                    .Handler("btnAddProduct_click")
+
+                                                                                , HQ.Button()//.ID("btnDel")
+                                                                                    .ToolTip(Util.GetLang("Del")).ID("btnDeleteInvtID")
+                                                                                    .HQLangCode("Del")
+                                                                                    .Icon(Icon.ReverseGreen)
+                                                                                    .MarginSpec("5 5 0 5")
+                                                                                    .Handler("btnDelProduct_click")
+
+                                                                                , HQ.Button()//.ID("btnDelAll")
+                                                                                    .ToolTip(Util.GetLang("DelAll"))
+                                                                                    .HQLangCode("DelAll").ID("btnDeleteAllInvtID")
+                                                                                    .Icon(Icon.RewindGreen)
+                                                                                    .MarginSpec("5 5 0 5")
+                                                                                    .Handler("btnProductDelAll_click")
+                                                                            )
+                                                                , X.Panel()
+                                                                    .Region(Region.East)
+                                                                    .MinWidth(250)
+                                                                    .Split(true)
+                                                                    .AutoScroll(true)
+                                                                    .Flex(3)
+                                                                    .Layout(LayoutType.Fit)
+                                                                    .Items
+                                                                    (
+                                                                        X.GridPanel()
+                                                                            .ID("grdProduct")
+                                                                            .Scroll(ScrollMode.Both)
+                                                                            .View(X.GridView().TrackOver(true))
+                                                                            .Store
+                                                                            (
+                                                                                X.Store()
+                                                                                    .ID("stoGridProduct")
+                                                                                    .PageSize(50).ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridPgProduct"))).AutoLoad(false)
+                                                                                    .Model(Util.GenerateModel(typeof(OM20320_pgProduct_Result), "OM20320_pgProduct", ""))
+                                                                                    .Parameters(ps =>
+                                                                                    {
+                                                                                        ps.Add(new StoreParameter("AccumulateID", "App.txtProgramID.getValue()", ParameterMode.Raw));
+
+                                                                                    })
+                                                                                    .Listeners(l =>
+                                                                                    {
+                                                                                        l.BeforeLoad.Handler = "this.HQFieldKeys=['From'];";
+                                                                                        l.Load.Fn = "grdProduct_Load";
+                                                                                    })
+
+                                                                            )
+                                                                            .SortableColumns(false)
+                                                                            .ColumnModel
+                                                                            (
+                                                                                X.RowNumbererColumn().Width(40)
+                                                                                , X.Column()
+                                                                                    .ID("ProductID")
+                                                                                    .DataIndex("InvtID")
+                                                                                    .Text(Util.GetLang("OM20320ProductID")) // Mã Sản Phẩm
+                                                                                    .Width(100)
+                                                                                    .Editor
+                                                                                    (
+                                                                                        HQ.Combo()
+                                                                                        .ID("cboProductID")
+                                                                                        .HQProcedure("OM20320_pcProduct")
+                                                                                        .HQColumnShow("InvtID,Descr").DataIndex("InvtID")
+                                                                                        .HQHeightWidth(400, 300)
+                                                                                        .ValueField("InvtID").DisplayField("InvtID")
+                                                                                        .SelectOnFocus(true)
+                                                                                        .AllowBlank(false)
+                                                                                        .ForceSelection(true)
+                                                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                                        .Listeners(lst =>
+                                                                                        {
+                                                                                            lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
+                                                                                        })
+                                                                                        .HQParam(new StoreParameterCollection()
+                                                                                        {
+                                                                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                                                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                                                        })
+                                                                                        .LoadData()
+                                                                                    )
+                                                                                , X.Column()
+                                                                                    .DataIndex("Descr")
+                                                                                    .Text(Util.GetLang("OM20320ProductName")) // Tên sản phẩm
+                                                                                    .Width(200)
+                                                                                , X.Column()
+                                                                                    .ID("Unit")
+                                                                                    .DataIndex("Unit")
+                                                                                    .Text(Util.GetLang("OM20320Unit")) // Đơn vị
+                                                                                    .Width(80)
+                                                                                , X.Column()
+                                                                                    .ID("Pct")
+                                                                                    .DataIndex("Pct")
+                                                                                    .Text(Util.GetLang("OM20320Percent")) // Phần trăm Chiếc Khấu
+                                                                                    .Width(150)
+                                                                                    .Editor
+                                                                                    (
+                                                                                        HQ.TextBox()
+                                                                                        .ID("Percent")
+                                                                                    )
+                                                                                , X.CommandColumn()
+                                                                                    .Width(100)
+                                                                                    .Commands
+                                                                                    (
+                                                                                        X.GridCommand()
+                                                                                        .Text(Util.GetLang("Reject"))
+                                                                                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                                        .CommandName("reject")
+                                                                                        .Icon(Icon.ArrowUndo)
+                                                                                    )
+                                                                                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                                                    .Listeners(l => l.Command.Handler = "grdProduct_Reject(record);")
+
+                                                                            )
+                                                                            .SelectionModel(X.RowSelectionModel().ID("slmProduct").Mode(SelectionMode.Multi))
+                                                                            .BottomBar
+                                                                            (
+                                                                                X.PagingToolbar()
+                                                                                .Items(
+                                                                                    X.Label("Page size:"),
+                                                                                    X.ToolbarSpacer(10),
+                                                                                    X.ComboBox()
+                                                                                    .Width(80)
+                                                                                    .Items("1", "2", "10", "20", "30", "50")
+                                                                                    .SelectedItems("10")
+                                                                                    .Listeners(l =>
+                                                                                    {
+                                                                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                                                                    })
+                                                                                )
+                                                                                .Plugins(X.ProgressBarPager())
+                                                                            )
+                                                                            .Plugins
+                                                                            (
+                                                                                X.CellEditing()
+                                                                                .ClicksToEdit(1)
+                                                                                .Listeners(ls =>
+                                                                                {
+                                                                                    ls.BeforeEdit.Fn = "grdProduct_BeforeEdit";
+                                                                                    ls.Edit.Fn = "grdProduct_Edit";
+                                                                                })
+                                                                            )
+                                                                            .Features
+                                                                            (
+                                                                                X.GridFilters()
+                                                                                    .Local(true)
+                                                                                    .Filters
+                                                                                    (
+                                                                                        X.ListFilter().DataIndex("LineRef"),// giá trị Filter theo % Thực trạng
+                                                                                        X.StringFilter().DataIndex("InvtID"),
+                                                                                        X.StringFilter().DataIndex("Descr"),
+                                                                                        X.StringFilter().DataIndex("Unit"),
+                                                                                        X.StringFilter().DataIndex("Percent")
+                                                                                    )
+                                                                            )
+
+                                                                        ).Listeners(x =>
+                                                                        {
+                                                                            x.Activate.Handler = "HQ.focus = 'Product'";
+                                                                        })
+                                                                )
+                                                        )
+                                                    )
+                                            )
+
+                               )
+                )//giao dien
+
+       )
+)
