@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <edmx:Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="eBiz4DWebSysModel" ZoomLevel="77">
+        <edmx:EntityTypeShape EntityType="OM20320Model.SI_Hierarchy" Width="1.5" PointX="0.75" PointY="0.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedCustomer" Width="2.5" PointX="2.5" PointY="0.5" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_Accumulated" Width="2.75" PointX="3.375" PointY="4.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.HO_PendingTasks" Width="1.5" PointX="5.375" PointY="0.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.SI_ApprovalFlowHandle" Width="2.75" PointX="0.75" PointY="5.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedLevelAmt" Width="2.375" PointX="8.375" PointY="0.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedLevelInvt" Width="3.125" PointX="7.375" PointY="5.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedLevel" Width="2.625" PointX="2.125" PointY="10.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedManage" Width="2.875" PointX="5.375" PointY="10.75" />
+        <edmx:EntityTypeShape EntityType="OM20320Model.OM_AccumulatedReward" Width="1.5" PointX="9.375" PointY="10.75" />
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
