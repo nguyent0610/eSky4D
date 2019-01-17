@@ -232,7 +232,7 @@ var btnImport_Click = function (sender, e) {
                 }
                 else {
                     HQ.message.process(msg, data, true);
-                    app.stoSI_Ward.reload();
+                    App.stoSI_Ward.reload();
                 }
             },
             failure: function (msg, data) {

@@ -142,6 +142,7 @@ namespace SI24300.Controllers
                 string errorDistrictNotExists = string.Empty;
                 string errorWard = string.Empty;
                 string errorWardFormat = string.Empty;
+                string errorWardUnicode = string.Empty;
                 string errorWardName = string.Empty;
                 string errorWardNameFormat = string.Empty;
                 string errorDuplicateWard = string.Empty;
@@ -203,9 +204,14 @@ namespace SI24300.Controllers
                                 }
                                 else
                                 {
-                                    if(ward.Length > 30)
+                                    if (ward.Length > 30 )
                                     {
                                         errorWardFormat += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (!IsUniCode(ward))
+                                    {
+                                        errorWardUnicode += (i + 1).ToString() + ",";
                                         flagCheck = true;
                                     }
                                 }
@@ -273,6 +279,8 @@ namespace SI24300.Controllers
                             message += errorWardName == "" ? "" : string.Format(Message.GetString("2018091301", null), "Tên Phường/Xã", errorWardName);
                             message += errorWardNameFormat == "" ? "" : string.Format(Message.GetString("2018091303", null), "Tên Phường/Xã", errorWardNameFormat, "100");
                             message += errorDuplicateWard == "" ? "" : string.Format(Message.GetString("2018091304", null), "Mã Phường/Xã", errorDuplicateWard);
+                            message += errorWardUnicode == "" ? "" : string.Format(Message.GetString("2019011760", null), "Mã Phường/Xã", errorWardUnicode, "30");
+                            
                             if (message == "" || message == string.Empty)
                             {
                                 _db.SaveChanges();
@@ -306,6 +314,11 @@ namespace SI24300.Controllers
                 }
             }
             return _logMessage;
+        }
+        public bool IsUniCode(string pText)
+        {
+            Regex regex = new Regex(@"^[a-zA-Z0-9_]+$");
+            return regex.IsMatch(pText);
         }
         #endregion
         #region -Export-
