@@ -273,12 +273,10 @@ var askClose = function (item) {
         App.stoQuestList.reload();
         App.frmMain.hide();
         App.frmFirst.show();
-        HQ.isChange = false;
-
+        HQ.common.changeData(false, 'SI22100');
     } else {
         App.frmMain.show();
         App.frmFirst.hide();
-        HQ.common.changeData(false, 'SI22100');
     }
 }
 var firstLoad = function () {
@@ -336,7 +334,7 @@ var cboQuestListID_Blur = function (sender, newValue, oldValue) {
 };
 
 var btnLoadData_Click = function () {
-    debugger
+    
     if (HQ.form.checkRequirePass(App.frmFirst)) {
         App.stoQuestList.reload();
     }
@@ -435,10 +433,7 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI22100');
-};
+
 
 var stoQuestionList_Load = function (sto,e,success) {
     if (HQ.isInsert === true)
@@ -495,23 +490,14 @@ var stoQuestionList_Load = function (sto,e,success) {
 };
 
 var stoQuestion_Load = function (sto,e,success) {
-
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI22100');
-    
     App.stoAnswer.reload();
     App.stoAnswer.addListener('load', checkGird);
 
 };
 
 var stoAnswer_Load = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI22100');
     App.stoQuestionList.commitChanges();
-    //App.slmQuestion.select(indexsel);
-
 };
-
 
 ////// grd///////////////
 var grdQuestion_Reject = function (record) {
@@ -523,11 +509,9 @@ var grdQuestion_Reject = function (record) {
             if (item != undefined)
                 App.grdAnswer.store.remove(item);
         }
-
-        HQ.grid.checkReject(record, App.grdQuestion);
-        stoChanged(App.stoQuestion);
-    frmChange();
-    // xóa tat ca record trên Detail
+        HQ.grid.checkReject(record, App.grdQuestion); 
+        frmChange();
+        // xóa tat ca record trên Detail
 };
 
 var grdQuestion_BeforeEdit = function (editor, e) {
@@ -545,7 +529,7 @@ var dtpFromDay_Change = function (a, newValue, oldValue) {
     App.dtpToDay.setMinValue(newValue);
 }
 var grdQuestion_Edit = function (item, e) {
-  debugger
+  
     //if (e.field === 'QuestDescr') {
     //    e.record.data.QuestListID = App.cboQuestListID.getValue();
     //    e.record.data.QuestID = App.stoQuestion.allData.length;
@@ -579,7 +563,7 @@ var grdQuestion_ValidateEdit = function (item, e) {
 
 var grdAnswer_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdAnswer);
-    stoChanged(App.stoAnswer);
+    frmChange();
 };
 
 var grdAnswer_BeforeEdit = function (editor, e) {
@@ -658,7 +642,7 @@ function setOneChoice(id) {
 }
 //bug Thông báo -- bỏ trống trên nhiều dòng
 function checkCorrectAnswer() {
-    debugger
+    
     var check = '' ;
     var dataQuestion = App.stoQuestion.snapshot || App.stoQuestion.allData || App.stoQuestion.data;
     if (App.cboType.getValue() === 'Y' || App.cboType.getValue() === 'M' || App.cboType.getValue() === 'O') {
@@ -706,12 +690,14 @@ function checkAnswer(sto, questID) {
 }
 //////////////////////////// NPP /////////////////////////////////////
 var frmChange = function () {
-    //if (App.frmMain.getRecord() != undefined) {
-    //    App.frmMain.getForm().updateRecord();
-    //    HQ.isChange = HQ.store.isChange(App.stoQuestionList);
-    //}
-
-
+    debugger
+        App.frmMain.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.stoQuestionList)
+                || HQ.store.isChange(App.stoQuestion)
+                || HQ.store.isChange(App.stoAnswer)
+                || HQ.store.isChange(App.grdQuestion.store)
+                || HQ.store.isChange(App.grdAnswer.store);
+        HQ.common.changeData(HQ.isChange, 'SI22100');//co thay doi du lieu gan * tren tab title header  
         if (!HQ.isChange) {
             HQ.isChange = HQ.store.isChange(App.stoQuestion);
             App.cboQuestListID.setReadOnly(HQ.isChange);
@@ -721,21 +707,12 @@ var frmChange = function () {
             HQ.isChange = HQ.store.isChange(App.stoAnswer);
             App.cboQuestListID.setReadOnly(HQ.isChange);
         }
-        HQ.common.changeData(HQ.isChange, 'SI22100');//co thay doi du lieu gan * tren tab title header  
-    
-     
-        App.cboType.setReadOnly(HQ.isChange);
-  
+
         if (App.cboQuestListID.valueModels) {
             if (App.cboQuestListID.valueModels.length > 0 || !HQ.isNew) {
                 App.cboType.setReadOnly(true);
             }
         }
-
-        if (App.stoQuestion.data.length > 1) {
-            App.cboType.setReadOnly(true);
-        }
-
         if (App.cboQuestListID.valueModels == null || HQ.isNew === true) {
             App.cboQuestListID.setReadOnly(false);
         }
@@ -743,8 +720,7 @@ var frmChange = function () {
             App.cboQuestListID.setReadOnly(HQ.isChange);
 
         }
-   
-
+        
 };
 
 var SI22100refresh = function (item) {
@@ -1061,7 +1037,7 @@ var btnExport_Click = function () {
 
 
 var btnEdit_Click = function (record) {
-    debugger
+    
     App.frmMain.show();
     App.frmFirst.hide();
     App.cboQuestListID.setValue(record.data.QuestListID);
