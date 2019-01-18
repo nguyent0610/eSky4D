@@ -262,6 +262,7 @@ namespace SI24300.Controllers
                                             recordItem.LUpd_Prog = _screenNbr;
                                             recordItem.LUpd_User = _userName;
                                         }
+                                        lstWard.Add(recordItem);
                                     }
                                 }
                                 else
