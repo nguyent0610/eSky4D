@@ -205,7 +205,8 @@ var checkDeleteData = function (indexColum, check, checkState) {
                 lstCheckState: checkState
             },
             success: function (msg, data) {
-                App.grdIN_ProductClass.deleteSelected();
+                //  App.grdIN_ProductClass.deleteSelected();
+                App.grdDet.deleteSelected();
                 frmChange();
             },
             failure: function (msg, data) {
