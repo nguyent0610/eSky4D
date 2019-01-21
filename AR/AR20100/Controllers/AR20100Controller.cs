@@ -22,7 +22,7 @@ namespace AR20100.Controllers
         private string _userName = Current.UserName;
         AR20100Entities _db = Util.CreateObjectContext<AR20100Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-
+        
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);

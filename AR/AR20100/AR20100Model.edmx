@@ -12,7 +12,7 @@
           <Property Name="ClassId" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="City" Type="varchar" MaxLength="10" />
           <Property Name="Country" Type="varchar" MaxLength="3" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="30" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="300" />
           <Property Name="District" Type="varchar" MaxLength="10" />
           <Property Name="PriceClass" Type="varchar" MaxLength="6" />
           <Property Name="State" Type="varchar" MaxLength="10" />
@@ -21,16 +21,17 @@
           <Property Name="TradeDisc" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="TaxDflt" Type="varchar" MaxLength="1" />
           <Property Name="TaxID00" Type="varchar" MaxLength="10" />
           <Property Name="TaxID01" Type="varchar" MaxLength="10" />
           <Property Name="TaxID02" Type="varchar" MaxLength="10" />
           <Property Name="TaxID03" Type="varchar" MaxLength="10" />
+          <Property Name="PrefixCustID" Type="varchar" MaxLength="10" />
         </EntityType>
         <Function Name="AR20100_ppAR_CustClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
@@ -69,7 +70,7 @@
           <Property Name="ClassId" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="City" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Country" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="Descr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Descr" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="District" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="PriceClass" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -78,16 +79,17 @@
           <Property Name="TradeDisc" Type="Double" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="TaxDflt" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="TaxID00" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxID01" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxID02" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxID03" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PrefixCustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -120,6 +122,7 @@
           <EntitySetMapping Name="AR_CustClass">
             <EntityTypeMapping TypeName="AR20100Model.AR_CustClass">
               <MappingFragment StoreEntitySet="AR_CustClass">
+                <ScalarProperty Name="PrefixCustID" ColumnName="PrefixCustID" />
                 <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
                 <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
                 <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />

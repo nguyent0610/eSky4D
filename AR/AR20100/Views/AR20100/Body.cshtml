@@ -41,7 +41,7 @@
                             })
                     // cboClassId                    
                     , HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr").AllowBlank(false)
-                    .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Descr")  
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(300).EnforceMaxLength(true).DataIndex("Descr")  
                                       
                     ,HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("Territory").HQProcedure("AR20100_pcTerritory")
                     .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory").DataIndex("Territory")
