@@ -783,7 +783,7 @@ namespace OM23102.Controllers
                                 {
                                     branchid = workSheet.Cells[i, 1].StringValue.PassNull().ToUpper().Trim();
                                     slsperid = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper().Trim();
-                                    month = workSheet.Cells[i, 4].DateTimeValue.AddMonths(1).AddDays(-1);
+                                    month = new DateTime(workSheet.Cells[i, 4].DateTimeValue.Year, workSheet.Cells[i, 4].DateTimeValue.Month, 1);
                                     classid = workSheet.Cells[i, 5].StringValue.PassNull().ToUpper().Trim();
                                     sellin = workSheet.Cells[i, 6].DoubleValue;
                                     sellout = workSheet.Cells[i, 7].DoubleValue;                                   
