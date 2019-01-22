@@ -97,6 +97,7 @@ var Process = {
     refresh: function (item) {
         if (item == 'yes') {
             HQ.isChange = false;
+            App.stoDet.reload();
             Event.Form.menuClick("refresh");
         }
     },
@@ -129,7 +130,10 @@ var Store = {
 
             if (frmRec && frmRec.data.Active) {
                 if (successful) {
-                    HQ.store.insertBlank(sto, keys);
+                    var record = HQ.store.findRecord(App.grdDet.store, ['BranchID'], ['']);
+                    if (!record) {
+                        HQ.store.insertBlank(sto, keys);
+                    }
                 }
             }
         }
@@ -181,7 +185,7 @@ var Event = {
                     if (HQ.focus == 'posm') {
                         HQ.combo.first(App.cboPosmID, HQ.isChange);
                     }
-                    else if (HQ.focus == 'branch') {
+                    else if (HQ.focus == 'grdDet') {
                         HQ.grid.first(App.grdDet);
                     }
                     break;
@@ -189,7 +193,7 @@ var Event = {
                     if (HQ.focus == 'posm') {
                         HQ.combo.next(App.cboPosmID, HQ.isChange);
                     }
-                    else if (HQ.focus == 'branch') {
+                    else if (HQ.focus == 'grdDet') {
                         HQ.grid.next(App.grdDet);
                     }
                     break;
@@ -197,7 +201,7 @@ var Event = {
                     if (HQ.focus == 'posm') {
                         HQ.combo.prev(App.cboPosmID, HQ.isChange);
                     }
-                    else if (HQ.focus == 'branch') {
+                    else if (HQ.focus == 'grdDet') {
                         HQ.grid.prev(App.grdDet);
                     }
                     break;
@@ -205,7 +209,7 @@ var Event = {
                     if (HQ.focus == 'posm') {
                         HQ.combo.last(App.cboPosmID, HQ.isChange);
                     }
-                    else if (HQ.focus == 'branch') {
+                    else if (HQ.focus == 'grdDet') {
                         HQ.grid.last(App.grdDet);
                     }
                     break;
@@ -219,7 +223,7 @@ var Event = {
                                 App.stoPOSM.reload();
                             });
                         }
-                        else if (HQ.focus == 'branch') {
+                        else if (HQ.focus == 'grdDet') {
                             App.grdDet.store.reload();
                         }
                     }
@@ -238,10 +242,7 @@ var Event = {
                     if (HQ.isUpdate || HQ.isCreate) {
                         if (App.frmMain.isValid()) {
                             var keys = App.grdDet.store.HQFieldKeys ? App.grdDet.store.HQFieldKeys : "";
-
-                            if (HQ.store.checkRequirePass(App.grdDet.store, keys,
-                                ["Zone", "Territory", "BranchID"],
-                                ["Zone", "Territory", "BranchID"])) {
+                            if (HQ.store.checkRequirePass(App.grdDet.store, keys,["PosmID","BranchID"])) {
                                 Process.saveData();
                             }
                         }
@@ -257,11 +258,9 @@ var Event = {
                                 HQ.message.show(11, '', 'Process.deletePosm');
                             }
                         }
-                        else if (HQ.focus == 'branch') {
+                        else if (HQ.focus == 'grdDet') {
                             if (App.cboPosmID.getValue() && App.slmDet.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('BranchID') + " " + App.slmDet.selected.items[0].data.BranchID,
-                                    'Process.deleteBranch');
+                                HQ.message.show(2015020806, App.slmDet.selected.items[0].data.BranchID,'Process.deleteBranch');
                             }
                         }
                     }
@@ -285,15 +284,8 @@ var Event = {
                             if (e.record.data.tstamp)
                                 return false;
                         }
-
-                        if (e.field == "Zone") {
-                            App.cboColZone.store.reload();
-                        }
-                        else if (e.field == "Territory") {
-                            App.cboColTerritory.store.reload();
-                        }
-                        else if (e.field == "BranchID") {
-                            App.cboColCpny.store.reload();
+                       if (e.field == "BranchID") {
+                           App.cboBranchID.store.reload();
                         }
 
                         return HQ.grid.checkInput(e, keys);
@@ -333,17 +325,15 @@ var Event = {
                     HQ.store.insertBlank(e.store, keys);
                 }
             }
-
-            if (e.field == "Zone") {
-                if (e.value != e.originalValue) {
-                    e.record.set("Territory", "");
+            if (e.field == 'BranchID') {               
+                if (App.cboBranchID.valueModels != undefined && App.cboBranchID.valueModels.length > 0) {
+                    e.record.set('PosmID', App.cboPosmID.getValue());
+                    e.record.set('BranchID', App.cboBranchID.valueModels[0].data.CpnyID)
+                    e.record.set('CpnyName', App.cboBranchID.valueModels[0].data.CpnyName);
+                    e.record.set('CpnyType', App.cboBranchID.valueModels[0].data.CpnyType)
+                    }
                 }
-            }
-            else if (e.field == "Territory") {
-                if (e.value != e.originalValue) {
-                    e.record.set("BranchID", "");
-                }
-            }
+        
             //Event.Form.frmMain_fieldChange();
         },
 
@@ -365,3 +355,264 @@ var Event = {
         }
     },
 };
+//-----TREE------
+
+var tree_ItemCollapse = function (a, b) {
+    collapseNode(a);
+}//ham nay controller goi
+var tree_AfterRender = function (id) {
+    HQ.common.showBusy(true, HQ.waitMsg);
+    App.direct.IN22001GetTreeBranch((id), {
+        success: function (result) {
+            App.treePanelCompany.getRootNode().expand();
+            HQ.common.showBusy(false, HQ.waitMsg);
+        }, failure: function (result) {
+            HQ.common.showBusy(false, HQ.waitMsg);
+
+        }
+    });
+}
+getLeafNodes = function (node) {
+    var childNodes = [];
+    node.eachChild(function (child) {
+        if (child.isLeaf()) {
+            childNodes.push(child);
+        }
+        else {
+            var children = getLeafNodes(child);
+            if (children.length) {
+                children.forEach(function (nill) {
+                    childNodes.push(nill);
+                });
+            }
+        }
+    });
+    return childNodes;
+}
+var updateTreeView = function (tree, fn) {
+    var view = tree.getView();
+    view.getStore().loadRecords(fn(tree.getRootNode()));
+    view.refresh();
+};
+
+/// ///////// Expand /////////////////////////////////////////////////////////////
+var expandAll = function (tree) {
+    this.updateTreeView(tree, function (root) {
+        var nodes = [];
+        root.cascadeBy(function (node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = true;
+                nodes.push(node);
+            }
+        });
+        return nodes;
+    });
+}
+var expandNode = function (node) {
+    if (node != undefined) {
+        node.expand();
+        if (node.childNodes.length > 0) {
+            for (var i = 0; i < node.childNodes.length; i++) {
+                expandNode(node.childNodes[i]);
+            }
+        }
+    }
+}
+/// ///////// Collapse /////////////////////////////////////////////////////////////
+var collapseAll = function (tree) {
+    this.updateTreeView(tree, function (root) {
+        root.cascadeBy(function (node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = false;
+            }
+        });
+        return tree.rootVisible ? [root] : root.childNodes;
+    });
+}
+var collapseNode = function (node) {
+    if (node != undefined) {
+        node.collapse();
+        if (node.childNodes.length > 0) {
+            for (var i = 0; i < node.childNodes.length; i++) {
+                collapseNode(node.childNodes[i]);
+            }
+        }
+    }
+}
+var treePanelCompany_checkChange = function (node, checked) { 
+        if (node.hasChildNodes()) {
+            node.eachChild(function (childNode) {
+                childNode.set('checked', checked);
+                treePanelCompany_checkChange(childNode, checked);
+            });
+    }
+}
+btnExpand_Click = function (btn, e, eOpts) {
+    Ext.suspendLayouts();
+    expandAll(App.treePanelCompany);
+    Ext.resumeLayouts(true);
+}
+btnCollapse_Click = function (btn, e, eOpts) {
+    Ext.suspendLayouts();
+    collapseAll(App.treePanelCompany);
+    Ext.resumeLayouts(true);
+}
+//---Button Add Tree----
+var btnAdd_click = function (btn, e, eOpts) {   
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var isError = false;
+            var allNodes = App.treePanelCompany.getCheckedNodes();
+            if (allNodes && allNodes.length > 0) {
+                App.grdDet.store.suspendEvents();
+                var invtBlank = HQ.store.findRecord(App.grdDet.store, ['BranchID'], ['']);
+                if (invtBlank) {
+                    App.grdDet.store.remove(invtBlank);
+                }
+                var _posm = App.cboPosmID.getValue();
+                allNodes.forEach(function (node) {
+                    if (node.attributes.Type == "CpnyID") {
+                        var idx = App.grdDet.store.getCount();                 
+                        var record = HQ.store.findInStore(App.grdDet.store,['BranchID'],[node.attributes.CpnyID]);
+                        if (!record) {
+                            var det = App.stoDet.snapshot || App.stoDet.allData || App.stoDet.data;
+                            for (var j = 0; j < det.length; j++) {
+                                var _posmrecord = det.items[j].data.PosmID;
+                                var _branchrecord = det.items[j].data.BranchID;
+                                if (_posm == _posmrecord && _branchrecord == node.attributes.CpnyID) {
+                                    return false;
+                                    isError = true;
+                                } 
+                            }
+                        if(!isError) {
+                            HQ.store.insertBlank(App.stoDet, ['BranchID']);
+                            var record = App.stoDet.getAt(App.grdDet.store.getCount() - 1);
+                            record.set('PosmID', _posm);
+                            record.set('BranchID', node.attributes.CpnyID);
+                            var branchName = node.attributes.CpnyName.split(" - ");
+                            record.set('CpnyName', branchName[1]);
+                            record.set('CpnyType', node.attributes.CpnyType);
+                            } 
+                        }
+                    }
+                });
+                invtBlank = HQ.store.findRecord(App.grdDet.store, ['BranchID'], ['']);
+                if (!invtBlank) {
+                    var idx = App.grdDet.store.data.length > 0 ? App.grdDet.store.data.length : 0;
+                    App.grdDet.store.insert(idx, Ext.create("App.mdlCpny", {
+                        BranchID: ''
+                    }));
+                }
+                App.grdDet.store.resumeEvents();
+                App.stoDet.loadPage(1);
+                App.stoDet.applyPaging();
+                App.treePanelCompany.clearChecked();
+                App.grdDet.view.refresh();
+            }
+
+        }
+
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+}
+var btnAddAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var allNodes = getLeafNodes(App.treePanelCompany.getRootNode(), true);
+            if (allNodes && allNodes.length > 0) {
+                App.grdDet.store.suspendEvents();
+                var invtBlank = HQ.store.findRecord(App.grdDet.store, ['BranchID'], ['']);
+                if (invtBlank) {
+                    App.grdDet.store.remove(invtBlank);
+                }
+                var isError = false;
+                var lstnode = [];
+                var _posm = App.cboPosmID.getValue();
+                allNodes.forEach(function (node, index) {
+                    if (node.data.Type == "CpnyID") {
+                        var idx = App.grdDet.store.getCount();
+                        if (idx > 0)
+                            idx = idx - 1;
+                        var record = HQ.store.findInStore(App.grdDet.store,['BranchID'],[node.data.CpnyID]);
+                        if (!record) {                          
+                            var det = App.stoDet.snapshot || App.stoDet.allData || App.stoDet.data;
+                            for (var j = 0; j < det.length; j++) {
+                                var _posmrecord = det.items[j].data.PosmID;
+                                var _branchrecord = det.items[j].data.BranchID;
+                                if (_posm == _posmrecord && _branchrecord == node.data.CpnyID) {
+                                    return false;
+                                    isError = true;
+                                }
+                            }
+                            if (!isError) {
+                                var record = Ext.create('App.mdlCpny');
+                                record.set('PosmID', _posm);
+                                record.set('BranchID', node.data.CpnyID);
+                                var branchName = node.data.CpnyName.split(" - ");
+                                record.set('CpnyName', branchName[1]);
+                                record.set('CpnyType', node.data.CpnyType);
+                                lstnode.push(record);
+                            }
+                        }
+                    }
+                });               
+                App.stoDet.add(lstnode);
+                App.grdDet.store.resumeEvents();
+                App.stoDet.loadPage(1);
+                App.stoDet.applyPaging();
+                App.treePanelCompany.clearChecked();
+                App.grdDet.view.refresh();
+
+            }
+
+        }
+        else {
+                Main.Process.showFieldInvalid(App.frmMain);
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+}
+var btnDel_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            Event.Form.menuClick('delete');
+        }
+        else {
+            if (Main.Process.showFieldInvalid(App.frmMain)) {
+                Main.Process.showFieldInvalid(App.frmMain);
+            }
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+}
+
+var btnDelAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            HQ.message.show(11, '', 'deleteAllBranch');
+        }
+        else {
+            if (Main.Process.showFieldInvalid(App.frmMain)) {
+                Main.Process.showFieldInvalid(App.frmMain);
+            }
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+}
+deleteAllBranch = function (item) {
+    if (item == "yes") {
+        App.grdDet.store.removeAll();
+        var record = HQ.store.findRecord(App.grdDet.store, ['BranchID'], ['']);
+        if (!record) {
+            HQ.store.insertBlank(App.stoDet, ['BranchID'],['']);
+        }
+    }
+}

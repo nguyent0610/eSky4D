@@ -35,7 +35,7 @@
         <title>@ViewBag.Title</title>
     </head>
     <body>
-        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
         @(
             X.Store().ID("stoPOSM")
@@ -53,30 +53,25 @@
             // Store: stoPOSM
         )
 
-        @(
+        @*@(
             X.Store().ID("stoDet")
             .AutoLoad(false).PageSize(50)//.RemotePaging(true)
             .Model(Util.GenerateModel(typeof(IN22001_pgBranch_Result), "mdlDet", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetBranch", "IN22001"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetBranch", "IN22001"))              
             ) 
             .Parameters(ps =>
             {
                 ps.Add(new StoreParameter("posmID", "App.cboPosmID.getValue()", ParameterMode.Raw));
             })
             .Listeners(p => {
-                p.BeforeLoad.Handler = "this.HQFieldKeys=['BranchID','Zone','Territory'];";
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['BranchID'];";
                 p.Load.Fn = "Store.stoDet_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
             })
             // Store: stoDet
-        )
+        )*@
 
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->

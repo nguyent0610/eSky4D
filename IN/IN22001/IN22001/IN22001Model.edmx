@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_POSMBranch">
           <Key>
             <PropertyRef Name="PosmID" />
@@ -16,10 +16,10 @@
           <Property Name="Territory" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="FCS" Type="float" />
         </EntityType>
@@ -33,17 +33,24 @@
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="ProgTypeFCS" Type="varchar" MaxLength="2" />
+          <Property Name="ProgType" Type="varchar" MaxLength="2" />
         </EntityType>
         <Function Name="IN22001_pgBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="PosmID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN22001_ptTreeNodeCpny" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
           <EntitySet Name="IN_POSMBranch" EntityType="Self.IN_POSMBranch" Schema="dbo" store:Type="Tables" />
@@ -62,6 +69,11 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="PosmID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="IN22001_ptTreeNodeCpny" ReturnType="Collection(IN22001Model.IN22001_ptTreeNodeCpny_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_POSMBranch">
           <Key>
@@ -74,10 +86,10 @@
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="FCS" Type="Double" />
         </EntityType>
@@ -91,11 +103,13 @@
           <Property Type="Boolean" Name="Active" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="ProgTypeFCS" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="ProgType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="IN22001_pgBranch_Result">
           <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
@@ -104,6 +118,16 @@
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
           <Property Type="Double" Name="FCS" Nullable="true" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="IN22001_ptTreeNodeCpny_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="LevelID" Nullable="true" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -132,6 +156,8 @@
           <EntitySetMapping Name="IN_POSMHeader">
             <EntityTypeMapping TypeName="IN22001Model.IN_POSMHeader">
               <MappingFragment StoreEntitySet="IN_POSMHeader">
+                <ScalarProperty Name="ProgType" ColumnName="ProgType" />
+                <ScalarProperty Name="ProgTypeFCS" ColumnName="ProgTypeFCS" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -155,6 +181,20 @@
                 <ScalarProperty Name="Territory" ColumnName="Territory" />
                 <ScalarProperty Name="FCS" ColumnName="FCS" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN22001_ptTreeNodeCpny" FunctionName="eBiz4DWebAppModel.Store.IN22001_ptTreeNodeCpny">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22001Model.IN22001_ptTreeNodeCpny_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

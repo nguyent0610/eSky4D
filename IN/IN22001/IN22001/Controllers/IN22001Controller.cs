@@ -23,7 +23,7 @@ namespace IN22001.Controllers
     {
         private string _screenNbr = "IN22001";
         IN22001Entities _db = Util.CreateObjectContext<IN22001Entities>(false);
-        //
+        List<IN22001_ptTreeNodeCpny_Result> lstAllNodeCpny = new List<IN22001_ptTreeNodeCpny_Result>();
         // GET: /IN22001/
         public ActionResult Index()
         {
@@ -208,8 +208,8 @@ namespace IN22001.Controllers
             {
                 createdCpny.PosmID = created.PosmID;
                 createdCpny.BranchID = created.BranchID;
-                createdCpny.Zone = created.Zone;
-                createdCpny.Territory = created.Territory;
+                createdCpny.Zone = "";
+                createdCpny.Territory = "";
                 createdCpny.FCS = created.FCS;
 
                 createdCpny.Crtd_DateTime = DateTime.Now;
@@ -236,6 +236,135 @@ namespace IN22001.Controllers
             posm.LUpd_DateTime = DateTime.Now;
             posm.LUpd_Prog = _screenNbr;
             posm.LUpd_User = Current.UserName;
+        }
+    //---- tree---
+        [DirectMethod]
+        public ActionResult IN22001GetTreeBranch(string panelID)
+        {
+
+            TreePanel tree = new TreePanel();
+            tree.ID = "treePanelCompany";
+            tree.ItemID = "treePanelConpany";
+
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Zone", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CpnyID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CpnyName", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CpnyType", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            Node node = new Node();
+            node.NodeID = "Root";
+            node.Checked = false;
+
+            lstAllNodeCpny = _db.IN22001_ptTreeNodeCpny(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
+
+            var maxLevel = lstAllNodeCpny.Max(x => x.LevelID);
+            var lstFirst = lstAllNodeCpny.Where(x => x.LevelID == maxLevel).ToList();
+            var crrLevel = maxLevel - 1;
+            if (lstFirst.Count > 0)
+            {
+                string crrParent = string.Empty;
+                Node parentNode = null;
+                bool isAddChild = false;
+                foreach (var it in lstFirst)
+                {
+                    var childNode = SetNodeValueCpny(it, Ext.Net.Icon.Folder);
+                    GetChildNodeCpny(ref childNode, (int)crrLevel, it.Code);
+
+                    if (it.ParentID != crrParent)
+                    {
+                        crrParent = it.ParentID;
+                        parentNode.Children.Add(childNode);
+                        isAddChild = true;
+                        node.Children.Add(parentNode);
+                    }
+                    else
+                    {
+                        if (it.ParentID != string.Empty)
+                        {
+                            parentNode.Children.Add(childNode);
+                        }
+                    }
+                    if (!isAddChild)
+                    {
+                        node.Children.Add(childNode);
+                    }
+                }
+            }
+
+            node.Icon = Ext.Net.Icon.FolderHome;
+
+            tree.Root.Add(node);
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+
+            tree.Listeners.CheckChange.Fn = "treePanelCompany_checkChange";
+            tree.Listeners.ItemCollapse.Fn = "tree_ItemCollapse";
+            tree.AddTo(treeBranch);
+
+            return this.Direct();
+        }
+        private Node SetNodeValueCpny(IN22001_ptTreeNodeCpny_Result objNode, Ext.Net.Icon icon)
+        {
+            Node node = new Node();
+
+            Random rand = new Random();
+            node.NodeID = objNode.Code + objNode.ParentID + (rand.Next(999, 9999) + objNode.LevelID).ToString();
+            node.Checked = false;
+            node.Text = objNode.Descr;
+            node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = objNode.Type, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyName", Value = objNode.Descr, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyType", Value = objNode.CpnyType, Mode = Ext.Net.ParameterMode.Value });
+
+            if (objNode.LevelID == 0)
+            {
+                var objTerritory = lstAllNodeCpny.FirstOrDefault(x => x.Code == objNode.ParentID);
+                if (objTerritory != null)
+                {
+                    node.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = objNode.ParentID, Mode = Ext.Net.ParameterMode.Value });
+                    node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });
+                    node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyName", Value = objNode.Descr, Mode = Ext.Net.ParameterMode.Value });
+                    node.CustomAttributes.Add(new ConfigItem() { Name = "CpnyType", Value = objNode.CpnyType, Mode = Ext.Net.ParameterMode.Value });
+                }
+
+            }
+            node.Icon = objNode.LevelID != 0 ? icon : Ext.Net.Icon.Folder;
+            node.Leaf = objNode.LevelID == 0;// true;
+            node.IconCls = "tree-node-noicon";
+            return node;
+        }
+        private void GetChildNodeCpny(ref Node crrNode, int level, string parrentID)
+        {
+            if (level >= 0)
+            {
+                var lstSub = lstAllNodeCpny.Where(x => x.ParentID == parrentID && x.LevelID == level).ToList();
+
+                if (lstSub.Count > 0)
+                {
+                    var crrLevel = level - 1;
+                    string crrParent = string.Empty;
+                    foreach (var it in lstSub)
+                    {
+                        var childNode = SetNodeValueCpny(it, Ext.Net.Icon.FolderGo);
+                        GetChildNodeCpny(ref childNode, crrLevel, it.Code);
+                        crrNode.Children.Add(childNode);
+                    }
+                }
+                else
+                {
+                    crrNode.Leaf = true;
+                }
+            }
+            else
+            {
+                crrNode.Leaf = true;
+            }
         }
     }
 }
