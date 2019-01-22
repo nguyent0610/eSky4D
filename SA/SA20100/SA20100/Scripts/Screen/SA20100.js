@@ -1,6 +1,6 @@
 //// Declare ///////////////////////////////////////////////////////////
 var _Source = 0;
-var _maxSource = 2;
+var _maxSource = 1;
 var _isLoadMaster = false;
 var _statusID = '';
 var _statusType = '';
@@ -27,7 +27,6 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboStatusType.getStore().addListener('load', checkLoad);
-    App.cboLangID.getStore().addListener('load', checkLoad);
     if (HQ.isInsert) {
         var record = HQ.store.findRecord(App.stoStatus, keys, ['', '']);
         if (!record) {
@@ -231,6 +230,7 @@ var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {
 var findRecordCombo = function (value) {
     var data = null;
     var store = App.cboLangID.store;
+    store.suspendEvents();
     var allRecords = store.snapshot || store.allData || store.data;
     allRecords.each(function (record) {
         if (record.data.LangID == value) {
@@ -238,6 +238,7 @@ var findRecordCombo = function (value) {
             return false;
         }
     });
+    store.resumeEvents();
     return data;
 };
 var calcPage = function (value) {
