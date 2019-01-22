@@ -220,32 +220,34 @@ var cboTerritory_Change = function (sender, e) {
     }
 };
 var cboDist_Change = function (sender, e) {
-    if (e) {
-        App.cboSlsperId.store.reload();
-        App.cboCustID.store.reload();
-    }
-    if (HQ.isChange) {
-        HQ.message.show(20150303, '', 'refresh');
-    }
-    else {
-        //App.grdOM_PG_FCS.store.removeAll();
-        App.grdOM_PG_FCS.hide();
-        //App.cboSlsperId.store.reload();
+    if (App.cboDist.valueModels && App.cboDist.valueModels[0]) {
+        if (e) {
+            App.cboSlsperId.store.reload();
+            App.cboCustID.store.reload();
+        }
+        if (HQ.isChange) {
+            HQ.message.show(20150303, '', 'refresh');
+        }
+        else {
+            //App.grdOM_PG_FCS.store.removeAll();
+            App.grdOM_PG_FCS.hide();
+            //App.cboSlsperId.store.reload();
+        }
     }
 };
 var cboDist_Select = function (sender, e) {
-    if (e) {
-        App.cboSlsperId.store.reload();
-        App.cboCustID.store.reload();
-    }
-    if (HQ.isChange) {
-        HQ.message.show(20150303, '', 'refresh');
-    }
-    else {
-        //App.grdOM_PG_FCS.store.removeAll();
-        App.grdOM_PG_FCS.hide();
-        //App.cboSlsperId.store.reload();
-    }
+    //if (e) {
+    //    App.cboSlsperId.store.reload();
+    //    App.cboCustID.store.reload();
+    //}
+    //if (HQ.isChange) {
+    //    HQ.message.show(20150303, '', 'refresh');
+    //}
+    //else {
+    //    //App.grdOM_PG_FCS.store.removeAll();
+    //    App.grdOM_PG_FCS.hide();
+    //    //App.cboSlsperId.store.reload();
+    //}
 };
 
 var dateFcs_Change = function (sender, e) {

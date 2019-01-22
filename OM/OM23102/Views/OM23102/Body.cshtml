@@ -104,21 +104,21 @@
                         lst.Change.Fn = "cboDist_Change";
                         lst.Select.Fn = "cboDist_Select";
                     }).DirectEvents(de =>
-                            {
-                                de.Change.EventMask.ShowMask = true;
-                                de.Change.EventMask.Msg = Util.GetLang("LoadingData");
-                                de.Change.EventMask.MinDelay = 500;
-
-                                de.Change.Url = Url.Action("OM23102_LoadParm");
-                                de.Change.ExtraParams.Add(new Parameter
                                 {
-                                    Name = "BranchID",
-                                    Value = "App.cboDist.getValue()",
-                                    Mode = ParameterMode.Raw
-                                });                                                       
+                                    de.Select.EventMask.ShowMask = true;
+                                    de.Select.EventMask.Msg = Util.GetLang("LoadingData");
+                                    de.Select.EventMask.MinDelay = 500;
 
-                            }
-                        )
+                                    de.Select.Url = Url.Action("OM23102_LoadParm");
+                                    de.Select.ExtraParams.Add(new Parameter
+                                    {
+                                        Name = "BranchID",
+                                        Value = "App.cboDist.getValue()",
+                                        Mode = ParameterMode.Raw
+                                    });
+
+                                }
+                            )
 
                 , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
                     .Text(Util.GetLang("OM23102_Search")).Listeners(p =>
