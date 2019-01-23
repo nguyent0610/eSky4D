@@ -90,7 +90,7 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
-                    , HQ.NumberField().ID("txtPrioritize").DecimalPrecision(0).HQLangCode("IN20300Prioritize").DataIndex("Prioritize").MinValue(0)
+                    , HQ.NumberField().ID("txtPrioritize").DecimalPrecision(0).HQLangCode("IN20300Prioritize").DataIndex("Prioritize").MinValue(1)
                     .Listeners(lst => {
                         lst.Blur.Fn = "txtPrioritize_Blur";
                     })
