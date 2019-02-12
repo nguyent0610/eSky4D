@@ -17,7 +17,26 @@
         .BodyPadding(0)
         .TrackResetOnLoad(true)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print", true, ""))
+        //.TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+            
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("ImportTemplate")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            }),
+                    
+            X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("ExportTemplate"))
+            .Icon(Icon.ArrowTurnRight) 
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        }))
         .BottomBar(
             X.Toolbar()
             .Items(

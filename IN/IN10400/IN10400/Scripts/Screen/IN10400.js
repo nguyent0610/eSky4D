@@ -219,6 +219,9 @@ var firstLoad = function () {
     App.txtBranchName.setVisible(HQ.showBranchName);
     App.colQtyAvail.setVisible(HQ.showAvlColumn);
 
+    App.btnImport.setVisible(HQ.showImportExport);
+    App.btnExport.setVisible(HQ.showImportExport);
+
     App.cboWhseLoc.isValid();
     App.stoSetup.load();
     App.stoUserDefault.load();
@@ -1916,4 +1919,133 @@ function checkSave(item) {
     if (item == 'yes') {
         save();
     }
+};
+
+
+
+var btnImport_Click = function (c, e) {
+    if (Ext.isEmpty(App.SiteID.getValue())) {
+        HQ.message.show('1000', [HQ.common.getLang('siteid')], '', true);
+        App.btnImport.reset();
+        return;
+    }
+
+    var fileName = c.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            clientValidation: false,
+            method: 'POST',
+            url: 'IN10400/Import',
+            timeout: 1000000,
+            params: {
+                lineRef: lastLineRef()
+            },
+            success: function (msg, data) {
+                if (this.result.data.lstTrans != undefined) {
+                    App.stoTrans.suspendEvents();
+                    this.result.data.lstTrans.forEach(function (item) {
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objTrans) {
+                            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+                            var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
+                            newTrans.set('JrnlType', item.JrnlType);
+                            newTrans.set('ReasonCD', item.ReasonCD);
+                            newTrans.set('TranAmt', item.TranAmt);
+                            newTrans.set('BranchID', HQ.cpnyID);
+                            newTrans.set('CnvFact', item.CnvFact);
+                            newTrans.set('ExtCost', item.TranAmt);
+                            newTrans.set('InvtID', item.InvtID);
+                            newTrans.set('InvtMult', item.InvtMult);
+                            newTrans.set('LineRef', item.LineRef);
+                            newTrans.set('Qty', item.Qty);
+                            newTrans.set('SiteID', item.SiteID);
+                            newTrans.set('TranDate', App.DateEnt.getValue());
+                            newTrans.set('TranDesc', item.TranDesc);
+                            newTrans.set('TranType', item.TranType);
+                            newTrans.set('UnitCost', item.UnitCost);
+                            newTrans.set('UnitDesc', item.UnitDesc);
+                            newTrans.set('UnitMultDiv', item.UnitMultDiv);
+                            newTrans.set('UnitPrice', item.UnitPrice);
+                        }
+                        else {
+                            objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
+                        }
+                    });
+                    App.stoTrans.resumeEvents();
+                    App.grdTrans.view.refresh();
+
+                    App.stoLotTrans.clearFilter();
+                    App.stoLotTrans.suspendEvents();
+                    this.result.data.lstLot.forEach(function (item) {
+                        var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objLot) {
+                            HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), true);
+                            var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
+                            newLot.set('LotSerNbr', item.LotSerNbr);
+                            newLot.set('INTranLineRef', objTrans.data.LineRef);
+                            newLot.set('ExpDate', new Date(parseInt(item.ExpDate.substr(6))));
+                            newLot.set('InvtID', item.InvtID);
+                            newLot.set('InvtMult', item.InvtMult);
+                            newLot.set('MfgrLotSerNbr', item.MfgrLotSerNbr);
+                            newLot.set('Qty', item.Qty);
+                            newLot.set('SiteID', item.SiteID);
+                            newLot.set('SlsperID', item.SlsperID);
+                            newLot.set('TranDate', App.DateEnt.getValue());
+                            newLot.set('WarrantyDate', new Date(parseInt(item.WarrantyDate.substr(6))));
+                            newLot.set('TranType', 'RC');
+                            newLot.set('UnitCost', item.UnitCost);
+                            newLot.set('UnitDesc', item.UnitDesc);
+                            newLot.set('UnitMultDiv', item.UnitMultDiv);
+                            newLot.set('UnitPrice', item.UnitPrice);
+                            newLot.set('CnvFact', item.CnvFact);
+                            newLot.set('MfgrLotSerNbr', '');
+                        }
+                        else {
+                            objLot.set('Qty', (objLot.data.Qty + item.Qty));
+                        }
+                    });
+                    App.stoLotTrans.resumeEvents();
+                    calculate();
+                    checkTransAdd();
+
+                    if (!Ext.isEmpty(this.result.data.message)) {
+                        var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
+                        HQ.message.show('2013103001', [result], '', true);
+                        //  HQ.message.show('2013103001', [this.result.data.message], '', true);
+                    } else {
+                        HQ.message.process(msg, data, true);
+                    }
+                } else {
+                    HQ.message.process(msg, data, true);
+                }
+                App.btnImport.reset();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                App.btnImport.reset();
+            }
+        });
+    } else {
+        HQ.message.show('2014070701', [ext], '', true);
+        App.btnImport.reset();
+    }
+};
+
+
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'IN10400/Export',
+        timeout: 1000000,
+        clientValidation: false,
+        success: function (msg, data) {
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+
+
 };
