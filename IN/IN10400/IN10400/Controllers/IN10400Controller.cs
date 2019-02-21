@@ -56,6 +56,7 @@ namespace IN10400.Controllers
 
         public ActionResult Index(string branchID)
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             int showWhseLoc = 0;
             string perPost = string.Empty;

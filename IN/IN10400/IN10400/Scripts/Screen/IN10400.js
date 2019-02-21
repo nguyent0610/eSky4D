@@ -1924,7 +1924,7 @@ function checkSave(item) {
 
 
 var btnImport_Click = function (c, e) {
-    if (Ext.isEmpty(App.SiteID.getValue())) {
+    if (Ext.isEmpty(App.cboSiteID.getValue())) {
         HQ.message.show('1000', [HQ.common.getLang('siteid')], '', true);
         App.btnImport.reset();
         return;
@@ -1948,7 +1948,7 @@ var btnImport_Click = function (c, e) {
                     this.result.data.lstTrans.forEach(function (item) {
                         var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
                         if (!objTrans) {
-                            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+                            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), false);
                             var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
                             newTrans.set('JrnlType', item.JrnlType);
                             newTrans.set('ReasonCD', item.ReasonCD);
@@ -1961,7 +1961,7 @@ var btnImport_Click = function (c, e) {
                             newTrans.set('LineRef', item.LineRef);
                             newTrans.set('Qty', item.Qty);
                             newTrans.set('SiteID', item.SiteID);
-                            newTrans.set('TranDate', App.DateEnt.getValue());
+                            newTrans.set('TranDate', App.txtDateEnt.getValue());
                             newTrans.set('TranDesc', item.TranDesc);
                             newTrans.set('TranType', item.TranType);
                             newTrans.set('UnitCost', item.UnitCost);
@@ -1982,7 +1982,7 @@ var btnImport_Click = function (c, e) {
                         var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
                         var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
                         if (!objLot) {
-                            HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), true);
+                            HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), false);
                             var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
                             newLot.set('LotSerNbr', item.LotSerNbr);
                             newLot.set('INTranLineRef', objTrans.data.LineRef);
