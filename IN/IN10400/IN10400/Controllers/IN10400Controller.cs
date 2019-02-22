@@ -706,7 +706,7 @@ namespace IN10400.Controllers
 
 
                 var cell = sheetTrans.Cells["B1"];
-                cell.PutValue("CHI TIẾT NHẬP KHO");
+                cell.PutValue(Util.GetLang("IN10400TitleE"));
                 style = cell.GetStyle();
                 style.Font.IsBold = true;
                 style.Font.Size = 16;
