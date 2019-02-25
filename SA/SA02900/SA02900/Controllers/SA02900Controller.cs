@@ -56,6 +56,10 @@ namespace SA02900.Controllers
         {
             try
             {
+                string appFolID = data["cboAppFol"].PassNull();
+                string[] appFolIDs = appFolID.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string role = data["cboRole"].PassNull();
+                string[] roles = role.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTopGrid"]);
                 var lstTopGrid = dataHandler.ObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>() == null ? new List<SA02900_pgSI_ApprovalFlowStatus_Result>() : dataHandler.ObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>();
 
@@ -63,7 +67,10 @@ namespace SA02900.Controllers
                 var lstBotGrid = dataHandler1.ObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>() == null ? new List<SA02900_pgSI_ApprovalFlowHandle_Result>() : dataHandler1.ObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>();
 
                 #region Save SI_ApprovalFlowStatus
-                var lstOld_SI_ApprovalFlowStatus = _db.SI_ApprovalFlowStatus.ToList();
+                var lstOld_SI_ApprovalFlowStatus = (from val in _db.SI_ApprovalFlowStatus
+                                                    where (role == "" ? val.RoleID.Contains("") : val.RoleID.StartsWith(role) || roles.Contains(val.RoleID))
+                                                    && (appFolID == "" ? val.AppFolID.Contains("") : val.AppFolID.StartsWith(appFolID) || appFolIDs.Contains(val.AppFolID))
+                                                   select val).ToList();
 
                 foreach (var objold in lstOld_SI_ApprovalFlowStatus)
                 {
@@ -110,7 +117,7 @@ namespace SA02900.Controllers
                     {
                         _db.SI_ApprovalFlowHandle.DeleteObject(objold);
                     }
-                }
+                }                
 
                 foreach (var item in lstBotGrid)
                 {
