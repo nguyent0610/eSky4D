@@ -253,7 +253,9 @@ namespace IN10900
         /// <param name="slsperId">No Metadata Documentation available.</param>
         /// <param name="fromDate">No Metadata Documentation available.</param>
         /// <param name="toDate">No Metadata Documentation available.</param>
-        public ObjectResult<IN10900_pgLoadGrid_Result> IN10900_pgLoadGrid(global::System.String cpnyID, global::System.String slsperId, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
+        /// <param name="checkDate">No Metadata Documentation available.</param>
+        /// <param name="handleType">No Metadata Documentation available.</param>
+        public ObjectResult<IN10900_pgLoadGrid_Result> IN10900_pgLoadGrid(global::System.String cpnyID, global::System.String slsperId, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, Nullable<global::System.DateTime> checkDate, global::System.String handleType)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -295,7 +297,27 @@ namespace IN10900
                 toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<IN10900_pgLoadGrid_Result>("IN10900_pgLoadGrid", cpnyIDParameter, slsperIdParameter, fromDateParameter, toDateParameter);
+            ObjectParameter checkDateParameter;
+            if (checkDate.HasValue)
+            {
+                checkDateParameter = new ObjectParameter("CheckDate", checkDate);
+            }
+            else
+            {
+                checkDateParameter = new ObjectParameter("CheckDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter handleTypeParameter;
+            if (handleType != null)
+            {
+                handleTypeParameter = new ObjectParameter("HandleType", handleType);
+            }
+            else
+            {
+                handleTypeParameter = new ObjectParameter("HandleType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10900_pgLoadGrid_Result>("IN10900_pgLoadGrid", cpnyIDParameter, slsperIdParameter, fromDateParameter, toDateParameter, checkDateParameter, handleTypeParameter);
         }
     
         /// <summary>
@@ -2046,6 +2068,54 @@ namespace IN10900
         private global::System.String _PosmID;
         partial void OnPosmIDChanging(global::System.String value);
         partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InvtType
+        {
+            get
+            {
+                return _InvtType;
+            }
+            set
+            {
+                OnInvtTypeChanging(value);
+                ReportPropertyChanging("InvtType");
+                _InvtType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InvtType");
+                OnInvtTypeChanged();
+            }
+        }
+        private global::System.String _InvtType;
+        partial void OnInvtTypeChanging(global::System.String value);
+        partial void OnInvtTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                OnDiscIDChanging(value);
+                ReportPropertyChanging("DiscID");
+                _DiscID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscID");
+                OnDiscIDChanged();
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
 
         #endregion
 
@@ -2068,16 +2138,20 @@ namespace IN10900
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="slsPerID">Initial value of the SlsPerID property.</param>
         /// <param name="stkOutNbr">Initial value of the StkOutNbr property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static PPC_StockOutlet CreatePPC_StockOutlet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
+        public static PPC_StockOutlet CreatePPC_StockOutlet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
         {
             PPC_StockOutlet pPC_StockOutlet = new PPC_StockOutlet();
             pPC_StockOutlet.BranchID = branchID;
             pPC_StockOutlet.SlsPerID = slsPerID;
             pPC_StockOutlet.StkOutNbr = stkOutNbr;
+            pPC_StockOutlet.Crtd_User = crtd_User;
             pPC_StockOutlet.Crtd_DateTime = crtd_DateTime;
+            pPC_StockOutlet.LUpd_User = lUpd_User;
             pPC_StockOutlet.LUpd_DateTime = lUpd_DateTime;
             pPC_StockOutlet.tstamp = tstamp;
             return pPC_StockOutlet;
@@ -2243,7 +2317,7 @@ namespace IN10900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -2255,7 +2329,7 @@ namespace IN10900
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -2315,7 +2389,7 @@ namespace IN10900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -2327,7 +2401,7 @@ namespace IN10900
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -2407,6 +2481,30 @@ namespace IN10900
         private global::System.String _StockType;
         partial void OnStockTypeChanging(global::System.String value);
         partial void OnStockTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ShiftID
+        {
+            get
+            {
+                return _ShiftID;
+            }
+            set
+            {
+                OnShiftIDChanging(value);
+                ReportPropertyChanging("ShiftID");
+                _ShiftID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ShiftID");
+                OnShiftIDChanged();
+            }
+        }
+        private global::System.String _ShiftID;
+        partial void OnShiftIDChanging(global::System.String value);
+        partial void OnShiftIDChanged();
 
         #endregion
 

@@ -16,23 +16,7 @@
     .ID("frmMain")
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
-    //.TopBar(Util.SetupToolbar("Print", true, ""))
         .TopBar(Util.SetupToolbar( new AbstractComponent[]{
-        //X.FileUploadField()
-        //.ID("btnImport")
-        //.ButtonText("Import")
-        //.ButtonOnly(true)
-        //.Icon(Icon.BookAdd)
-        //.Listeners(p=>{
-        //    p.Change.Fn = "btnImport_Click";              
-        //})          
-        //, X.Button()
-        //.ID("btnExport")
-        //.Text(Util.GetLang("Export"))
-        //.Icon(Icon.ArrowTurnRight)
-        //.Listeners(p=>{
-        //    p.Click.Fn = "btnExport_Click";
-        //})
     },"Print,New,Delete",true,""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
@@ -46,40 +30,50 @@
 		//Field header o day
             X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
             .Items(
+
                 HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("IN10900_pcCpny").HQLangCode("CPNYID").MarginSpec("5 0 0 0")
-                .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                .Width(300).HQHeightWidth(400,300).ForceSelection(true)
-                .AllowBlank(false).HQAutoLoad(true).HQDBSys(false)
-                .HQParam(new StoreParameterCollection() 
-                { 
-                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                })
-                .Listeners(l =>
-                    {
-                        l.Change.Fn = "cboCpnyID_Change";
-                        l.Select.Fn = "cboCpnyID_Select";
-                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                })
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .LoadData()
-                
-                ,HQ.Combo().ID("cboHandle").Name("cboHandle").Width(300).AllowBlank(false).HQAutoLoad(true).MarginSpec("5 0 0 0")
-                .HQLangCode("HANDLE").HQProcedure("IN10900_pcGetHandle")
-                .HQColumnShow("Code,Descr").ForceSelection(true)
-                .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
-                .HQParam(new StoreParameterCollection() 
-                { 
-                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                })
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                    .Width(300).HQHeightWidth(400,300).ForceSelection(true)
+                    .AllowBlank(false).HQAutoLoad(true).HQDBSys(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Listeners(l =>
+                        {
+                            l.Change.Fn = "cboCpnyID_Change";
+                            l.Select.Fn = "cboCpnyID_Select";
+                            l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+
+                , HQ.DateField().ID("dteFromDate").Name("dteFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(300).ReadOnly(false).Value(DateTime.Now)
                 .Listeners(lst =>
-                {
-                    //lst.Change.Fn = "cboSlsPerID_Change";
-                    //lst.Select.Fn = "cboProgID_Select";
-                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
-                }).LoadData() 
+                                 {
+                                     lst.Change.Fn = "txtFromDate_Change";
+                                 })
+                , HQ.Combo().ID("cboHandleType").Width(300).AllowBlank(false).HQAutoLoad(true).MarginSpec("5 0 0 0").Name("cboHandleType")
+                        .HQLangCode("IN10900HandleType").HQProcedure("IN10900_pcHandleType")
+                        .HQColumnShow("Code,Descr").ForceSelection(true)
+                        .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
+                        }).LoadData()
+
+                , HQ.Button().ID("btnLoad").MarginSpec("5 0 0 110")
+                            .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
+                            .Handler("btnLoad_click")
                             
             )
             
@@ -101,25 +95,32 @@
                     lst.Change.Fn = "cboSlsPerID_Change";
                     //lst.Select.Fn = "cboProgID_Select";
                     lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
-                }).LoadData() 
-            
+                }).LoadData()
+
+                , HQ.DateField().ID("dteToDate").Name("dteToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(300).ReadOnly(false).Value(DateTime.Now).Listeners(lst =>
+                                     {
+                                         lst.Change.Fn = "txtFromDate_Change";
+                                     })
                 ,HQ.DateField().ID("dteCheckDate").MarginSpec("5 0 0 0").HQLangCode("IN10900CheckDate").Width(300).ReadOnly(false).Value(DateTime.Now)
+
+                , HQ.Combo().ID("cboHandle").Name("cboHandle").Width(300).AllowBlank(false).HQAutoLoad(true).MarginSpec("5 0 0 0")
+                        .HQLangCode("HANDLE").HQProcedure("IN10900_pcGetHandle")
+                        .HQColumnShow("Code,Descr").ForceSelection(true)
+                        .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
+                        })
+                        .LoadData() 
             )
             
-            , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
-                .Items(
-                HQ.DateField().ID("dteFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(300).ReadOnly(false).Value(DateTime.Now)
-                  .Listeners(lst =>
-                                 {
-                                     lst.Change.Fn = "txtFromDate_Change";
-                                 })
-                                
-                ,HQ.DateField().ID("dteToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(300).ReadOnly(false).Value(DateTime.Now)  .Listeners(lst =>
-                                 {
-                                     lst.Change.Fn = "txtFromDate_Change";
-                                 })
-                                
-            )
+ 
         )
         .Listeners(lss =>
         {
@@ -145,7 +146,9 @@
                         ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("SlsperId", "App.cboSlsPerID.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw)); 
+                        ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("handleType", "App.dteToDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("checkDate", "App.cboHandleType.getValue()", ParameterMode.Raw)); 
                   
                     })
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)

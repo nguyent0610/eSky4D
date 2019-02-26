@@ -110,6 +110,7 @@ var menuClick = function (command) {
 ////load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     //HQ.util.checkAccessRight();
+    App.frmMain.isValid();
     HQ.isFirstLoad = true;
     if (HQ.isInsert == false) {
         App.menuClickbtnNew.disable();
@@ -123,33 +124,10 @@ var firstLoad = function () {
     App.stoData.reload();
 };
 var grdDet_BeforeEdit = function (editor, e) {
-    
-   // _posmID = e.record.data.PosmID;
-   //// App.cboBranchID.store.reload();
-   // _classID = e.record.data.ClassID;
-   // //App.cboInvtID.store.reload();
-   // _siteId = e.record.data.SiteID;
-   //// App.cboExpDate.store.reload();
-   // _invtID = e.record.data.InvtID;
-   //// App.cboExpDate.store.reload();
-   // _branchID = e.record.data.BranchID;
-   //// App.cboExpDate.store.reload();
-   // if (e.field == 'SiteID') {
-   //     if (Ext.isEmpty(e.record.data.BranchID)) {
-   //         App.cboSiteId.getStore().removeAll();
-
-   //     }
-   //     else {
-   //         App.cboSiteId.store.reload();
-   //     }
-   // }
-
     if (HQ.isUpdate == false && HQ.isInsert == false) {
         return false;
     }
-    //else {
-    //    return HQ.grid.checkBeforeEdit(e, keys);
-    //}
+
 };
 var grdDet_Edit = function (item, e) {
     if (e.field == 'PosmID') {
@@ -157,7 +135,6 @@ var grdDet_Edit = function (item, e) {
             e.record.set('BranchID', '');
             e.record.set('CpnyName', '');
             e.record.set('SiteID', '');
-            //e.record.set('Date', new Date());
         }
     }
     if (e.field == 'BranchID') {
@@ -279,7 +256,7 @@ var cboCpnyID_Select = function (sender, value) {
 
 // cboProgID_Change change
 var cboSlsPerID_Change = function (sender, value) {
-    App.stoData.reload();
+    //App.stoData.reload();
     //if (value == "D3") {
     //    HQ.grid.show(App.grdDet, ['InvtID', 'Descr', 'Date']);
     //    keys = ['BranchID', 'ClassID', 'SiteID', 'InvtID', 'Date'];
@@ -385,3 +362,11 @@ var ImportData = function () {
         alert(ex.message);
     }
 };
+
+
+function btnLoad_click() {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        HQ.common.showBusy(true);
+        refresh('yes');
+    }
+}

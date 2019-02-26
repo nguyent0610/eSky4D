@@ -40,9 +40,9 @@ namespace IN10900.Controllers
         {
             return PartialView();
         }
-        public ActionResult GetData(string CpnyID, string SlsperId,DateTime FromDate,DateTime ToDate)
+        public ActionResult GetData(string CpnyID, string SlsperId, DateTime? FromDate, DateTime? ToDate, string handleType, DateTime? checkDate)
         {
-            return this.Store(_db.IN10900_pgLoadGrid(CpnyID, SlsperId, FromDate, ToDate));
+            return this.Store(_db.IN10900_pgLoadGrid(CpnyID, SlsperId, FromDate ?? DateTime.Now, ToDate, checkDate ?? DateTime.Now, handleType));
         }
         public ActionResult Save(FormCollection data)
         {
@@ -52,13 +52,12 @@ namespace IN10900.Controllers
 				ChangeRecords<IN10900_pgLoadGrid_Result> lstData = dataHandlerGrid.BatchObjectData<IN10900_pgLoadGrid_Result>();
 				var docDate = data["dteCheckDate"];
 				var branchID = data["cboCpnyID"];
-				//if (_db.IN10900_ppCheckCloseDate(branchID.PassNull(), docDate.ToDateShort(), "IN10900").FirstOrDefault() == "0")
-				//{
-				//	throw new MessageException(MessageType.Message, "301");
-				//	return new MessageException(MessageType.Message, "301").ToMessage();
-				//}
+                var handle = data["cboHandle"];
+		
 				lstData.Created.AddRange(lstData.Updated);
-				
+
+			    string arrSlsperID = "";
+			    string arrBranchID = "";
 				foreach (IN10900_pgLoadGrid_Result curItem in lstData.Created.Where(p => p.Selected == true))
 				{
 					if (curItem.Selected == false)
@@ -66,10 +65,17 @@ namespace IN10900.Controllers
 						continue;
 					}
 
-					var objStockOutlet = _db.PPC_StockOutlet.Where(p => p.BranchID.ToLower() == branchID.ToLower()
+                    if (handle == "R")
+                    {
+                        arrBranchID += branchID + ",";
+                        arrSlsperID += curItem.SlsPerID + ",";
+                        continue;
+                    }
+
+					var objStockOutlet = _db.PPC_StockOutlet.FirstOrDefault(p => p.BranchID.ToLower() == branchID.ToLower()
 						&& p.SlsPerID.ToLower() == curItem.SlsPerID.ToLower()
 						&& p.StkOutNbr.ToLower() == curItem.StkOutNbr.ToLower()
-					   ).FirstOrDefault();
+					   );
 					if (objStockOutlet != null)
 					{
 						objStockOutlet.StkOutDate = docDate.ToDateShort();
@@ -94,24 +100,26 @@ namespace IN10900.Controllers
 						_objStockOutlet.LUpd_User = Current.UserName;
 					}
 
-                    //var objin_trans = _db.IN_Trans.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower()).ToList();
-
-                    //if (objin_trans.Count() > 0)
-                    //{
-                    //    foreach (var a in objin_trans)
-                    //    {
-                    //        a.TranDate = docDate.ToDateShort();
-                    //        a.LUpd_DateTime = DateTime.Now;
-                    //        a.LUpd_Prog = _screenNbr;
-                    //        a.LUpd_User = Current.UserName;
-                    //    }
-                    //}
-
-
 				}
 
 				_db.SaveChanges();
 
+			    if (arrBranchID != "" || arrSlsperID != "")
+			    {
+                    Dictionary<string, string> dicData = new Dictionary<string, string>();
+                    dicData.Add("@UserName", Current.UserName);
+                    dicData.Add("@CpnyID", Current.CpnyID);
+                    dicData.Add("@LangID", Current.LangID.ToString());
+                    dicData.Add("@BranchID", arrBranchID);
+                    dicData.Add("@SlsperID", arrSlsperID);
+                    dicData.Add("@FromDate", data["dteFromDate"] ?? DateTime.Now.ToString());
+                    dicData.Add("@ToDate", data["dteToDate"] ?? DateTime.Now.ToString());
+                    dicData.Add("@CheckDate", data["cboHandleType"] ?? DateTime.Now.ToString());
+                    dicData.Add("@HandleType", data["cboHandleType"] ?? "");
+
+                    Util.getDataTableFromProc("IN10900_ppRelease", dicData);
+			    }
+             
 				return Util.CreateMessage(MessageProcess.Save);
 
 			}
