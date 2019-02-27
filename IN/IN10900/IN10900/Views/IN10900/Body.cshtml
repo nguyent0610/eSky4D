@@ -103,8 +103,8 @@
                                      })
                 ,HQ.DateField().ID("dteCheckDate").MarginSpec("5 0 0 0").HQLangCode("IN10900CheckDate").Width(300).ReadOnly(false).Value(DateTime.Now)
 
-                , HQ.Combo().ID("cboHandle").Name("cboHandle").Width(300).AllowBlank(false).HQAutoLoad(true).MarginSpec("5 0 0 0")
-                        .HQLangCode("HANDLE").HQProcedure("IN10900_pcGetHandle")
+                , HQ.Combo().ID("cboHandle").Name("cboHandle").Width(300).MarginSpec("5 0 0 0")
+                        .HQLangCode("HANDLE").HQProcedure("IN10900_pcGetHandle").Value("N")
                         .HQColumnShow("Code,Descr").ForceSelection(true)
                         .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
                         .HQParam(new StoreParameterCollection() 
@@ -147,8 +147,8 @@
                         ps.Add(new StoreParameter("SlsperId", "App.cboSlsPerID.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("handleType", "App.dteToDate.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("checkDate", "App.cboHandleType.getValue()", ParameterMode.Raw)); 
+                        ps.Add(new StoreParameter("handleType", "App.cboHandleType.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("checkDate", "App.dteToDate.getValue()", ParameterMode.Raw)); 
                   
                     })
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)

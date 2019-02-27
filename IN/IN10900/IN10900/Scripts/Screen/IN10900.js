@@ -121,6 +121,9 @@ var firstLoad = function () {
     if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
         App.menuClickbtnSave.disable();
     }
+    App.cboHandle.store.reload();
+    App.cboHandle.setValue("N");
+
     App.stoData.reload();
 };
 var grdDet_BeforeEdit = function (editor, e) {
