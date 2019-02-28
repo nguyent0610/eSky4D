@@ -60,7 +60,7 @@ namespace IN10900.Controllers
 			    string arrBranchID = "";
 			    string temp = "";
 
-			    var checkDate = _db.IN10900_ppCheckCloseDate(Current.CpnyID, docDate.ToDateTime(), _screenNbr).FirstOrDefault();
+                var checkDate = _db.IN10900_ppCheckCloseDate(branchID, docDate.ToDateTime(), _screenNbr).FirstOrDefault();
                 if (checkDate != null)
 			    {
 			        if (checkDate == "0")
