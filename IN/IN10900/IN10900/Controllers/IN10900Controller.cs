@@ -59,6 +59,16 @@ namespace IN10900.Controllers
 			    string arrSlsperID = "";
 			    string arrBranchID = "";
 			    string temp = "";
+
+			    var checkDate = _db.IN10900_ppCheckCloseDate(Current.CpnyID, docDate.ToDateTime(), _screenNbr).FirstOrDefault();
+                if (checkDate != null)
+			    {
+			        if (checkDate == "0")
+			        {
+                        throw new MessageException(MessageType.Message, "301");
+			        }
+			    }
+
 				foreach (IN10900_pgLoadGrid_Result curItem in lstData.Created.Where(p => p.Selected == true))
 				{
 					if (curItem.Selected == false)
@@ -108,22 +118,27 @@ namespace IN10900.Controllers
 
 			    if (arrBranchID != "" || arrSlsperID != "")
 			    {
-			           Dictionary<string, string> dicData = new Dictionary<string, string>();
-			    dicData.Add("@UserName", Current.UserName);
-                dicData.Add("@CpnyID", Current.CpnyID);
-                dicData.Add("@LangID", Current.LangID.ToString());
-                dicData.Add("@BranchID",arrBranchID);
-                dicData.Add("@SlsperID", arrSlsperID);
-                dicData.Add("@Temp", temp);
-                dicData.Add("@FromDate", data["dteFromDate"] ?? DateTime.Now.ToString());
-                dicData.Add("@ToDate", data["dteToDate"] ?? DateTime.Now.ToString());
-                dicData.Add("@CheckDate", data["cboHandleType"] ?? DateTime.Now.ToString());
-                dicData.Add("@HandleType", data["cboHandleType"] ?? "");
+			        Dictionary<string, string> dicData = new Dictionary<string, string>();
+			        dicData.Add("@UserName", Current.UserName ?? "");
+			        dicData.Add("@CpnyID", Current.CpnyID ?? "");
+			        dicData.Add("@LangID", Current.LangID.ToString());
+			        dicData.Add("@BranchID", arrBranchID);
+			        dicData.Add("@SlsperID", arrSlsperID);
+			        dicData.Add("@Temp", temp);
+			        dicData.Add("@FromDate",
+			            data["dteFromDate"].ToDateTime().ToString("yyyy-MM-dd hh:mm:ss") ??
+			            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+			        dicData.Add("@ToDate",
+			            data["dteToDate"].ToDateTime().ToString("yyyy-MM-dd hh:mm:ss") ??
+			            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+			        dicData.Add("@CheckDate",
+			            docDate.ToDateTime().ToString("yyyy-MM-dd hh:mm:ss") ?? DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+			        dicData.Add("@HandleType", data["cboHandleType"] ?? "");
 
-                Util.getDataTableFromProc("IN10900_ppRelease", dicData);
+			        Util.getDataTableFromProc("IN10900_ppRelease", dicData);
 			    }
-             
-				return Util.CreateMessage(MessageProcess.Save);
+
+			    return Util.CreateMessage(MessageProcess.Save);
 
 			}
 			catch (Exception ex)
