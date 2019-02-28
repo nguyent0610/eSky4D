@@ -32,9 +32,9 @@ namespace SA00700.Controllers
             return PartialView();
         }
 
-        public ActionResult GetSYS_AccessDetRights(string cpnyID, string userID, string type, string module)
+        public ActionResult GetSYS_AccessDetRights(string cpnyID, string userID, string type, string module, string screenNbr)
         {
-            return this.Store(_db.SA00700_pgAccessRightsScreen(cpnyID, userID, type, module, Current.UserName, Current.LangID).ToList());
+            return this.Store(_db.SA00700_pgAccessRightsScreen(cpnyID, userID, type, module, Current.UserName, Current.LangID, screenNbr));
         }
 
         [HttpPost]
@@ -44,10 +44,10 @@ namespace SA00700.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_AccessDetRights"]);
                 ChangeRecords<SA00700_pgAccessRightsScreen_Result> lstSYS_AccessDetRights = dataHandler.BatchObjectData<SA00700_pgAccessRightsScreen_Result>();
-                
+
                 foreach (SA00700_pgAccessRightsScreen_Result deleted in lstSYS_AccessDetRights.Deleted)
                 {
-                    var del = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber 
+                    var del = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber
                                                                         && p.UserID == userID
                                                                         && p.CpnyID == cpnyID
                                                                         && p.RecType == recType);
@@ -65,8 +65,8 @@ namespace SA00700.Controllers
                     {
                         continue;
                     }
-                    
-                    var objRight = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == crrRight.ScreenNumber 
+
+                    var objRight = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == crrRight.ScreenNumber
                                                                         && p.UserID.ToLower() == userID.ToLower()
                                                                         && p.CpnyID.ToLower() == cpnyID.ToLower()
                                                                         && p.RecType.ToLower() == recType.ToLower());
@@ -101,6 +101,58 @@ namespace SA00700.Controllers
                     }
                 }
 
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult copy(String recType, String userID, String userIDCopy)
+        {
+            try
+            {
+                if (_db.SYS_AccessDetRights.Any(p => p.RecType == recType && p.UserID == userIDCopy))
+                {
+                    throw new MessageException(MessageType.Message, "2019022801");
+                }
+                int count = 0;
+                foreach (var item in _db.SYS_AccessDetRights.Where(p => p.RecType == recType && p.UserID == userID))
+                {
+                    var objRight = new SYS_AccessDetRights();
+                    objRight.ResetET();
+
+                    objRight.ScreenNumber = item.ScreenNumber;
+                    objRight.CpnyID = item.CpnyID;
+                    objRight.UserID = userIDCopy;
+                    objRight.RecType = recType;
+
+                    objRight.InitRights = item.InitRights;
+                    objRight.InsertRights = item.InsertRights;
+                    objRight.UpdateRights = item.UpdateRights;
+                    objRight.DeleteRights = item.DeleteRights;
+                    objRight.ViewRights = item.ViewRights;
+                    objRight.ReleaseRights = item.ReleaseRights;
+                    objRight.DatabaseName = item.DatabaseName;
+
+                    objRight.LUpd_DateTime = DateTime.Now;
+                    objRight.LUpd_Prog = _screenNbr;
+                    objRight.LUpd_User = _userName;
+                    objRight.Crtd_DateTime = DateTime.Now;
+                    objRight.Crtd_Prog = _screenNbr;
+                    objRight.Crtd_User = _userName;
+
+                    _db.SYS_AccessDetRights.AddObject(objRight);
+                    count++;
+                }
+                if (count == 0)
+                {
+                    throw new MessageException(MessageType.Message, "2019022804", parm: new string[1] { userID });
+                }
                 _db.SaveChanges();
                 return Json(new { success = true });
             }

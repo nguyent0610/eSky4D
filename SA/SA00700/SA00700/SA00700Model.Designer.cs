@@ -106,7 +106,8 @@ namespace SA00700
         /// <param name="module">No Metadata Documentation available.</param>
         /// <param name="crtdUser">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SA00700_pgAccessRightsScreen_Result> SA00700_pgAccessRightsScreen(global::System.String cpnyID, global::System.String userID, global::System.String type, global::System.String module, global::System.String crtdUser, Nullable<global::System.Int16> langID)
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        public ObjectResult<SA00700_pgAccessRightsScreen_Result> SA00700_pgAccessRightsScreen(global::System.String cpnyID, global::System.String userID, global::System.String type, global::System.String module, global::System.String crtdUser, Nullable<global::System.Int16> langID, global::System.String screenNbr)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -168,7 +169,17 @@ namespace SA00700
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<SA00700_pgAccessRightsScreen_Result>("SA00700_pgAccessRightsScreen", cpnyIDParameter, userIDParameter, typeParameter, moduleParameter, crtdUserParameter, langIDParameter);
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA00700_pgAccessRightsScreen_Result>("SA00700_pgAccessRightsScreen", cpnyIDParameter, userIDParameter, typeParameter, moduleParameter, crtdUserParameter, langIDParameter, screenNbrParameter);
         }
 
         #endregion

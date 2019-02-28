@@ -28,12 +28,14 @@
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")
             .Region(Region.North)
+            .Layout(LayoutType.HBox)
             .Items(
-
-                HQ.Combo().ID("cboRecType")
-                    .Name("cboRecType").HQLangCode("Type").HQProcedure("SA00700_pcLoadComboTypeMVC")
+                X.Container().Layout(LayoutType.VBox)
+                .Items(
+                    HQ.Combo().ID("cboRecType")
+                    .Name("cboRecType").HQLangCode("SA00700Type").HQProcedure("SA00700_pcLoadComboTypeMVC")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(120)
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
@@ -47,10 +49,10 @@
                         lst.Change.Fn = "cboRecType_Change";
                     })
 
-                    , HQ.Combo().ID("cboUsr_GrByType").Text(Util.GetLang("UserID"))
-                    .Name("cboUsr_GrByType").HQLangCode("UserID").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
+                    , HQ.Combo().ID("cboUsr_GrByType")
+                    .Name("cboUsr_GrByType").HQLangCode("SA00700UserID").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
                     .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false)
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(120)
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
@@ -63,23 +65,50 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
-                , HQ.Combo().ID("cboCpny").Name("cboCpny").HQLangCode("CPNYID").HQProcedure("SA00700_pcSYS_Company")
+                , HQ.Combo().ID("cboCpny").Name("cboCpny").HQLangCode("SA00700CpnyID").HQProcedure("SA00700_pcSYS_Company")
                     .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("ALL")
-                    .LoadData()
+                    .LoadData().LabelWidth(120)                        .LabelWidth(120)
 
                 , HQ.Combo().ID("cboModule").Name("cboModule").HQLangCode("Module").HQProcedure("SA00700_pcSYS_Module")
                     .HQColumnShow("ModuleID,ModuleName").DisplayField("ModuleID").ValueField("ModuleID")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("ALL")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(120)
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("ALL").AllowBlank(false)
                     .LoadData()
 
-                , X.Button().MarginSpec("5 0 5 160").Width(150)
+                , HQ.Combo().ID("cboScreenNbr").Name("cboScreenNbr").HQLangCode("SA00700ScreenNbr").HQProcedure("SA00700_pcSYS_ScreenNbr")
+                    .HQColumnShow("ScreenNbr,Descr").DisplayField("ScreenNbr").ValueField("ScreenNbr")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .LoadData()                        .LabelWidth(120)
+
+                , X.Button().MarginSpec("5 0 5 175").Width(150)
                  .Text(Util.GetLang("LoadData")).Listeners(p =>
                  {
                      p.Click.Fn = "LoadGrid";
                  })
+                )
+
+               , X.Container().Layout(LayoutType.HBox).Items(
+                 X.Button().MarginSpec("5 0 0 10").Width(120).Text(Util.GetLang("SA00700CopyFrom")).Listeners(p => p.Click.Fn = "copy")
+
+                 , HQ.Combo().ID("cboUsr_GrByTypeCopy")
+                 .Name("cboUsr_GrByTypeCopy").HQLangCode("SA00700UserIDCopy").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
+                 .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false).LabelWidth(120)
+                 .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 50")
+                 .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                     .HQParam(new StoreParameterCollection()
+                 {
+                     new StoreParameter() { Name = "@RecType", Value = "App.cboRecType.getValue()", Mode = ParameterMode.Raw }
+                 })
+                 .LoadData()
+                 .Listeners(lst =>
+                 {
+                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                 })
+               )
             )//pnl Header
 
             ,
@@ -109,6 +138,7 @@
                         ps.Add(new StoreParameter("userID", "App.cboUsr_GrByType.value", ParameterMode.Raw));
                         ps.Add(new StoreParameter("cpnyID", "App.cboCpny.value", ParameterMode.Raw));
                         ps.Add(new StoreParameter("module", "App.cboModule.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("screenNbr", "App.cboScreenNbr.value", ParameterMode.Raw));
                     })
                     .Listeners(l =>
                     {
@@ -133,9 +163,9 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("DescrScreen")).DataIndex("Descr").Width(220)
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(220)
 
-                    , X.Column().Text(Util.GetLang("SA00700ScreenName")).DataIndex("ScreenNumberCmt").Width(220)
+                    //, X.Column().Text(Util.GetLang("SA00700ScreenName")).DataIndex("ScreenNumberCmt").Width(220)
 
                     //Colum Init
                     , X.CheckColumn().ID("txtInitRights").StyleSpec("text-align:center;")
@@ -150,7 +180,7 @@
 
                     //Colum Insert
                     , X.CheckColumn().ID("txtInsertRights").StyleSpec("text-align:center;")
-                    .DataIndex("InsertRights").Text(Util.GetLang("InsertRights")).Width(80).Editable(true)//.HideTitleEl(true)
+                    .DataIndex("InsertRights").Text(Util.GetLang("SA00700InsertRights")).Width(80).Editable(true)//.HideTitleEl(true)
                         .HeaderItems(
                             HQ.Checkbox().ID("InsertRightsCheckAll").StyleSpec("text-align:center;")//.HQLangCode("InsertRights").MarginSpec("0 0 0 10")
                                 .Listeners(l =>

@@ -19,10 +19,13 @@ var checkLoad = function (sto) {
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboRecType.getStore().load(function () {
-        App.cboUsr_GrByType.getStore().load(function () {
+        App.cboUsr_GrByType.getStore().load(function (sto) {
+            if (sto.length > 0) {
+                App.cboUsr_GrByTypeCopy.store.data.addAll(sto);
+            }
             App.cboCpny.getStore().load(function () {
                 App.cboModule.getStore().load(function () {
-                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                    HQ.common.showBusy(false);
                 })
             })
         })
@@ -57,9 +60,7 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.stoSYS_AccessDetRights.reload();
+                refresh('yes');
             }
             break;
         case "new":
@@ -109,6 +110,7 @@ var frmChange = function () {
 };
 function refresh(item) {
     if (item == 'yes') {
+        debugger
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoSYS_AccessDetRights.reload();
@@ -118,7 +120,7 @@ function refresh(item) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-   
+
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
@@ -133,7 +135,7 @@ var stoLoad = function (sto) {
     //App.frmMain.suspendLayouts();
     //store.reload();
     //App.frmMain.resumeLayouts(true);
-   // App.frmMain.doLayout();
+    // App.frmMain.doLayout();
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
@@ -144,7 +146,7 @@ var grdSYS_AccessDetRights_BeforeEdit = function (editor, e) {
 };
 var grdSYS_AccessDetRights_Edit = function (item, e) {
     if (e.field == 'InitRights') {
-       // e.record.set("InitRights", e.value);
+        // e.record.set("InitRights", e.value);
         e.record.set("InsertRights", e.value);
         e.record.set("UpdateRights", e.value);
         e.record.set("DeleteRights", e.value);
@@ -273,6 +275,9 @@ var ReleaseRightsCheckAll_Change = function (value) {
 };
 
 var LoadGrid = function (sender, e) {
+    if (!App.frmMain.isValid()) {
+        return;
+    }
     App.grdSYS_AccessDetRights.show();
     App.stoSYS_AccessDetRights.reload();
     if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
@@ -318,9 +323,47 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                //menuClick("refresh");
                 refresh("yes");
-                App.stoSYS_AccessDetRights.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+
+var copy = function () {
+    if (App.cboRecType.getValue() != '') {
+        if (Ext.isEmpty(App.cboUsr_GrByType.getValue())) {
+            HQ.message.show(15, App.cboUsr_GrByType.fieldLabel, '');
+            return;
+        }
+        if (Ext.isEmpty(App.cboUsr_GrByTypeCopy.getValue())) {
+            HQ.message.show(15, App.cboUsr_GrByTypeCopy.fieldLabel, '');
+            return;
+        }
+    } else {
+        HQ.message.show(15, App.cboRecType.fieldLabel, '');
+        return;
+    }
+
+    if (App.cboUsr_GrByTypeCopy.getValue() == App.cboUsr_GrByType.getValue()) {
+        HQ.message.show(2019022803, [App.cboUsr_GrByTypeCopy.fieldLabel, App.cboUsr_GrByType.fieldLabel], '', true);
+        return;
+    }
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SA00700CoppingData"),
+            url: 'SA00700/copy',
+            params: {
+                RecType: App.cboRecType.getValue(),
+                UserID: App.cboUsr_GrByType.getValue(),
+                userIDCopy: App.cboUsr_GrByTypeCopy.getValue(),
+            },
+            success: function (msg, data) {
+                HQ.message.show(2019022802);
+                refresh("yes");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -351,11 +394,4 @@ var isAllValidKey = function (items) {
 };
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-function refresh(item) {
-    if (item == 'yes') {
-        HQ.isChange = false;
-        HQ.isFirstLoad = true;
-        App.stoSYS_AccessDetRights.reload();
-    }
-};
 ///////////////////////////////////
