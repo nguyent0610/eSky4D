@@ -198,6 +198,14 @@ namespace SA02500
     
             return base.ExecuteFunction<global::System.String>("SA02500_ppCheckPass", userNameParameter, passwordParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA02500isCustomization_Result> SA02500isCustomization()
+        {
+            return base.ExecuteFunction<SA02500isCustomization_Result>("SA02500isCustomization");
+        }
 
         #endregion
 
@@ -2056,10 +2064,148 @@ namespace SA02500
         private global::System.Double _CrtLmtInvoice;
         partial void OnCrtLmtInvoiceChanging(global::System.Double value);
         partial void OnCrtLmtInvoiceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SlsPersonPosition
+        {
+            get
+            {
+                return _SlsPersonPosition;
+            }
+            set
+            {
+                OnSlsPersonPositionChanging(value);
+                ReportPropertyChanging("SlsPersonPosition");
+                _SlsPersonPosition = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsPersonPosition");
+                OnSlsPersonPositionChanged();
+            }
+        }
+        private global::System.String _SlsPersonPosition;
+        partial void OnSlsPersonPositionChanging(global::System.String value);
+        partial void OnSlsPersonPositionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SlsPersons
+        {
+            get
+            {
+                return _SlsPersons;
+            }
+            set
+            {
+                OnSlsPersonsChanging(value);
+                ReportPropertyChanging("SlsPersons");
+                _SlsPersons = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsPersons");
+                OnSlsPersonsChanged();
+            }
+        }
+        private global::System.String _SlsPersons;
+        partial void OnSlsPersonsChanging(global::System.String value);
+        partial void OnSlsPersonsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DeliveryUnit
+        {
+            get
+            {
+                return _DeliveryUnit;
+            }
+            set
+            {
+                OnDeliveryUnitChanging(value);
+                ReportPropertyChanging("DeliveryUnit");
+                _DeliveryUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DeliveryUnit");
+                OnDeliveryUnitChanged();
+            }
+        }
+        private global::System.String _DeliveryUnit;
+        partial void OnDeliveryUnitChanging(global::System.String value);
+        partial void OnDeliveryUnitChanged();
 
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA02500Model", Name="SA02500isCustomization_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA02500isCustomization_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isShowLogin
+        {
+            get
+            {
+                return _isShowLogin;
+            }
+            set
+            {
+                OnisShowLoginChanging(value);
+                ReportPropertyChanging("isShowLogin");
+                _isShowLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isShowLogin");
+                OnisShowLoginChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isShowLogin;
+        partial void OnisShowLoginChanging(Nullable<global::System.Boolean> value);
+        partial void OnisShowLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isShowRule
+        {
+            get
+            {
+                return _isShowRule;
+            }
+            set
+            {
+                OnisShowRuleChanging(value);
+                ReportPropertyChanging("isShowRule");
+                _isShowRule = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isShowRule");
+                OnisShowRuleChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isShowRule;
+        partial void OnisShowRuleChanging(Nullable<global::System.Boolean> value);
+        partial void OnisShowRuleChanged();
+
+        #endregion
+
     }
 
     #endregion

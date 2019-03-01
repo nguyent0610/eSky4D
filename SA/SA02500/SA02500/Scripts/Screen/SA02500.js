@@ -1,5 +1,4 @@
-﻿
-// Command of the topbar on screen
+﻿// Command of the topbar on screen
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -40,12 +39,16 @@ var menuClick = function (command) {
 };
 
 var frmMain_afterRender = function () {
+    debugger
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             url: 'SA02500/SA02500Render',
             success: function (result, data) {
                 App.txtPassRule.setValue(data.result.totalpassRule);
                 App.txtPassRule.setReadOnly(true);
+                debugger
+                App.btnLoginPage.setVisible(data.result.isShowLogin);
+                App.pnlRule.setVisible(data.result.isShowRule);
             },
             failure: function (errorMsg, data) {
             }
@@ -60,6 +63,15 @@ var LoginPage_Click = function () {
     else window.location = 'Login';
 };
 
+function chkShowPassword_Change(item, newValue, oldValue) {
+    var type = 'password';
+    if (newValue) {
+        type = 'text';
+    }
+    App.txtOldPassword.inputEl.dom.type = type;
+    App.txtNewPassword.inputEl.dom.type = type;
+    App.txtReNewPassword.inputEl.dom.type = type;
+}
 
 function Check() {
     //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
@@ -116,7 +128,12 @@ function save() {
             },
             success: function (result, data) {
                 HQ.message.show(1504, '', null);
-                menuClick("refresh");
+                if (App.btnLoginPage.isVisible()) {
+                    menuClick("refresh");
+                }
+                else {
+                    LoginPage_Click();
+                }
 
             }
             , failure: function (errorMsg, data) {

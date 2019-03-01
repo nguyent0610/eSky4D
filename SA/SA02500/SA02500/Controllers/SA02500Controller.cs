@@ -130,8 +130,10 @@ namespace SA02500.Controllers
         public ActionResult SA02500Render(FormCollection data)
         {
             string totalpassRule = Util.GetLang("PassRule1") + "\n" + Util.GetLang("PassRule2") + "\n" + Util.GetLang("PassRule3") + "\n" + Util.GetLang("PassRule4");
-
-            return Json(new { success = true, totalpassRule }, JsonRequestBehavior.AllowGet);
+            var result =  _db.SA02500isCustomization().FirstOrDefault();
+            bool isShowLogin = result.isShowLogin == null ? false: result.isShowLogin.Value;
+            bool isShowRule = result.isShowRule == null ? false : result.isShowRule.Value;
+            return Json(new { success = true, totalpassRule, isShowLogin, isShowRule }, JsonRequestBehavior.AllowGet);
         }
         
 
