@@ -984,7 +984,7 @@ namespace IN10400.Controllers
 
                                 newLot.SiteID = data["SiteID"].PassNull();
                                 newLot.TranDate = data["DateEnt"].ToDateShort();
-                                newLot.TranType = "RC";
+                                newLot.TranType = "AJ";
                                 newLot.UnitDesc = workSheet.Cells[i, 2].StringValue;
                                 newLot.UnitMultDiv = "M";
                                 newLot.WarrantyDate = DateTime.Now;
@@ -1021,7 +1021,7 @@ namespace IN10400.Controllers
                             newTrans.CnvFact = 1;
                             newTrans.UnitMultDiv = "M";
                             newTrans.InvtMult = 1;
-                            newTrans.TranType = "RC";
+                            newTrans.TranType = "AJ";
                             newTrans.JrnlType = "IN";
                             newTrans.TranDesc = objInvt.Descr;
 
