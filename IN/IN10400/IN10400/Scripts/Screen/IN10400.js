@@ -1995,7 +1995,7 @@ var btnImport_Click = function (c, e) {
                             newLot.set('SlsperID', item.SlsperID);
                             newLot.set('TranDate', App.DateEnt.getValue());
                             newLot.set('WarrantyDate', new Date(parseInt(item.WarrantyDate.substr(6))));
-                            newLot.set('TranType', 'RC');
+                            newLot.set('TranType', 'AJ');
                             newLot.set('UnitCost', item.UnitCost);
                             newLot.set('UnitDesc', item.UnitDesc);
                             newLot.set('UnitMultDiv', item.UnitMultDiv);
