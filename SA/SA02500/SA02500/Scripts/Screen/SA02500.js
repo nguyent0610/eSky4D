@@ -39,14 +39,12 @@ var menuClick = function (command) {
 };
 
 var frmMain_afterRender = function () {
-    debugger
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             url: 'SA02500/SA02500Render',
             success: function (result, data) {
                 App.txtPassRule.setValue(data.result.totalpassRule);
                 App.txtPassRule.setReadOnly(true);
-                debugger
                 App.btnLoginPage.setVisible(data.result.isShowLogin);
                 App.pnlRule.setVisible(data.result.isShowRule);
             },
@@ -74,9 +72,10 @@ function chkShowPassword_Change(item, newValue, oldValue) {
 }
 
 function Check() {
+    var checkRule = App.pnlRule.isVisible();
     //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
     if (App.txtOldPassword.value == "") {
-        HQ.message.show(1500, '', null);
+        HQ.message.show(2019030701, '', null);
         App.txtOldPassword.focus();
         return;
     }
@@ -85,16 +84,16 @@ function Check() {
         App.txtReNewPassword.focus();
         return;
     }
-    else if (HQ.GroupAdmin=="1" && HQ.TextValAdmin != '0') {
+    else if (HQ.GroupAdmin == "1" && HQ.TextValAdmin != '0' && checkRule) {
         var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextValAdmin + ",}$", "");
 
         if (!App.txtNewPassword.value.match(decimal)) {
-            HQ.message.show(20180111, [HQ.TextValAdmin],null,true);
+            HQ.message.show(20180111, [HQ.TextValAdmin], null, true);
             App.txtNewPassword.focus();
             return;
         }
     }
-    else if (HQ.GroupAdmin == "0" && HQ.TextVal != '0') {
+    else if (HQ.GroupAdmin == "0" && HQ.TextVal != '0' && checkRule) {
         //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
         var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextVal + ",}$", "");
 
@@ -104,16 +103,26 @@ function Check() {
             return;
         }
     }
-    //if (HQ.TextVal == '1') {
-    //    if (!App.txtNewPassword.value.match(decimal)) {
-    //        HQ.message.show(998, '', null);
-    //        App.txtNewPassword.focus();
-    //        return;
-    //    }
-    //}
+        //if (HQ.TextVal == '1') {
+        //    if (!App.txtNewPassword.value.match(decimal)) {
+        //        HQ.message.show(998, '', null);
+        //        App.txtNewPassword.focus();
+        //        return;
+        //    }
+        //}
     else if (App.txtReNewPassword.value != App.txtNewPassword.value) {
         HQ.message.show(1503, '', null);
         App.txtReNewPassword.focus();
+        return;
+    }
+    else if (App.txtReNewPassword.value.length != 6) {
+        HQ.message.show(2019030701, ['6', App.txtReNewPassword.fieldLabel], null, true);
+        App.txtReNewPassword.focus();
+        return;
+    }
+    else if (App.txtNewPassword.value.length != 6) {
+        HQ.message.show(2019030701, ['6', App.txtNewPassword.fieldLabel], null, true);
+        App.txtNewPassword.focus();
         return;
     }
     save();
@@ -121,10 +130,12 @@ function Check() {
 
 function save() {
     if (App.frmMain.isValid()) {
+        var checkRule = App.pnlRule.isVisible();
         App.frmMain.submit({
             waitMsg: 'Submiting...',
             url: 'SA02500/SA02500Save',
             params: {
+                checkRule: checkRule
             },
             success: function (result, data) {
                 HQ.message.show(1504, '', null);
@@ -137,13 +148,14 @@ function save() {
 
             }
             , failure: function (errorMsg, data) {
-
+                debugger
                 if (data.result.code) {
                     HQ.message.show(data.result.code, '', '');
                     menuClick("refresh");
                 }
                 else {
-                    processMessage(errorMsg, data);
+                    //processMessage(errorMsg, data);
+                    HQ.message.process(errorMsg, data, true);
                 }
             }
         });

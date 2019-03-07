@@ -172,9 +172,18 @@ namespace SA02500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectResult<SA02500isCustomization_Result> SA02500isCustomization()
+        {
+            return base.ExecuteFunction<SA02500isCustomization_Result>("SA02500isCustomization");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="password">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> SA02500_ppCheckPass(global::System.String userName, global::System.String password)
+        /// <param name="checkRule">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> SA02500_ppCheckPass(global::System.String userName, global::System.String password, Nullable<global::System.Boolean> checkRule)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -196,15 +205,25 @@ namespace SA02500
                 passwordParameter = new ObjectParameter("Password", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("SA02500_ppCheckPass", userNameParameter, passwordParameter);
+            ObjectParameter checkRuleParameter;
+            if (checkRule.HasValue)
+            {
+                checkRuleParameter = new ObjectParameter("checkRule", checkRule);
+            }
+            else
+            {
+                checkRuleParameter = new ObjectParameter("checkRule", typeof(global::System.Boolean));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("SA02500_ppCheckPass", userNameParameter, passwordParameter, checkRuleParameter);
         }
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA02500isCustomization_Result> SA02500isCustomization()
+        public ObjectResult<SA02500_pdConfig_Result> SA02500_pdConfig()
         {
-            return base.ExecuteFunction<SA02500isCustomization_Result>("SA02500isCustomization");
+            return base.ExecuteFunction<SA02500_pdConfig_Result>("SA02500_pdConfig");
         }
 
         #endregion
@@ -2145,6 +2164,68 @@ namespace SA02500
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA02500Model", Name="SA02500_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA02500_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isShowLogin
+        {
+            get
+            {
+                return _isShowLogin;
+            }
+            set
+            {
+                OnisShowLoginChanging(value);
+                ReportPropertyChanging("isShowLogin");
+                _isShowLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isShowLogin");
+                OnisShowLoginChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isShowLogin;
+        partial void OnisShowLoginChanging(Nullable<global::System.Boolean> value);
+        partial void OnisShowLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isShowRule
+        {
+            get
+            {
+                return _isShowRule;
+            }
+            set
+            {
+                OnisShowRuleChanging(value);
+                ReportPropertyChanging("isShowRule");
+                _isShowRule = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isShowRule");
+                OnisShowRuleChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isShowRule;
+        partial void OnisShowRuleChanging(Nullable<global::System.Boolean> value);
+        partial void OnisShowRuleChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

@@ -98,11 +98,12 @@
           <Property Name="SlsPersons" Type="varchar(max)" />
           <Property Name="DeliveryUnit" Type="varchar" MaxLength="8000" />
         </EntityType>
+        <Function Name="SA02500_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SA02500_ppCheckPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="checkRule" Type="bit" Mode="In" />
         </Function>
-        <Function Name="SA02500isCustomization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="SA02500ModelStoreContainer">
           <EntitySet Name="SYS_Configurations" EntityType="Self.SYS_Configurations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYS_PassHistory" EntityType="Self.SYS_PassHistory" Schema="dbo" store:Type="Tables" />
@@ -117,12 +118,14 @@
           <EntitySet Name="SYS_PassHistory" EntityType="SA02500Model.SYS_PassHistory" />
           <EntitySet Name="Users" EntityType="SA02500Model.User" />
           <EntitySet Name="SYS_Configurations" EntityType="SA02500Model.SYS_Configurations" />
+          <EntitySet Name="SYS_UserGroup" EntityType="SA02500Model.SYS_UserGroup" />
+          <FunctionImport Name="SA02500isCustomization" ReturnType="Collection(SA02500Model.SA02500isCustomization_Result)" />
           <FunctionImport Name="SA02500_ppCheckPass" ReturnType="Collection(String)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="checkRule" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <EntitySet Name="SYS_UserGroup" EntityType="SA02500Model.SYS_UserGroup" />
-          <FunctionImport Name="SA02500isCustomization" ReturnType="Collection(SA02500Model.SA02500isCustomization_Result)" />
+          <FunctionImport Name="SA02500_pdConfig" ReturnType="Collection(SA02500Model.SA02500_pdConfig_Result)" />
         </EntityContainer>
         <EntityType Name="SYS_PassHistory">
           <Key>
@@ -221,6 +224,10 @@
           <Property Type="Boolean" Name="isShowLogin" Nullable="true" />
           <Property Type="Boolean" Name="isShowRule" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="SA02500_pdConfig_Result">
+          <Property Type="Boolean" Name="isShowLogin" Nullable="true" />
+          <Property Type="Boolean" Name="isShowRule" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -308,7 +315,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA02500_ppCheckPass" FunctionName="SA02500Model.Store.SA02500_ppCheckPass" />
           <EntitySetMapping Name="SYS_UserGroup">
             <EntityTypeMapping TypeName="SA02500Model.SYS_UserGroup">
               <MappingFragment StoreEntitySet="SYS_UserGroup">
@@ -324,9 +330,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA02500isCustomization" FunctionName="SA02500Model.Store.SA02500isCustomization">
+          <FunctionImportMapping FunctionImportName="SA02500_ppCheckPass" FunctionName="SA02500Model.Store.SA02500_ppCheckPass" />
+          <FunctionImportMapping FunctionImportName="SA02500_pdConfig" FunctionName="SA02500Model.Store.SA02500_pdConfig">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SA02500Model.SA02500isCustomization_Result">
+              <ComplexTypeMapping TypeName="SA02500Model.SA02500_pdConfig_Result">
                 <ScalarProperty Name="isShowLogin" ColumnName="isShowLogin" />
                 <ScalarProperty Name="isShowRule" ColumnName="isShowRule" />
               </ComplexTypeMapping>

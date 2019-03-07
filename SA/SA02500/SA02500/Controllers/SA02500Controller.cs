@@ -48,7 +48,7 @@ namespace SA02500.Controllers
         }
 
         [HttpPost]
-        public ActionResult SA02500Save(FormCollection data)
+        public ActionResult SA02500Save(FormCollection data, bool? checkRule)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace SA02500.Controllers
                 string username = Current.UserName.ToString();
 
                 // Kiem tra pass trung 5 lan gan nhat
-                var flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t")).FirstOrDefault();
+                string flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t"), checkRule == null? true: checkRule.Value).FirstOrDefault();
 
                 if (flag.ToString() == "0")
                 {
@@ -130,7 +130,7 @@ namespace SA02500.Controllers
         public ActionResult SA02500Render(FormCollection data)
         {
             string totalpassRule = Util.GetLang("PassRule1") + "\n" + Util.GetLang("PassRule2") + "\n" + Util.GetLang("PassRule3") + "\n" + Util.GetLang("PassRule4");
-            var result =  _db.SA02500isCustomization().FirstOrDefault();
+            var result = _db.SA02500_pdConfig().FirstOrDefault();
             bool isShowLogin = result.isShowLogin == null ? false: result.isShowLogin.Value;
             bool isShowRule = result.isShowRule == null ? false : result.isShowRule.Value;
             return Json(new { success = true, totalpassRule, isShowLogin, isShowRule }, JsonRequestBehavior.AllowGet);
