@@ -4,25 +4,31 @@ var keys = ['ScreenNumber'];
 var fieldsCheckRequire = ["ScreenNumber"];
 var fieldsLangCheckRequire = ["ScreenNumber"];
 var _Source = 0;
-var _maxSource = 1;
+var _maxSource = 5;
 var _isLoadMaster = false;
 /////////////////////Store////////////////////
 var checkLoad = function (sto) {
-    _Source += 1;
-    if (_Source == _maxSource) {
-        _isLoadMaster = true;
-        _Source = 0;
-        App.stoSYS_AccessDetRights.reload();
-        HQ.common.showBusy(false);
-    }
+    _Source = 1;
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"), App.frmMain);
+    App.cboRecType.getStore().addListener('load', cboStore_load);
+    App.cboUsr_GrByType.getStore().addListener('load', cboStore_load);
+    App.cboCpny.getStore().addListener('load', cboStore_load);
+    App.cboModule.getStore().addListener('load', cboStore_load);
+    App.cboScreenNbr.getStore().addListener('load', cboStore_load);
+
+    App.cboRecType.getStore().reload();
+    App.cboCpny.getStore().reload();
+    App.cboModule.getStore().reload();
+    App.cboScreenNbr.getStore().reload();
+
 };
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboRecType.getStore().load(function () {
         App.cboUsr_GrByType.getStore().load(function (sto) {
-            if (sto.length > 0) {
-                App.cboUsr_GrByTypeCopy.store.data.addAll(sto);
-            }
+            //if (sto.length > 0) {
+            App.cboUsr_GrByTypeCopy.store.data.addAll(sto);
+            //}
             App.cboCpny.getStore().load(function () {
                 App.cboModule.getStore().load(function () {
                     HQ.common.showBusy(false);
@@ -104,24 +110,55 @@ var firstLoad = function () {
     checkLoad(); // Mới
 };
 
+function cboStore_load(sto) {
+    if (_Source < _maxSource) {
+        _Source++;
+    } else {
+        HQ.common.showBusy(false);
+    }
+
+    if (sto.storeId == App.cboUsr_GrByType.store.storeId) {
+        App.cboUsr_GrByTypeCopy.store.removeAll();
+        App.cboUsr_GrByTypeCopy.clearValue();
+        App.cboUsr_GrByTypeCopy.store.add(sto.getRange());
+    }
+
+    if (sto.getCount() > 0) {
+        var str = sto.storeId;
+        var n = str.indexOf("SA00700");
+        var cboID = str.substring(0, n);
+        if (cboID == App.cboRecType.id || cboID == App.cboCpny.id || cboID == App.cboModule.id) {
+            var cbo = App[cboID];
+            cbo.setValue(sto.getAt(0));            
+        }
+    }
+}
+
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoSYS_AccessDetRights);
     HQ.common.changeData(HQ.isChange, 'SA00700');//co thay doi du lieu gan * tren tab title header
 };
 function refresh(item) {
     if (item == 'yes') {
-        debugger
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoSYS_AccessDetRights.reload();
     }
 };
 
-
+var beforeLoad = function () {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    App.InitRightsCheckAll.setValue(false);
+    App.InsertRightsCheckAll.setValue(false);
+    App.UpdateRightsCheckAll.setValue(false);
+    App.DeleteRightsCheckAll.setValue(false);
+    App.ViewRightsCheckAll.setValue(false);
+    App.ReleaseRightsCheckAll.setValue(false);
+}
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
 
-    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    HQ.common.showBusy(false);
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
@@ -160,6 +197,7 @@ var grdSYS_AccessDetRights_Edit = function (item, e) {
         e.record.set("InitRights", initRight);
     }
     HQ.grid.checkInsertKey(App.grdSYS_AccessDetRights, e, keys);
+    frmChange();
 };
 var grdSYS_AccessDetRights_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_AccessDetRights, e, keys);
@@ -186,7 +224,7 @@ var InitRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
-
+    frmChange();
 };
 
 var InsertRightsCheckAll_Change = function (value) {
@@ -204,6 +242,8 @@ var InsertRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
+
+    frmChange();
 };
 
 var UpdateRightsCheckAll_Change = function (value) {
@@ -221,6 +261,7 @@ var UpdateRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
+    frmChange();
 };
 
 var DeleteRightsCheckAll_Change = function (value) {
@@ -238,6 +279,7 @@ var DeleteRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
+    frmChange();
 };
 
 var ViewRightsCheckAll_Change = function (value) {
@@ -255,6 +297,7 @@ var ViewRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
+    frmChange();
 };
 
 var ReleaseRightsCheckAll_Change = function (value) {
@@ -272,6 +315,7 @@ var ReleaseRightsCheckAll_Change = function (value) {
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
     }
+    frmChange();
 };
 
 var LoadGrid = function (sender, e) {
