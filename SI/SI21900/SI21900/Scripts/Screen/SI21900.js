@@ -1,5 +1,6 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['Territory', "Zone"];
+var key = ['Territory'];
 var fieldsCheckRequire = ["Territory", "Descr","Zone"];
 var fieldsLangCheckRequire = ["Territory", "Descr","Zone"];
 
@@ -128,12 +129,12 @@ var grdTerritory_BeforeEdit = function (editor, e) {
 };
 
 var grdTerritory_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdTerritory, e, keys);
+   // HQ.grid.checkInsertKey(App.grdTerritory, e, keys);
     frmChange();
 };
 
 var grdTerritory_ValidateEdit = function (item, e) {
-    return checkValidateEdit(App.grdTerritory, e, keys);
+    return checkValidateEdit(App.grdTerritory, e, key);
 };
 
 var grdTerritory_Reject = function (record) {
