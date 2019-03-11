@@ -1573,8 +1573,8 @@ var setChange = function (isChange) {
 var calculate = function () {
     var totAmt = 0;
     var totQty = 0;
-
-    App.stoTrans.data.each(function (item) {
+    var data = App.stoTrans.snapshot || App.stoTrans.allData || App.stoTrans.data;
+    data.each(function (item) {
         totAmt += item.data.TranAmt;
         totQty += item.data.Qty;
     });
