@@ -75,12 +75,12 @@ function Check() {
     var checkRule = App.pnlRule.isVisible();
     //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
     if (App.txtOldPassword.value == "") {
-        HQ.message.show(2019030701, '', null);
+        HQ.message.show(2019031101, '', null);
         App.txtOldPassword.focus();
         return;
     }
     else if (App.txtReNewPassword.value == "") {
-        HQ.message.show(1501, '', null);
+        HQ.message.show(2019031102, '', null);
         App.txtReNewPassword.focus();
         return;
     }
@@ -115,13 +115,23 @@ function Check() {
         App.txtReNewPassword.focus();
         return;
     }
-    else if (App.txtReNewPassword.value.length != 6) {
-        HQ.message.show(2019030701, ['6', App.txtReNewPassword.fieldLabel], null, true);
+    else if (App.txtReNewPassword.value.length < 6) {
+        HQ.message.show(2019030701, [App.txtReNewPassword.fieldLabel], null, true);
         App.txtReNewPassword.focus();
         return;
     }
-    else if (App.txtNewPassword.value.length != 6) {
-        HQ.message.show(2019030701, ['6', App.txtNewPassword.fieldLabel], null, true);
+    else if (App.txtReNewPassword.value.length > 100) {
+        HQ.message.show(2019031103, [App.txtReNewPassword.fieldLabel], null, true);
+        App.txtReNewPassword.focus();
+        return;
+    }
+    else if (App.txtNewPassword.value.length < 6) {
+        HQ.message.show(2019030701, [App.txtNewPassword.fieldLabel], null, true);
+        App.txtNewPassword.focus();
+        return;
+    }
+    else if (App.txtNewPassword.value.length > 100) {
+        HQ.message.show(2019031103, [App.txtNewPassword.fieldLabel], null, true);
         App.txtNewPassword.focus();
         return;
     }
