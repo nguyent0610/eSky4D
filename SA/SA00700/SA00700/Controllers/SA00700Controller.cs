@@ -116,19 +116,19 @@ namespace SA00700.Controllers
         {
             try
             {
-                if (_db.SYS_AccessDetRights.Any(p => p.RecType == recType && p.UserID == userIDCopy))
+                if (_db.SYS_AccessDetRights.Any(p => p.RecType == recType && p.UserID == userID))
                 {
                     throw new MessageException(MessageType.Message, "2019022801");
                 }
                 int count = 0;
-                foreach (var item in _db.SYS_AccessDetRights.Where(p => p.RecType == recType && p.UserID == userID))
+                foreach (var item in _db.SYS_AccessDetRights.Where(p => p.RecType == recType && p.UserID == userIDCopy))
                 {
                     var objRight = new SYS_AccessDetRights();
                     objRight.ResetET();
 
                     objRight.ScreenNumber = item.ScreenNumber;
                     objRight.CpnyID = item.CpnyID;
-                    objRight.UserID = userIDCopy;
+                    objRight.UserID = userID;
                     objRight.RecType = recType;
 
                     objRight.InitRights = item.InitRights;

@@ -103,7 +103,7 @@
                  })
                 )
 
-               , X.Container().Layout(LayoutType.HBox).Items(
+                 , X.Container().Layout(LayoutType.HBox).MarginSpec("28 0 0 0").Items(
                  X.Button().MarginSpec("5 0 0 10").Width(120).Text(Util.GetLang("SA00700CopyFrom")).Listeners(p => p.Click.Fn = "copy")
 
                  , HQ.Combo().ID("cboUsr_GrByTypeCopy")
