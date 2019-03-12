@@ -1269,10 +1269,12 @@ namespace IN11700
         /// </summary>
         /// <param name="showWhseLoc">No Metadata Documentation available.</param>
         /// <param name="whseLoc">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN11700_pdGetItemSiteKit_Result> IN11700_pdGetItemSiteKit(Nullable<global::System.Int32> showWhseLoc, global::System.String whseLoc, global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        public ObjectResult<IN11700_pdGetItemSiteKit_Result> IN11700_pdGetItemSiteKit(Nullable<global::System.Int32> showWhseLoc, global::System.String whseLoc, global::System.String siteID, global::System.String invtID, global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter showWhseLocParameter;
             if (showWhseLoc.HasValue)
@@ -1292,6 +1294,26 @@ namespace IN11700
             else
             {
                 whseLocParameter = new ObjectParameter("WhseLoc", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
             }
     
             ObjectParameter cpnyIDParameter;
@@ -1324,7 +1346,7 @@ namespace IN11700
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<IN11700_pdGetItemSiteKit_Result>("IN11700_pdGetItemSiteKit", showWhseLocParameter, whseLocParameter, cpnyIDParameter, userNameParameter, langIDParameter);
+            return base.ExecuteFunction<IN11700_pdGetItemSiteKit_Result>("IN11700_pdGetItemSiteKit", showWhseLocParameter, whseLocParameter, siteIDParameter, invtIDParameter, cpnyIDParameter, userNameParameter, langIDParameter);
         }
 
         #endregion
@@ -15125,7 +15147,9 @@ namespace IN11700
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="barCode">Initial value of the BarCode property.</param>
         /// <param name="qtyOnHand">Initial value of the QtyOnHand property.</param>
-        public static IN11700_pgReceiptLoad_Result CreateIN11700_pgReceiptLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.Byte[] tstamp, global::System.String barCode, global::System.Double qtyOnHand)
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
+        /// <param name="toWhseLoc">Initial value of the ToWhseLoc property.</param>
+        public static IN11700_pgReceiptLoad_Result CreateIN11700_pgReceiptLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.Byte[] tstamp, global::System.String barCode, global::System.Double qtyOnHand, global::System.String whseLoc, global::System.String toWhseLoc)
         {
             IN11700_pgReceiptLoad_Result iN11700_pgReceiptLoad_Result = new IN11700_pgReceiptLoad_Result();
             iN11700_pgReceiptLoad_Result.BatNbr = batNbr;
@@ -15145,6 +15169,8 @@ namespace IN11700
             iN11700_pgReceiptLoad_Result.tstamp = tstamp;
             iN11700_pgReceiptLoad_Result.BarCode = barCode;
             iN11700_pgReceiptLoad_Result.QtyOnHand = qtyOnHand;
+            iN11700_pgReceiptLoad_Result.WhseLoc = whseLoc;
+            iN11700_pgReceiptLoad_Result.ToWhseLoc = toWhseLoc;
             return iN11700_pgReceiptLoad_Result;
         }
 
@@ -15971,7 +15997,7 @@ namespace IN11700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String WhseLoc
         {
@@ -15983,7 +16009,7 @@ namespace IN11700
             {
                 OnWhseLocChanging(value);
                 ReportPropertyChanging("WhseLoc");
-                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                _WhseLoc = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("WhseLoc");
                 OnWhseLocChanged();
             }
@@ -15995,7 +16021,7 @@ namespace IN11700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String ToWhseLoc
         {
@@ -16007,7 +16033,7 @@ namespace IN11700
             {
                 OnToWhseLocChanging(value);
                 ReportPropertyChanging("ToWhseLoc");
-                _ToWhseLoc = StructuralObject.SetValidValue(value, true);
+                _ToWhseLoc = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("ToWhseLoc");
                 OnToWhseLocChanged();
             }
@@ -16087,30 +16113,6 @@ namespace IN11700
         private global::System.String _KitID;
         partial void OnKitIDChanging(global::System.String value);
         partial void OnKitIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> IsSelected
-        {
-            get
-            {
-                return _IsSelected;
-            }
-            set
-            {
-                OnIsSelectedChanging(value);
-                ReportPropertyChanging("IsSelected");
-                _IsSelected = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsSelected");
-                OnIsSelectedChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _IsSelected;
-        partial void OnIsSelectedChanging(Nullable<global::System.Boolean> value);
-        partial void OnIsSelectedChanged();
 
         #endregion
 

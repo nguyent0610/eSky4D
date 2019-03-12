@@ -107,7 +107,7 @@
                             , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                             .Items(
-                                 X.ComboBox()
+                                X.ComboBox()
                                 .ID("cboBatNbr")
                                 .Name("BatNbr")
                                 .MinChars(1)
@@ -123,7 +123,6 @@
                                 .Listeners(l =>
                                 {
                                     l.Change.Fn = "cboBatNbr_Change";
-                                    //l.Focus.Handler = "HQ.focus='batch'";
                                     l.TriggerClick.Handler = "if (index == 0) { this.clearValue();} defaultOnNew();";
                                 })
                                 .QueryMode(DataLoadMode.Remote)
@@ -208,8 +207,9 @@
                                 .LoadData()
                                 .Listeners(l =>
                                 {
-                                    l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    l.TriggerClick.Handler = "if (index == 0) { this.clearValue();App.cboSiteLocation.setValue('');}";
                                     l.Focus.Fn = "cboSite_Focus";
+                                    l.Change.Fn = "cboSite_Change";
                                 })
                                 , HQ.Combo().ID("cboSiteLocation")
                                 .HQLangCode("WhseLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLoc")
@@ -234,42 +234,44 @@
                             , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                             .Items(
-                             HQ.Combo().ID("cboSiteTP")
-                                .HQLangCode("IN11700Site").HQProcedure("IN11700_pcSiteID").Name("ToSiteID")
-                                .HQColumnShow("SiteID,Name").ForceSelection(true).DataIndex("SiteIDTP")
-                                .HQHeightWidth(400, 300)
-                                .ValueField("SiteID").DisplayField("SiteID").AllowBlank(false).LabelWidth(130)
-                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .HQParam(new StoreParameterCollection() {
-                                    new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw)
-                                    ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
-                                    ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
-                                    ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                })
-                                .LoadData()
-                                .Listeners(l =>
-                                {
-                                    l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    l.Focus.Fn = "cboSiteTP_Focus";
-                                })
+                                 HQ.Combo().ID("cboSiteTP")
+                                    .HQLangCode("IN11700Site").HQProcedure("IN11700_pcSiteID").Name("ToSiteID")
+                                    .HQColumnShow("SiteID,Name").ForceSelection(true).DataIndex("SiteIDTP")
+                                    .HQHeightWidth(400, 300)
+                                    .ValueField("SiteID").DisplayField("SiteID").AllowBlank(false).LabelWidth(130)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw)
+                                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                        ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                    })
+                                    .LoadData()
+                                    .Listeners(l =>
+                                    {
+                                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();App.cboSiteTPLocation.setValue('');}";
+                                        l.Focus.Fn = "cboSiteTP_Focus";
+                                        l.Change.Fn = "cboSiteTP_Change";
+                                    })
+                                
                                 ,HQ.Combo().ID("cboSiteTPLocation")
-                                .HQLangCode("IN11700SiteLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLocTo")
-                                .HQColumnShow("WhseLoc,Descr").ForceSelection(true).DataIndex("WhseLocTP")
-                                .HQHeightWidth(400, 300)
-                                .ValueField("WhseLoc").DisplayField("WhseLoc").AllowBlank(false).LabelWidth(130)
-                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .HQParam(new StoreParameterCollection() {
-                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
-                                    ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
-                                    ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                })
-                                .LoadData()
-                                .Listeners(l =>
-                                {
-                                    l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    l.Focus.Fn = "cboSiteTPLocation_Focus";
-                                    l.Focus.Handler = "HQ.focus='batch';" ;
-                                })
+                                    .HQLangCode("IN11700SiteLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLocTo")
+                                    .HQColumnShow("WhseLoc,Descr").ForceSelection(false).DataIndex("WhseLocTP")
+                                    .HQHeightWidth(400, 300)
+                                    .ValueField("WhseLoc").DisplayField("WhseLoc").AllowBlank(false).LabelWidth(130)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                        ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                    })
+                                    .LoadData()
+                                    .Listeners(l =>
+                                    {
+                                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        l.Focus.Fn = "cboSiteTPLocation_Focus";
+                                        l.Focus.Handler = "HQ.focus='batch';" ;
+                                    })
                                 , X.Hidden().ID("tstamp")
                             )
                         )
@@ -303,7 +305,7 @@
                     .Store(
                         X.Store()
                         .ID("stoSite")
-                        .PageSize(50)//.AutoLoad(true)
+                        .PageSize(50)
                         .Model(Util.GenerateModel(typeof(IN11700_pgReceiptLoad_Result), "IN11700_pgSite", ""))
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKit"))).AutoLoad(false)
                         .Parameters(ps =>
@@ -324,26 +326,25 @@
                     , X.Column().Text(Util.GetLang("KitID")).DataIndex("InvtID").Width(120)
                     .Editor(
                         HQ.Combo().ID("cboKitID").Name("cboKitID").MarginSpec("5 0 5 0").Width(250)
-                        .HQDBSys(false).HQProcedure("IN11700_pcKitID")
-                        .HQColumnShow("KitID,Descr,StkUnit").ForceSelection(true)
-                        .HQAutoLoad(true)
-                        .DisplayField("KitID").ValueField("KitID").HQHeightWidth(400, 300)
-                        .HQParam(new StoreParameterCollection()
-                        {
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                            new StoreParameter() {Name ="@BranchID", Value="App.cboBranchID.getValue()",Mode=ParameterMode.Raw}
-                        })
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .Listeners(ls =>
-                        {
-                            ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            //ls.Change.Fn = "cboBranchID_Change";
-                        })
-                        .LoadData()
+                            .HQDBSys(false).HQProcedure("IN11700_pcKitID")
+                            .HQColumnShow("KitID,Descr,StkUnit").ForceSelection(true)
+                            .HQAutoLoad(true)
+                            .DisplayField("KitID").ValueField("KitID").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                new StoreParameter() {Name ="@BranchID", Value="App.cboBranchID.getValue()",Mode=ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(ls =>
+                            {
+                                ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            })
+                            .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(120)
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(300)
                     , X.Column().Text(Util.GetLang("UnitDesc")).DataIndex("UnitDesc").Width(120)
                     , X.NumberColumn().Text(Util.GetLang("Amnt")).DataIndex("Qty").Width(120).Align(Alignment.Right)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
@@ -356,26 +357,7 @@
                         X.Button()
                         .MarginSpec("1 4 1 3").Height(18).Text("")
                         .Listeners(p => p.Click.Fn = "btnLotDPBB_Click")
-                    )
-                //, X.CommandColumn().Width(150)
-                //.Commands(
-                //        X.GridCommand()
-                //        .Text(Util.GetLang("Reject"))
-                //        .ToolTip(t =>
-                //        {
-                //            t.Text = Util.GetLang("Rejectrowchanges");
-                //        })
-                //        .CommandName("reject")
-                //        .Icon(Icon.ArrowUndo)
-                //)
-                //.PrepareToolbar(t =>
-                //{
-                //    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                //})
-                //.Listeners(l =>
-                //{
-                //    l.Command.Handler = "grdSite_Reject(record);";
-                //})
+                    )                
                 )
                 .SelectionModel(X.RowSelectionModel().ID("slmHeader").Mode(SelectionMode.Single)).Listeners(l => l.Select.Fn = "slmHeader_select")
                 .BottomBar(
@@ -405,13 +387,13 @@
                 )
                 .Features(
                     X.GridFilters()
-                        .Local(true)
-                        .Filters(
-                                X.StringFilter().DataIndex("InvtID"),
-                                X.StringFilter().DataIndex("TranDesc"),
-                                X.StringFilter().DataIndex("UnitDesc"),
-                                X.NumericFilter().DataIndex("Qty")
-                        )
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("InvtID"),
+                        X.StringFilter().DataIndex("TranDesc"),
+                        X.StringFilter().DataIndex("UnitDesc"),
+                        X.NumericFilter().DataIndex("Qty")
+                    )
                 )
             )
             
@@ -475,7 +457,7 @@
                     })
                     .LoadData()
                 )
-                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120)
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(300)
                 , X.Column().Text(Util.GetLang("UnitDesc")).DataIndex("Unit").Width(120)
                 , X.NumberColumn().Text(Util.GetLang("Amnt")).DataIndex("ComponentQty").Width(120).Align(Alignment.Right)
                 , X.ComponentColumn()

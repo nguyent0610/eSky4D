@@ -243,6 +243,18 @@
         .Reader(X.JsonReader().Root("data")))
 )
 
+@(
+ X.Store()
+    .ID("stoInvtComponent")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetItemSiteKit_Result), "mdlInvtComponent", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetInvtComponent", "IN11700"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
 
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   

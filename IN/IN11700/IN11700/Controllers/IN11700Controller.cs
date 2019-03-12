@@ -76,7 +76,13 @@ namespace IN11700.Controllers
 
         public ActionResult GetItemSiteKit(string invtID, string siteID, string whseLoc, int showWhseLoc)
         {
-            var objSite = _db.IN11700_pdGetItemSiteKit(showWhseLoc, whseLoc, Current.CpnyID, Current.UserName, Current.LangID);
+            var objSite = _db.IN11700_pdGetItemSiteKit(showWhseLoc, whseLoc, siteID, invtID, Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            return this.Store(objSite);
+        }
+
+        public ActionResult GetInvtComponent(string invtID, string siteID, string whseLoc, int showWhseLoc)
+        {
+            var objSite = _db.IN11700_pdGetItemSiteKit(showWhseLoc, whseLoc, siteID, invtID, Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             return this.Store(objSite);
         }
         public ActionResult GetComponent(string KitID, string branchID, string lineRef, string refNbr, string batNbr)
@@ -995,8 +1001,6 @@ namespace IN11700.Controllers
                     }
                     objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, _decQty);
                     objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, _decQty);
-                    // itemsite.QtyAllocIN = Math.Round(itemsite.QtyAllocIN + newQty - oldQty, 0);
-                    // itemsite.QtyAvail = Math.Round(itemsite.QtyAvail - newQty + oldQty, 0);
                     return true;
                 }
                 return true;
@@ -1042,8 +1046,6 @@ namespace IN11700.Controllers
                 {
                     if (!_objIN.NegQty && newQty > 0 && objItemLot.QtyAvail + oldQty - newQty < 0)
                     {
-
-                        //Util.AppendLog(ref _logMessage, "608", parm: new[] { objItemLot.InvtID + " " objItemLot.LotSerNbr , objItemSite.SiteID });
                         return false;
                     }
                     objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + newQty - oldQty, decQty);

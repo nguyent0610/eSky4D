@@ -412,6 +412,8 @@
         <Function Name="IN11700_pdGetItemSiteKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ShowWhseLoc" Type="int" Mode="In" />
           <Parameter Name="WhseLoc" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -622,6 +624,8 @@
           <FunctionImport Name="IN11700_pdGetItemSiteKit" ReturnType="Collection(IN11700Model.IN11700_pdGetItemSiteKit_Result)">
             <Parameter Name="ShowWhseLoc" Mode="In" Type="Int32" />
             <Parameter Name="WhseLoc" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -1097,12 +1101,11 @@
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="QtyOnHand" Nullable="false" />
           <Property Type="String" Name="LotSerTrack" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="ToWhseLoc" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ToWhseLoc" Nullable="false" MaxLength="10" />
           <Property Type="DateTime" Name="RptExpDate" Nullable="true" Precision="23" />
           <Property Type="Int16" Name="WarrantyDays" Nullable="true" />
           <Property Type="String" Name="KitID" Nullable="true" MaxLength="30" />
-          <Property Type="Boolean" Name="IsSelected" Nullable="true" />
         </ComplexType>
         <ComplexType Name="IN11700_pcComponent_Result">
           <Property Type="String" Name="ComponentID" Nullable="false" MaxLength="30" />
@@ -1768,7 +1771,6 @@
                 <ScalarProperty Name="RptExpDate" ColumnName="RptExpDate" />
                 <ScalarProperty Name="WarrantyDays" ColumnName="WarrantyDays" />
                 <ScalarProperty Name="KitID" ColumnName="KitID" />
-                <ScalarProperty Name="IsSelected" ColumnName="IsSelected" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
