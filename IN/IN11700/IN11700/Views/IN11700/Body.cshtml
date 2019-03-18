@@ -215,7 +215,7 @@
                                 , HQ.Combo().ID("cboSiteLocation")
                                 .HQLangCode("WhseLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLoc")
                                 .HQColumnShow("WhseLoc,Descr").ForceSelection(true).DataIndex("WhseLoc")
-                                .HQHeightWidth(400, 300)
+                                .HQHeightWidth(400, 300).HQAutoLoad(true)
                                 .ValueField("WhseLoc").DisplayField("Descr").AllowBlank(false).LabelWidth(130)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection() {
@@ -258,7 +258,7 @@
                                 ,HQ.Combo().ID("cboSiteTPLocation")
                                     .HQLangCode("IN11700SiteLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLocTo")
                                     .HQColumnShow("WhseLoc,Descr").ForceSelection(false).DataIndex("WhseLocTP")
-                                    .HQHeightWidth(400, 300)
+                                    .HQHeightWidth(400, 300).HQAutoLoad(true)
                                     .ValueField("WhseLoc").DisplayField("Descr").AllowBlank(false).LabelWidth(130)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() {

@@ -46,7 +46,7 @@ var checkStoreLoad = function () {
         //HQ.common.showBusy(false);
         _isLoadMaster = true;
         if (App.grdSite.selModel.selected.length == 0) {
-            //App.slmHeader.select(0);
+            _detSource = 0;
         }
     }
     
