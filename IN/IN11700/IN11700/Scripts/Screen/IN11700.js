@@ -296,7 +296,7 @@ var save = function () {
                 var batNbr = '';
 
                 if (this.result.data != undefined && this.result.data.batNbr != null) {
-                    var batNbr = this.result.data.batNbr
+                    var batNbr = this.result.data.batNbr;
                 }
                 if (!Ext.isEmpty(batNbr)) {
                     App.cboBatNbr.forceSelection = false;
@@ -304,7 +304,6 @@ var save = function () {
                     App.cboBatNbr.getStore().load({
                         callback: function () {
                             if (Ext.isEmpty(App.cboBatNbr.getValue())) {
-                                debugger
                                 App.cboBatNbr.setValue(batNbr);
                             }                           
                         }
@@ -404,6 +403,8 @@ var deleteData = function (item) {
         }
         else {
             App.grdSite.deleteSelected();
+            App.grdComponent.store.clearData();
+            App.grdComponent.view.refresh();
         }
     }
 };
@@ -489,6 +490,7 @@ var grdSite_Edit = function (item, e) {
     var lstComponent = App.grdComponent.store.snapshot || App.grdComponent.store.allData|| App.grdComponent.store.data;
     if (e.field == 'Qty')
     {
+        App.stoComponent.suspendEvents();
         if (e.value > 0) {
             calcLot(e.record);
         }
@@ -496,13 +498,18 @@ var grdSite_Edit = function (item, e) {
         {
             if (e.record.data.InvtID == lstComponent.items[i].data.InvtID)
             {
-                lstComponent.items[i].set("ComponentQty", (lstComponent.items[i].data.QtyTemp * e.record.data.Qty));
-            
+                if (e.record.data.Qty > 0) {
+                    lstComponent.items[i].set("ComponentQty", (lstComponent.items[i].data.QtyTemp * e.record.data.Qty));
+                }
+                else {
+                    lstComponent.items[i].set("ComponentQty", lstComponent.items[i].data.QtyTemp);
+                }
+                            
             }     
         }
         
-        //App.stoComponent.resumeEvents();
-        //App.grdComponent.view.refresh();
+        App.stoComponent.resumeEvents();
+        App.grdComponent.view.refresh();
     }
     if (e.field == "Qty")
     {
@@ -968,18 +975,27 @@ var bindBatch = function (record) {
     //Dung bindTrans IN10100 lay duoc vi tri kho
     HQ.objBatch = record;
     App.cboBatNbr.events['change'].suspend();
-    App.cboSite.events['change'].suspend();
-    App.frmMain.events['fieldchange'].suspend();
+    //App.frmMain.events['fieldchange'].suspend();
     App.cboStatus.forceSelection = false;
     App.frmMain.loadRecord(HQ.objBatch);
-    App.frmMain.events['fieldchange'].resume();
+    //App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
-    App.cboSite.events['change'].resume();
-    setStatusForm();
+    if (Ext.isEmpty(record.data.BatNbr)) {
+        App.cboSite.setValue("");
+        App.cboSite.setReadOnly(false);
+        App.cboSiteLocation.setValue("");
+        App.cboSiteLocation.setReadOnly(false);
+        App.cboSiteTP.setValue("");
+        App.cboSiteTP.setReadOnly(false);
+        App.cboSiteTPLocation.setValue("");
+        App.cboSiteTPLocation.setReadOnly(false);
+        App.stoSite.clearData();
+    }
     App.stoSite.reload();
     App.stoLotTransDPBB.reload();
     App.stoLotTrans.reload();
     App.stoComponent.reload();
+    setStatusForm();
     checkSourceDetail();
     HQ.common.showBusy(true, HQ.waitMsg);
     HQ.numDetail = 0;
@@ -1494,7 +1510,6 @@ var renderTerritory = function (value, metaData, record, row, col, store, gridVi
         return r.data.Descr;
 };
 var stringFilterStatus = function (record) {
-
     if (this.dataIndex == 'Status') {
         App.cboStatus.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboStatus.store, "Code", "Descr");
@@ -1889,11 +1904,17 @@ var cboSite_Focus = function () {
         code = App.cboBranchID.getValue();
     }
     App.cboSite.store.filter("CpnyID", code);
+    App.cboSite.forceSelection = true;
 }
 var cboSite_Change = function (item) {
     App.cboSiteLocation.store.clearFilter();
     if (item.hasFocus) {
-        App.cboSiteLocation.setValue("");
+        if (App.cboSite.valueModels && App.cboSite.valueModels.length > 0) {
+            App.cboSiteLocation.setValue(App.cboSite.valueModels[0].data.WhseLoc);
+        }
+        else {
+            App.cboSiteLocation.setValue("");
+        }        
     }    
     var code = "@@@@@";
     if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
@@ -1920,7 +1941,12 @@ var cboSiteLocation_Focus = function () {
 
 var cboSiteTP_Change = function (item) {
     if (item.hasFocus) {
-        App.cboSiteTPLocation.setValue("");
+        if (App.cboSiteTP.valueModels && App.cboSiteTP.valueModels.length>0) {
+            App.cboSiteTPLocation.setValue(App.cboSiteTP.valueModels[0].data.WhseLoc);
+        }
+        else {
+            App.cboSiteTPLocation.setValue("");
+        }        
     }
     App.cboSiteTPLocation.store.clearFilter();
     var code = "@@@@@";
@@ -2016,9 +2042,10 @@ var setUOM = function (invtID, classID, stkUnit, fromUnit) {
     return null;
 };
 var checkDPBBAdd = function () {
+    debugger
     var flat = false;
     var store = App.stoSite;
-    var allRecords = store.snapshot || store.allData || store.data;
+    var allRecords = store.allData || store.data;
 
     allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {

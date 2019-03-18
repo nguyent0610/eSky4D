@@ -194,7 +194,7 @@
                             .Items(
                                 HQ.Combo().ID("cboSite")
                                 .HQLangCode("SiteId").HQProcedure("IN11700_pcSiteID").Name("SiteID")
-                                .HQColumnShow("SiteID,Name").ForceSelection(true).DataIndex("SiteID")
+                                .HQColumnShow("SiteID,Name").ForceSelection(false).DataIndex("SiteID")
                                 .HQHeightWidth(400, 300)
                                 .ValueField("SiteID").DisplayField("SiteID").AllowBlank(false).LabelWidth(130)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -210,12 +210,13 @@
                                     l.TriggerClick.Handler = "if (index == 0) { this.clearValue();App.cboSiteLocation.setValue('');}";
                                     l.Focus.Fn = "cboSite_Focus";
                                     l.Change.Fn = "cboSite_Change";
+                                    l.Blur.Handler = "App.cboSite.forceSelection=false;";
                                 })
                                 , HQ.Combo().ID("cboSiteLocation")
                                 .HQLangCode("WhseLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLoc")
                                 .HQColumnShow("WhseLoc,Descr").ForceSelection(true).DataIndex("WhseLoc")
                                 .HQHeightWidth(400, 300)
-                                .ValueField("WhseLoc").DisplayField("WhseLoc").AllowBlank(false).LabelWidth(130)
+                                .ValueField("WhseLoc").DisplayField("Descr").AllowBlank(false).LabelWidth(130)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection() {
                                     new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
@@ -258,7 +259,7 @@
                                     .HQLangCode("IN11700SiteLoc").HQProcedure("IN11700_pcSiteLocation").Name("WhseLocTo")
                                     .HQColumnShow("WhseLoc,Descr").ForceSelection(false).DataIndex("WhseLocTP")
                                     .HQHeightWidth(400, 300)
-                                    .ValueField("WhseLoc").DisplayField("WhseLoc").AllowBlank(false).LabelWidth(130)
+                                    .ValueField("WhseLoc").DisplayField("Descr").AllowBlank(false).LabelWidth(130)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
