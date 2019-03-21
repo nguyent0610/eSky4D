@@ -503,8 +503,7 @@ var grdSite_Edit = function (item, e) {
                 }
                 else {
                     lstComponent.items[i].set("ComponentQty", lstComponent.items[i].data.QtyTemp);
-                }
-                            
+                }                            
             }     
         }
         
@@ -522,7 +521,12 @@ var grdSite_Edit = function (item, e) {
             if (lstCompo4Save != undefined) {
                 for (var i = 0; i < lstCompo4Save.length; i++) {
                     if (lstCompo4Save.items[i].data.InvtID == e.record.data.InvtID) {
-                        lstCompo4Save.items[i].set("ComponentQty", lstCompo4Save.items[i].data.QtyTemp * e.record.data.Qty);
+                        if (e.record.data.Qty > 0) {
+                            lstCompo4Save.items[i].set("ComponentQty", (lstCompo4Save.items[i].data.QtyTemp * e.record.data.Qty));
+                        }
+                        else {
+                            lstCompo4Save.items[i].set("ComponentQty", lstCompo4Save.items[i].data.QtyTemp);
+                        }
                         if (lstLot != undefined) {                           
                             for (var j = lstLot.length; j > 0; j--) {
                                 if (lstLot.items[j - 1].data.INTranLineRef == lstCompo4Save.items[i].data.LineRef && lstLot.items[j - 1].data.ComponentID == lstCompo4Save.items[i].data.ComponentID) {
@@ -1915,12 +1919,13 @@ var cboSite_Change = function (item) {
         else {
             App.cboSiteLocation.setValue("");
         }        
-    }    
-    var code = "@@@@@";
-    if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
-        code = App.cboSite.getValue();
     }
-    App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
+    App.cboSiteLocation.store.reload();
+    //var code = "@@@@@";
+    //if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
+    //    code = App.cboSite.getValue();
+    //}
+    //App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
 }
 var cboSiteTP_Focus = function () {
     App.cboSiteTP.store.clearFilter();
@@ -1931,12 +1936,7 @@ var cboSiteTP_Focus = function () {
     App.cboSiteTP.store.filter("CpnyID", code);
 }
 var cboSiteLocation_Focus = function () {
-    App.cboSiteLocation.store.clearFilter();
-    var code = "@@@@@";
-    if (App.cboSite.getValue() != "" && App.cboSite.getValue() != null) {
-        code = App.cboSite.getValue();
-    }
-    App.cboSiteLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
+    App.cboSiteLocation.forceSelection = true;
 }
 
 var cboSiteTP_Change = function (item) {
@@ -1948,12 +1948,7 @@ var cboSiteTP_Change = function (item) {
             App.cboSiteTPLocation.setValue("");
         }        
     }
-    App.cboSiteTPLocation.store.clearFilter();
-    var code = "@@@@@";
-    if (App.cboSiteTP.getValue() != "" && App.cboSiteTP.getValue() != null) {
-        code = App.cboSiteTP.getValue();
-    }
-    App.cboSiteTPLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
+    App.cboSiteTPLocation.store.reload();
 }
 
 
@@ -1965,14 +1960,15 @@ var cboSiteLocation_Change = function () {
 
 
 var cboSiteTPLocation_Focus = function () {
-    App.cboSiteTPLocation.store.clearFilter();
-    var code = "@@@@@";
-    if (App.cboSiteTP.getValue() != "" && App.cboSiteTP.getValue() != null) {
-        code = App.cboSiteTP.getValue();
-    }
-    App.cboSiteTPLocation.store.filter("SiteID", new RegExp('^' + Ext.escapeRe(code) + '$'));
+    App.cboSiteLocation.forceSelection = true;
 }
-var cboBranchID_Change = function () {
+var cboBranchID_Change = function (item) {
+    if (item.hasFocus) {
+        App.cboSite.setValue("");
+        App.cboSiteTP.setValue("");
+        App.cboSiteLocation.setValue("");
+        App.cboSiteTPLocation.setValue("");
+    }
     App.stoBatch.reload();
 }
 var focusOnInvalidField = function (item) {
@@ -2042,7 +2038,6 @@ var setUOM = function (invtID, classID, stkUnit, fromUnit) {
     return null;
 };
 var checkDPBBAdd = function () {
-    debugger
     var flat = false;
     var store = App.stoSite;
     var allRecords = store.allData || store.data;
