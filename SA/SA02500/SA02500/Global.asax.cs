@@ -38,16 +38,16 @@ namespace SA02500
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ECO_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();ECO_eSky4DSys
+            Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SA02500"] = acc;
-            Session["DBApp"] = Current.DBApp = "ECO_eSky4DSys";// "eBiz4DWebApp"; ECO_eSky4DApp
-            Session["UserName"] = Current.UserName = "00000000";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
+            Session["UserName"] = Current.UserName = "0001";
+            Session["CpnyID"] = Current.CpnyID = "ECO";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

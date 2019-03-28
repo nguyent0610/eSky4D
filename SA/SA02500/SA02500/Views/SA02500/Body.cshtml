@@ -34,25 +34,28 @@
             X.Container().Layout(LayoutType.VBox)
             .Items(
                     HQ.TextBox().ID("txtOldPassword").Name("txtOldPassword").HQLangCode("SA02500OldPassword")
-                    .Width(410).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
+                    .Width(410).MarginSpec("5 0 0 0").MaxLength(100).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
                     .Listeners(lst =>
                     {
                         lst.Blur.Fn = "txtOldPassword_Change";
+                        lst.Change.Fn = "txt_Change";
                     })
                             
                     ,HQ.TextBox().ID("txtNewPassword").Name("txtNewPassword").HQLangCode("NewPassword")
-                    .Width(410).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
+                    .Width(410).MarginSpec("5 0 0 0").MaxLength(100).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
                     .Listeners(lst =>
                     {
                         lst.Blur.Fn = "txtNewPassword_Change";
+                        lst.Change.Fn = "txt_Change";
                     })
                                                
                     ,HQ.TextBox().ID("txtReNewPassword").Name("txtReNewPassword").HQLangCode("ReNewPassword").DataIndex("Password")
                     .Width(410).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
-                    .MaxLength(50).EnforceMaxLength(true)
+                    .MaxLength(100).EnforceMaxLength(true)
                     .Listeners(lst =>
                     {
                         lst.Blur.Fn = "txtReNewPassword_Change";
+                        lst.Change.Fn = "txt_Change";
                     })
                     
                     , HQ.Checkbox().ID("chkShowPassword").HQLangCode("SA02500Showhide").MarginSpec("0 0 0 205").Value(false)

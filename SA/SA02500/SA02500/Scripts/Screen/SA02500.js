@@ -184,6 +184,18 @@ var txtOldPassword_Change = function (sender, e) {
 
 };
 
+var txt_Change = function (item, newValue, oldValue) {
+    //var newValue = item.value;
+    debugger
+    if (Ext.isEmpty(newValue)) {
+        return;
+    }
+    if (newValue.length > 50) {
+        HQ.message.show(1234, [item.fieldLabel, 50], "", true);
+        item.setValue(oldValue);
+        return;
+    }
+}
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
