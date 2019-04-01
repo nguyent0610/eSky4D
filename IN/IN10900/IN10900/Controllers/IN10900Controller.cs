@@ -52,6 +52,7 @@ namespace IN10900.Controllers
 				ChangeRecords<IN10900_pgLoadGrid_Result> lstData = dataHandlerGrid.BatchObjectData<IN10900_pgLoadGrid_Result>();
 				var docDate = data["dteCheckDate"];
 				var branchID = data["cboCpnyID"];
+                var slsperID = data["cboSlsPerID"];
                 var handle = data["cboHandle"];
 		
 				lstData.Created.AddRange(lstData.Updated);
@@ -78,9 +79,8 @@ namespace IN10900.Controllers
 
                     if (handle == "R")
                     {
-                        arrBranchID += branchID + ",";
-                        arrSlsperID += curItem.SlsPerID + ",";
-                        temp = branchID + "#" + curItem.SlsPerID + "#" + curItem.CustID + "#" + curItem.StkOutNbr + ",";
+                     
+                        temp += branchID + "#" + curItem.SlsPerID + "#" + curItem.CustID + "#" + curItem.StkOutNbr + ",";
                         continue;
                     }
 
@@ -116,14 +116,14 @@ namespace IN10900.Controllers
 
 				_db.SaveChanges();
 
-			    if (arrBranchID != "" || arrSlsperID != "")
-			    {
+                //if (arrBranchID != "" || arrSlsperID != "")
+                //{
 			        Dictionary<string, string> dicData = new Dictionary<string, string>();
 			        dicData.Add("@UserName", Current.UserName ?? "");
 			        dicData.Add("@CpnyID", Current.CpnyID ?? "");
 			        dicData.Add("@LangID", Current.LangID.ToString());
-			        dicData.Add("@BranchID", arrBranchID);
-			        dicData.Add("@SlsperID", arrSlsperID);
+                    dicData.Add("@BranchID", branchID);
+                    dicData.Add("@SlsperID", slsperID);
 			        dicData.Add("@Temp", temp);
 			        dicData.Add("@FromDate",
 			            data["dteFromDate"].ToDateTime().ToString("yyyy-MM-dd hh:mm:ss") ??
@@ -136,7 +136,7 @@ namespace IN10900.Controllers
 			        dicData.Add("@HandleType", data["cboHandleType"] ?? "");
 
 			        Util.getDataTableFromProc("IN10900_ppRelease", dicData);
-			    }
+			    //}
 
 			    return Util.CreateMessage(MessageProcess.Save);
 
