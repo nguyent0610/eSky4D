@@ -652,3 +652,49 @@ var PopupwinPOSM = {
         return true;
     }
 }
+
+
+/////////////excel
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'IN10700/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+
+        },
+        success: function (msg, data) {
+            var filePath = data.result.filePath;
+            if (filePath) {
+                window.location = "IN10700/Download?filePath=" + filePath + "&fileName=data_";
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+
+}
+var btnImport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: HQ.common.getLang("WaitMsg"),
+        url: 'IN10700/Import',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        success: function (msg, data) {
+            if (this.result.data.message) {
+                HQ.message.show('2013103001', [this.result.data.message], '', true);
+            }
+            else {
+                HQ.message.process(msg, data, true);
+            }
+            refresh("yes");
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+            App.btnImport.reset();
+        }
+    });
+}
