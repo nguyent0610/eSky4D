@@ -25,20 +25,20 @@
         }
     </style>
     <script>
-       
-        HQ.cpnyID = '@Current.CpnyID';
-        HQ.langID = '@Current.LangID';
-        HQ.userName = '@Current.UserName';
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()'); // chú ý ẩn hiện 
-        HQ.country = HQ.util.toBool('@ViewBag.CountryView'); // chú ý ẩn hiện
+
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()'); // chú ý ẩn hiện
+    HQ.country = HQ.util.toBool('@ViewBag.CountryView'); // chú ý ẩn hiện
         HQ.isDublicateState = HQ.util.toBool('@ViewBag.isDublicateState'); // chú ý ẩn hiện
     </script>  
     <title>@ViewBag.Title</title>
 </head>
 <body>   
-    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Default" : Current.Theme.PassNull())))
     
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   

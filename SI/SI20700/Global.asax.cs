@@ -39,17 +39,17 @@ namespace SI20700
 
             Current.Authorize = false;
             Current.Server = "HOANGSAD";
-            Current.DBSys = "ECO_eSky4DSys";
+            Current.DBSys = "ECOPharm_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SI20700"] = acc;
-            Session["DBApp"] = Current.DBApp = "ECO_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ECOPharm_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "vi";
-            Session["LangID"] = 1;
+            Session["Language"] = Current.Language = "en";
+            Session["LangID"] = 0;
         }
     }
 }

@@ -148,9 +148,42 @@ namespace SI20700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI20700_pcLoadCountryAll_Result> SI20700_pcLoadCountryAll()
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SI20700_pcLoadCountryAll_Result> SI20700_pcLoadCountryAll(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
-            return base.ExecuteFunction<SI20700_pcLoadCountryAll_Result>("SI20700_pcLoadCountryAll");
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SI20700_pcLoadCountryAll_Result>("SI20700_pcLoadCountryAll", cpnyIDParameter, userNameParameter, langIDParameter);
         }
     
         /// <summary>
@@ -238,42 +271,9 @@ namespace SI20700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SI20700_pcTerritoryAll_Result1> SI20700_pcTerritoryAll(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<SI20700_pcTerritoryAll_Result1> SI20700_pcTerritoryAll()
         {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<SI20700_pcTerritoryAll_Result1>("SI20700_pcTerritoryAll", userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<SI20700_pcTerritoryAll_Result1>("SI20700_pcTerritoryAll");
         }
     
         /// <summary>

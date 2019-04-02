@@ -135,7 +135,7 @@ var stoData_Load = function (sto) {
 
 var grdDet_BeforeEdit = function (editor, e) {
     if (e.field == "State") {
-        if(e.value != "")
+        if (e.value != "" || e.record.data.Territory == "")
         {
             return false;
         }
@@ -160,7 +160,6 @@ var grdDet_ValidateEdit = function (item, e) {
         }
     }
     else return checkValidateEdit(App.grdDet, e, keys);
-   
 };
 
 var grdDet_Reject = function (record) {
@@ -192,6 +191,7 @@ var save = function () {
         });
     }
 };
+
 var checkDeleteData = function (indexColum, check, checkState) {
 
     if (App.frmMain.isValid()) {

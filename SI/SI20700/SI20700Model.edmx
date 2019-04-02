@@ -54,17 +54,17 @@
           <Property Name="Zone" Type="varchar" MaxLength="10" />
           <Property Name="STT" Type="varchar" MaxLength="10" />
         </EntityType>
-        <Function Name="SI20700_pcLoadCountryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI20700_pcLoadCountryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SI20700_pcLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <Function Name="SI20700_pcTerritoryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserName" Type="varchar" Mode="In" />
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
+        <Function Name="SI20700_pcTerritoryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SI20700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -93,7 +93,11 @@
       <Schema Namespace="SI20700Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI20700Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_State" EntityType="SI20700Model.SI_State" />
-          <FunctionImport Name="SI20700_pcLoadCountryAll" ReturnType="Collection(SI20700Model.SI20700_pcLoadCountryAll_Result)" />
+          <FunctionImport Name="SI20700_pcLoadCountryAll" ReturnType="Collection(SI20700Model.SI20700_pcLoadCountryAll_Result)" >
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
           <FunctionImport Name="SI20700_pcLoadTerritory" ReturnType="Collection(SI20700Model.SI20700_pcLoadTerritory_Result)" >
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -105,10 +109,7 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="SI20700_pcTerritoryAll" ReturnType="Collection(SI20700Model.SI20700_pcTerritoryAll_Result1)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
+            </FunctionImport>
           <EntitySet Name="SI_Territory" EntityType="SI20700Model.SI_Territory" />
           <EntitySet Name="SI_Country" EntityType="SI20700Model.SI_Country" />
           <FunctionImport Name="SI20700_pdConfig" ReturnType="Collection(SI20700Model.SI20700_pdConfig_Result)">

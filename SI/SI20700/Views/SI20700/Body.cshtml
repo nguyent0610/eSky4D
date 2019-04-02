@@ -16,7 +16,9 @@
         X.FormPanel()
             .ID("frmMain")
             .BodyPadding(0)
+            .TrackResetOnLoad(true)
             .KeyMap(Util.SetupKeyMap())
+            .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
             .TopBar(Util.SetupToolbar(new AbstractComponent[]
                 {
                     X.FileUploadField()
@@ -32,13 +34,14 @@
                         .Listeners(p=>{p.Click.Fn = "btnExport_Click";})
                 }
              , "Print", true, "menuClick"))
-            .Layout(LayoutType.Fit)
+            .Layout(LayoutType.Border)
             .Items(
                 ////Thiet ke giao dien o day
                 X.GridPanel()
                 .Scroll(ScrollMode.Both)
                 .View(X.GridView().TrackOver(false))
                 .ID("grdDet")
+                .Region(Region.Center).Flex(1)
                 .Store(
                     X.Store()
                         .ID("stoData")
@@ -60,84 +63,74 @@
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
                 , X.Column()
-                        .Text(Util.GetLang("SI20700_Country")) //Đất nước -- ẩn hiện config
-                        .DataIndex("Country").ID("Country")
-                        .Flex(1)
-                            .Editor(
-                                HQ.Combo()
-                                .ID("cboCountry")
-                                .Name("cboCountry")
-                                .HQProcedure("SI20700_pcLoadCountryAll")
-                                .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
-                                .Width(300).HQHeightWidth(500, 400)
-                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
-                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                })
-                                .LoadData()
-                            )
+                .Text(Util.GetLang("SI20700_Country")) //Đất nước -- ẩn hiện config
+                .DataIndex("Country").ID("Country")
+                    .Editor(
+                        HQ.Combo()
+                        .ID("cboCountry")
+                        .Name("cboCountry")
+                        .HQProcedure("SI20700_pcLoadCountryAll")
+                        .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
+                        .Width(150).HQHeightWidth(500, 400)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()
+                    )
                 ,X.Column()
-                        .Text(Util.GetLang("SI20700_Territory")) // Mã vùng bán hàng
-                        .DataIndex("Territory")
-                        .Flex(1)
-                                .Editor(
-                                    HQ.Combo()
-                                        .ID("cboTerritory")
-                                        .Name("cboTerritory")
-                                        .HQProcedure("SI20700_pcLoadTerritory")
-                                        .HQColumnShow("Territory,DescrTerritory")
-                                        .DisplayField("Territory")
-                                        .ValueField("Territory")
-                                        .Width(300)
-                                        .HQHeightWidth(500, 400)
-                                        .AllowBlank(true)
-                                        .ForceSelection(true)
-                                        .HQDBSys(false)
-                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .Listeners(lst =>
-                                            {
-                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                            })
-                                        .HQParam(new StoreParameterCollection()
-                                            {
-                                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
-                                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
-                                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                            })
-                                        .LoadData())
+                .Text(Util.GetLang("SI20700_Territory")) // Mã vùng bán hàng
+                .DataIndex("Territory").Width(150)
+                .Editor(
+                    HQ.Combo()
+                    .ID("cboTerritory")
+                    .Name("cboTerritory")
+                    .HQProcedure("SI20700_pcLoadTerritory")
+                    .HQColumnShow("Territory,DescrTerritory")
+                    .DisplayField("Territory")
+                    .ValueField("Territory")
+                    .HQHeightWidth(500, 400)
+                    .AllowBlank(true)
+                    .ForceSelection(true)
+                    .HQDBSys(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData())
                 , X.Column()
-                        .ID("DescrTerritory")
-                        .Text(Util.GetLang("DescrTerritory")) // Tên Vùng Bán Hàng
-                        .DataIndex("DescrTerritory")
-                        .Flex(1)
+                .ID("DescrTerritory")
+                .Text(Util.GetLang("DescrTerritory")) // Tên Vùng Bán Hàng
+                .DataIndex("DescrTerritory").Width(250)
                                      
                 ,X.Column()
-                    .ID("State")
-                    .Text(Util.GetLang("SI20700_State")) // Mã Tỉnh/Thành Phố
-                    .DataIndex("State")
-                    .Flex(1)
-                    .Editor(Html.X()
-                                .TextField()
-                                .MaxLength(10)
-                                .EnforceMaxLength(true)
-                                    //.Listeners(lst =>
-                                    //{
-                                    //    lst.Change.Fn = "State_edit";
-                                    //})
-                                    )
+                .ID("State").Width(150)
+                .Text(Util.GetLang("SI20700_State")) // Mã Tỉnh/Thành Phố
+                .DataIndex("State")
+                .Editor(Html.X()
+                    .TextField()
+                    .MaxLength(10)
+                    .EnforceMaxLength(true)
+                )
                     
                 ,X.Column()
-                    //.Text(Util.GetLang("Descr")) //Tên Tỉnh/Thành Phố
-                    .Text(Util.GetLang("SI20700_Descr"))
-                    .DataIndex("Descr")
-                    .Flex(1)
-                        .Editor(Html.X()
-                            .TextField()
-                            .MaxLength(30)
-                            .EnforceMaxLength(true)      
-                            )                               
+                //.Text(Util.GetLang("Descr")) //Tên Tỉnh/Thành Phố
+                .Text(Util.GetLang("SI20700_Descr"))
+                .DataIndex("Descr").Width(250)
+                .Editor(Html.X()
+                    .TextField()
+                    .MaxLength(30)
+                    .EnforceMaxLength(true)      
+                    )                               
                 ,X.CommandColumn()
                     .Width(80)
                     .Commands(
