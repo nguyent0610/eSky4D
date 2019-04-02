@@ -24,7 +24,7 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
-          <Parameter Name="Country" Type="varchar" Mode="In" />
+          <Parameter Name="CatID" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SI_TaxCat" EntityType="Self.SI_TaxCat" Schema="dbo" store:Type="Tables" />
@@ -40,7 +40,7 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="Country" Mode="In" Type="String" />
+            <Parameter Name="CatID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_TaxCat">
@@ -115,7 +115,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI20900Model.SI_TaxCat" Width="1.5" PointX="11.008976691872336" PointY="5.6787369128683292" />
+        <EntityTypeShape EntityType="SI20900Model.SI_TaxCat" Width="1.5" PointX="5.625" PointY="1.125" />
       </Diagram>
     </Diagrams>
   </Designer>

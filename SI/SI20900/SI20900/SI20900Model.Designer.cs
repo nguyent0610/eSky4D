@@ -111,8 +111,8 @@ namespace SI20900
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="country">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Boolean>> SI20900_ppCheckDelete(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String country)
+        /// <param name="catID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SI20900_ppCheckDelete(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String catID)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -144,17 +144,17 @@ namespace SI20900
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            ObjectParameter countryParameter;
-            if (country != null)
+            ObjectParameter catIDParameter;
+            if (catID != null)
             {
-                countryParameter = new ObjectParameter("Country", country);
+                catIDParameter = new ObjectParameter("CatID", catID);
             }
             else
             {
-                countryParameter = new ObjectParameter("Country", typeof(global::System.String));
+                catIDParameter = new ObjectParameter("CatID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SI20900_ppCheckDelete", userNameParameter, cpnyIDParameter, langIDParameter, countryParameter);
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SI20900_ppCheckDelete", userNameParameter, cpnyIDParameter, langIDParameter, catIDParameter);
         }
 
         #endregion
