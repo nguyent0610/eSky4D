@@ -47,70 +47,64 @@
             X.RowNumbererColumn()
             .Width(40)
             , X.Column()
-                .Flex(1)
-                .Text(Util.GetLang("SI21900_Zone")) // Mã Miền
-                .DataIndex("Zone")
-                    .Editor(HQ.Combo()
-                        .ID("cboZone")
-                        .HQProcedure("SI21900_pcZone")
-                        .HQColumnShow("Code,Descr").DataIndex("Zone")
-                        .HQHeightWidth(400, 300)
-                        .ValueField("Code").DisplayField("Code")
-                        .SelectOnFocus(true).ForceSelection(true)
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .HQParam(new StoreParameterCollection() {
-                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
-                            ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
-                            ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                        })
-                        .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
-                                lst.Change.Fn = "cboZone_Change";
-                                lst.Select.Fn = "cboZone_Change";
+            .Text(Util.GetLang("SI21900_Zone")) // Mã Miền
+            .DataIndex("Zone")
+            .Editor(HQ.Combo()
+            .ID("cboZone")
+            .HQProcedure("SI21900_pcZone")
+            .HQColumnShow("Code,Descr").DataIndex("Zone")
+            .HQHeightWidth(400, 300)
+            .ValueField("Code").DisplayField("Code")
+            .SelectOnFocus(true).ForceSelection(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection() {
+                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+            })
+            .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
+                    lst.Change.Fn = "cboZone_Change";
+                    lst.Select.Fn = "cboZone_Change";
 
-                            })
-                                .LoadData()
-                        )
+                })
+                    .LoadData()
+            )
 
             , X.Column()
-                .Text(Util.GetLang("ProgramCode")) // Tên Miền
-                .DataIndex("ZoneDescr")
-                .Flex(1)
+            .Text(Util.GetLang("ProgramCode")) // Tên Miền
+            .DataIndex("ZoneDescr").Width(250)
                  
             ,X.Column()
-                .ID("Territory")
-                .Text(Util.GetLang("SI21900_Territory")) // Mã Vùng Bán Hàng
-                .DataIndex("Territory")
-                .Flex(1)
-                        .Editor(Html.X()
-                            .TextField()
-                            .MaxLength(10)
-                            .EnforceMaxLength(true))
+            .ID("Territory")
+            .Text(Util.GetLang("SI21900_Territory")) // Mã Vùng Bán Hàng
+            .DataIndex("Territory").Width(150)
+            .Editor(Html.X()
+            .TextField()
+            .MaxLength(10)
+            .EnforceMaxLength(true))
                     
             ,X.Column()
-                .Text(Util.GetLang("SI21900_Descr")) // Tên Vùng Bán Hàng
-                .DataIndex("Descr")
-                .Flex(1)
-                    .Editor(Html.X()
-                        .TextField()
-                        .MaxLength(200)
-                        .EnforceMaxLength(true))
+            .Text(Util.GetLang("SI21900_Descr")) // Tên Vùng Bán Hàng
+            .DataIndex("Descr").Width(250)
+            .Editor(Html.X()
+            .TextField()
+            .MaxLength(200)
+            .EnforceMaxLength(true))
 
-
-
-                , X.Column()
-                    .Text(Util.GetLang("Distance"))
-                    .DataIndex("Distance")
-                    .Width(150)
-                    .ID("txtDistance")
-                    .Editor(Html.X()
-                            .NumberField()
-                            .MinValue(0)
-                            .DecimalPrecision(2)
-                            .MaxValue(99999999.99)
-                            .AllowExponential(false))
-                            .Renderer("renderDistance")       
+            , X.Column()
+            .Text(Util.GetLang("Distance"))
+            .DataIndex("Distance")
+            .Width(120)
+            .ID("txtDistance")
+            .Editor(Html.X()
+            .NumberField()
+            .MinValue(0)
+            .DecimalPrecision(2)
+            .MaxValue(99999999.99)
+            .AllowExponential(false))
+            .Renderer("renderDistance")       
                             
             ,X.CommandColumn()
                 .Width(100)
