@@ -420,6 +420,195 @@ namespace IN10800
     
             return base.ExecuteFunction<IN10800_pgStockOutletDetPOSM_Result>("IN10800_pgStockOutletDetPOSM", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, stkOutNbrParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10800_piCustID_Result> IN10800_piCustID(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String custID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10800_piCustID_Result>("IN10800_piCustID", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, custIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="classID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10800_piInvtID_Result> IN10800_piInvtID(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String classID, global::System.String invtID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10800_piInvtID_Result>("IN10800_piInvtID", userNameParameter, cpnyIDParameter, langIDParameter, classIDParameter, invtIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10800_piSlsperID_Result> IN10800_piSlsperID(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String slsperID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10800_piSlsperID_Result>("IN10800_piSlsperID", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, slsperIDParameter);
+        }
 
         #endregion
 
@@ -1057,16 +1246,20 @@ namespace IN10800
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="slsPerID">Initial value of the SlsPerID property.</param>
         /// <param name="stkOutNbr">Initial value of the StkOutNbr property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static PPC_StockOutlet CreatePPC_StockOutlet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
+        public static PPC_StockOutlet CreatePPC_StockOutlet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
         {
             PPC_StockOutlet pPC_StockOutlet = new PPC_StockOutlet();
             pPC_StockOutlet.BranchID = branchID;
             pPC_StockOutlet.SlsPerID = slsPerID;
             pPC_StockOutlet.StkOutNbr = stkOutNbr;
+            pPC_StockOutlet.Crtd_User = crtd_User;
             pPC_StockOutlet.Crtd_DateTime = crtd_DateTime;
+            pPC_StockOutlet.LUpd_User = lUpd_User;
             pPC_StockOutlet.LUpd_DateTime = lUpd_DateTime;
             pPC_StockOutlet.tstamp = tstamp;
             return pPC_StockOutlet;
@@ -1232,7 +1425,7 @@ namespace IN10800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -1244,7 +1437,7 @@ namespace IN10800
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -1304,7 +1497,7 @@ namespace IN10800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -1316,7 +1509,7 @@ namespace IN10800
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -1396,6 +1589,30 @@ namespace IN10800
         private global::System.String _StockType;
         partial void OnStockTypeChanging(global::System.String value);
         partial void OnStockTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ShiftID
+        {
+            get
+            {
+                return _ShiftID;
+            }
+            set
+            {
+                OnShiftIDChanging(value);
+                ReportPropertyChanging("ShiftID");
+                _ShiftID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ShiftID");
+                OnShiftIDChanged();
+            }
+        }
+        private global::System.String _ShiftID;
+        partial void OnShiftIDChanging(global::System.String value);
+        partial void OnShiftIDChanged();
 
         #endregion
 
@@ -1887,6 +2104,30 @@ namespace IN10800
         private global::System.String _PosmID;
         partial void OnPosmIDChanging(global::System.String value);
         partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Unit
+        {
+            get
+            {
+                return _Unit;
+            }
+            set
+            {
+                OnUnitChanging(value);
+                ReportPropertyChanging("Unit");
+                _Unit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Unit");
+                OnUnitChanged();
+            }
+        }
+        private global::System.String _Unit;
+        partial void OnUnitChanging(global::System.String value);
+        partial void OnUnitChanged();
 
         #endregion
 
@@ -3097,6 +3338,313 @@ namespace IN10800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10800Model", Name="IN10800_piCustID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10800_piCustID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10800_piCustID_Result object.
+        /// </summary>
+        /// <param name="custID">Initial value of the CustID property.</param>
+        /// <param name="custName">Initial value of the CustName property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static IN10800_piCustID_Result CreateIN10800_piCustID_Result(global::System.String custID, global::System.String custName, global::System.String branchID)
+        {
+            IN10800_piCustID_Result iN10800_piCustID_Result = new IN10800_piCustID_Result();
+            iN10800_piCustID_Result.CustID = custID;
+            iN10800_piCustID_Result.CustName = custName;
+            iN10800_piCustID_Result.BranchID = branchID;
+            return iN10800_piCustID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustID
+        {
+            get
+            {
+                return _CustID;
+            }
+            set
+            {
+                OnCustIDChanging(value);
+                ReportPropertyChanging("CustID");
+                _CustID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustID");
+                OnCustIDChanged();
+            }
+        }
+        private global::System.String _CustID;
+        partial void OnCustIDChanging(global::System.String value);
+        partial void OnCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustName
+        {
+            get
+            {
+                return _CustName;
+            }
+            set
+            {
+                OnCustNameChanging(value);
+                ReportPropertyChanging("CustName");
+                _CustName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustName");
+                OnCustNameChanged();
+            }
+        }
+        private global::System.String _CustName;
+        partial void OnCustNameChanging(global::System.String value);
+        partial void OnCustNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10800Model", Name="IN10800_piInvtID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10800_piInvtID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10800_piInvtID_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static IN10800_piInvtID_Result CreateIN10800_piInvtID_Result(global::System.String invtID)
+        {
+            IN10800_piInvtID_Result iN10800_piInvtID_Result = new IN10800_piInvtID_Result();
+            iN10800_piInvtID_Result.InvtID = invtID;
+            return iN10800_piInvtID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StkUnit
+        {
+            get
+            {
+                return _StkUnit;
+            }
+            set
+            {
+                OnStkUnitChanging(value);
+                ReportPropertyChanging("StkUnit");
+                _StkUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StkUnit");
+                OnStkUnitChanged();
+            }
+        }
+        private global::System.String _StkUnit;
+        partial void OnStkUnitChanging(global::System.String value);
+        partial void OnStkUnitChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10800Model", Name="IN10800_piSlsperID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10800_piSlsperID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10800_piSlsperID_Result object.
+        /// </summary>
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
+        public static IN10800_piSlsperID_Result CreateIN10800_piSlsperID_Result(global::System.String slsperID)
+        {
+            IN10800_piSlsperID_Result iN10800_piSlsperID_Result = new IN10800_piSlsperID_Result();
+            iN10800_piSlsperID_Result.SlsperID = slsperID;
+            return iN10800_piSlsperID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
 
         #endregion
 
