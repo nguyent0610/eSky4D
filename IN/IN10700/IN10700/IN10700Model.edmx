@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_Setup">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -42,17 +42,18 @@
           </Key>
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="CustID" Type="varchar" MaxLength="50" />
           <Property Name="StkOutDate" Type="datetime" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="StockType" Type="varchar" MaxLength="10" />
+          <Property Name="ShiftID" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PPC_StockOutletDet">
           <Key>
@@ -64,7 +65,7 @@
           </Key>
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ExpDate" Type="datetime" Nullable="false" />
           <Property Name="ProdDate" Type="datetime" />
@@ -72,14 +73,15 @@
           <Property Name="CS" Type="float" />
           <Property Name="PC" Type="float" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ReasonID" Type="varchar" MaxLength="5" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
+          <Property Name="Unit" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="PPC_StockOutletPOSM">
           <Key>
@@ -137,6 +139,27 @@
           <Parameter Name="StkType" Type="varchar" Mode="In" />
           <Parameter Name="StkOutDate" Type="datetime" Mode="In" />
           <Parameter Name="InvtType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10700_piCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10700_piInvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10700_piSlsperID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10700_ppCheckForUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -211,6 +234,27 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="PPC_StockOutlet" EntityType="IN10700Model.PPC_StockOutlet" />
+          <FunctionImport Name="IN10700_piCustID" ReturnType="Collection(IN10700Model.IN10700_piCustID_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10700_piInvtID" ReturnType="Collection(IN10700Model.IN10700_piInvtID_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10700_piSlsperID" ReturnType="Collection(IN10700Model.IN10700_piSlsperID_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN10700_phStockOutlet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -280,7 +324,7 @@
           </Key>
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="StkOutNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StkOutNbr" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
           <Property Type="DateTime" Name="ProdDate" Precision="3" />
@@ -288,14 +332,15 @@
           <Property Type="Double" Name="CS" />
           <Property Type="Double" Name="PC" />
           <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="ReasonID" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PosmID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PPC_StockOutletPOSM">
           <Key>
@@ -343,18 +388,34 @@
           </Key>
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="SlsPerID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="StkOutNbr" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="StkOutNbr" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StkOutDate" Type="DateTime" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="StockType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ShiftID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="IN10700_piCustID_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN10700_piInvtID_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="IN10700_piSlsperID_Result">
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -435,6 +496,7 @@
           <EntitySetMapping Name="PPC_StockOutletDet">
             <EntityTypeMapping TypeName="IN10700Model.PPC_StockOutletDet">
               <MappingFragment StoreEntitySet="PPC_StockOutletDet">
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="PosmID" ColumnName="PosmID" />
                 <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -501,6 +563,7 @@
           <EntitySetMapping Name="PPC_StockOutlet">
             <EntityTypeMapping TypeName="IN10700Model.PPC_StockOutlet">
               <MappingFragment StoreEntitySet="PPC_StockOutlet">
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
                 <ScalarProperty Name="StockType" ColumnName="StockType" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
@@ -517,6 +580,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10700_piCustID" FunctionName="eBiz4DWebAppModel.Store.IN10700_piCustID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10700Model.IN10700_piCustID_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10700_piInvtID" FunctionName="eBiz4DWebAppModel.Store.IN10700_piInvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10700Model.IN10700_piInvtID_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10700_piSlsperID" FunctionName="eBiz4DWebAppModel.Store.IN10700_piSlsperID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10700Model.IN10700_piSlsperID_Result">
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -442,19 +442,20 @@ namespace IN10700.Controllers
 
                     string branchNull = string.Empty;
                     string slsperNull = string.Empty;
+                    string slsperErr = string.Empty;
                     string custNull = string.Empty;
+                    string custErr = string.Empty;
                     string invtTypeNull = string.Empty;
                     string stockTypeNull = string.Empty;
                     string stkDateNull = string.Empty;
+                    string stkExpDateNull = string.Empty;
                     string invtNull = string.Empty;
+                    string invtErr = string.Empty;
                     string qtyNull = string.Empty;
                     string posmNull = string.Empty;
-        
-                    var regex = new Regex(@"^-*[0-9,\. ]+$");
-                    if (workSheet.Cells.MaxDataRow < 1)
-                    {
-                        throw new MessageException(MessageType.Message, "2018062955");
-                    }
+                    string qtyErr = string.Empty;
+
+                    var regex = new Regex(@"^[0-9]*$");
                     DataRow dtTemp;
                     Dictionary<string, int> dicStkOutNbr = new Dictionary<string, int>();
 
@@ -474,15 +475,13 @@ namespace IN10700.Controllers
                     dtIN_StockOutletTmp.Columns.Add(new DataColumn() { ColumnName = "StockType" });
                     dtIN_StockOutletTmp.Columns.Add(new DataColumn() { ColumnName = "InvtType" });
                     dtIN_StockOutletTmp.Columns.Add(new DataColumn() { ColumnName = "StkOutNbr" });
-
+                    bool flagCheck = false;
                     #endregion
                     int index = 0;
                     int dataBlank = 1;
                     for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++) //index luôn đi từ 0
                     {
                         #region -Get data from excel-
-
-                        bool flagCheck = false;
 
                         var branchID = workSheet.Cells[i, colTexts.IndexOf("BranchID")].StringValue.Trim();
                         var slsperID = workSheet.Cells[i, colTexts.IndexOf("SlsperID")].StringValue.Trim();
@@ -493,40 +492,73 @@ namespace IN10700.Controllers
                         var unit = workSheet.Cells[i, colTexts.IndexOf("StkUnit")].StringValue.Trim();
                         if (string.IsNullOrEmpty(branchID) && string.IsNullOrEmpty(slsperID) && string.IsNullOrEmpty(custID) && string.IsNullOrEmpty(invtType) && string.IsNullOrEmpty(stockType) && string.IsNullOrEmpty(invtID))
                         {
+                             if (dataBlank == 10)
+                            {
+                                if (i == dataBlank)
+                                {
+                                    throw new MessageException(MessageType.Message, "2019040451");
+                                }
+                                break;
+                            }
                              dataBlank ++;
                              continue;
-
                         }
-                        if (dataBlank == 10)
-                        {
-                            break;
-                        }
+                 
 
                         DateTime stkDate;
                       
                         DateTime expDate;
-                        Double qty;
+                        Double qty = 0;
 
                         try
                         {
-                            expDate = workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].DateTimeValue;
+                            if (workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue.Length > 0)
+                            {
+                                stkDate = DateTime.ParseExact(workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                                    //workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].DateTimeValue;
+                            }
+                            else
+                            {
+                                stkDate = "1990/1/1".ToDateTime();
+                            }
+                           
                         }
                         catch (Exception)
                         {
-                            expDate = "1990/1/1".ToDateTime();
+                            stkDate = "1990/1/1".ToDateTime();
                         }
 
-                        if (workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue.Trim().Length == 0 && GetCodeFromExcel(stockType) != "SP")
+                        if (workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue.Trim().Length == 0 && GetCodeFromExcel(stockType) != "SP")
                         {
-                            stkDateNull += (i + 1) + ", ";
+                            stkExpDateNull += (i + 1) + ", ";
                             flagCheck = true;
                         }
 
-                        stkDate = GetCodeFromExcel(stockType) == "SP" ? "1990/1/1".ToDateTime() : workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].DateTimeValue;
+
+                        if (workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue.Length > 0 && !flagCheck)
+                        {
+                            expDate = GetCodeFromExcel(stockType) == "SP" ? "1990/1/1".ToDateTime() : DateTime.ParseExact(workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                                
+                        }
+                        else
+                        {
+                            expDate = "1990/1/1".ToDateTime();
+                        }
+                       // stkDate = GetCodeFromExcel(stockType) == "SP" ? "1990/1/1".ToDateTime() : workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].DateTimeValue;
 
                         try
                         {
-                            qty = workSheet.Cells[i, colTexts.IndexOf("Qty")].DoubleValue;
+                            if (!regex.IsMatch(workSheet.Cells[i, colTexts.IndexOf("Qty")].StringValue))
+                            {
+                                qtyErr += (i + 1) + ", ";
+                                flagCheck = true;
+                            }
+                            else
+                            {
+                                qty = workSheet.Cells[i, colTexts.IndexOf("Qty")].DoubleValue;
+                            }
                         }
                         catch
                         {
@@ -547,11 +579,29 @@ namespace IN10700.Controllers
                                 slsperNull += (i + 1) + ", ";
                                 flagCheck = true;
                             }
+                            else
+                            {
+                                var objSlser = _db.IN10700_piSlsperID(Current.UserName,Current.CpnyID,Current.LangID,branchID,slsperID).FirstOrDefault();
+                                if (objSlser == null)
+                                {
+                                    slsperErr += (i + 1) + ", ";
+                                    flagCheck = true;
+                                }
+                            }
 
                             if (string.IsNullOrEmpty(custID))
                             {
                                 custNull += (i + 1) + ", ";
                                 flagCheck = true;
+                            }
+                            else
+                            {
+                                var objCust = _db.IN10700_piCustID(Current.UserName, Current.CpnyID, Current.LangID, branchID, custID).FirstOrDefault();
+                                if (objCust == null)
+                                {
+                                    custErr += (i + 1) + ", ";
+                                    flagCheck = true;
+                                }
                             }
 
                             if (string.IsNullOrEmpty(invtType))
@@ -560,7 +610,7 @@ namespace IN10700.Controllers
                                 flagCheck = true;
                             }
 
-                            if (invtType.ToUpper() == "POSM" && string.IsNullOrEmpty(posmNull))
+                            if (GetCodeFromExcel(invtType).ToUpper() == "POSM" && string.IsNullOrEmpty(posm))
                             {
                                 posmNull += (i + 1) + ", ";
                                 flagCheck = true;
@@ -577,6 +627,15 @@ namespace IN10700.Controllers
                                 invtNull += (i + 1) + ", ";
                                 flagCheck = true;
                             }
+                            else
+                            {
+                                var objInvt = _db.IN10700_piInvtID(Current.UserName, Current.CpnyID, Current.LangID, branchID, invtID).FirstOrDefault();
+                                if (objInvt == null)
+                                {
+                                    invtErr += (i + 1) + ", ";
+                                    flagCheck = true;
+                                }
+                            }
 
                             if (qty == 0)
                             {
@@ -585,12 +644,10 @@ namespace IN10700.Controllers
                             }
                         #endregion
 
-                
-
                         if (!flagCheck)
                         {
 
-                            var key = branchID + slsperID + custID + invtID + stockType + stkDate;
+                            var key = branchID + slsperID + custID + invtType + stockType + stkDate;
 
                             if (!dicStkOutNbr.ContainsKey(key))
                             {
@@ -625,10 +682,16 @@ namespace IN10700.Controllers
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));
-                    message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StkDate"), stkDateNull.TrimEnd(','));
+                    message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkExpDateNull.TrimEnd(','));
                     message += invtNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("InvtID"), invtNull.TrimEnd(','));
                     message += qtyNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("Qty"), qtyNull.TrimEnd(','));
                     message += posmNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700POSM"), posmNull.TrimEnd(','));
+                    message += qtyErr == "" ? "" : string.Format(Message.GetString("2019040551", null), qtyErr.TrimEnd(','));
+
+                    message += slsperErr == "" ? "" : string.Format(Message.GetString("2019040851", null), slsperErr.TrimEnd(',') , Util.GetLang("SlsperID"));
+                    message += custErr == "" ? "" : string.Format(Message.GetString("2019040851", null), custErr.TrimEnd(','), Util.GetLang("IN10700CustID"));
+                    message += invtErr == "" ? "" : string.Format(Message.GetString("2019040851", null), invtErr.TrimEnd(','), Util.GetLang("InvtID"));
+
 
                     if (string.IsNullOrEmpty(message))
                     {
@@ -778,6 +841,8 @@ namespace IN10700.Controllers
             DataTable dtPosm = dal.ExecDataTable("IN10700_pcPosmExcel", CommandType.StoredProcedure, ref pc);
             MasterData.Cells.ImportDataTable(dtPosm, true, 0, 35, false);
 
+            DataTable dtDate = dal.ExecDataTable("IN10700_pcInvtDateExcel", CommandType.StoredProcedure, ref pc);
+            MasterData.Cells.ImportDataTable(dtDate,true, 0, 40, false);
 
             #endregion
 
@@ -826,6 +891,11 @@ namespace IN10700.Controllers
             validation = GetValidation(ref sheet, formulaInvt, "Chọn Sản Phẩm", "Mã Sản này không tồn tại");
             validation.AddArea(GetCellArea(1, dtInvt.Rows.Count + 100, ColTexts.IndexOf("InvtID")));
 
+            string formulaInvtDate = string.Format("=OFFSET(MasterData!$AP$1,IFERROR(MATCH(J{0},MasterData!$AO$2:$AO${1},0),{2}),0, IF(COUNTIF(MasterData!$AO$2:$AO${1},J{0})=0,1,COUNTIF(MasterData!$AO$2:$AO${1},J{0})),1)",
+               new string[] { "2", (dtDate.Rows.Count + 100).ToString(), (dtDate.Rows.Count + 64).ToString() });
+            validation = GetValidation(ref sheet, formulaInvtDate, "Chọn HSD", "Ngày HSD này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtDate.Rows.Count + 100, ColTexts.IndexOf("IN10700OutDate")));
+
 
             string formulaInvtName = string.Format("=IF(ISERROR(VLOOKUP({0},MasterData!$AA:$AC,2,0)),\"\",VLOOKUP({0},MasterData!$AA:$AC,2,0))", "J2");
             sheet.Cells["K2"].SetSharedFormula(formulaInvtName, 1000, 1);
@@ -844,7 +914,7 @@ namespace IN10700.Controllers
 
             var strFirstRow = 2.ToString();
             style = sheet.Cells["A" + strFirstRow].GetStyle();
-            style.IsLocked = false;
+            //style.IsLocked = false;
 
 
             range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("BranchID")) + 2, Getcell(allColumns.IndexOf("BranchID")) + 1000);
@@ -875,6 +945,9 @@ namespace IN10700.Controllers
 
             range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("Reason")) + 2, Getcell(allColumns.IndexOf("Reason")) + 1000);
             range.SetStyle(style);
+
+            range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("IN10700OutDate")) + 2, Getcell(allColumns.IndexOf("IN10700OutDate")) + 1000);
+            range.SetStyle(style);
             //style.Number = 49;
 
             style.Number = 14;
@@ -882,14 +955,13 @@ namespace IN10700.Controllers
             range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("IN10700StkDate")) + 2, Getcell(allColumns.IndexOf("IN10700StkDate")) + 1000);
             range.SetStyle(style);
 
-            range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("IN10700OutDate")) + 2, Getcell(allColumns.IndexOf("IN10700OutDate")) + 1000);
-            range.SetStyle(style);
+           
 
             #endregion
 
 
 
-            sheet.Protect(ProtectionType.All);
+            //sheet.Protect(ProtectionType.All);
             MasterData.Protect(ProtectionType.All);
             MasterData.VisibilityType = VisibilityType.Hidden;
 
