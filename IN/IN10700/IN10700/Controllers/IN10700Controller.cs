@@ -521,6 +521,8 @@ namespace IN10700.Controllers
                             else
                             {
                                 stkDate = "1990/1/1".ToDateTime();
+                                stkDateNull += (i + 1) + ", ";
+                                flagCheck = true;
                             }
                            
                         }
@@ -629,7 +631,7 @@ namespace IN10700.Controllers
                             }
                             else
                             {
-                                var objInvt = _db.IN10700_piInvtID(Current.UserName, Current.CpnyID, Current.LangID, branchID, invtID).FirstOrDefault();
+                                var objInvt = _db.IN10700_piInvtID(Current.UserName, Current.CpnyID, Current.LangID, GetCodeFromExcel(invtType), invtID).FirstOrDefault();
                                 if (objInvt == null)
                                 {
                                     invtErr += (i + 1) + ", ";
@@ -647,7 +649,7 @@ namespace IN10700.Controllers
                         if (!flagCheck)
                         {
 
-                            var key = branchID + slsperID + custID + invtType + stockType + stkDate;
+                            var key = branchID + slsperID + custID + invtType + stockType + stkDate + reason;
 
                             if (!dicStkOutNbr.ContainsKey(key))
                             {
@@ -665,7 +667,7 @@ namespace IN10700.Controllers
                             dtTemp["SlsperID"] = slsperID;
                             dtTemp["InvtID"] = invtID;
                             dtTemp["ExpDate"] = expDate;
-                            dtTemp["ProdDate"] = expDate;
+                            dtTemp["ProdDate"] = stkDate;
                             dtTemp["StkQty"] = qty;
                             dtTemp["ReasonID"] = GetCodeFromExcel(reason);
                             dtTemp["PosmID"] = GetCodeFromExcel(posm);
@@ -679,6 +681,7 @@ namespace IN10700.Controllers
 
                     message = branchNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("BranchID"), branchNull.TrimEnd(','));
                     message += slsperNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("SlsperID"), slsperNull.TrimEnd(','));
+                    message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StkDate"), stkDateNull.TrimEnd(','));
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));
