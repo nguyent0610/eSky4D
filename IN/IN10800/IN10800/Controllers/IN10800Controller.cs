@@ -445,6 +445,8 @@ namespace IN10800.Controllers
                             else
                             {
                                 stkDate = "1990/1/1".ToDateTime();
+                                stkDateNull += (i + 1) + ", ";
+                                flagCheck = true;
                             }
 
                         }
@@ -575,7 +577,7 @@ namespace IN10800.Controllers
                         if (!flagCheck)
                         {
 
-                            var key = branchID + slsperID + custID + invtType + stockType + stkDate;
+                            var key = branchID + slsperID + custID + invtType + stockType + stkDate + reason;
 
                             if (!dicStkOutNbr.ContainsKey(key))
                             {
@@ -593,7 +595,7 @@ namespace IN10800.Controllers
                             dtTemp["SlsperID"] = slsperID;
                             dtTemp["InvtID"] = invtID;
                             dtTemp["ExpDate"] = expDate;
-                            dtTemp["ProdDate"] = expDate;
+                            dtTemp["ProdDate"] = stkDate;
                             dtTemp["StkQty"] = qty;
                             dtTemp["ReasonID"] = GetCodeFromExcel(reason);
                             dtTemp["PosmID"] = GetCodeFromExcel(posm);
@@ -610,6 +612,7 @@ namespace IN10800.Controllers
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800StockType"), stockTypeNull.TrimEnd(','));
+                    message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkExpDateNull.TrimEnd(','));
                     message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800OutDate"), stkExpDateNull.TrimEnd(','));
                     message += reasonNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("Reason"), reasonNull.TrimEnd(','));
                     message += invtNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("InvtID"), invtNull.TrimEnd(','));
