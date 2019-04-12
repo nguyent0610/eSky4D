@@ -649,18 +649,13 @@ namespace IN10700.Controllers
                         if (!flagCheck)
                         {
 
-                            var key = branchID + slsperID + custID + invtType + stockType + stkDate + reason;
+                            var key = branchID + slsperID + custID + invtType + stockType + expDate + reason;
 
                             if (!dicStkOutNbr.ContainsKey(key))
                             {
                                 dicStkOutNbr.Add(key, index);
                                 index++;
                             }
-                            else
-                            {
-                                index = 0;
-                            }
-
                             dtTemp = dtIN_StockOutletTmp.NewRow();
                             dtTemp["BranchID"] = branchID;
                             dtTemp["CustID"] = custID;
