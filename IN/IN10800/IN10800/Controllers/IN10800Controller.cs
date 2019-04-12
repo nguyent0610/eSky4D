@@ -369,12 +369,13 @@ namespace IN10800.Controllers
                     string stkExpDateNull = string.Empty;
                     string invtNull = string.Empty;
                     string invtErr = string.Empty;
+                    string stkDateErr = string.Empty;
                     string qtyNull = string.Empty;
                     string posmNull = string.Empty;
                     string reasonNull = string.Empty;
                     string qtyErr = string.Empty;
 
-                    var regex = new Regex(@"^-*[0-9,\. ]+$");
+                    var regex = new Regex(@"^[0-9]*$");
                     if (workSheet.Cells.MaxDataRow < 1)
                     {
                         throw new MessageException(MessageType.Message, "2018062955");
@@ -452,6 +453,8 @@ namespace IN10800.Controllers
                         }
                         catch (Exception)
                         {
+                            stkDateErr += (i + 1) + ", ";
+                            flagCheck = true;
                             stkDate = "1990/1/1".ToDateTime();
                         }
 
@@ -584,10 +587,6 @@ namespace IN10800.Controllers
                                 dicStkOutNbr.Add(key, index);
                                 index++;
                             }
-                            else
-                            {
-                                index = 0;
-                            }
 
                             dtTemp = dtIN_StockOutletTmp.NewRow();
                             dtTemp["BranchID"] = branchID;
@@ -612,7 +611,7 @@ namespace IN10800.Controllers
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800StockType"), stockTypeNull.TrimEnd(','));
-                    message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkExpDateNull.TrimEnd(','));
+                    message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkDateNull.TrimEnd(','));
                     message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800OutDate"), stkExpDateNull.TrimEnd(','));
                     message += reasonNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("Reason"), reasonNull.TrimEnd(','));
                     message += invtNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("InvtID"), invtNull.TrimEnd(','));
@@ -623,6 +622,7 @@ namespace IN10800.Controllers
                     message += slsperErr == "" ? "" : string.Format(Message.GetString("2019040851", null), slsperErr.TrimEnd(','), Util.GetLang("SlsperID"));
                     message += custErr == "" ? "" : string.Format(Message.GetString("2019040851", null), custErr.TrimEnd(','), Util.GetLang("IN10800CustID"));
                     message += invtErr == "" ? "" : string.Format(Message.GetString("2019040851", null), invtErr.TrimEnd(','), Util.GetLang("InvtID"));
+                    message += stkDateErr == "" ? "" : string.Format(Message.GetString("2019040851", null), stkDateErr.TrimEnd(','), Util.GetLang("IN10800StkDate"));
 
                     if (string.IsNullOrEmpty(message))
                     {
@@ -846,7 +846,7 @@ namespace IN10800.Controllers
 
             var strFirstRow = 2.ToString();
             style = sheet.Cells["A" + strFirstRow].GetStyle();
-            style.IsLocked = false;
+            //style.IsLocked = false;
 
 
             range = sheet.Cells.CreateRange(Getcell(allColumns.IndexOf("BranchID")) + 2, Getcell(allColumns.IndexOf("BranchID")) + 1000);
@@ -893,7 +893,7 @@ namespace IN10800.Controllers
 
 
 
-            sheet.Protect(ProtectionType.All);
+            //sheet.Protect(ProtectionType.All);
             MasterData.Protect(ProtectionType.All);
             MasterData.VisibilityType = VisibilityType.Hidden;
 
