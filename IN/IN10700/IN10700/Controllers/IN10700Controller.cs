@@ -649,7 +649,7 @@ namespace IN10700.Controllers
                         if (!flagCheck)
                         {
 
-                            var key = branchID + slsperID + custID + invtType + stockType + expDate + reason;
+                            var key = branchID + slsperID + custID + invtType + stockType + stkDate + reason;
 
                             if (!dicStkOutNbr.ContainsKey(key))
                             {
@@ -665,7 +665,7 @@ namespace IN10700.Controllers
                             dtTemp["ProdDate"] = stkDate;
                             dtTemp["StkQty"] = qty;
                             dtTemp["ReasonID"] = GetCodeFromExcel(reason);
-                            dtTemp["PosmID"] = GetCodeFromExcel(posm);
+                            dtTemp["PosmID"] = posm; // GetCodeFromExcel(posm);
                             dtTemp["Unit"] = unit;
                             dtTemp["StockType"] = GetCodeFromExcel(stockType);
                             dtTemp["InvtType"] = GetCodeFromExcel(invtType);
