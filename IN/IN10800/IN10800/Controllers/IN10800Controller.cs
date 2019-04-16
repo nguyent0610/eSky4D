@@ -597,7 +597,7 @@ namespace IN10800.Controllers
                             dtTemp["ProdDate"] = stkDate;
                             dtTemp["StkQty"] = qty;
                             dtTemp["ReasonID"] = GetCodeFromExcel(reason);
-                            dtTemp["PosmID"] = GetCodeFromExcel(posm);
+                            dtTemp["PosmID"] = posm;// GetCodeFromExcel(posm);
                             dtTemp["Unit"] = unit;
                             dtTemp["StockType"] = GetCodeFromExcel(stockType);
                             dtTemp["InvtType"] = GetCodeFromExcel(invtType);
@@ -611,7 +611,7 @@ namespace IN10800.Controllers
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800StockType"), stockTypeNull.TrimEnd(','));
-                    message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkDateNull.TrimEnd(','));
+                    message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800StkDate"), stkDateNull.TrimEnd(','));
                     message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10800OutDate"), stkExpDateNull.TrimEnd(','));
                     message += reasonNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("Reason"), reasonNull.TrimEnd(','));
                     message += invtNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("InvtID"), invtNull.TrimEnd(','));
