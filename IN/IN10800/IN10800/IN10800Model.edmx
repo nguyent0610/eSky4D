@@ -94,7 +94,7 @@
           </Key>
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ExpDate" Type="datetime" Nullable="false" />
@@ -110,6 +110,11 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="IN10800_pcInvtDateExcel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="IN10800_pgStockOutletDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -222,6 +227,11 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10800_pcInvtDateExcel" ReturnType="Collection(IN10800Model.IN10800_pcInvtDateExcel_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN10800_phStockOutlet_Result">
@@ -349,7 +359,7 @@
           </Key>
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="StkOutNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StkOutNbr" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
@@ -379,6 +389,10 @@
         <ComplexType Name="IN10800_piSlsperID_Result">
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN10800_pcInvtDateExcel_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -559,6 +573,14 @@
               <ComplexTypeMapping TypeName="IN10800Model.IN10800_piSlsperID_Result">
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10800_pcInvtDateExcel" FunctionName="eBiz4DWebAppModel.Store.IN10800_pcInvtDateExcel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10800Model.IN10800_pcInvtDateExcel_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

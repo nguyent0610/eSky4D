@@ -367,6 +367,7 @@ namespace IN10800.Controllers
                     string stockTypeNull = string.Empty;
                     string stkDateNull = string.Empty;
                     string stkExpDateNull = string.Empty;
+                    string stkExpDateError = string.Empty;
                     string invtNull = string.Empty;
                     string invtErr = string.Empty;
                     string stkDateErr = string.Empty;
@@ -383,7 +384,7 @@ namespace IN10800.Controllers
                     DataRow dtTemp;
                     Dictionary<string, int> dicStkOutNbr = new Dictionary<string, int>();
 
-
+                    var lstInvtDate = _db.IN10800_pcInvtDateExcel(Current.UserName, Current.CpnyID, Current.LangID).ToList();
                     #region -Table temp-
                     System.Data.DataTable dtIN_StockOutletTmp = new System.Data.DataTable() { TableName = "IN_StockOutletTmp" };
                     dtIN_StockOutletTmp.Columns.Add(new DataColumn() { ColumnName = "BranchID" });
@@ -467,6 +468,11 @@ namespace IN10800.Controllers
 
                         if (workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue.Length > 0 && !flagCheck)
                         {
+                            if (!lstInvtDate.Any(p => p.InvtID.ToUpper() == invtID.ToUpper() && p.Date.ToDateShort() == workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue.Trim().ToDateShort()))
+                            {
+                                stkExpDateError += (i + 1) + ", ";
+                                flagCheck = true;
+                            }
                             expDate = GetCodeFromExcel(stockType) == "SP" ? "1990/1/1".ToDateTime() : DateTime.ParseExact(workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture);
                         }
@@ -623,6 +629,7 @@ namespace IN10800.Controllers
                     message += custErr == "" ? "" : string.Format(Message.GetString("2019040851", null), custErr.TrimEnd(','), Util.GetLang("IN10800CustID"));
                     message += invtErr == "" ? "" : string.Format(Message.GetString("2019040851", null), invtErr.TrimEnd(','), Util.GetLang("InvtID"));
                     message += stkDateErr == "" ? "" : string.Format(Message.GetString("2019040851", null), stkDateErr.TrimEnd(','), Util.GetLang("IN10800StkDate"));
+                    message += stkExpDateError == "" ? "" : string.Format(Message.GetString("2019040851", null), stkExpDateError.TrimEnd(','), Util.GetLang("IN10700OutDate"));
 
                     if (string.IsNullOrEmpty(message))
                     {
