@@ -228,7 +228,7 @@
             )
 
             .Features(
-                X.GridFilters()
+                X.GridFilters() 
                     .Local(true)
                     .Filters(
                         X.StringFilter().DataIndex("InvtID"),
@@ -405,7 +405,8 @@
                         .Local(true)
                         .Filters(
                             X.StringFilter().DataIndex("CpnyID"),
-                            X.StringFilter().DataIndex("CpnyName")
+                            X.StringFilter().DataIndex("CpnyName"),
+                            X.StringFilter().DataIndex("CpnyType")
                         )
                 )            
                 )
