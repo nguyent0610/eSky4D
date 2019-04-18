@@ -686,8 +686,8 @@ namespace IN10700.Controllers
                     message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StkDate"), stkDateNull.TrimEnd(','));
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700InvtType"), invtTypeNull.TrimEnd(','));
-                    message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));                    
-                    message += stkExpDateError == "" ? "" : string.Format(Message.GetString("2019040851", null), Util.GetLang("IN10700OutDate"), stkExpDateError.TrimEnd(','));
+                    message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));
+                    message += stkExpDateError == "" ? "" : string.Format(Message.GetString("2019040851", null), stkExpDateError.TrimEnd(','), Util.GetLang("IN10700OutDate"));
                     message += invtNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("InvtID"), invtNull.TrimEnd(','));
                     message += qtyNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("Qty"), qtyNull.TrimEnd(','));
                     message += posmNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700POSM"), posmNull.TrimEnd(','));
