@@ -94,7 +94,8 @@ namespace SA00001.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-           
+            try
+            {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Cpny"]);
                 ChangeRecords<SA00001_pgLoadGridCompany_Result> lstSYS_Cpny = dataHandler.BatchObjectData<SA00001_pgLoadGridCompany_Result>();
                 lstSYS_Cpny.Created.AddRange(lstSYS_Cpny.Updated);
@@ -117,7 +118,7 @@ namespace SA00001.Controllers
                         }
                     }
                 }
-           
+
                 foreach (SA00001_pgLoadGridCompany_Result curRow in lstSYS_Cpny.Created)
                 {
                     if (curRow.CpnyID.PassNull() == "") continue;
@@ -136,12 +137,12 @@ namespace SA00001.Controllers
                     else
                     {
                         RowDB = new SYS_Company();
-                        RowDB.ResetET();                      
+                        RowDB.ResetET();
                         Update_Language(RowDB, curRow, true);
                         _db.SYS_Company.AddObject(RowDB);
                     }
                 }
-                
+
                 foreach (SA000001_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
                 {
                     if (lstSys_CompanyAddr.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
@@ -197,11 +198,9 @@ namespace SA00001.Controllers
                 dicData.Add("@AccumulateID", data["AccumulateID"] ?? "");
                 dicData.Add("@UserID", _userName);
 
-                Util.getDataTableFromProc("SA00001_ppUserSales", dicData,true);
+                Util.getDataTableFromProc("SA00001_ppUserSales", dicData, true);
 
-                return Json(new { success = true});
-                try
-                {
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
