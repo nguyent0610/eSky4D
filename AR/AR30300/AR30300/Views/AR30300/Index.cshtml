@@ -30,8 +30,8 @@
         .images-view .span {
             display: inline-block;
             width: 128px;
-            white-space: nowrap; 
-            width: 120px; 
+            white-space: nowrap;
+            width: 120px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -64,7 +64,22 @@
             color: red;
             z-index: 1;
         }
-
+        #Default{
+        height:300px !important;
+        }
+        #dtvAlbumDefault{
+        margin-left: -25px !important;
+        }
+        #Other{
+        height: 200px !important;
+        }
+        #dtvAlbumOther{
+        height: 200px !important;
+        margin-left: -20px !important;       
+        }
+        #txtCustID{
+        text-align: right;
+        }
 
     </style>
     <script>
@@ -79,32 +94,64 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>   
-    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
         
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong AR30300Controller để dựng view Body.cshtml, mục đích tạo cache. -->    
-        @(HQ.Store().HQDBSys(false).HQProcedure("AR30300_pdAlbum").ID("stoAlbum").AutoLoad(false)
+        @(HQ.Store().HQDBSys(false).HQProcedure("AR30300_pdAlbumList").ID("stoAlbumDefault").AutoLoad(false)
             .HQParam(new StoreParameterCollection()
-		    {
-			    new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue()", Mode = ParameterMode.Raw },
+		    {   
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },            
                 new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
-                new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
-                new StoreParameter() { Name = "@CustID", Value = "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@ClassID", Value = "App.cboContractType.getValue()", Mode = ParameterMode.Raw },               
+                new StoreParameter() { Name = "@CustID", Value = "App.txtCustID.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@StartDate", Value = "App.dtpFromDate.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@EndDate", Value = "App.dtpToDate.getValue()", Mode = ParameterMode.Raw }
                
+               
 		    })
             .LoadData()
-            .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")
+            .Listeners(p =>{p.Load.Handler = "HQ.common.showBusy(false);";
+                            p.Load.Fn = "stoAlbumListDefault_Load";
+                          }
+                     )
 
         )
+    @(HQ.Store().HQDBSys(false).HQProcedure("AR30300_pdAlbumList").ID("stoAlbumOther").AutoLoad(false)
+            .HQParam(new StoreParameterCollection()
+		    {
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@ClassID", Value = "App.cboContractType.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CustID", Value = "App.txtCustID.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@StartDate", Value = "App.dtpFromDate.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@EndDate", Value = "App.dtpToDate.getValue()", Mode = ParameterMode.Raw }
+
+		    })
+            .LoadData()
+            .Listeners(p =>
+            {
+                p.Load.Handler = "HQ.common.showBusy(false);";
+                p.Load.Fn = "stoAlbumListOther_Load";
+            }
+            )
+
+    )
         
         @(X.Store().ID("stoImage").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(AR30300_pdImage_Result), "mdlIN20500_pdHeader", ""))       
+            .Model(Util.GenerateModel(typeof(AR30300_pdImages_Result), "mdlIN20500_pdHeader", ""))       
             .Proxy(
                     X.AjaxProxy()                
                     .Url(Url.Action("GetAR30300_pdImage", "AR30300"))                
@@ -115,14 +162,14 @@
                     .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
                 )
             .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("Zone", "App.cboZone.getValue()", ParameterMode.Raw));
+            {               
                 ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("State", "App.cboState.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("ClassID", "App.cboContractType.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("SlsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("CustID", "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", ParameterMode.Raw));
-                ps.Add(new StoreParameter("TypeAlbum", "App.dtvAlbum.selModel.selected.items[0] == undefined ? '': App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum", ParameterMode.Raw));
+                ps.Add(new StoreParameter("CustID", "App.treePanelCustomer.selModel.selected.items[0] == undefined ? '' : App.treePanelCustomer.selModel.selected.items[0].data.RecID", ParameterMode.Raw));
+                 ps.Add(new StoreParameter("TypeAlbum", "typeAlbum", ParameterMode.Raw));
                 ps.Add(new StoreParameter("StartDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("EndDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
             })      

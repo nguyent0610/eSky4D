@@ -4,12 +4,35 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
-        <Function Name="AR30300_pdImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="Zone" Type="varchar" Mode="In" />
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="OM_AlbumImage">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="AlbumID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="ImageCreateDate" />
+            <PropertyRef Name="ImageName" />
+            <PropertyRef Name="CustID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="AlbumID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsperID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ImageCreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ImageName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Function Name="AR30300_pdImages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="Territory" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
@@ -18,37 +41,54 @@
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
         </Function>
-        <Function Name="AR30300_pgCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="Zone" Type="varchar" Mode="In" />
-          <Parameter Name="Territory" Type="varchar" Mode="In" />
-          <Parameter Name="BranchID" Type="varchar" Mode="In" />
-          <Parameter Name="ClassID" Type="varchar" Mode="In" />
-          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
-          <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
-          <Parameter Name="StartDate" Type="datetime" Mode="In" />
-          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        <Function Name="AR30300_pgCustSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="ClassId" Type="varchar" Mode="In" />
+          <Parameter Name="KeySearch" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AR30300_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Territory" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_AlbumImage" EntityType="Self.OM_AlbumImage" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AR30300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR30300Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="AR30300_pgCustomer" ReturnType="Collection(AR30300Model.AR30300_pgCustomer_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <FunctionImport Name="AR30300_pgCustSearch" ReturnType="Collection(AR30300Model.AR30300_pgCustSearch_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="ClassId" Mode="In" Type="String" />
+            <Parameter Name="KeySearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR30300_ptTreeNode" ReturnType="Collection(AR30300Model.AR30300_ptTreeNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Territory" Mode="In" Type="String" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
-            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
-            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <FunctionImport Name="AR30300_pdImage" ReturnType="Collection(AR30300Model.AR30300_pdImage_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <FunctionImport Name="AR30300_pdImages" ReturnType="Collection(AR30300Model.AR30300_pdImages_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
@@ -57,43 +97,124 @@
             <Parameter Name="StartDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="OM_AlbumImage" EntityType="AR30300Model.OM_AlbumImage" />
         </EntityContainer>
-        <ComplexType Name="AR30300_pgCustomer_Result">
-          <Property Type="String" Name="Code" Nullable="true" />
-          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="AR30300_pdImage_Result">
+        <ComplexType Name="AR30300_pgCustSearch_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="TypeAlbum" Nullable="false" MaxLength="7" />
-          <Property Type="String" Name="Pic" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="ImageName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="LastMod" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="RefCustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr1" Nullable="true" />
+          <Property Type="String" Name="Addr2" Nullable="true" />
+          <Property Type="String" Name="DeliveryUnit" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="state" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassId" Nullable="true" MaxLength="6" />
         </ComplexType>
+        <ComplexType Name="AR30300_ptTreeNode_Result">
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="6" />
+          <Property Type="Int32" Name="Level" Nullable="false" />
+          <Property Type="String" Name="Data" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Position" Nullable="true" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="AR30300_pdImages_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="TypeAlbum" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Pic" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ImageName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="LastMod" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="linkreal" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <EntityType Name="OM_AlbumImage">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="AlbumID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="ImageCreateDate" />
+            <PropertyRef Name="ImageName" />
+            <PropertyRef Name="CustID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="AlbumID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SlsperID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageCreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CustID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR30300Entities" >
-          <FunctionImportMapping FunctionImportName="AR30300_pgCustomer" FunctionName="eBiz4DWebSysModel.Store.AR30300_pgCustomer">
+          <FunctionImportMapping FunctionImportName="AR30300_pgCustSearch" FunctionName="eBiz4DWebSysModel.Store.AR30300_pgCustSearch">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR30300Model.AR30300_pgCustomer_Result">
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
+              <ComplexTypeMapping TypeName="AR30300Model.AR30300_pgCustSearch_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="DeliveryUnit" ColumnName="DeliveryUnit" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AR30300_pdImage" FunctionName="eBiz4DWebSysModel.Store.AR30300_pdImage" >
+          <FunctionImportMapping FunctionImportName="AR30300_ptTreeNode" FunctionName="eBiz4DWebSysModel.Store.AR30300_ptTreeNode">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR30300Model.AR30300_pdImage_Result">
+              <ComplexTypeMapping TypeName="AR30300Model.AR30300_ptTreeNode_Result">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR30300_pdImages" FunctionName="eBiz4DWebSysModel.Store.AR30300_pdImages">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR30300Model.AR30300_pdImages_Result">
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
                 <ScalarProperty Name="TypeAlbum" ColumnName="TypeAlbum" />
                 <ScalarProperty Name="Pic" ColumnName="Pic" />
                 <ScalarProperty Name="ImageName" ColumnName="ImageName" />
                 <ScalarProperty Name="LastMod" ColumnName="LastMod" />
+                <ScalarProperty Name="linkreal" ColumnName="linkreal" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OM_AlbumImage">
+            <EntityTypeMapping TypeName="AR30300Model.OM_AlbumImage">
+              <MappingFragment StoreEntitySet="OM_AlbumImage">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="ImageCreateDate" ColumnName="ImageCreateDate" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -110,11 +231,13 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="34" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="97" >
+        <EntityTypeShape EntityType="AR30300Model.OM_AlbumImage" Width="3.25" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
