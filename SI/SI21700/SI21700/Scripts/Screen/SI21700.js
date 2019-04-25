@@ -1,17 +1,16 @@
-﻿//// Declare //////////////////////////////////////////////////////////
-//var screenNbr = 'SI21700';
-var keys = ['State'];
+﻿//=============== Declare ===============
+var keys = ["State"];
 var _District = "";
 var fieldsCheckRequire = ["Country", "State", "District", "Name"];
 var fieldsLangCheckRequire = ["SI21700_Country", "SI21700_State", "SI21700_District", "SI21700_Name"];
-
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
+var keys1 = ['Country', 'State'];
+var keys2 = ["State", "District"];
+var keyth = ['Country', 'State', 'District'];
 
-
-///////////////////////////////////////////////////////////////////////
-//// Store /////////////////////////////////////////////////////////////
+//=============== checkLoad ==============
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -19,11 +18,11 @@ var checkLoad = function (sto) {
         _Source = 0;
         App.stoSI_District.reload();
         HQ.common.showBusy(false);
+     
     }
 };
-////////////////////////////////////////////////////////////////////////
-//// Event /////////////////////////////////////////////////////////////
 
+//=============== menuClick ==============
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -47,9 +46,9 @@ var menuClick = function (command) {
                 HQ.isFirstLoad = true;
                 App.stoSI_District.reload();
             }
-            var record = HQ.store.findRecord(App.stoData, keys, ['State']);
+            var record = HQ.store.findRecord(App.stoSI_District, keys, ['State']);
             if (!record) {
-                HQ.store.insertBlank(App.stoData, ['State']);
+                HQ.store.insertBlank(App.stoSI_District, ['State']);
             }
             break;
         case "new":
@@ -77,18 +76,25 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            //HQ.common.close(this);            
             break;
     }
 };
 
-//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+//=============== refresh ================
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSI_District.reload();
+    }
+};
+
+//=============== firstLoad ==============
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    //checkLoad();
     App.cboCountry.getStore().addListener('load', checkLoad);
     
     if (HQ.countryView == false) {
@@ -105,55 +111,83 @@ var firstLoad = function () {
         App.Country.show();
     }
     checkLoad();
+    HQ.store.insertBlank(App.stoSI_District, ['State']);
 };
 
+//=============== frmChange ==============
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoSI_District);
-    HQ.common.changeData(HQ.isChange, 'SI21700');//co thay doi du lieu gan * tren tab title header
+    HQ.common.changeData(HQ.isChange, 'SI21700');
 };
 
+//=============== stoBeforeLoad ==========
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
+//=============== stoSI_District =========
 var stoSI_District_Load = function (sto) {
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, ['State']);
-        }
-        HQ.isFirstLoad = false; //sto load cuoi se su dung
-    }
+    HQ.store.insertBlank(App.stoSI_District, ['State']);
     //Sto tiep theo
-    frmChange();
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
     }
 };
+
+//=============== Grid Event =============
+// Grid Select
 var grdSI_District_Select = function (slm, selRec, idx, eOpts)
 {
-    debugger
     _District = selRec.data.District;
 }
+// Grid BeforeEdit
 var grdSI_District_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;   
 };
 
-var grdSI_District_Edit = function (item, e) {
+// Grid StateStateClassDetail Edit
+var grdStateClassDetail_Edit = function (item, e) {
+
+    if (e.field == "State") {
+        var a = HQ.store.findRecord(App.cboState.store, ['State'], [e.value]);
+        if (e.value != "" && e.value != null) {
+            e.record.set('DescrState', a.data.DescrState);
+        }
+        else {
+            e.record.set('DescrState', '');
+        }
+    }
     HQ.grid.checkInsertKey(App.grdSI_District, e, keys);
-    frmChange();
 };
-
-var grdSI_District_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSI_District, e, keys);
-};
-
+// Grid Reject
 var grdSI_District_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSI_District);
-    frmChange();
 };
 
+//=============== checkValidate ==========
+var checkValidateEditN = function (grd, e, keys, isCheckSpecialChar) {
+    if (keys.indexOf(e.field) != -1) {
+        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+        if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+        if (isCheckSpecialChar) {
+            if (e.value)
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                    HQ.message.show(2018120350, e.column.text);
+                    return false;
+                }
+        }
+        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+            if (e.column.xtype == "datecolumn")
+                HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+            else HQ.message.show(1112, e.value);
+            return false;
+        }
 
+    }
+}
+
+//=============== firstLoad ==============
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -174,7 +208,6 @@ var save = function () {
     }
 };
 
-
 var deleteData = function (item) {
     if (item == "yes") {
         var indexcolum = '';
@@ -194,18 +227,9 @@ var deleteData = function (item) {
         checkDeleteData(indexcolum, lstCountry, lstState, lstDistrict, District);
     }
 };
-/////////////////////////////////////////
-////////////////////////////////////////
-//Other Function
-function refresh(item) {
-    if (item == 'yes') {
-        HQ.isChange = false;
-        HQ.isFirstLoad = true;
-        App.stoSI_District.reload();
-    }
-};
 
-var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict, District) {
+//=============== checkDeleteData ========
+var checkDeleteData = function (lstIndexColum, lstCountry, lstState, lstDistrict, District) {
     debugger
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -213,7 +237,7 @@ var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict, D
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI21700/CheckDelete',
             params: {
-                indexColum: indexcolum,
+                lstIndexColum: lstIndexColum,
                 lstCountry: lstCountry,
                 lstState: lstState,
                 lstDistrict: lstDistrict,
@@ -221,7 +245,6 @@ var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict, D
             },
             success: function (msg, data) {
                 App.grdSI_District.deleteSelected();
-                frmChange();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -230,25 +253,7 @@ var checkDeleteData = function (indexcolum, lstCountry, lstState, lstDistrict, D
     }
 };
 
-
-
-//////////////////////// combo phụ thuộc vào combo
-var grdStateClassDetail_Edit = function (item, e) {
-
-    if (e.field == "State") {
-        var a = HQ.store.findRecord(App.cboState.store, ['State'], [e.value]);
-        if (e.value != "" && e.value != null) {
-            e.record.set('DescrState', a.data.DescrState);
-        }
-        else {
-            e.record.set('DescrState', '');
-        }
-    }
-    HQ.grid.checkInsertKey(App.grdSI_District, e, keys);
-    frmChange();
-};
-
-///////////// Import
+//=============== Button Import ============
 var btnImport_Click = function (sender, e) {
     debugger
     var fileName = sender.getValue();
@@ -283,8 +288,8 @@ var btnImport_Click = function (sender, e) {
         sender.reset();
     }
 };
-///////////////////////////////////
-//Export
+
+//=============== Button Export =============
 var btnExport_Click = function () {
     App.frmMain.submit({
         url: 'SI21700/Export',

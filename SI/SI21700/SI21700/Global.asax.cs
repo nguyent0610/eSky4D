@@ -30,7 +30,7 @@ namespace SI21700
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
+            Current.Server = "TRUONGSAD";
             Current.DBSys = "ECO_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

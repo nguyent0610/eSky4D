@@ -41,7 +41,7 @@ namespace SI21700.Controllers
             ViewBag.CountryView = country;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+      //  [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -141,14 +141,10 @@ namespace SI21700.Controllers
         {
             string District = data["District"];
             List<SI_Ward> lstSI_Ward = new List<SI_Ward>();// khai báo dữ liệu bảng
-            List<SI_RightsByDataGeography> lstSI_RightsByDataGeography = new List<SI_RightsByDataGeography>(); // khai báo dữ liệu bảng
-            
             try
             {
                 lstSI_Ward = _db.SI_Ward.ToList();
-                lstSI_RightsByDataGeography = _db.SI_RightsByDataGeography.ToList();
-                var record = lstSI_Ward.Where(p => p.District == District).FirstOrDefault(); // Lấy District của Grid so sánh database
-               // var record2 = lstSI_RightsByDataGeography.Where(p => p.District == District).FirstOrDefault();
+                var record = lstSI_Ward.Where(p => p.District == District).FirstOrDefault(); 
                 if (record != null)
                 {
                     throw new MessageException(MessageType.Message, "2018113050");
@@ -216,10 +212,10 @@ namespace SI21700.Controllers
                 string errorCountry = string.Empty;
                 string errorCountryduplicate = string.Empty;
                 string errorStateduplicate = string.Empty;
-                string errorHaveData = string.Empty;
                 string errorState = string.Empty;
                 string errorDistrict = string.Empty;
                 string errorDistrictRegex = string.Empty;
+                string errorDistrictLeght = string.Empty;
                 string errorName = string.Empty;
 
                 if(fileInfo.Extension.ToLower() == ".xls" || fileInfo.Extension.ToLower() == ".xlsx")
@@ -263,6 +259,10 @@ namespace SI21700.Controllers
                                     Country     = workSheet.Cells[i, Coltexts.IndexOf("Country")].StringValue.PassNull();
                                 }
                                 State = workSheet.Cells[i, Coltexts.IndexOf("State")].StringValue.PassNull();
+                                if (i == 3 && State == "")
+                                {
+                                    throw new MessageException(MessageType.Message, "2018071250");
+                                }
                                 DescrState = workSheet.Cells[i, Coltexts.IndexOf("DescrState")].StringValue.PassNull();
                                 District = workSheet.Cells[i, Coltexts.IndexOf("District")].StringValue.PassNull();
                                 Name = workSheet.Cells[i, Coltexts.IndexOf("Name")].StringValue.PassNull();
@@ -293,6 +293,11 @@ namespace SI21700.Controllers
                                     errorName += (i + 1).ToString() + ",";
                                     flagCheck = true;
                                 }
+                                if (District.Length > 10)
+                                {
+                                    errorDistrictLeght += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
                                 if (District == "") //DescrTerritory
                                 {
                                     errorDistrict += (i + 1).ToString() + ",";
@@ -300,7 +305,7 @@ namespace SI21700.Controllers
                                 }
                                 else
                                 {
-                                    Regex rgx = new Regex("^[a-z0-9A-Z/ ]+$");
+                                    Regex rgx = new Regex("^[a-zA-Z0-9]*$");
                                     if (!rgx.IsMatch(District))
                                     {
                                         errorDistrictRegex += (i + 1).ToString() + ",";
@@ -312,30 +317,31 @@ namespace SI21700.Controllers
                                     errorStateduplicate += (i + 1).ToString() + ",";
                                     flagCheck = true;
                                 }
-                                var record2 = lstSI_District.Where(p => p.State == State && p.District == District).FirstOrDefault();
-                                if(record2 != null)
-                                {
-                                    errorHaveData += (i + 1).ToString() + ",";
-                                    flagCheck = true;
-                                }
                                 
                                 if (flagCheck == true)
                                 {
                                     continue;
                                 }
-                                var record = lstSI_District.Where(p => p.State == State && p.Country == Country).FirstOrDefault();
+                                var record = lstSI_District.Where(p => p.State == State && p.District == District).FirstOrDefault();
                                 if (record == null)
                                 {
                                     record = new SI_District();
                                     record.ResetET();
                                     record.District = District;
-                                    record.Country = Country;
+                                    record.State = State;
                                     record.Crtd_Datetime = DateTime.Now;
                                     record.Crtd_Prog = _screenNbr;
                                     record.Crtd_User = _userName;
+                                    if (Country == "")
+                                    {
+                                        record.Country = "VN";
+                                    }
+                                    else
+                                    {
+                                        record.Country = Country;
+                                    }
                                     _db.SI_District.AddObject(record);
                                 }
-                                record.State = State;
                                 record.Name = Name;
                                 record.LUpd_Datetime = DateTime.Now;
                                 record.LUpd_Prog = _screenNbr;
@@ -348,9 +354,11 @@ namespace SI21700.Controllers
                             message += errorName == "" ? "" : string.Format(Message.GetString("2018102401", null), Util.GetLang("SI21700_Name"), errorName);
                             message += errorCountryduplicate == "" ? "" : string.Format(Message.GetString("2018102402", null), Util.GetLang("SI21700_Country"), errorCountryduplicate);
                             message += errorStateduplicate == "" ? "" : string.Format(Message.GetString("2018102402", null), Util.GetLang("SI21700_State"), errorStateduplicate);  //không được nhập ký tự đặc biệt
-                            message += errorHaveData == "" ? "" : string.Format(Message.GetString("2018102404", null), Util.GetLang("SI21700_District"), errorHaveData);
+                      //      message += errorHaveData == "" ? "" : string.Format(Message.GetString("2018102404", null), Util.GetLang("SI21700_District"), errorHaveData);
                             message += errorDistrictRegex == "" ? "" : string.Format(Message.GetString("2018102403", null), Util.GetLang("SI21700_District"), errorDistrictRegex);
-                                        
+                            message += errorDistrictLeght == "" ? "" : string.Format(Message.GetString("2018120751", null), Util.GetLang("SI21700_District"), errorDistrictLeght);
+
+                            
                             if (message == "" || message == string.Empty)
                             {
                                 _db.SaveChanges();
@@ -396,9 +404,6 @@ namespace SI21700.Controllers
         {
             try
             {
-                //StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_CabinetChecking"]);
-                //var lstOM_EquipmentStatus = dataHandler.ObjectData<OM29200_pgOM_CabinetChecking_Result>();
-
                 Cell cell;
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
