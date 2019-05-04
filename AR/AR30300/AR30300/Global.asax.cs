@@ -44,7 +44,7 @@ namespace AR30300
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["OM41300"] = acc;
+            Session["AR30300"] = acc;
             Session["DBApp"] = Current.DBApp = "ECOPharm_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "C000058";

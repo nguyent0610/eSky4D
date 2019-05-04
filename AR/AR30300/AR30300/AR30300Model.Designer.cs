@@ -180,8 +180,9 @@ namespace AR30300
         /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="state">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="classID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
-        public ObjectResult<AR30300_ptTreeNode_Result> AR30300_ptTreeNode(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String territory, global::System.String state, global::System.String slsperID, global::System.String custID)
+        public ObjectResult<AR30300_ptTreeNode_Result> AR30300_ptTreeNode(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String territory, global::System.String state, global::System.String slsperID, global::System.String classID, global::System.String custID)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -243,6 +244,16 @@ namespace AR30300
                 slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
             }
     
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
             ObjectParameter custIDParameter;
             if (custID != null)
             {
@@ -253,7 +264,7 @@ namespace AR30300
                 custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR30300_ptTreeNode_Result>("AR30300_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter, territoryParameter, stateParameter, slsperIDParameter, custIDParameter);
+            return base.ExecuteFunction<AR30300_ptTreeNode_Result>("AR30300_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter, territoryParameter, stateParameter, slsperIDParameter, classIDParameter, custIDParameter);
         }
     
         /// <summary>

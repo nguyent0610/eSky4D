@@ -56,6 +56,7 @@
           <Parameter Name="Territory" Type="varchar" Mode="In" />
           <Parameter Name="State" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
@@ -81,6 +82,7 @@
             <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AR30300_pdImages" ReturnType="Collection(AR30300Model.AR30300_pdImages_Result)">

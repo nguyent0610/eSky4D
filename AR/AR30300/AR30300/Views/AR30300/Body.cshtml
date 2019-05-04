@@ -162,9 +162,11 @@
                             .Html(
                             @<text>
                                 <tpl for=".">
-                                    <div class="thumb-wrap" id="{AlbumID}" style="text-align: center; clear:both">
-                                        <div class="thumb"><img width="50" height="50" src="~/Content/images/AR30300_Album.png" title="{Name}"></div>
-                                        <span style="color:#17365D;">{Name}</span>
+                                    <div class="thumb-wrap" id="{AlbumID}" style="text-align:center;clear:both;margin:0">
+                                        <div class="thumb">
+                                            <img width="50" height="50" src="~/Content/images/AR30300_Album.png" title="{Name}">                                          
+                                        </div>  
+                                        <span style="color:#17365D;">{Name}</span>                                    
                                     </div>
                                 </tpl>
                                 <div class="x-clear"></div>
@@ -196,8 +198,10 @@
                             .Html(
                             @<text>
                                 <tpl for=".">
-                                    <div class="thumb-wrap" id="{AlbumID}" style="text-align: left; clear:both;margin:0">
-                                        <div class="thumb"><img width="50" height="50" src="~/Content/images/AR30300_Album.png" title="{Name}"></div>
+                                    <div class="thumb-wrap" id="{AlbumID}" style="text-align:center;clear:both;margin:0">
+                                       <div class="thumb">
+                                        <img width="50" height="50" src="~/Content/images/AR30300_Album.png" title="{Name}">
+                                       </div>
                                         <span style="color:#17365D;">{Name}</span>
                                     </div>
                                 </tpl>
@@ -260,16 +264,15 @@
                                         , HQ.Button().ID("btnSaveImage").HQLangCode("AR30300SaveImg").Icon(Icon.PictureSave)
                                              .Listeners(p => p.Click.Fn = "btnSaveImage_Click")
                                        ,X.FileUploadField().ID("btnUpLoadImage").ButtonText(Util.GetLang("AR30300UpLoad")).Frame(false)
-                                            .ButtonOnly(true)
-                                            .Icon(Icon.ArrowUp)
+                                            .ButtonOnly(true).Icon(Icon.ArrowUp)
                                             .Listeners(lst =>
                                             {
                                                 lst.Change.Fn = "btnUpLoadImage_Click";
                                             })                                       
                                         , HQ.Button().ID("btnPrint").Icon(Icon.Printer).Text(Util.GetLang("AR30300Print")).Width(50)
-                                         // .Listeners(p => p.Click.Fn = "btnPrintImage_Click")
+                                            .Listeners(p => p.Click.Fn = "btnPrint_Click")
                                         , HQ.Button().ID("btnDelete").Icon(Icon.Delete).Text(Util.GetLang("AR30300Delete")).MarginSpec("0 0 0 0")
-                                          .Listeners(p => p.Click.Fn = "btnDeleteImage_Click")
+                                            .Listeners(p => p.Click.Fn = "btnDeleteImage_Click")
                                       , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0")
                                          .Items(
                                             X.Hidden().ID("hdnPPCStorePicReq2")
@@ -322,8 +325,7 @@
 
 @(X.Window()
     .ID("winView")
-    .Hidden(true)
-    .Title(Util.GetLang("AR30300ViewImage"))
+    .Hidden(true).Title(Util.GetLang("AR30300ViewImage"))
     .Layout(LayoutType.Border)
     .Height(500)
     .Width(600)

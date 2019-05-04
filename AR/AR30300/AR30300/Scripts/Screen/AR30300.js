@@ -115,9 +115,6 @@ var cboBranchID_Change = function (sender, value) {
         if (!App.cboSlsperId.store.loading) {
             App.cboSlsperId.store.reload();
         }
-        //if (!App.cboCustID.store.loading) {
-        //    App.cboCustID.store.reload();
-        //}
     }
 };
 
@@ -126,23 +123,8 @@ var cboBranchID_Select = function (sender, value) {
         if (!App.cboSlsperId.store.loading) {
             App.cboSlsperId.store.reload();
         }
-        //if (!App.cboCustID.store.loading) {
-        //    App.cboCustID.store.reload();
-        //}
     }
 };
-
-//var cboSlsperId_Select = function (sender, value) {
-//    if (sender.valueModels != null && !App.cboCustID.store.loading) {
-//        App.cboCustID.store.reload();
-//    }
-//};
-
-//var cboSlsperId_Change = function (sender, value) {
-//    if (sender.valueModels != null && !App.cboCustID.store.loading) {
-//        App.cboCustID.store.reload();
-//    }
-//};
 
 var frmChange = function () {
     //HQ.isChange = HQ.store.isChange(App.stoAR_Customer);
@@ -188,21 +170,7 @@ var save = function () {
 
 var btnReadData_Click = function () {
     tree_AfterRender("treeCust");
-    App.stoImage.reload();
-    var tree = App.treePanelCustomer,
-    text = App.cboSlsperId.getRawValue();
-   // text = App.txtCustID.getValue();
-    tree.clearFilter();
-    if (Ext.isEmpty(text, false)) {
-         expandNode(App.treePanelCustomer);
-          //  expandAll(App.treePanelCustomer);     
-           
-        return;
-    } else {
-        filterTreeByByValue(tree, text);
-    }
-    
-    
+    App.stoImage.reload(); 
 }
 var convertImgToBase64URL = function (url, filename, callback) {
     var img = new Image();
@@ -338,8 +306,8 @@ var readImage = function (fup, imgControl, ctr) {
 
 
 
-var btnPrintImage_Click = function () {
-
+var btnPrint_Click = function () {
+    window.print();
 }
 var btnDeleteImage_Click = function (obj, command, record, index, fn) {
     if (App.dtvImage.selModel.selected.length > 0) {
@@ -523,7 +491,7 @@ var btnNextImage_Click = function () {
 ///////////////////////////////////////// TREE CUST VIEW ////////////////////////////////////
 tree_AfterRender = function (id) {
     HQ.common.showBusy(true, HQ.waitMsg);
-    App.direct.AR30300GetTreeCustomer(id,App.cboTerritory.getValue(), App.cboState.getValue(), App.cboSlsperId.getValue(), App.txtCustID.getValue(), App.cboBranchID.getValue(), {
+    App.direct.AR30300GetTreeCustomer(id, App.cboTerritory.getValue(), App.cboState.getValue(), App.cboSlsperId.getValue(), App.cboContractType.getValue(), App.txtCustID.getValue(), App.cboBranchID.getValue(), {
         success: function (result) {
             App.treePanelCustomer.getRootNode().expand();
             HQ.common.showBusy(false, HQ.waitMsg);
@@ -545,15 +513,15 @@ var tree_ItemCollapse = function (a, b) {
     collapseNode(a);
 }//ham nay controller goi
 btnExpand_click = function (btn, e, eOpts) {
-    App.treePanelCustomer.suspendLayouts();
+    Ext.suspendLayouts();
     expandAll(App.treePanelCustomer);
-    App.treePanelCustomer.resumeLayouts(true);  
+    Ext.resumeLayouts(true);  
 }
 
 btnCollapse_click = function (btn, e, eOpts) {
-    App.treePanelCustomer.suspendLayouts();
+    Ext.suspendLayouts();
     collapseAll(App.treePanelCustomer);
-    App.treePanelCustomer.resumeLayouts(true);
+    Ext.resumeLayouts(true);
 }
 getLeafNodes = function (node) {
     var childNodes = [];
@@ -626,42 +594,42 @@ var collapseNode = function (node) {
         }
     }
 }
-var removeUnicode = function (str) {
-    str = str.toLowerCase();
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/gi, 'a');
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/gi, 'e');
-    str = str.replace(/ì|í|ị|ỉ|ĩ/gi, 'i');
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/gi, 'o');
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/gi, 'u');
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/gi, 'y');
-    str = str.replace(/đ/gi, 'd');
-    // str = str.replace(/\W+/g, ' ');
-    // str = str.replace(/\s/g, '-');
-    return str;
-}
-var filterTreeByByValue = function (tree,text) {
-    App.frmMain.mask();
-   Ext.suspendLayouts();
-    var lstParent = [];
-    var re = new RegExp(".*" + removeUnicode(text) + ".*", "i");
-   // var re = new RegExp(".*" + text + ".*", "i");
-    tree.filterBy(function (node) {
-        if (re.test(removeUnicode(node.data.text))) {
-         // if (re.test(node.data.text)) {      
-            lstParent.push(node.id);
-            return node;
-        } else {
-            if (lstParent.indexOf(node.parentNode.id) > -1) {
-                lstParent.push(node.id);
-                return node;
-            }
-        }
-    });
-    // Ext.getCmp('treeCust').body.scrollTo('top', 0);
-    Ext.resumeLayouts(true);
-    //App.treePanelCustomer.resumeLayouts(true);
-    App.frmMain.unmask();
-}
+//var removeUnicode = function (str) {
+//    str = str.toLowerCase();
+//    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/gi, 'a');
+//    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/gi, 'e');
+//    str = str.replace(/ì|í|ị|ỉ|ĩ/gi, 'i');
+//    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/gi, 'o');
+//    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/gi, 'u');
+//    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/gi, 'y');
+//    str = str.replace(/đ/gi, 'd');
+//    // str = str.replace(/\W+/g, ' ');
+//    // str = str.replace(/\s/g, '-');
+//    return str;
+//}
+//var filterTreeByByValue = function (tree,text) {
+//    App.frmMain.mask();
+//   Ext.suspendLayouts();
+//    var lstParent = [];
+//    var re = new RegExp(".*" + removeUnicode(text) + ".*", "i");
+//   // var re = new RegExp(".*" + text + ".*", "i");
+//    tree.filterBy(function (node) {
+//        if (re.test(removeUnicode(node.data.text))) {
+//         // if (re.test(node.data.text)) {      
+//            lstParent.push(node.id);
+//            return node;
+//        } else {
+//            if (lstParent.indexOf(node.parentNode.id) > -1) {
+//                lstParent.push(node.id);
+//                return node;
+//            }
+//        }
+//    });
+//    // Ext.getCmp('treeCust').body.scrollTo('top', 0);
+//    Ext.resumeLayouts(true);
+//    //App.treePanelCustomer.resumeLayouts(true);
+//    App.frmMain.unmask();
+//}
 
 //------------------------CustSearch------------------
 var btnFindCustID_click = function () {

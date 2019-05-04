@@ -62,7 +62,7 @@ namespace AR30300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       // [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -184,7 +184,7 @@ namespace AR30300.Controllers
         }
 //////------------------TREE----------------------///////////
         [DirectMethod]
-        public ActionResult AR30300GetTreeCustomer(string panelID,string territory,string state,string slsperID,string custID,string branchID)
+        public ActionResult AR30300GetTreeCustomer(string panelID,string territory,string state,string slsperID,string classID,string custID,string branchID)
         {
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelCustomer";
@@ -202,10 +202,11 @@ namespace AR30300.Controllers
             string _territory = territory == "null" ? "" : territory;
             string _state = state == "null" ? "" : state;
             string _slsperID = slsperID == "null" ? "" : slsperID;
-            string _custID = custID == "null" ? "" : custID;
+            string _classID = classID == "null" ? "" : classID;
+            string _custID = custID == "" ? "" : custID;
             string _branchID = branchID == "null" ? Current.CpnyID : branchID;
             // node.Checked = false;
-            lstAllNode = _db.AR30300_ptTreeNode(Current.UserName, _branchID , Current.LangID, _territory, _state, _slsperID,_custID).ToList();
+            lstAllNode = _db.AR30300_ptTreeNode(Current.UserName, _branchID , Current.LangID, _territory, _state, _slsperID,_classID,_custID).ToList();
 
 
             var maxLevel = lstAllNode.Count == 0 ? -1 : lstAllNode.Max(x => x.Level);
