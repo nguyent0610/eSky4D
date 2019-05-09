@@ -542,7 +542,7 @@ namespace IN10700.Controllers
 
                         if (workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue.Trim().Length > 0 && !flagCheck)
                         {
-                            if (!lstInvtDate.Any(p => p.InvtID.ToUpper() == invtID.ToUpper() && p.Date.ToDateShort() == workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue.Trim().ToDateShort()))
+                            if (!lstInvtDate.Any(p => p.InvtID.ToUpper() == invtID.ToUpper() && p.Date == workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue))
                             {
                                 stkExpDateError += (i + 1) + ", ";
                                 flagCheck = true;
