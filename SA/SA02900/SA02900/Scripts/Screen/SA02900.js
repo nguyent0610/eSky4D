@@ -342,14 +342,14 @@ function filterBot() {
 };
 
 var cboAppFolID_Change = function (value) {
-    if (value.displayTplData[0] != undefined)
-    {
-        var k = value.displayTplData[0].DescrScreen;
-        App.slmTopGrid.selected.items[0].set('DescrScreen', k);
-    }
-    else
-    {
-        App.slmTopGrid.selected.items[0].set('DescrScreen', '');
+    if (value.displayTplData != null) {
+        if (value.displayTplData[0] != undefined) {
+            var k = value.displayTplData[0].DescrScreen;
+            App.slmTopGrid.selected.items[0].set('DescrScreen', k);
+        }
+        else {
+            App.slmTopGrid.selected.items[0].set('DescrScreen', '');
+        }
     }
 };
 var cboLangStatus_Select = function(value)
