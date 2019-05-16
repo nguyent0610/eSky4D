@@ -995,6 +995,7 @@ var btnImport_Click = function () {
             else {
                 HQ.message.process(msg, data, true);
             }
+            App.cboCpnyID.store.reload();
         },
         failure: function (msg, data) {
             HQ.message.process(msg, data, true);

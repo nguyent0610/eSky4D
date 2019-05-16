@@ -455,7 +455,7 @@ namespace SA00000.Controllers
                         string district = workSheet.Cells[i, colTexts.IndexOf("District")].StringValue.Trim();
                         string cpnyType = workSheet.Cells[i, colTexts.IndexOf("CpnyType")].StringValue.Trim();
                         string email = workSheet.Cells[i, colTexts.IndexOf("EMAIL")].StringValue.Trim();
-                        string owner = workSheet.Cells[i, colTexts.IndexOf("Owner")].StringValue.Trim();
+                        string owner = workSheet.Cells[i, colTexts.IndexOf("SA00000Owner")].StringValue.Trim();
                         double creditLimit = 0;
                         try
                         {
@@ -611,7 +611,7 @@ namespace SA00000.Controllers
                     message += districtNull == "" ? "" : string.Format(Message.GetString("2018082851", null), districtNull.TrimEnd(','), Util.GetLang("District"));
                     message += cpnyTypeNull == "" ? "" : string.Format(Message.GetString("2018082851", null), cpnyTypeNull.TrimEnd(','), Util.GetLang("CpnyType"));
                     message += emailNull == "" ? "" : string.Format(Message.GetString("2018082851", null), emailNull.TrimEnd(','), Util.GetLang("EMAIL"));
-                    message += ownerNull == "" ? "" : string.Format(Message.GetString("2018082851", null), ownerNull.TrimEnd(','), Util.GetLang("Owner"));
+                    message += ownerNull == "" ? "" : string.Format(Message.GetString("2018082851", null), ownerNull.TrimEnd(','), Util.GetLang("SA00000Owner"));
 
                     message += errCpnyID == "" ? "" : string.Format(Message.GetString("2018112951", null), errCpnyID.TrimEnd(','));
 
@@ -748,6 +748,15 @@ namespace SA00000.Controllers
             MasterData.Cells.ImportDataTable(dtDistrict, true, 0, 15 , false);
 
 
+            pc = new ParamCollection();
+            pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+            pc.Add(new ParamStruct("@LangID", DbType.String, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+            DataTable dtOwner = dal.ExecDataTable("SA00000_peOwner", CommandType.StoredProcedure, ref pc);
+            MasterData.Cells.ImportDataTable(dtOwner, true, 0, 20, false);
+
+
 
 
             //#region formular
@@ -772,7 +781,14 @@ namespace SA00000.Controllers
             validation.AddArea(GetCellArea(1, dtCountry.Rows.Count + 100, ColTexts.IndexOf("Country")));
 
 
-            ////State
+            ////Owner
+            string formulaOwner = string.Format("=OFFSET(MasterData!$V$1,IFERROR(MATCH(H{0},MasterData!$U$2:$U${1},0),{2}),0, IF(COUNTIF(MasterData!$U$2:$U${1},H{0})=0,1,COUNTIF(MasterData!$U$2:$U${1},H{0})),1)",
+                   new string[] { "2", (dtState.Rows.Count + 100).ToString(), (dtState.Rows.Count + 64).ToString() });
+
+            validation = GetValidation(ref SheetMCP, formulaOwner, "Chọn Địa Bàn", "Mã Địa bàn này không tồn tại");
+            validation.AddArea(GetCellArea(1, dtOwner.Rows.Count + 100, ColTexts.IndexOf("SA00000Owner")));
+
+            //State
             string formulaState = string.Format("=OFFSET(MasterData!$G$1,IFERROR(MATCH(H{0},MasterData!$F$2:$F${1},0),{2}),0, IF(COUNTIF(MasterData!$F$2:$F${1},H{0})=0,1,COUNTIF(MasterData!$F$2:$F${1},H{0})),1)",
                    new string[] { "2", (dtState.Rows.Count + 100).ToString(), (dtState.Rows.Count + 64).ToString() });
 
@@ -784,8 +800,8 @@ namespace SA00000.Controllers
 
 
             ////District
-            string formulaDistrict = string.Format("=OFFSET(MasterData!$Q$1,IFERROR(MATCH(J{0},MasterData!$P$2:$P${1},0),{2}),0, IF(COUNTIF(MasterData!$P$2:$P${1},J{0})=0,1,COUNTIF(MasterData!$P$2:$P${1},J{0})),1)",
-                   new string[] { "2", (dtDistrict.Rows.Count + 100).ToString(), (dtDistrict.Rows.Count + 64).ToString() });
+            string formulaDistrict = string.Format("=OFFSET(MasterData!$Q$1,IFERROR(MATCH({0},MasterData!$P$2:$P${1},0),{2}),0, IF(COUNTIF(MasterData!$P$2:$P${1},{0})=0,1,COUNTIF(MasterData!$P$2:$P${1},{0})),1)",
+                   new string[] { Getcell(ColTexts.IndexOf("State")) + "2", (dtDistrict.Rows.Count + 100).ToString(), (dtDistrict.Rows.Count + 64).ToString() });
 
             validation = GetValidation(ref SheetMCP, formulaDistrict, "Chọn Quận Huyện", "Mã quận huyện này không tồn tại");
             validation.AddArea(GetCellArea(1, dtDistrict.Rows.Count + 100, ColTexts.IndexOf("District")));
@@ -861,7 +877,7 @@ namespace SA00000.Controllers
         }
         private List<string> HeaderExcel()
         {
-            return new List<string>() { "CpnyID", "CpnyName", "Address", "Phone", "Fax", "TaxRegNbr", "Channel", "Territory", "Country", "State",  "District", "CpnyType", "EMAIL", "Owner", "CreditLimit" };
+            return new List<string>() { "CpnyID", "CpnyName", "Address", "Phone", "Fax", "TaxRegNbr", "Channel", "Territory", "SA00000Owner", "Country", "State", "District", "CpnyType", "EMAIL", "CreditLimit" };
         }
 
 
