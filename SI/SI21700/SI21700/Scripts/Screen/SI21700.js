@@ -46,14 +46,9 @@ var menuClick = function (command) {
                 HQ.isFirstLoad = true;
                 App.stoSI_District.reload();
             }
-            var record = HQ.store.findRecord(App.stoSI_District, keys, ['State']);
-            if (!record) {
-                HQ.store.insertBlank(App.stoSI_District, ['State']);
-            }
             break;
         case "new":
             if (HQ.isInsert) {
-                debugger
                 HQ.grid.insert(App.grdSI_District, ['State']);
             }
             break;
@@ -128,7 +123,13 @@ var stoBeforeLoad = function (sto) {
 //=============== stoSI_District =========
 var stoSI_District_Load = function (sto) {
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
-    HQ.store.insertBlank(App.stoSI_District, ['State']);
+
+    if (HQ.isInsert) {
+        var obj = HQ.store.findInStore(App.stoSI_District, keyth, ['', '', '']);
+        if(!obj)
+            HQ.store.insertBlank(App.stoSI_District, keyth);
+    }
+    frmChange();
     //Sto tiep theo
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
@@ -143,7 +144,21 @@ var grdSI_District_Select = function (slm, selRec, idx, eOpts)
 }
 // Grid BeforeEdit
 var grdSI_District_BeforeEdit = function (editor, e) {
-    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;   
+    if (e.field == "District")
+    {
+        if(e.value != "" || e.record.data.Country == "" || e.record.data.State == "")
+        {
+            return false;
+        }
+    }
+    if (e.field == "State")
+    {
+        if(e.value != "" || e.record.data.Country == "")
+        {
+            return false;
+        }
+    }
+    if (!HQ.grid.checkBeforeEdit(e, keyth)) return false;
 };
 
 // Grid StateStateClassDetail Edit
@@ -158,7 +173,10 @@ var grdStateClassDetail_Edit = function (item, e) {
             e.record.set('DescrState', '');
         }
     }
-    HQ.grid.checkInsertKey(App.grdSI_District, e, keys);
+    HQ.grid.checkInsertKey(App.grdSI_District, e, keyth);
+};
+var grdSI_District_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSI_District, e, keyth);
 };
 // Grid Reject
 var grdSI_District_Reject = function (record) {
@@ -230,7 +248,6 @@ var deleteData = function (item) {
 
 //=============== checkDeleteData ========
 var checkDeleteData = function (lstIndexColum, lstCountry, lstState, lstDistrict, District) {
-    debugger
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             timeout: 1800000,
@@ -255,7 +272,6 @@ var checkDeleteData = function (lstIndexColum, lstCountry, lstState, lstDistrict
 
 //=============== Button Import ============
 var btnImport_Click = function (sender, e) {
-    debugger
     var fileName = sender.getValue();
     var ext = fileName.split(".").pop().toLowerCase();
     if (ext == "xls" || ext == "xlsx") {

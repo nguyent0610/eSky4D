@@ -106,7 +106,13 @@
             (
                 X.CellEditing()
                 .ClicksToEdit(1)
-                .Listeners(P => { P.Edit.Fn = "grdStateClassDetail_Edit"; })
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdSI_District_BeforeEdit";
+                    ls.Edit.Fn = "grdStateClassDetail_Edit";
+                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit";
+
+                })            
             )
             .Features
             (
