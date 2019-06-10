@@ -468,7 +468,7 @@ namespace IN10800.Controllers
 
                         if (workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue.Length > 0 && !flagCheck)
                         {
-                            if (!lstInvtDate.Any(p => p.InvtID.ToUpper() == invtID.ToUpper() && p.Date.ToDateShort() == workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue.Trim().ToDateShort()))
+                            if (!lstInvtDate.Any(p => p.InvtID.ToUpper() == invtID.ToUpper() && p.Date == workSheet.Cells[i, colTexts.IndexOf("IN10800OutDate")].StringValue.Trim()))
                             {
                                 stkExpDateError += (i + 1) + ", ";
                                 flagCheck = true;
