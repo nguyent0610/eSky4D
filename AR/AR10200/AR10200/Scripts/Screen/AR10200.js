@@ -1,5 +1,4 @@
 var _hold = "H";
-//var _keys = ["InvcNbr", "DocDate"];
 var _keys = ["InvcNbr"];
 var Process = {
     deleteBatRef: function (item) {
@@ -60,7 +59,6 @@ var Process = {
                     }
                 }
             });
-
             total();
         }
     },
@@ -129,7 +127,6 @@ var Process = {
                         if (data.result.refNbr) {
                             App.cboRefNbr.setValue(data.result.refNbr);
                         }
-                        //App.stoRefNbr.reload();
                     });
                 });
             },
@@ -153,8 +150,6 @@ var Store = {
                 BranchID: HQ.cpnyID,
                 Status: _hold
             });
-            //sto.insert(0, batRec);
-            //batRec.commit();
             HQ.store.insertRecord(sto, [], batRec, true);
         }
         var frmRecord = sto.getAt(0);
@@ -184,19 +179,11 @@ var Store = {
                 BranchID: HQ.cpnyID,
                 DocDate: HQ.currentDate
             });
-            //sto.insert(0, batRec);
-            //batRec.commit();
             HQ.store.insertRecord(sto, [], batRec, true);
         }
         var docRec = sto.getAt(0);
         App.pnlDocument.loadRecord(docRec);
         App.grdAdjust.store.reload();
-        //if (docRec.data.RefNbr) {
-        //    App.grdAdjust.store.reload();
-        //}
-        //else {
-        //    App.grdAdjust.store.removeAll();
-        //}
     },
 
     stoAdjust_load: function (sto, records, successful, eOpts) {
@@ -210,23 +197,27 @@ var Store = {
             });
             HQ.store.insertRecord(sto, _keys, adjustRec);
         }
-        total();
-        frmMain_fieldChange();
+       // if (Ext.isEmpty(App.cboCustID.getValue())) {
+            total();
+        //} else {
+        //    var paymentTotal = 0;
+        //    var unpaymentTotal = 0;
+        //    sto.suspendEvents();
+        //    sto.each(function (record) {
+        //        if (record.data.Reversal != 'NS') {
+        //            paymentTotal += record.data.Payment;
+        //            unpaymentTotal += record.data.DocBal;
+        //        }
+        //    });
+        //    sto.resumeEvents();
+        //    App.txtTotApply.setValue(paymentTotal);
+        //    App.txtUnTotApply.setValue(unpaymentTotal);
+        //    frmMain_fieldChange();
+        //}        
     },
 
     stoAdjust_dataChanged: function (sto, eOpts) {
-        //var paymentTotal = 0;
-        //var unpaymentTotal = 0;
-
-        //sto.each(function (record) {
-        //    if (record.data.Reversal != 'NS') {
-        //        paymentTotal += record.data.Payment;
-        //        unpaymentTotal += record.data.DocBal;
-        //    }
-        //});
-
-        //App.txtTotApply.setValue(paymentTotal);
-        //App.txtUnTotApply.setValue(unpaymentTotal);
+        
     }
 };
 
@@ -246,8 +237,7 @@ var Event = {
                     App.cboRefNbr.setValue(records[0].data.RefNbr);
                 }
                 App.stoBatNbr.reload();
-            });
-            
+            });            
         },
 
         cboStatus_Change: function (cbo, newValue, oldValue, eOpts) {
@@ -303,7 +293,6 @@ var Event = {
                         record.set("Payment", autoPayment);
                         record.set("DocBal", record.data.OrigDocBal - autoPayment);
                     }
-
                     sumPayment += record.data.Payment;
                 });
 
@@ -313,9 +302,7 @@ var Event = {
                 App.txtAutoPayment.setValue(0);
             }
             total();
-        },
-
-        
+        },               
 
         chkSelectHeaderRef_change: function (chk, newValue, oldValue, eOpts) {
             App.grdRef.store.each(function (record) {
@@ -344,7 +331,6 @@ var Event = {
             else {
                 strAdjdRefNbr = "";
             }
-
             Process.releaseAdjdRefNbr(strAdjdRefNbr);
         },
 
@@ -359,24 +345,6 @@ var Event = {
 
                 return false;
             }
-            //if (App.cboStatus.value == _hold) {
-            //    var store = chk.up("grid").store;
-            //    store.each(function (record) {
-            //        if (record.data.InvcNbr) {
-            //            if (chk.checked) {
-            //                record.set("Selected", true);
-            //                record.set("DocBal", 0);
-            //                record.set("Payment", record.data.OrigDocBal);
-            //            }
-            //            else {
-            //                record.set("Selected", false);
-            //                record.set("DocBal", record.data.OrigDocBal);
-            //                record.set("Payment", 0);
-            //            }
-            //        }
-            //    });
-            //}
-
             var store = App.stoAdjust;
             var allRecords = store.snapshot || store.allData || store.data;
             store.suspendEvents();
@@ -498,7 +466,6 @@ var Event = {
                 }
                 total();
             }
-
             if (e.field == 'InvcNbr') {
                 var invcRec = App.cboInvcNbr.store.findRecord("InvcNbr", e.value);
                 if (invcRec) {
@@ -522,17 +489,16 @@ var Event = {
                     total();
                 }
             }
-
             frmMain_fieldChange();
         },
 
         grdAdjust_validateEdit: function (editor, e) {
-            
             return HQ.grid.checkValidateEdit(e.grid, e, _keys);
         },
 
         grdAdjust_reject: function (record, grid) {
             HQ.grid.checkReject(record, grid);
+            total();
             frmMain_fieldChange();
         }
     }
@@ -546,7 +512,6 @@ var btnPopupOk_Click = function () {
         HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
     }
 };
-
 
 var dteFromDate_Change = function (dtp, newValue, oldValue, eOpts) {
     App.dteToDate.setMinValue(App.dteFromDate.getValue());
@@ -562,7 +527,8 @@ var total = function () {
     store.suspendEvents();
     var allRecords = store.snapshot || store.allData || store.data;
     allRecords.each(function (record) {
-        if (record.data.Payment && record.data.Reversal!='NS') {
+        if (record.data.Reversal != 'NS') { //record.data.Payment && 
+
             totalAmt += record.data.Payment;
             totalDocBal += record.data.DocBal;
         }
@@ -589,33 +555,13 @@ var frmMain_boxReady = function (frm, width, height, eOpts) {
 };
 
 var frmMain_fieldChange = function (frm, field, newValue, oldValue, eOpts) {
-    //var batRec = App.pnlBatch.getRecord();
-    //if (batRec) {
-    //    App.pnlBatch.updateRecord();
-    //}
-    //if (!HQ.store.isChange(App.stoBatNbr)) {
-    //    var refRec = App.pnlDocument.getRecord();
-    //    if (refRec) {
-    //        App.pnlDocument.updateRecord();
-    //    }
-    //    if (!HQ.store.isChange(App.stoRefNbr)) {
-    //        HQ.isChange = HQ.store.isChange(App.grdAdjust.store);
-    //    }
-    //    else {
-    //        HQ.isChange = true;
-    //    }
-    //}
-    //else {
-    //    HQ.isChange = true;
-    //}
     if (App.stoBatNbr.getCount() > 0) {
         App.pnlBatch.updateRecord();
     }
     if (App.stoRefNbr.getCount() > 0) {
         App.pnlDocument.updateRecord();
     }
-    HQ.isChange = HQ.store.isChange(App.stoBatNbr) == false ? (HQ.store.isChange(App.stoRefNbr)
-                                                    == false ? (HQ.store.isChange(App.stoAdjust)) : true) : true;
+    HQ.isChange = HQ.store.isChange(App.stoBatNbr) || HQ.store.isChange(App.stoRefNbr) || HQ.store.isChange(App.stoAdjust);
     HQ.common.changeData(HQ.isChange, 'AR10200');
     if (App.cboBatNbr.valueModels == null || HQ.isNew == true) {
         App.cboBatNbr.setReadOnly(false);

@@ -138,9 +138,10 @@ namespace AR10200.Controllers
                 var refHandler = new StoreDataHandler(data["lstRefNbr"]);
                 var inputRefNbr = refHandler.ObjectData<AR_Doc>().FirstOrDefault();
 
-                if (_db.AR10200_ppCheckCloseDate(Current.CpnyID,Current.UserName,Current.LangID,branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
+                if (_db.AR10200_ppCheckCloseDate(Current.CpnyID, Current.UserName, Current.LangID, branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
+                {
                     throw new MessageException(MessageType.Message, "301");
-                
+                }
                 inputBatNbr.Descr = txtDescr;
                 inputBatNbr.ReasonCD = cboBankAcct;
 
@@ -154,8 +155,7 @@ namespace AR10200.Controllers
                 if (batchObj != null)
                 {
                     if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
-                    {
-                        
+                    {                        
                         Updating_Batch(ref batchObj, inputBatNbr, false, branchID);
                     }
                     else
@@ -166,12 +166,9 @@ namespace AR10200.Controllers
                 else
                 {
                     Updating_Batch(ref batchObj, inputBatNbr, true, branchID);
-
                     _db.Batches.AddObject(batchObj);
                     isNewBatch = true;
                 }
-
-
                 inputRefNbr.RefNbr = batchObj.RefNbr;
                 inputRefNbr.BatNbr = batchObj.BatNbr;
                 inputRefNbr.DocDesc = txtDescr;
@@ -185,7 +182,6 @@ namespace AR10200.Controllers
                 {
                     if (refObj.tstamp.ToHex() == inputRefNbr.tstamp.ToHex())
                     {
-
                         Updating_AR_Doc(ref refObj, inputRefNbr, false, branchID);
                         SaveAR_Adjust(data, refObj, branchID);
                         return Json(new
@@ -214,13 +210,11 @@ namespace AR10200.Controllers
                         refNbr = batchObj.RefNbr
                     });
                 }
-
                 if (_logMessage != null)
                 {
                     return _logMessage;
                 }
                 return Util.CreateMessage(MessageProcess.Save, new { batNbr = data["cboBatNbr"] });
-
             }
             catch (Exception ex)
             {
@@ -298,7 +292,6 @@ namespace AR10200.Controllers
             {
                 Data_Release("R", refObj.BranchID, refObj.BatNbr, "");
             }
-
         }
 
         private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust,AR_Doc objDoc, string branchID, string handle)
@@ -316,7 +309,6 @@ namespace AR10200.Controllers
             objAd.LUpd_DateTime = DateTime.Now;
             objAd.LUpd_Prog = _screenNbr;
             objAd.LUpd_User = Current.UserName;
-
             if (handle == "R")
             {
                 var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
@@ -376,7 +368,6 @@ namespace AR10200.Controllers
                         {
                             _db.AR_Adjust.DeleteObject(adjustObj);
                         }
-
                         _db.Batches.DeleteObject(batchObj);
 
                         _db.SaveChanges();
@@ -387,12 +378,7 @@ namespace AR10200.Controllers
                         throw new MessageException(MessageType.Message, "19");
                     }
                 }
-                return Json(new { success = true });
-                //else
-                //{
-                //    throw new MessageException(MessageType.Message, "19");
-                //    //throw new MessageException(MessageType.Message, "22701");
-                //}
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -426,11 +412,11 @@ namespace AR10200.Controllers
                     }
                 }
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" }, JsonRequestBehavior.AllowGet);
             }
         }
 

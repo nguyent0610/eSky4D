@@ -31,14 +31,14 @@ namespace AR10200
 
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";
-            Current.DBSys = "eSky4DChevronVNSys";
+            Current.Server = ConfigurationManager.AppSettings["Server"];
+            Current.DBSys = ConfigurationManager.AppSettings["DBSys"];
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR10200"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DChevronVNApp";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"];
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "080100021";
             Session["Language"] = Current.Language = "vi";
