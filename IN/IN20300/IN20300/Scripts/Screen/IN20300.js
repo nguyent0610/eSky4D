@@ -10,6 +10,7 @@ var _isLoadMaster = false;
 
 var checkLoad = function (sto) {
     _Source += 1;
+    debugger 
     if (_Source == _maxSource) {
         _isLoadMaster = true;
         _Source = 0;
@@ -17,7 +18,7 @@ var checkLoad = function (sto) {
         App.chkAllowedSales.setVisible(HQ.allowedSales);
         App.txtPrioritize.setVisible(HQ.prioritize);
         App.txtPrioritize.allowBlank = !HQ.prioritize;
-        if (HQ.prioritize == true) {
+        if (!HQ.prioritize) {
             App.txtPrioritize.setMinValue(0);
         }
         App.txtPrioritize.isValid();
