@@ -16,6 +16,11 @@ var checkLoad = function (sto) {
         App.stoIN_Site.reload();
         App.chkAllowedSales.setVisible(HQ.allowedSales);
         App.txtPrioritize.setVisible(HQ.prioritize);
+        App.txtPrioritize.allowBlank = !HQ.prioritize;
+        if (HQ.prioritize == true) {
+            App.txtPrioritize.setMinValue(0);
+        }
+        App.txtPrioritize.isValid();
         HQ.common.showBusy(false);
     }
 };
@@ -72,6 +77,11 @@ var menuClick = function (command) {
                     if (HQ.util.checkEmail(App.txtEmailAddr.value) && HQ.form.checkRequirePass(App.frmMain)) {
                         save();
                     }
+                }
+                else if (App.txtPrioritize.getValue() == 0 && HQ.prioritize) {
+                    HQ.message.show(2019012360, [App.txtPrioritize.fieldLabel], '', true);
+                    return;
+
                 }
                 else {
                     if (HQ.form.checkRequirePass(App.frmMain)) {
