@@ -29,27 +29,19 @@ namespace IF30100
         }
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            //Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
-            //Session["DBApp"] = Current.DBApp = "eBiz4DWebApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "HQH00000";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
-
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "KidoTraining_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             Current.FormatDate = "dd/MM/yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IF30100"] = acc;
-            Session["DBApp"] = Current.DBApp = "KidoTraining_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "vi";
+            Session["Language"] = Current.Language = "cn";
             Session["LangID"] = 1;
         }
     }

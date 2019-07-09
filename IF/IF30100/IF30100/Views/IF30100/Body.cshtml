@@ -258,9 +258,10 @@
                                 {
                                     l.Change.Fn = "ColCheckChoiceColumn_Change";
                                 })
-                            )
-                            , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("ColumnName").Width(200)
-                            , X.Column().Text(Util.GetLang("ColFormat")).ID("ColFormat").DataIndex("Format").Editor(X.TextField())                                
+                            ).Width(80)
+                            //, X.Column().Text(Util.GetLang("Column_Name")).DataIndex("ColumnName").Width(200).Hidden(true)                            
+                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("ColumnLang").Width(250)
+                            , X.Column().Text(Util.GetLang("ColFormat")).ID("ColFormat").DataIndex("Format").Editor(X.TextField()).Width(250)                              
                         )
                         .SelectionModel(X.RowSelectionModel().ID("smlChoiceColumnDetail").Mode(SelectionMode.Single))
                         .View(X.GridView().TrackOver(false))
@@ -276,7 +277,9 @@
                             X.GridFilters()
                             .Local(true)
                             .Filters(
-                                X.StringFilter().DataIndex("Column_Name"),
+                                X.StringFilter().DataIndex("ColumnName"),
+                                X.StringFilter().DataIndex("ColumnLang"),
+                                X.StringFilter().DataIndex("Format"),
                                 X.BooleanFilter().DataIndex("Checked")
                             )
                         )                            

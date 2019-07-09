@@ -32,10 +32,7 @@ namespace IF30100.Controllers
             public string Name { get; set; }
             public string Value { get; set; }
         }
-        private SYS_ReportExport _objReport;
         private string _screenNbr = "IF30100";
-        private string _userName = Current.UserName;
-        private string _branchID = "";
        
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
         IF30100SysEntities _eBiz4DSys = Util.CreateObjectContext<IF30100SysEntities>(true,"Sys");
@@ -43,7 +40,7 @@ namespace IF30100.Controllers
 
         public ActionResult Index(string screenNbr)
         {
-            //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             string type = "E";
             if (screenNbr.PassNull() != string.Empty)
             {
@@ -68,10 +65,6 @@ namespace IF30100.Controllers
         {
             try
             {
-                
-
-               // _objOrder = data.ConvertToObject<OM10100_pcOrder_Result>(false, new string[] { "DoNotCalDisc", "CreditHold", "ApproveOver" });
-
                 if (_logMessage != null)
                 {
                     return _logMessage;
@@ -91,7 +84,7 @@ namespace IF30100.Controllers
        
         public ActionResult GetIF30100_pgData(string view)
         {
-            return this.Store(_db.IF30100_pgData(view).ToList());
+            return this.Store(_db.IF30100_pgData(view));
         }
         public ActionResult GetChoiceColumnInfo(bool sys, string type, string name)
         {
@@ -119,8 +112,8 @@ namespace IF30100.Controllers
                     {
 
                         Checked = false,
-                        ColumnName = itm["ColumnName"].ToString()
-                     
+                        ColumnName = itm["ColumnName"].ToString(),
+                        ColumnLang = Util.GetLang(itm["ColumnName"].ToString()),                     
                     };
                     if (itm["DataType"].ToString().ToUpper().Contains("DATE")
                             || itm["DataType"].ToString().ToUpper().Contains("FLOAT")
@@ -1483,7 +1476,7 @@ namespace IF30100.Controllers
             var pnlButton = this.GetCmp<TabPanel>("pnlButton");
           
             Component component = new Component() { ID = "component", Flex = 1 };
-            Ext.Net.Button btnLoadParamList = new Ext.Net.Button() { ID = "btnLoadParamList", Text = Util.GetLang("reloadfilterlist"), MarginSpec = "3 0 0 0", Hidden = true };
+            Ext.Net.Button btnLoadParamList = new Ext.Net.Button() { ID = "btnLoadParamList", Text = Util.GetLang("reloadfilterlist"), MarginSpec = "3 5 0 0", Icon = Ext.Net.Icon.PageRefresh, Hidden = true };
 
 
             HQGridPanel List00 = new HQGridPanel() { ID = "List0", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true, RowLines = true, ColumnLines = true };
@@ -2707,6 +2700,7 @@ namespace IF30100.Controllers
     {
         public bool Checked { get; set; }
         public string ColumnName { get; set; }
+        public string ColumnLang { get; set; }
         public string Format { get; set; }
         public bool IsFormat { get; set; }
     }
