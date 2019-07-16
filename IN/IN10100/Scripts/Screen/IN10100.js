@@ -1469,6 +1469,7 @@ var save = function () {
                 PerPost: App.cboPerPost.getValue()
     },
             success: function (msg, data) {
+                debugger 
                 if (HQ.isTransfer) {
                     App.TrnsferNbr.store.reload();
                 }
