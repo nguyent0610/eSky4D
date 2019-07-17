@@ -408,6 +408,16 @@ namespace IF30100.Controllers
             style.Font.IsBold = true;
             style.Font.Size = 10;
             style.Font.Color = Color.Black;
+            style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+            style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+            style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+            style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+            //Setting the foreground color to yellow            
+            style.Pattern = BackgroundType.Solid;
+            style.ForegroundColor = Color.LightBlue;
+            
+            //Setting the background pattern to vertical stripe
+
             style.HorizontalAlignment = alignH;
             style.VerticalAlignment = alignV;
             c.SetStyle(style);
@@ -2467,14 +2477,16 @@ namespace IF30100.Controllers
                             if (j == 0)
                                 SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[lstColumn[x]].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
                             cell = SheetData.Cells[j+1, x];
-                           
 
+                            Aspose.Cells.Style style = cell.GetStyle();
+                            style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
                             if (_listChoice[x].Format != "")
-                            {
-                                Aspose.Cells.Style style = cell.GetStyle();
-
+                            {                               
                                 // Setting the custom display format to show date as "d-mmm-yy"
-                                style.Custom = _listChoice[x].Format;
+                                style.Custom = _listChoice[x].Format;                      
                                 if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("STRING"))
                                 {
                                     if(dtInvtID.Rows[j][lstColumn[x]].ToString().ToUpper().StartsWith("HTTP"))
@@ -2491,7 +2503,7 @@ namespace IF30100.Controllers
                                     cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString().ToDouble());
                                     style.HorizontalAlignment = TextAlignmentType.Right;
                                 }
-                                cell.SetStyle(style);
+                               
                             }
                             else if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("STRING"))
                             {
@@ -2499,6 +2511,7 @@ namespace IF30100.Controllers
                                     SheetData.Hyperlinks.Add(cell.Name, 1, 1, dtInvtID.Rows[j][lstColumn[x]].ToString());
                                 else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
                             } else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
+                            cell.SetStyle(style);
                         }
                     }
 
@@ -2521,10 +2534,19 @@ namespace IF30100.Controllers
 
                     //    }
                     //}
+                    
 
                     SheetData.Cells.InsertRow(0);
                     SheetData.Cells.InsertRow(0);
                     SheetData.Cells.InsertRow(0);
+                    SheetData.Cells.InsertRow(0);
+
+                    Aspose.Cells.Style style1 = SheetData.Cells["A1"].GetStyle();
+                    style1.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.White);
+                    style1.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.White);
+                    style1.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.White);
+                    style1.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.White);
+
                     SheetData.Cells["A1"].Value = Util.GetLang("PVCreateUser");
                     SheetData.Cells["A2"].Value = Util.GetLang("PVCreateDate");
                     SheetData.Cells["A3"].Value = Util.GetLang("PVFromDate");
@@ -2536,7 +2558,33 @@ namespace IF30100.Controllers
                     SheetData.Cells["B3"].Value = created.DateParm00.ToString(Current.FormatDate);
                     SheetData.Cells["D3"].Value = created.DateParm01.ToString(Current.FormatDate);
 
+                    SheetData.Cells["A1"].SetStyle(style1);
+                    SheetData.Cells["A2"].SetStyle(style1);
+                    SheetData.Cells["A3"].SetStyle(style1);
+                    SheetData.Cells["B1"].SetStyle(style1);
+                    SheetData.Cells["B2"].SetStyle(style1);
+                    SheetData.Cells["B3"].SetStyle(style1);
+                    SheetData.Cells["D1"].SetStyle(style1);
+                    SheetData.Cells["D2"].SetStyle(style1);
+                    SheetData.Cells["D3"].SetStyle(style1);
+                    SheetData.Cells["C1"].SetStyle(style1);
+                    SheetData.Cells["C2"].SetStyle(style1);
+                    SheetData.Cells["C3"].SetStyle(style1);
                     
+
+
+                    // Creating a range of cells starting from "A1" cell to 3rd column in a row
+                    Aspose.Cells.Range range = SheetData.Cells.CreateRange(0, 0, 3, 4);
+
+                    // Adding a thick top border with blue line
+                    range.SetOutlineBorder(BorderType.TopBorder, CellBorderType.Thick, Color.Black);
+                    // Adding a thick bottom border with blue line
+                    range.SetOutlineBorder(BorderType.BottomBorder, CellBorderType.Thick, Color.Black);
+                    // Adding a thick left border with blue line
+                    range.SetOutlineBorder(BorderType.LeftBorder, CellBorderType.Thick, Color.Black);
+                    // Adding a thick right border with blue line
+                    range.SetOutlineBorder(BorderType.RightBorder, CellBorderType.Thick, Color.Black);
+
 
                     SheetData.AutoFitColumns();
                     SheetData.Protection.AllowFiltering = true;

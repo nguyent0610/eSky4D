@@ -247,7 +247,8 @@
                                 {
                                     ps.Add(new StoreParameter("name", "getView()", ParameterMode.Raw));
                                     ps.Add(new StoreParameter("sys", "false", ParameterMode.Value));
-                                })                                
+                                })
+                                .Listeners(l=>l.Load.Handler="App.ColCheckChoiceColumn_Header.setValue(false); App.ColCheckChoiceColumn_Header.setValue(true);")                                
                             )
                         .ColumnModel(
                             X.RowNumbererColumn()//.Renderer("renderRowNumber")

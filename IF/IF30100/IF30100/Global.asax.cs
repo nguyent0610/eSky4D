@@ -34,6 +34,7 @@ namespace IF30100
             Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             Current.FormatDate = "dd/MM/yyyy";
+            Current.FormatTime = "HH:mm";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
