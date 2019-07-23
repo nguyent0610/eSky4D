@@ -22,9 +22,9 @@ Global
 		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.120.4:8088/tfs/hqsoft
-		SccProjectUniqueName0 = SI23800\\SI23800.csproj
-		SccProjectName0 = SI23800
-		SccLocalPath0 = SI23800
-		SccLocalPath1 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SI23800\\SI23800.csproj
+		SccProjectName1 = SI23800
+		SccLocalPath1 = SI23800
 	EndGlobalSection
 EndGlobal
