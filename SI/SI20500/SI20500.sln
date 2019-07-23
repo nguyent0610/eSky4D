@@ -1,17 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SI20500", "SI20500\SI20500.csproj", "{7B510D3F-36ED-4FD9-9551-3C804F97DB58}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.130.4:8088/tfs/hqsoft
-		SccProjectUniqueName0 = SI20500\\SI20500.csproj
-		SccProjectName0 = SI20500
-		SccLocalPath0 = SI20500
-		SccLocalPath1 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -24,5 +17,17 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB197107-93A5-4261-82A5-E51C537E0E80}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.120.4:8088/tfs/hqsoft
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SI20500\\SI20500.csproj
+		SccProjectName1 = SI20500
+		SccLocalPath1 = SI20500
 	EndGlobalSection
 EndGlobal
