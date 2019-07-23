@@ -25,6 +25,7 @@ namespace SI22000.Controllers
 
         public ActionResult Index()
         {
+            Util.InitRight(screenNbr);
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
             var obj= _db.SI22000_ppCon().FirstOrDefault();

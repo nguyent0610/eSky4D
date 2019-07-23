@@ -339,7 +339,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -358,7 +358,7 @@ namespace SI22000
                 {
                     OnEmailIDChanging(value);
                     ReportPropertyChanging("EmailID");
-                    _EmailID = StructuralObject.SetValidValue(value, false);
+                    _EmailID = StructuralObject.SetValidValue(value, false, "EmailID");
                     ReportPropertyChanged("EmailID");
                     OnEmailIDChanged();
                 }
@@ -383,7 +383,7 @@ namespace SI22000
             {
                 OnSMTPServerChanging(value);
                 ReportPropertyChanging("SMTPServer");
-                _SMTPServer = StructuralObject.SetValidValue(value, false);
+                _SMTPServer = StructuralObject.SetValidValue(value, false, "SMTPServer");
                 ReportPropertyChanged("SMTPServer");
                 OnSMTPServerChanged();
             }
@@ -407,7 +407,7 @@ namespace SI22000
             {
                 OnUserNameChanging(value);
                 ReportPropertyChanging("UserName");
-                _UserName = StructuralObject.SetValidValue(value, false);
+                _UserName = StructuralObject.SetValidValue(value, false, "UserName");
                 ReportPropertyChanged("UserName");
                 OnUserNameChanged();
             }
@@ -431,7 +431,7 @@ namespace SI22000
             {
                 OnPassChanging(value);
                 ReportPropertyChanging("Pass");
-                _Pass = StructuralObject.SetValidValue(value, false);
+                _Pass = StructuralObject.SetValidValue(value, false, "Pass");
                 ReportPropertyChanged("Pass");
                 OnPassChanged();
             }
@@ -455,7 +455,7 @@ namespace SI22000
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -479,7 +479,7 @@ namespace SI22000
             {
                 OnMailBoxChanging(value);
                 ReportPropertyChanging("MailBox");
-                _MailBox = StructuralObject.SetValidValue(value, false);
+                _MailBox = StructuralObject.SetValidValue(value, false, "MailBox");
                 ReportPropertyChanged("MailBox");
                 OnMailBoxChanged();
             }
@@ -503,7 +503,7 @@ namespace SI22000
             {
                 OnPortChanging(value);
                 ReportPropertyChanging("Port");
-                _Port = StructuralObject.SetValidValue(value);
+                _Port = StructuralObject.SetValidValue(value, "Port");
                 ReportPropertyChanged("Port");
                 OnPortChanged();
             }
@@ -527,7 +527,7 @@ namespace SI22000
             {
                 OnSSLChanging(value);
                 ReportPropertyChanging("SSL");
-                _SSL = StructuralObject.SetValidValue(value);
+                _SSL = StructuralObject.SetValidValue(value, "SSL");
                 ReportPropertyChanged("SSL");
                 OnSSLChanged();
             }
@@ -551,7 +551,7 @@ namespace SI22000
             {
                 OnCrtd_DatetimeChanging(value);
                 ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                _Crtd_Datetime = StructuralObject.SetValidValue(value, "Crtd_Datetime");
                 ReportPropertyChanged("Crtd_Datetime");
                 OnCrtd_DatetimeChanged();
             }
@@ -575,7 +575,7 @@ namespace SI22000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -599,7 +599,7 @@ namespace SI22000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -623,7 +623,7 @@ namespace SI22000
             {
                 OnLUpd_DatetimeChanging(value);
                 ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                _LUpd_Datetime = StructuralObject.SetValidValue(value, "LUpd_Datetime");
                 ReportPropertyChanged("LUpd_Datetime");
                 OnLUpd_DatetimeChanged();
             }
@@ -647,7 +647,7 @@ namespace SI22000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -671,7 +671,7 @@ namespace SI22000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -695,7 +695,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -706,7 +706,6 @@ namespace SI22000
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -756,7 +755,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -773,7 +772,7 @@ namespace SI22000
             {
                 OnObjectIDChanging(value);
                 ReportPropertyChanging("ObjectID");
-                _ObjectID = StructuralObject.SetValidValue(value, false);
+                _ObjectID = StructuralObject.SetValidValue(value, false, "ObjectID");
                 ReportPropertyChanged("ObjectID");
                 OnObjectIDChanged();
             }
@@ -797,7 +796,7 @@ namespace SI22000
             {
                 OnBranchIDChanging(value);
                 ReportPropertyChanging("BranchID");
-                _BranchID = StructuralObject.SetValidValue(value, false);
+                _BranchID = StructuralObject.SetValidValue(value, false, "BranchID");
                 ReportPropertyChanged("BranchID");
                 OnBranchIDChanged();
             }
@@ -821,7 +820,7 @@ namespace SI22000
             {
                 OnEditScreenNbrChanging(value);
                 ReportPropertyChanging("EditScreenNbr");
-                _EditScreenNbr = StructuralObject.SetValidValue(value, false);
+                _EditScreenNbr = StructuralObject.SetValidValue(value, false, "EditScreenNbr");
                 ReportPropertyChanged("EditScreenNbr");
                 OnEditScreenNbrChanged();
             }
@@ -845,7 +844,7 @@ namespace SI22000
             {
                 OnContentChanging(value);
                 ReportPropertyChanging("Content");
-                _Content = StructuralObject.SetValidValue(value, false);
+                _Content = StructuralObject.SetValidValue(value, false, "Content");
                 ReportPropertyChanged("Content");
                 OnContentChanged();
             }
@@ -869,7 +868,7 @@ namespace SI22000
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, false);
+                _Status = StructuralObject.SetValidValue(value, false, "Status");
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -893,7 +892,7 @@ namespace SI22000
             {
                 OnNoteChanging(value);
                 ReportPropertyChanging("Note");
-                _Note = StructuralObject.SetValidValue(value, true);
+                _Note = StructuralObject.SetValidValue(value, true, "Note");
                 ReportPropertyChanged("Note");
                 OnNoteChanged();
             }
@@ -917,7 +916,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -941,7 +940,7 @@ namespace SI22000
             {
                 OnCrtd_DatetimeChanging(value);
                 ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                _Crtd_Datetime = StructuralObject.SetValidValue(value, "Crtd_Datetime");
                 ReportPropertyChanged("Crtd_Datetime");
                 OnCrtd_DatetimeChanged();
             }
@@ -965,7 +964,7 @@ namespace SI22000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -989,7 +988,7 @@ namespace SI22000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -1013,7 +1012,7 @@ namespace SI22000
             {
                 OnLUpd_DatetimeChanging(value);
                 ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                _LUpd_Datetime = StructuralObject.SetValidValue(value, "LUpd_Datetime");
                 ReportPropertyChanged("LUpd_Datetime");
                 OnLUpd_DatetimeChanged();
             }
@@ -1037,7 +1036,7 @@ namespace SI22000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -1061,7 +1060,7 @@ namespace SI22000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -1087,7 +1086,7 @@ namespace SI22000
                 {
                     OnTaskIDChanging(value);
                     ReportPropertyChanging("TaskID");
-                    _TaskID = StructuralObject.SetValidValue(value);
+                    _TaskID = StructuralObject.SetValidValue(value, "TaskID");
                     ReportPropertyChanged("TaskID");
                     OnTaskIDChanged();
                 }
@@ -1112,7 +1111,7 @@ namespace SI22000
             {
                 OnParm00Changing(value);
                 ReportPropertyChanging("Parm00");
-                _Parm00 = StructuralObject.SetValidValue(value, true);
+                _Parm00 = StructuralObject.SetValidValue(value, true, "Parm00");
                 ReportPropertyChanged("Parm00");
                 OnParm00Changed();
             }
@@ -1136,7 +1135,7 @@ namespace SI22000
             {
                 OnParm02Changing(value);
                 ReportPropertyChanging("Parm02");
-                _Parm02 = StructuralObject.SetValidValue(value, true);
+                _Parm02 = StructuralObject.SetValidValue(value, true, "Parm02");
                 ReportPropertyChanged("Parm02");
                 OnParm02Changed();
             }
@@ -1160,7 +1159,7 @@ namespace SI22000
             {
                 OnParm01Changing(value);
                 ReportPropertyChanging("Parm01");
-                _Parm01 = StructuralObject.SetValidValue(value, true);
+                _Parm01 = StructuralObject.SetValidValue(value, true, "Parm01");
                 ReportPropertyChanged("Parm01");
                 OnParm01Changed();
             }
@@ -1171,7 +1170,6 @@ namespace SI22000
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1217,7 +1215,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1236,7 +1234,7 @@ namespace SI22000
                 {
                     OnAppFolIDChanging(value);
                     ReportPropertyChanging("AppFolID");
-                    _AppFolID = StructuralObject.SetValidValue(value, false);
+                    _AppFolID = StructuralObject.SetValidValue(value, false, "AppFolID");
                     ReportPropertyChanged("AppFolID");
                     OnAppFolIDChanged();
                 }
@@ -1263,7 +1261,7 @@ namespace SI22000
                 {
                     OnRoleIDChanging(value);
                     ReportPropertyChanging("RoleID");
-                    _RoleID = StructuralObject.SetValidValue(value, false);
+                    _RoleID = StructuralObject.SetValidValue(value, false, "RoleID");
                     ReportPropertyChanged("RoleID");
                     OnRoleIDChanged();
                 }
@@ -1290,7 +1288,7 @@ namespace SI22000
                 {
                     OnStatusChanging(value);
                     ReportPropertyChanging("Status");
-                    _Status = StructuralObject.SetValidValue(value, false);
+                    _Status = StructuralObject.SetValidValue(value, false, "Status");
                     ReportPropertyChanged("Status");
                     OnStatusChanged();
                 }
@@ -1317,7 +1315,7 @@ namespace SI22000
                 {
                     OnHandleChanging(value);
                     ReportPropertyChanging("Handle");
-                    _Handle = StructuralObject.SetValidValue(value, false);
+                    _Handle = StructuralObject.SetValidValue(value, false, "Handle");
                     ReportPropertyChanged("Handle");
                     OnHandleChanged();
                 }
@@ -1342,7 +1340,7 @@ namespace SI22000
             {
                 OnLangHandleChanging(value);
                 ReportPropertyChanging("LangHandle");
-                _LangHandle = StructuralObject.SetValidValue(value, true);
+                _LangHandle = StructuralObject.SetValidValue(value, true, "LangHandle");
                 ReportPropertyChanged("LangHandle");
                 OnLangHandleChanged();
             }
@@ -1366,7 +1364,7 @@ namespace SI22000
             {
                 OnToStatusChanging(value);
                 ReportPropertyChanging("ToStatus");
-                _ToStatus = StructuralObject.SetValidValue(value, true);
+                _ToStatus = StructuralObject.SetValidValue(value, true, "ToStatus");
                 ReportPropertyChanged("ToStatus");
                 OnToStatusChanged();
             }
@@ -1390,7 +1388,7 @@ namespace SI22000
             {
                 OnProcNameChanging(value);
                 ReportPropertyChanging("ProcName");
-                _ProcName = StructuralObject.SetValidValue(value, true);
+                _ProcName = StructuralObject.SetValidValue(value, true, "ProcName");
                 ReportPropertyChanged("ProcName");
                 OnProcNameChanged();
             }
@@ -1414,7 +1412,7 @@ namespace SI22000
             {
                 OnContentApproveChanging(value);
                 ReportPropertyChanging("ContentApprove");
-                _ContentApprove = StructuralObject.SetValidValue(value, true);
+                _ContentApprove = StructuralObject.SetValidValue(value, true, "ContentApprove");
                 ReportPropertyChanged("ContentApprove");
                 OnContentApproveChanged();
             }
@@ -1438,7 +1436,7 @@ namespace SI22000
             {
                 OnMailSubjectChanging(value);
                 ReportPropertyChanging("MailSubject");
-                _MailSubject = StructuralObject.SetValidValue(value, true);
+                _MailSubject = StructuralObject.SetValidValue(value, true, "MailSubject");
                 ReportPropertyChanged("MailSubject");
                 OnMailSubjectChanged();
             }
@@ -1462,7 +1460,7 @@ namespace SI22000
             {
                 OnMailToChanging(value);
                 ReportPropertyChanging("MailTo");
-                _MailTo = StructuralObject.SetValidValue(value, true);
+                _MailTo = StructuralObject.SetValidValue(value, true, "MailTo");
                 ReportPropertyChanged("MailTo");
                 OnMailToChanged();
             }
@@ -1486,7 +1484,7 @@ namespace SI22000
             {
                 OnMailCCChanging(value);
                 ReportPropertyChanging("MailCC");
-                _MailCC = StructuralObject.SetValidValue(value, true);
+                _MailCC = StructuralObject.SetValidValue(value, true, "MailCC");
                 ReportPropertyChanged("MailCC");
                 OnMailCCChanged();
             }
@@ -1510,7 +1508,7 @@ namespace SI22000
             {
                 OnParam00Changing(value);
                 ReportPropertyChanging("Param00");
-                _Param00 = StructuralObject.SetValidValue(value, true);
+                _Param00 = StructuralObject.SetValidValue(value, true, "Param00");
                 ReportPropertyChanged("Param00");
                 OnParam00Changed();
             }
@@ -1534,7 +1532,7 @@ namespace SI22000
             {
                 OnParam01Changing(value);
                 ReportPropertyChanging("Param01");
-                _Param01 = StructuralObject.SetValidValue(value, true);
+                _Param01 = StructuralObject.SetValidValue(value, true, "Param01");
                 ReportPropertyChanged("Param01");
                 OnParam01Changed();
             }
@@ -1558,7 +1556,7 @@ namespace SI22000
             {
                 OnParam02Changing(value);
                 ReportPropertyChanging("Param02");
-                _Param02 = StructuralObject.SetValidValue(value, true);
+                _Param02 = StructuralObject.SetValidValue(value, true, "Param02");
                 ReportPropertyChanged("Param02");
                 OnParam02Changed();
             }
@@ -1582,7 +1580,7 @@ namespace SI22000
             {
                 OnParam03Changing(value);
                 ReportPropertyChanging("Param03");
-                _Param03 = StructuralObject.SetValidValue(value, true);
+                _Param03 = StructuralObject.SetValidValue(value, true, "Param03");
                 ReportPropertyChanged("Param03");
                 OnParam03Changed();
             }
@@ -1606,7 +1604,7 @@ namespace SI22000
             {
                 OnParam04Changing(value);
                 ReportPropertyChanging("Param04");
-                _Param04 = StructuralObject.SetValidValue(value, true);
+                _Param04 = StructuralObject.SetValidValue(value, true, "Param04");
                 ReportPropertyChanged("Param04");
                 OnParam04Changed();
             }
@@ -1630,7 +1628,7 @@ namespace SI22000
             {
                 OnParam05Changing(value);
                 ReportPropertyChanging("Param05");
-                _Param05 = StructuralObject.SetValidValue(value, true);
+                _Param05 = StructuralObject.SetValidValue(value, true, "Param05");
                 ReportPropertyChanged("Param05");
                 OnParam05Changed();
             }
@@ -1654,7 +1652,7 @@ namespace SI22000
             {
                 OnCrtd_DatetimeChanging(value);
                 ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                _Crtd_Datetime = StructuralObject.SetValidValue(value, "Crtd_Datetime");
                 ReportPropertyChanged("Crtd_Datetime");
                 OnCrtd_DatetimeChanged();
             }
@@ -1678,7 +1676,7 @@ namespace SI22000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -1702,7 +1700,7 @@ namespace SI22000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -1726,7 +1724,7 @@ namespace SI22000
             {
                 OnLUpd_DatetimeChanging(value);
                 ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                _LUpd_Datetime = StructuralObject.SetValidValue(value, "LUpd_Datetime");
                 ReportPropertyChanged("LUpd_Datetime");
                 OnLUpd_DatetimeChanged();
             }
@@ -1750,7 +1748,7 @@ namespace SI22000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -1774,7 +1772,7 @@ namespace SI22000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -1798,7 +1796,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -1822,7 +1820,7 @@ namespace SI22000
             {
                 OnMailApproveChanging(value);
                 ReportPropertyChanging("MailApprove");
-                _MailApprove = StructuralObject.SetValidValue(value, true);
+                _MailApprove = StructuralObject.SetValidValue(value, true, "MailApprove");
                 ReportPropertyChanged("MailApprove");
                 OnMailApproveChanged();
             }
@@ -1846,7 +1844,7 @@ namespace SI22000
             {
                 OnProcContentChanging(value);
                 ReportPropertyChanging("ProcContent");
-                _ProcContent = StructuralObject.SetValidValue(value, true);
+                _ProcContent = StructuralObject.SetValidValue(value, true, "ProcContent");
                 ReportPropertyChanged("ProcContent");
                 OnProcContentChanged();
             }
@@ -1857,7 +1855,6 @@ namespace SI22000
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1901,7 +1898,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1920,7 +1917,7 @@ namespace SI22000
                 {
                     OnAppFolIDChanging(value);
                     ReportPropertyChanging("AppFolID");
-                    _AppFolID = StructuralObject.SetValidValue(value, false);
+                    _AppFolID = StructuralObject.SetValidValue(value, false, "AppFolID");
                     ReportPropertyChanged("AppFolID");
                     OnAppFolIDChanged();
                 }
@@ -1947,7 +1944,7 @@ namespace SI22000
                 {
                     OnRoleIDChanging(value);
                     ReportPropertyChanging("RoleID");
-                    _RoleID = StructuralObject.SetValidValue(value, false);
+                    _RoleID = StructuralObject.SetValidValue(value, false, "RoleID");
                     ReportPropertyChanged("RoleID");
                     OnRoleIDChanged();
                 }
@@ -1974,7 +1971,7 @@ namespace SI22000
                 {
                     OnStatusChanging(value);
                     ReportPropertyChanging("Status");
-                    _Status = StructuralObject.SetValidValue(value, false);
+                    _Status = StructuralObject.SetValidValue(value, false, "Status");
                     ReportPropertyChanged("Status");
                     OnStatusChanged();
                 }
@@ -1999,7 +1996,7 @@ namespace SI22000
             {
                 OnDescrChanging(value);
                 ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
+                _Descr = StructuralObject.SetValidValue(value, true, "Descr");
                 ReportPropertyChanged("Descr");
                 OnDescrChanged();
             }
@@ -2023,7 +2020,7 @@ namespace SI22000
             {
                 OnLangStatusChanging(value);
                 ReportPropertyChanging("LangStatus");
-                _LangStatus = StructuralObject.SetValidValue(value, true);
+                _LangStatus = StructuralObject.SetValidValue(value, true, "LangStatus");
                 ReportPropertyChanged("LangStatus");
                 OnLangStatusChanged();
             }
@@ -2047,7 +2044,7 @@ namespace SI22000
             {
                 OnCrtd_DatetimeChanging(value);
                 ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                _Crtd_Datetime = StructuralObject.SetValidValue(value, "Crtd_Datetime");
                 ReportPropertyChanged("Crtd_Datetime");
                 OnCrtd_DatetimeChanged();
             }
@@ -2071,7 +2068,7 @@ namespace SI22000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -2095,7 +2092,7 @@ namespace SI22000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -2119,7 +2116,7 @@ namespace SI22000
             {
                 OnLUpd_DatetimeChanging(value);
                 ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                _LUpd_Datetime = StructuralObject.SetValidValue(value, "LUpd_Datetime");
                 ReportPropertyChanged("LUpd_Datetime");
                 OnLUpd_DatetimeChanged();
             }
@@ -2143,7 +2140,7 @@ namespace SI22000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -2167,7 +2164,7 @@ namespace SI22000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -2191,7 +2188,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -2202,7 +2199,6 @@ namespace SI22000
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -2250,7 +2246,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2269,7 +2265,7 @@ namespace SI22000
                 {
                     OnYearNbrChanging(value);
                     ReportPropertyChanging("YearNbr");
-                    _YearNbr = StructuralObject.SetValidValue(value, false);
+                    _YearNbr = StructuralObject.SetValidValue(value, false, "YearNbr");
                     ReportPropertyChanged("YearNbr");
                     OnYearNbrChanged();
                 }
@@ -2296,7 +2292,7 @@ namespace SI22000
                 {
                     OnCycleNbrChanging(value);
                     ReportPropertyChanging("CycleNbr");
-                    _CycleNbr = StructuralObject.SetValidValue(value, false);
+                    _CycleNbr = StructuralObject.SetValidValue(value, false, "CycleNbr");
                     ReportPropertyChanged("CycleNbr");
                     OnCycleNbrChanged();
                 }
@@ -2321,7 +2317,7 @@ namespace SI22000
             {
                 OnStartDateChanging(value);
                 ReportPropertyChanging("StartDate");
-                _StartDate = StructuralObject.SetValidValue(value);
+                _StartDate = StructuralObject.SetValidValue(value, "StartDate");
                 ReportPropertyChanged("StartDate");
                 OnStartDateChanged();
             }
@@ -2345,7 +2341,7 @@ namespace SI22000
             {
                 OnEndDateChanging(value);
                 ReportPropertyChanging("EndDate");
-                _EndDate = StructuralObject.SetValidValue(value);
+                _EndDate = StructuralObject.SetValidValue(value, "EndDate");
                 ReportPropertyChanged("EndDate");
                 OnEndDateChanged();
             }
@@ -2369,7 +2365,7 @@ namespace SI22000
             {
                 OnLUpd_DateTimeChanging(value);
                 ReportPropertyChanging("LUpd_DateTime");
-                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                _LUpd_DateTime = StructuralObject.SetValidValue(value, "LUpd_DateTime");
                 ReportPropertyChanged("LUpd_DateTime");
                 OnLUpd_DateTimeChanged();
             }
@@ -2393,7 +2389,7 @@ namespace SI22000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -2417,7 +2413,7 @@ namespace SI22000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -2441,7 +2437,7 @@ namespace SI22000
             {
                 OnCrtd_DateTimeChanging(value);
                 ReportPropertyChanging("Crtd_DateTime");
-                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                _Crtd_DateTime = StructuralObject.SetValidValue(value, "Crtd_DateTime");
                 ReportPropertyChanged("Crtd_DateTime");
                 OnCrtd_DateTimeChanged();
             }
@@ -2465,7 +2461,7 @@ namespace SI22000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -2489,7 +2485,7 @@ namespace SI22000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -2513,7 +2509,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -2537,7 +2533,7 @@ namespace SI22000
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, false);
+                _Status = StructuralObject.SetValidValue(value, false, "Status");
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -2561,7 +2557,7 @@ namespace SI22000
             {
                 OnWorkingDayChanging(value);
                 ReportPropertyChanging("WorkingDay");
-                _WorkingDay = StructuralObject.SetValidValue(value);
+                _WorkingDay = StructuralObject.SetValidValue(value, "WorkingDay");
                 ReportPropertyChanged("WorkingDay");
                 OnWorkingDayChanged();
             }
@@ -2572,7 +2568,6 @@ namespace SI22000
 
         #endregion
 
-    
     }
 
     #endregion
@@ -2602,7 +2597,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2619,7 +2614,7 @@ namespace SI22000
             {
                 OnToStatusChanging(value);
                 ReportPropertyChanging("ToStatus");
-                _ToStatus = StructuralObject.SetValidValue(value, true);
+                _ToStatus = StructuralObject.SetValidValue(value, true, "ToStatus");
                 ReportPropertyChanged("ToStatus");
                 OnToStatusChanged();
             }
@@ -2643,7 +2638,7 @@ namespace SI22000
             {
                 OnCodeChanging(value);
                 ReportPropertyChanging("Code");
-                _Code = StructuralObject.SetValidValue(value, false);
+                _Code = StructuralObject.SetValidValue(value, false, "Code");
                 ReportPropertyChanged("Code");
                 OnCodeChanged();
             }
@@ -2667,7 +2662,7 @@ namespace SI22000
             {
                 OnDescrChanging(value);
                 ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
+                _Descr = StructuralObject.SetValidValue(value, true, "Descr");
                 ReportPropertyChanged("Descr");
                 OnDescrChanged();
             }
@@ -2703,7 +2698,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2720,7 +2715,7 @@ namespace SI22000
             {
                 OnCodeChanging(value);
                 ReportPropertyChanging("Code");
-                _Code = StructuralObject.SetValidValue(value, false);
+                _Code = StructuralObject.SetValidValue(value, false, "Code");
                 ReportPropertyChanged("Code");
                 OnCodeChanged();
             }
@@ -2744,7 +2739,7 @@ namespace SI22000
             {
                 OnDescrChanging(value);
                 ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
+                _Descr = StructuralObject.SetValidValue(value, true, "Descr");
                 ReportPropertyChanged("Descr");
                 OnDescrChanged();
             }
@@ -2788,7 +2783,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2805,7 +2800,7 @@ namespace SI22000
             {
                 OnCycleNbrChanging(value);
                 ReportPropertyChanging("CycleNbr");
-                _CycleNbr = StructuralObject.SetValidValue(value, false);
+                _CycleNbr = StructuralObject.SetValidValue(value, false, "CycleNbr");
                 ReportPropertyChanged("CycleNbr");
                 OnCycleNbrChanged();
             }
@@ -2829,7 +2824,7 @@ namespace SI22000
             {
                 OnStartDateChanging(value);
                 ReportPropertyChanging("StartDate");
-                _StartDate = StructuralObject.SetValidValue(value);
+                _StartDate = StructuralObject.SetValidValue(value, "StartDate");
                 ReportPropertyChanged("StartDate");
                 OnStartDateChanged();
             }
@@ -2853,7 +2848,7 @@ namespace SI22000
             {
                 OnEndDateChanging(value);
                 ReportPropertyChanging("EndDate");
-                _EndDate = StructuralObject.SetValidValue(value);
+                _EndDate = StructuralObject.SetValidValue(value, "EndDate");
                 ReportPropertyChanged("EndDate");
                 OnEndDateChanged();
             }
@@ -2877,7 +2872,7 @@ namespace SI22000
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, false);
+                _Status = StructuralObject.SetValidValue(value, false, "Status");
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -2901,7 +2896,7 @@ namespace SI22000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
+                _tstamp = StructuralObject.SetValidValue(value, false, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -2925,7 +2920,7 @@ namespace SI22000
             {
                 OnWorkingDayChanging(value);
                 ReportPropertyChanging("WorkingDay");
-                _WorkingDay = StructuralObject.SetValidValue(value);
+                _WorkingDay = StructuralObject.SetValidValue(value, "WorkingDay");
                 ReportPropertyChanged("WorkingDay");
                 OnWorkingDayChanged();
             }
@@ -2961,7 +2956,7 @@ namespace SI22000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2978,7 +2973,7 @@ namespace SI22000
             {
                 OnTextValChanging(value);
                 ReportPropertyChanging("TextVal");
-                _TextVal = StructuralObject.SetValidValue(value, false);
+                _TextVal = StructuralObject.SetValidValue(value, false, "TextVal");
                 ReportPropertyChanged("TextVal");
                 OnTextValChanged();
             }
@@ -2993,5 +2988,4 @@ namespace SI22000
 
     #endregion
 
-    
 }
