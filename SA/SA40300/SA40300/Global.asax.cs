@@ -29,17 +29,9 @@ namespace SA40300
         }
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            //Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
-            //Session["DBApp"] = Current.DBApp = "eBiz4DWebApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "HQH00000";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
-
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();ND_test_eSky4D
+            Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.FormatDate = "yyyy-MM-dd";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -47,7 +39,7 @@ namespace SA40300
             acc.Update = true;
            
             Session["SA40300"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_test_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";

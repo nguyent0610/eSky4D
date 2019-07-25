@@ -231,7 +231,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\Screen\Copy of SA40300.debug.js" />
     <Content Include="Scripts\Screen\SA40300.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -278,7 +277,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>40509</DevelopmentServerPort>
+          <DevelopmentServerPort>2768</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

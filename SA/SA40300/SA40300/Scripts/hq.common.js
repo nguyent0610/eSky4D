@@ -1,4 +1,230 @@
-﻿if (!Array.prototype.indexOf) {
+﻿// Add event listener offline to detect network loss.
+
+
+//// Add event listener online to detect network recovery.
+//window.addEventListener("online", function (e) {
+//    Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
+//});
+var SummaryMess = function (mess, respone, store) {
+    Ext.Msg.show({
+        title: "Error"
+                       , buttons: { cancel: 'Ok', yes: 'ShowDetail' }
+                       , msg: 'Sorry, an error occurred while processing your request.'
+                       , fn: function (buttonId, text) {
+                           switch (buttonId) {
+                               case "yes": showDetailError(mess, respone, store)
+                           }
+                       }
+    });
+}
+var showDetailError = function (mess, response, store) {
+    if (store) {
+        var bodySize = Ext.getBody().getViewSize(),
+          width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+          height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+          win;
+        win = new Ext.window.Window({
+            id: "winError",
+            modal: true,
+            width: width,
+            height: height,
+            title: "Request Failure",
+            layout: "fit",
+            maximizable: false, //default is true
+            closable: true, //default is true
+            items: [{
+                xtype: "container",
+                layout: {
+                    type: "vbox",
+                    align: "stretch"
+                },
+                items: [
+                    {
+                        xtype: "container",
+                        height: 42,
+                        layout: "absolute",
+                        defaultType: "label",
+                        items: [
+                            {
+                                xtype: "component",
+                                x: 5,
+                                y: 5,
+                                html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                            },
+                            {
+                                x: 42,
+                                y: 6,
+                                html: "<b>Status Code: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 6,
+                                text: response.status
+                            },
+                            {
+                                x: 42,
+                                y: 25,
+                                html: "<b>Status Text: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 25,
+                                text: response.statusText
+                            }
+                        ]
+                    },
+                    {
+                        flex: 1,
+                        itemId: "__ErrorMessageEditor",
+                        xtype: "htmleditor",
+                        value: mess,
+                        readOnly: true,
+                        enableAlignments: false,
+                        enableColors: false,
+                        enableFont: false,
+                        enableFontSize: false,
+                        enableFormat: false,
+                        enableLinks: false,
+                        enableLists: false,
+                        enableSourceEdit: false
+                    }
+                ]
+            }]
+        });
+
+        win.show();
+    } else {
+        Ext.Msg.alert(HQ.common.getLang('Error'), mess);
+    }
+}
+Ext.data.AbstractStore.override({
+    onProxyException: function (proxy, response, operation) {
+        if (response != undefined && response.responseText != undefined && response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+            if (parent != null) {
+                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                if (App.frmMain) App.frmMain.unmask();
+            }
+            else {
+                Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                if (App.frmMain) App.frmMain.unmask();
+            }
+        }
+        else {
+            var error = operation.getError(),
+                message;
+
+            if (!Ext.isDefined(error)) {
+                error = Ext.decode(response.responseText).message;
+            }
+
+            message = Ext.isString(error) ? error : ("(" + error.status + ")" + error.statusText);
+
+            this.fireEvent("exception", proxy, response, operation);
+
+            if (Ext.net.DirectEvent.fireEvent("ajaxrequestexception", response, { "errorMessage": message }, null, null, null, null, operation) !== false) {
+                if (this.showWarningOnFailure !== false) {
+                    SummaryMess(response.responseText, response, true);
+                    //HQ.message.show('1712181724', response.responseText, '', false);
+                    //Ext.net.DirectEvent.showFailure(response, response.responseText);
+                }
+            }
+        }
+    }
+});
+Ext.override(Ext.net.DirectEvent, {
+    showFailure: function (response, errorMsg) {
+        var bodySize = Ext.getBody().getViewSize(),
+            width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+            height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+            win;
+        if (Ext.isEmpty(errorMsg)) {
+            errorMsg = response.responseText;
+        }
+        if (response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+            if (parent != null)
+                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+        }
+        else
+            if (response.status == 500 || response.status == 0) {
+                //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));		
+                SummaryMess(response.responseText, response, true);
+            }
+            else {
+                win = new Ext.window.Window({
+                    id: "winError",
+                    modal: true,
+                    width: width,
+                    height: height,
+                    title: "Request Failure",
+                    layout: "fit",
+                    maximizable: false, //default is true
+                    closable: true, //default is true
+                    items: [{
+                        xtype: "container",
+                        layout: {
+                            type: "vbox",
+                            align: "stretch"
+                        },
+                        items: [
+                            {
+                                xtype: "container",
+                                height: 42,
+                                layout: "absolute",
+                                defaultType: "label",
+                                items: [
+                                    {
+                                        xtype: "component",
+                                        x: 5,
+                                        y: 5,
+                                        html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                                    },
+                                    {
+                                        x: 42,
+                                        y: 6,
+                                        html: "<b>Status Code: </b>"
+                                    },
+                                    {
+                                        x: 125,
+                                        y: 6,
+                                        text: response.status
+                                    },
+                                    {
+                                        x: 42,
+                                        y: 25,
+                                        html: "<b>Status Text: </b>"
+                                    },
+                                    {
+                                        x: 125,
+                                        y: 25,
+                                        text: response.statusText
+                                    }
+                                ]
+                            },
+                            {
+                                flex: 1,
+                                itemId: "__ErrorMessageEditor",
+                                xtype: "htmleditor",
+                                value: errorMsg,
+                                readOnly: true,
+                                enableAlignments: false,
+                                enableColors: false,
+                                enableFont: false,
+                                enableFontSize: false,
+                                enableFormat: false,
+                                enableLinks: false,
+                                enableLists: false,
+                                enableSourceEdit: false
+                            }
+                        ]
+                    }]
+                });
+
+                win.show();
+            }
+    }
+});
+if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -24,6 +250,12 @@ if (typeof String.prototype.trim !== 'function') {
     }
 }
 
+if (typeof String.prototype.unsign !== 'function') {
+    String.prototype.unsign = function () {
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/ý|ỳ|ỷ|ỹ|ỵ/g, "y").replace(/ú|ù|ủ|ũ|ụ|ứ|ừ|ử|ữ|ự/g, "u").replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/g, "o")
+    }
+}
+
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)
@@ -31,17 +263,107 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+
 Date.prototype.addDays = function (days) {
     this.setDate(this.getDate() + days);
     return this;
 };
+Date.prototype.equal = function (days) {
+    if (Ext.Date.format(this, 'Y-m-d') == Ext.Date.format(days, 'Y-m-d'))
+        return true;
+    else return false;
+};
+Date.prototype.less = function (days) {
+    if (Ext.Date.format(this, 'Y-m-d') < Ext.Date.format(days, 'Y-m-d'))
+        return true;
+    else return false;
+};
+Date.prototype.greater = function (days) {
+    if (Ext.Date.format(this, 'Y-m-d') > Ext.Date.format(days, 'Y-m-d'))
+        return true;
+    else return false;
+
+};
+Date.prototype.greaterOrEqual = function (days) {
+    if (Ext.Date.format(this, 'Y-m-d') >= Ext.Date.format(days, 'Y-m-d'))
+        return true;
+    else return false;
+
+};
+Date.prototype.lessOrEqual = function (days) {
+    if (Ext.Date.format(this, 'Y-m-d') <= Ext.Date.format(days, 'Y-m-d'))
+        return true;
+    else return false;
+
+};
+Date.prototype.getFromFormat = function (format) {
+    var yyyy = this.getFullYear().toString();
+    format = format.replace(/yyyy/g, yyyy)
+    var mm = (this.getMonth() + 1).toString();
+    format = format.replace(/MM/g, (mm[1] ? mm : "0" + mm[0]));
+    var dd = this.getDate().toString();
+    format = format.replace(/dd/g, (dd[1] ? dd : "0" + dd[0]));
+    var hh = this.getHours().toString();
+    format = format.replace(/hh/g, (hh[1] ? hh : "0" + hh[0]));
+    var ii = this.getMinutes().toString();
+    format = format.replace(/mm/g, (ii[1] ? ii : "0" + ii[0]));
+    var ss = this.getSeconds().toString();
+    format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
+    return format;
+};
+
+Number.prototype.format = function (n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+///vi du 
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
 var HQ = {
     store: {
         isChange: function (store) {
             if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
-                || store.getChangedData().Updated != undefined
-                || store.getChangedData().Deleted != undefined) {
+                || store.getChangedData().Updated != undefined) {
                 return true;
+            } else if (store.getChangedData().Deleted != undefined) {
+                for (var i = 0; i < store.getChangedData().Deleted.length; i++) {
+                    if (store.getChangedData().Deleted[i].tstamp != '') return true;
+                }
+                return false;
+            }
+            else {
+                return false;
+            }
+        },
+        isGridChange: function (store, keys) { // Kiểm tra dòng thêm mới đã đủ key thì đánh dấu là đã thay đổi
+            if (store.getChangedData().Updated != undefined) {
+                return true;
+            }
+            else if (store.getChangedData().Deleted != undefined) {
+                for (var i = 0; i < store.getChangedData().Deleted.length; i++) {
+                    if (store.getChangedData().Deleted[i].tstamp != '') return true;
+                }
+            }
+            if (store.getChangedData().Created != undefined) {
+                if (store.getChangedData().Created.length > 1) {
+                    return true;
+                }
+                else {
+                    var itmCount = keys.length;
+                    var match = 0;
+                    for (var idx = 0; idx < itmCount; idx++) {
+                        if (store.getChangedData().Created[0][keys[idx]]) {
+                            match++;
+                        }
+                    }
+                    if (match == itmCount) {
+                        return true;
+                    }
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -69,6 +391,7 @@ var HQ = {
                 }
             }
         },
+        // Commit record
         insertRecord: function (store, keys, newRecord, commit) {
             var flat = store.findBy(function (record, id) {
                 if (keys.constructor === Array) {
@@ -88,7 +411,7 @@ var HQ = {
                 store.insert(store.getCount(), newRecord);
             }
             if (commit != undefined && commit == true) {
-                store.commitChanges();
+                store.data.items[store.data.length - 1].commit();
             }
         },
         getData: function (store, skip) {
@@ -100,88 +423,49 @@ var HQ = {
         getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
             if (isEqual == undefined || isEqual == true) {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             } else {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] == values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             }
         },
         findInStore: function (store, fields, values) {
             var data;
-            if (store.allData) {
-                store.allData.each(function (item) {
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
-                            intT++;
-                        }
-                    }
-                    if (intT == fields.length) {
-                        data = item.data;
-                        return false;
-                    }
-                });
-            }
-            else {
-                store.data.each(function (item) {
-                    var intT = 0;
-                    for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -195,25 +479,16 @@ var HQ = {
         },
         findRecord: function (store, fields, values) {
             var data;
-            if (store.allData) {
-                store.allData.each(function (item) {
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
-                            intT++;
-                        }
-                    }
-                    if (intT == fields.length) {
-                        data = item;
-                        return false;
-                    }
-                });
-            }
-            else {
-                store.data.each(function (item) {
-                    var intT = 0;
-                    for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -269,6 +544,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -285,12 +561,41 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
             }
             return true;
-        }
+        },
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
+        },
+        checkData: function (store, fields, values) {
+            var bData = false;
+            var allData = store.snapshot || store.allData || store.data;
+            for (var j = 0; j < allData.items.length; j++) {
+                item = allData.items[j];
+                var isb = false;
+                if (fields != null) {
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.data[fields[i]] != values[i]) {
+                            isb = true;
+                            break;
+                        }
+                    }
+                }
+                bData = isb;
+                return bData;
+            }
+            return bData;
+        },
     },
     combo: {
         first: function (cbo, isChange) {
@@ -363,7 +668,6 @@ var HQ = {
             }
 
         },
-
         selectAll: function (cbo) {
             var value = [];
             cbo.setValue('');
@@ -432,6 +736,10 @@ var HQ = {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
                         if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            var record = HQ.store.findRecord(store, keys, ['']);
+                            if (record != undefined) {
+                                store.remove(record);
+                            }
                             HQ.store.insertBlank(store, keys);
                         }
                         HQ.grid.last(grd);
@@ -455,6 +763,10 @@ var HQ = {
             }
             else {
                 if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    var record = HQ.store.findRecord(store, keys, ['']);
+                    if (record != undefined) {
+                        store.remove(record);
+                    }
                     HQ.store.insertBlank(store, keys);
                 }
                 HQ.grid.last(grd);
@@ -474,6 +786,55 @@ var HQ = {
                 }
             }
         },
+
+        insertAndFocusBlankRow: function (grid, fields, values, focusColumnIndex) {
+            var record;
+            var allData = grid.store.snapshot || grid.store.allData || grid.store.data;
+            var idx = -1;
+            if (allData) {
+                allData.each(function (item) {
+                    var intT = 0;
+                    idx++;
+                    for (var i = 0; i < fields.length; i++) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        record = item;
+                        return false;
+                    }
+                });
+            }
+            if (!record) {
+                HQ.store.insertBlank(grid.store, fields);
+            } else {
+                var page = Math.floor(idx / grid.store.pageSize) + 1;
+                if (page > 0) {
+                    grid.store.loadPage(page);
+                }
+            }
+            index = 1;
+            if (focusColumnIndex != undefined) {
+                var index = HQ.grid.findColumnIndex(grid.columns, focusColumnIndex);
+                if (index == -1) {
+                    index = 1;
+                }
+            }
+            setTimeout(function () {
+                if (grid.store.data.length > 0) {
+                    grid.editingPlugin.startEditByPosition({
+                        row: grid.store.data.length - 1,
+                        column: index
+                    });
+                }
+            }, 400);
+        },
+
         first: function (grd) {
             grd.getSelectionModel().select(0);
         },
@@ -491,56 +852,38 @@ var HQ = {
             store.pageSize = parseInt(combo.getValue(), 10);
             store.loadPage(1);
         },
+
         indexSelect: function (grd) {
             var index = '';
-            var arr = grd.getSelectionModel().getSelection();
+            var allData = grd.store.allData || grd.store.data;
+            var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+                index += (allData.indexOfKey(itm.internalId) + 1) + ',';
             });
-
             return index.substring(0, index.length - 1);
         },
+
         checkDuplicate: function (grd, row, keys) {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            if (store.data) {
-                for (var i = 0; i < store.data.items.length; i++) {
-                    var record = store.data.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        }
+            var allData = grd.store.allData || grd.store.data;
+            for (var i = 0; i < allData.items.length; i++) {
+                var record = allData.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]] != undefined) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += (row.record.data[keys[jkey]] != undefined ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
                     }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
                 }
-            }
-            else {
-                for (var i = 0; i < store.allData.items.length; i++) {
-                    var record = store.allData.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        }
-                    }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
-                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
             }
             return found;
         },
@@ -555,14 +898,14 @@ var HQ = {
             if (keys.indexOf(row.field) == -1) {
 
                 for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (row.record.data[keys[jkey]] == "") {
+                    if (!row.record.data[keys[jkey]]) {
                         return false;
                     }
                 }
             }
             if (keys.indexOf(row.field) != -1) {
                 for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (row.record.data[keys[jkey]] == "") return true;
+                    if (!row.record.data[keys[jkey]]) return true;
                 }
                 return false;
             }
@@ -579,7 +922,8 @@ var HQ = {
             return true;
         },
         checkBeforeEdit: function (e, keys) {
-            if (!HQ.isUpdate) return false;
+            if (!HQ.isUpdate && e.record.data.tstamp) return false;
+            if (!HQ.isInsert && !e.record.data.tstamp) return false;
             if (keys.indexOf(e.field) != -1) {
                 if (e.record.data.tstamp)
                     return false;
@@ -595,20 +939,38 @@ var HQ = {
                 record.reject();
             }
         },
-        checkValidateEdit: function (grd, e, keys) {
+        checkValidateEdit: function (grd, e, keys, isCheckSpecialChar) {
             if (keys.indexOf(e.field) != -1) {
-                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
-                    HQ.message.show(20140811, e.column.text);
-                    return false;
+                var regex = /^(\w*(\d|([a-zA-Z])|-|\_))*$/
+                if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+                if (isCheckSpecialChar) {
+                    if (e.value)
+                        if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                            HQ.message.show(20140811, e.column.text);
+                            return false;
+                        }
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
 
             }
         },
+
+        checkValidateEditDG: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
+                    return false;
+                }
+            }
+        },
+
         checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
@@ -619,7 +981,8 @@ var HQ = {
             var columns = grd.columns;
             arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
-                grd.columns[index].hide();
+                if (index != -1)
+                    grd.columns[index].hide();
 
             });
         },
@@ -627,7 +990,8 @@ var HQ = {
             var columns = grd.columns;
             arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
-                grd.columns[index].show();
+                if (index != -1)
+                    grd.columns[index].show();
             });
         },
         findColumnIndex: function (columns, dataIndex) {
@@ -636,6 +1000,53 @@ var HQ = {
                 if (columns[index].dataIndex == dataIndex) { break; }
             }
             return index == columns.length ? -1 : index;
+        },
+        // Get column text by dataIndex
+        findColumnNameByIndex: function (columns, dataIndex) {
+            var index = HQ.grid.findColumnIndex(columns, dataIndex);
+            return index != -1 ? columns[index].text : dataIndex;
+        },
+
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
+        },
+        filterString: function (record, item) {
+            var val = record.get(item.dataIndex);
+            if (typeof val != 'string') {
+                return (item.getValue().length === 0);
+            }
+            return val.toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
+        },
+        filterStringExact: function (record, item) {
+            if (item) {
+                var val = record.get(item.dataIndex);
+                if (typeof val != 'string') {
+                    return (item.getValue().length === 0);
+                }
+                if (item.getValue().constructor === Array) {
+                    return val.toLowerCase().unsign() == (item.getValue()[0].toLowerCase().unsign());
+                }
+                else
+                    return val.toLowerCase().unsign() == (item.getValue().toLowerCase().unsign());
+            } return false;
+        },
+        filterComboDescr: function (record, item, store, code, descr) {
+            var val = record.get(item.dataIndex);
+            if (typeof val != 'string') {
+                return (item.getValue().length === 0);
+            }
+            store.clearFilter();
+            var obj = store.findRecord(code, val);
+            if (obj) {
+                return obj.data[descr].toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
+            }
+            return val.toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
         }
     },
     message: {
@@ -646,6 +1057,12 @@ var HQ = {
                     success: function (result) {
                     },
                     failure: function (msg, data) {
+                        if (msg.indexOf('SESSIONTIMEOUT') > -1) {
+                            if (parent != null)
+                                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        }
                     }
                 });
             } else {
@@ -653,6 +1070,12 @@ var HQ = {
                     success: function (result) {
                     },
                     failure: function (msg, data) {
+                        if (msg.indexOf('SESSIONTIMEOUT') > -1) {
+                            if (parent != null)
+                                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        }
                     }
                 });
             }
@@ -666,30 +1089,65 @@ var HQ = {
                         HQ.message.show(obj.result.code, obj.result.parm, obj.result.fn, array);
                     }
                     else if (obj.result.type == "error") {
-                        Ext.Msg.alert('Error', obj.result.errorMsg);
+                        if (obj.result.errorMsg.indexOf("Timeout") > -1)
+                            Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
+                        else SummaryMess(obj.result.errorMsg);
+                        //HQ.message.show('1712181724', [obj.result.errorMsg]);
+                        //Ext.Msg.alert('99', obj.result.errorMsg);
+                    }
+                    else if (obj.response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
                     }
                 } else if (obj.responseText != undefined) {
                     var data = Ext.decode(obj.responseText);
-                    if (data.type == 'message') {
+                    if (obj.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                    }
+                    else if (data.type == 'message') {
                         HQ.message.show(data.code, data.parm, data.fn, array);
                     }
                     else if (data.type == "error") {
-                        Ext.Msg.alert('Error', obj.errorMsg);
+                        if (obj.errorMsg.indexOf("Timeout") > -1)
+                            Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
+                        else SummaryMess(obj.errorMsg);
+                        //HQ.message.show('1712181724', [obj.errorMsg]);
+                        //Ext.Msg.alert('99', obj.errorMsg);
                     }
                     else {
-                        Ext.Msg.alert('Error', data);
+                        //Ext.Msg.alert('Error', data);
+                        SummaryMess(obj.errorMsg);
+                        //HQ.message.show('1712181724', [obj.errorMsg]);
                     }
 
-                } else if (obj.response.responseText != undefined) {
-                    Ext.Msg.alert('Error', obj.response.responseText);
+                } else if (obj.response.responseText != undefined && obj.response.responseText != '') {
+                    if (obj.response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                    }
+                    else if (obj.response.responseText.indexOf('Blocked a frame with origin') > -1) {
+                        SummaryMess(obj.response.responseText);
+                        //HQ.message.show('1712181724', [obj.response.responseText]);
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
+                    }
+                    else Ext.Msg.alert('Error', obj.response.responseText);
                 } else {
                     if (obj.failureType != undefined) {
-                        Ext.Msg.alert('Error', HQ.common.getLang("FailedConnectServer"));
+                        //Ext.Msg.alert('99', obj.response.responseText);
+                        //HQ.message.show('99', obj.response.responseText);
                     }
                 }
             }
             catch (e) {
-                Ext.Msg.alert('Error', errorMsg);
+                SummaryMess(errorMsg);
+
             }
 
         }
@@ -747,6 +1205,12 @@ var HQ = {
                             itm.setReadOnly(lock)
 
                     }
+                    else if (typeof (itm.disable) != "undefined" && itm.xtype == 'button') {
+                        if (itm.getTag() != "X")
+                            if (lock)
+                                itm.disable()
+                            else itm.enable()
+                    }
                     HQ.common.lockItem(itm, lock);
                 });
             }
@@ -761,14 +1225,18 @@ var HQ = {
             if (form == undefined) {
                 if (busy) {
                     App.frmMain.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     App.frmMain.body.unmask();
+                    HQ.isBusy = false;
                 }
             } else {
                 if (busy) {
                     form.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     form.body.unmask();
+                    HQ.isBusy = false;
                 }
             }
 
@@ -810,8 +1278,39 @@ var HQ = {
             }
             return false;
         }
+        , findControlByDataIndex: function (ctr, value) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.dataIndex == value) {
+                        HQ.findItem = itm;
+                        return HQ.findItem;
+                    }
+                    else HQ.common.findControlByDataIndex(itm, value);
+                });
+            }
+            return HQ.findItem;
+        }
     },
     util: {
+        checkSpecialChar: function (value) {
+            var regex = /^[a-zA-Z0-9_-]+$/; //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/ 20160913: Cho phép nhập ký tự '-'
+            if (!HQ.util.passNull(value.toString()).match(regex))
+                return false;
+            for (var i = 0, n = value.length; i < n; i++) {
+                if (value.charCodeAt(i) > 127) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        checkAccessRight: function () {
+            if (HQ.isInsert == false && App.menuClickbtnNew)
+                App.menuClickbtnNew.disable();
+            if (HQ.isDelete == false && App.menuClickbtnDelete)
+                App.menuClickbtnDelete.disable();
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false && App.menuClickbtnSave)
+                App.menuClickbtnSave.disable();
+        },
         toBool: function (parm) {
             if (parm.toLowerCase() == 'false') {
                 return false;
@@ -877,7 +1376,7 @@ var HQ = {
             if ((HQ.util.passNull(value)).match(regex)) {
                 return true;
             } else {
-                HQ.message.show(09112014, '', null);
+                HQ.message.show(9112014, '', null);
                 return false;
             }
         },
@@ -889,6 +1388,15 @@ var HQ = {
         },
         mathCeil: function (value, exp) {
             return decimalAdjust('ceil', value, exp);
+        },
+
+        checkStrUnicode: function (str) {
+            for (var i = 0, n = str.length; i < n; i++) {
+                if (str.charCodeAt(i) > 127) {
+                    return true;
+                }
+            }
+            return false;
         }
 
     },
@@ -903,6 +1411,17 @@ var HQ = {
                                     HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
                                     isValid = false;
                                     return false;
+                                }
+                                else {//PhucHD check value có chứa mã HTML
+                                    if (item.value) {
+                                        var regex = /<[/a-zA-Z][\s\S]*>/
+                                        if (HQ.util.passNull(item.value.toString()).match(regex)) {
+                                            invalidField = item.id;
+                                            HQ.message.show(2016101010, item.fieldLabel, 'HQ.util.focusControl');
+                                            isValid = false;
+                                            return false;
+                                        }
+                                    }
                                 }
                             })
             return isValid;
@@ -942,47 +1461,96 @@ var HQ = {
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
 var FilterCombo = function (control, stkeyFilter) {
+    var filtersAux = [];
     if (control) {
+        control.suspendEvents();
         var store = control.getStore();
-        var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
+        store.suspendEvents();
+        var valueArray = HQ.util.passNull(control.getRawValue()).toString().split(control.delimiter);
+        var value = '';
+        if (valueArray.length > 0) value = valueArray[valueArray.length - 1];//value.split(',')[value.split(',').length-1];
         if (store) {
-            var filtersAux = [];
             // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    if (item.property && item.value)
+                        filtersAux.push(item);
+                }
+            });
+            store.clearFilter();
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
+            if (control.valueModels == null || control.valueModels.length == 0) {
+                store.filter(function (record, id) {
+                    var isMap = false;
+                    var strFind = '';
+                    if (record) {
+                        stkeyFilter.split(',').forEach(function (key) {
+                            if (key) {
+                                if ((typeof HQ.util.passNull(value)) == "string") {
+                                    if (record.data[key]) {
+                                        strFind += record.data[key].toString().toLowerCase().unsign();
+                                    }
+                                }
+                            }
+                        });
+                        var valuearr = value.split(':');
+                        isMap = true;
+                        for (var i = 0; i < valuearr.length; i++) {
+                            var fieldData = strFind.indexOf(HQ.util.passNull(valuearr[i]).toLowerCase().unsign());
+                            if (fieldData < 0) {
+                                isMap = false;
+                                return;
+                            }
+                        }
+                        return isMap;
+                    }
+                    else return false;
+                });
+            }
+
+        }
+        store.resumeEvents();
+        control.resumeEvents();
+        control.getPicker().refresh();
+        control.expand();
+    }
+};
+
+function FilterCombo_BeforeSelect(control, itemselect) {
+    if (control.multiSelect && control.hasFocus)//gán lại giá trị đã chọn
+    {
+        var filtersAux = [];
+        var store = control.store;
+        store.suspendEvents();
+        // get filter
+        if (store.filters)
             store.filters.items.forEach(function (item) {
                 if (item.id != control.id + '-query-filter') {
                     filtersAux.push(item);
                 }
             });
-            store.clearFilter();
-            if (control.valueModels == null || control.valueModels.length == 0) {
-                store.filterBy(function (record) {
-                    if (record) {
-                        var isMap = false;
-                        stkeyFilter.split(',').forEach(function (key) {
-                            if (key) {
-                                if ((typeof HQ.util.passNull(value)) == "string") {
-                                    if (record.data[key]) {
-                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
-                                        if (fieldData > -1) {
-                                            isMap = true;
-                                            return record;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        if (isMap == true) return record
-                    }
-                });
+        store.clearFilter();
+        filtersAux.forEach(function (item) {
+            store.filter(item._id, item._filterValue);
+        });
+        var allData = store.allData || store.data;
+        var valueArray = HQ.util.passNull(control.getRawValue()).toString().split(control.delimiter);
+        var lstRecordSelect = [];
+        allData.each(function (item) {
+            var index = valueArray.indexOf(item.data[control.displayField]);
+            if (index > -1) {
+                lstRecordSelect.push(item.data[control.valueField]);
+                valueArray.splice(index, 1);
+                if (valueArray.length == 0) return;
             }
-            filtersAux.forEach(function (item) {
-                store.filter(item.property, item.value);
-            });
-        }
+        });
+        lstRecordSelect.push(itemselect.data[control.valueField]);
+        control.setValue(lstRecordSelect);
+        store.resumeEvents();
     }
-};
+}
 var loadDefault = function (fileNameStore, cbo) {
     if (fileNameStore.data.items.length > 0) {
         cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));
@@ -1010,29 +1578,6 @@ function decimalAdjust(type, value, exp) {
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
 }
-
-
-
-//////Example Round
-////Math.round10(55.55, -1);   // 55.6
-////Math.round10(55.549, -1);  // 55.5
-////Math.round10(55, 1);       // 60
-////Math.round10(54.9, 1);     // 50
-////Math.round10(-55.55, -1);  // -55.5
-////Math.round10(-55.551, -1); // -55.6
-////Math.round10(-55, 1);      // -50
-////Math.round10(-55.1, 1);    // -60
-////Math.round10(1.005, -2);   // 1.01 -- compare this with Math.round(1.005*100)/100 above
-////// Floor
-////Math.floor10(55.59, -1);   // 55.5
-////Math.floor10(59, 1);       // 50
-////Math.floor10(-55.51, -1);  // -55.6
-////Math.floor10(-51, 1);      // -60
-////// Ceil
-////Math.ceil10(55.51, -1);    // 55.6
-////Math.ceil10(51, 1);        // 60
-////Math.ceil10(-55.59, -1);   // -55.5
-////Math.ceil10(-59, 1);       // -50
 
 //TrungHT override control ext
 Ext.define("NumbercurrencyPrecision", {
@@ -1115,7 +1660,7 @@ Ext.define("ThousandSeparatorNumberField", {
         value = me.parseValue(Ext.util.Format.number(value, format));
         value = me.fixPrecision(value);
         value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
-        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        value = isNaN(value) ? '' : String((value < 0 ? '-' : '') + Ext.util.Format.number(value < 0 ? value * -1 : value, format)).replace('.', me.decimalSeparator);
         return value;
     },
 
