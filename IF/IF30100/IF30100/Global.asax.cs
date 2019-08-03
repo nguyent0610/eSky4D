@@ -42,7 +42,7 @@ namespace IF30100
             Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "cn";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
     }

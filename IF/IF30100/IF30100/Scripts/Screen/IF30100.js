@@ -337,8 +337,9 @@ var ColCheckChoiceColumn_Change = function (value) {
             item.set("Checked", value.checked);
         });
         App.stoChoiceColumn.resumeEvents();
-        if (App.grdstoChoiceColumn && App.grdstoChoiceColumn.view)
-        App.grdstoChoiceColumn.view.refresh();
+        if (App.grdChoiceColumn && App.grdChoiceColumn.view) {
+            App.grdChoiceColumn.view.refresh();
+        }
     }
 };
 

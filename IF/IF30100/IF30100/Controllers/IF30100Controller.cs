@@ -37,7 +37,7 @@ namespace IF30100.Controllers
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
         IF30100SysEntities _eBiz4DSys = Util.CreateObjectContext<IF30100SysEntities>(true,"Sys");
         private JsonResult _logMessage;
-
+        
         public ActionResult Index(string screenNbr)
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
@@ -2292,160 +2292,13 @@ namespace IF30100.Controllers
             return Json(new { success = true, id = fileName, name = name + ".Xlsb" }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc,bool isReadOnly,string id)
+        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc,bool isReadOnly, string id)
         {
             try
             {
-                //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
-                //SelectedRowCollection List0 = JSON.Deserialize<SelectedRowCollection>(data["list0"]);
-                //SelectedRowCollection List1 = JSON.Deserialize<SelectedRowCollection>(data["list1"]);
-                //SelectedRowCollection List2 = JSON.Deserialize<SelectedRowCollection>(data["list2"]);
-                //SelectedRowCollection List3 = JSON.Deserialize<SelectedRowCollection>(data["list3"]);
+                var created = SaveRPTRuning(data, reportNbr);
+                Thread.Sleep(1000);
 
-                var created = new RPTRunning();
-                short bit1 = 1;
-                short bit0 = 0;
-                created.AppPath = "Reports\\";
-                created.BooleanParm00 = data["chk00"].PassNull() != "" ? bit1 : bit0;
-                created.BooleanParm01 = data["chk01"].PassNull() != "" ? bit1 : bit0;
-                created.BooleanParm02 = data["chk02"].PassNull() != "" ? bit1 : bit0;
-                created.BooleanParm03 = data["chk03"].PassNull() != "" ? bit1 : bit0;
-                created.ClientName = Current.UserName;
-                created.CpnyID = Current.CpnyID;
-                created.DateParm00 = Convert.ToDateTime(data["cboDate00"]);
-                created.DateParm01 = Convert.ToDateTime(data["cboDate01"]);
-                created.DateParm02 = Convert.ToDateTime(data["cboDate02"]);
-                created.DateParm03 = Convert.ToDateTime(data["cboDate03"]);
-                created.LangID = Current.LangID;
-                created.LoggedCpnyID = Current.CpnyID;
-                created.MachineName = "Web";
-                created.ReportCap = reportNbr;
-                created.ReportDate = DateTime.Now.ToDateShort();
-                created.ReportID = 0;
-                created.ReportName = reportNbr;
-                created.ReportNbr = reportNbr;
-                created.SelectionFormular = "";
-                created.StringParm00 = data["StringParm00"];
-                created.StringParm01 = data["StringParm01"];
-                created.StringParm02 = data["StringParm02"];
-                created.StringParm03 = data["StringParm03"];
-                created.UserID = Current.UserName;
-
-                _db.RPTRunnings.AddObject(created);
-                _db.SaveChanges();
-
-
-
-                #region//Insert RptParm0 RPTRunningParm0 parm0;
-                int i = 0;
-                if (data["list0"] != null)
-                    foreach (var ID in data["list0"].PassNull().TrimEnd(',').Split(','))
-                    {
-                        if (ID.PassNull() != "")
-                        {
-                            i++;
-                            var parm0 = new RPTRunningParm0();
-                            parm0.ReportNbr = created.ReportNbr;
-                            parm0.ReportID = created.ReportID;
-                            parm0.MachineName = "Web";
-                            parm0.LineRef = i.ToString();
-                            parm0.StringParm = ID;
-                            parm0.DateParm = DateTime.Now;
-                            parm0.NumericParm = 0;
-                            parm0.Crtd_DateTime = DateTime.Now;
-                            parm0.Crtd_Prog = created.ReportNbr;
-                            parm0.Crtd_User = Current.UserName;
-                            parm0.LUpd_DateTime = DateTime.Now;
-                            parm0.LUpd_Prog = created.ReportNbr;
-                            parm0.LUpd_User = Current.UserName;
-                            parm0.tstamp = new byte[1];
-                            _db.RPTRunningParm0.AddObject(parm0);
-                        }
-
-                    }
-                #endregion
-                #region//Insert RptParm1 RPTRunningParm1 parm1;
-                i = 0;
-                if (data["list1"] != null)
-                    foreach (var ID in data["list1"].PassNull().TrimEnd(',').Split(','))
-                    {
-                        if (ID.PassNull() != "")
-                        {
-                            i++;
-                            var parm1 = new RPTRunningParm1();
-                            parm1.ReportNbr = created.ReportNbr;
-                            parm1.ReportID = created.ReportID;
-                            parm1.MachineName = "Web";
-                            parm1.LineRef = i.ToString();
-                            parm1.StringParm = ID;
-                            parm1.DateParm = DateTime.Now;
-                            parm1.NumericParm = 0;
-                            parm1.Crtd_DateTime = DateTime.Now;
-                            parm1.Crtd_Prog = created.ReportNbr;
-                            parm1.Crtd_User = Current.UserName;
-                            parm1.LUpd_DateTime = DateTime.Now;
-                            parm1.LUpd_Prog = created.ReportNbr;
-                            parm1.LUpd_User = Current.UserName;
-                            parm1.tstamp = new byte[1];
-                            _db.RPTRunningParm1.AddObject(parm1);
-                        }
-                    }
-                #endregion
-                #region//Insert RptParm2 RPTRunningParm2 parm2;
-                i = 0;
-                if (data["list2"] != null)
-                    foreach (var ID in data["list2"].PassNull().TrimEnd(',').Split(','))
-                    {
-                        if (ID.PassNull() != "")
-                        {
-                            i++;
-                            var parm2 = new RPTRunningParm2();
-                            parm2.ReportNbr = created.ReportNbr;
-                            parm2.ReportID = created.ReportID;
-                            parm2.MachineName = "Web";
-                            parm2.LineRef = i.ToString();
-                            parm2.StringParm = ID;
-                            parm2.DateParm = DateTime.Now;
-                            parm2.NumericParm = 0;
-                            parm2.Crtd_DateTime = DateTime.Now;
-                            parm2.Crtd_Prog = created.ReportNbr;
-                            parm2.Crtd_User = Current.UserName;
-                            parm2.LUpd_DateTime = DateTime.Now;
-                            parm2.LUpd_Prog = created.ReportNbr;
-                            parm2.LUpd_User = Current.UserName;
-                            parm2.tstamp = new byte[2];
-                            _db.RPTRunningParm2.AddObject(parm2);
-                        }
-                    }
-                #endregion
-                #region//Insert RptParm3 RPTRunningParm3 parm3;
-                i = 0;
-                if (data["list3"] != null)
-                    foreach (var ID in data["list3"].PassNull().TrimEnd(',').Split(','))
-                    {
-                        if (ID.PassNull() != "")
-                        {
-                            i++;
-                            var parm3 = new RPTRunningParm3();
-                            parm3.ReportNbr = created.ReportNbr;
-                            parm3.ReportID = created.ReportID;
-                            parm3.MachineName = "Web";
-                            parm3.LineRef = i.ToString();
-                            parm3.StringParm = ID;
-                            parm3.DateParm = DateTime.Now;
-                            parm3.NumericParm = 0;
-                            parm3.Crtd_DateTime = DateTime.Now;
-                            parm3.Crtd_Prog = created.ReportNbr;
-                            parm3.Crtd_User = Current.UserName;
-                            parm3.LUpd_DateTime = DateTime.Now;
-                            parm3.LUpd_Prog = created.ReportNbr;
-                            parm3.LUpd_User = Current.UserName;
-                            parm3.tstamp = new byte[3];
-                            _db.RPTRunningParm3.AddObject(parm3);
-                        }
-                    }
-                #endregion
-                _db.SaveChanges();
                 string[] choiceColumn = data["choiceColumn"].PassNull().Split('@');
                 var detHandler = new StoreDataHandler(data["listChoice"]);
                 var _listChoice = detHandler.ObjectData<DataInfo>().Where(p=>p.Checked).ToList();
@@ -2459,9 +2312,8 @@ namespace IF30100.Controllers
 
                     DataAccess dal = Util.Dal(false,isReadOnly);
                     ParamCollection pc = new ParamCollection();
-                    pc.Add(new ParamStruct("@RPTID", DbType.Int16, clsCommon.GetValueDBNull(created.ReportID), ParameterDirection.Input, 50));
+                    pc.Add(new ParamStruct("@RPTID", DbType.Int32, clsCommon.GetValueDBNull(created.ReportID), ParameterDirection.Input, 50));
                     System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.StoredProcedure, ref pc);
-
                     Cell cell;
                     List<int> lstColumn = new List<int>();
                     //remove column
@@ -2626,6 +2478,155 @@ namespace IF30100.Controllers
             }
 
             //return Json(created.ReportName + created.ReportID + ".xls");
+        }
+
+        private RPTRunning SaveRPTRuning(FormCollection data, string reportNbr)
+        {
+            var created = new RPTRunning();
+            short bit1 = 1;
+            short bit0 = 0;
+            created.AppPath = "Reports\\";
+            created.BooleanParm00 = data["chk00"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm01 = data["chk01"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm02 = data["chk02"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm03 = data["chk03"].PassNull() != "" ? bit1 : bit0;
+            created.ClientName = Current.UserName;
+            created.CpnyID = Current.CpnyID;
+            created.DateParm00 = Convert.ToDateTime(data["cboDate00"]);
+            created.DateParm01 = Convert.ToDateTime(data["cboDate01"]);
+            created.DateParm02 = Convert.ToDateTime(data["cboDate02"]);
+            created.DateParm03 = Convert.ToDateTime(data["cboDate03"]);
+            created.LangID = Current.LangID;
+            created.LoggedCpnyID = Current.CpnyID;
+            created.MachineName = "Web";
+            created.ReportCap = reportNbr;
+            created.ReportDate = DateTime.Now.ToDateShort();
+            created.ReportID = 0;
+            created.ReportName = reportNbr;
+            created.ReportNbr = reportNbr;
+            created.SelectionFormular = "";
+            created.StringParm00 = data["StringParm00"];
+            created.StringParm01 = data["StringParm01"];
+            created.StringParm02 = data["StringParm02"];
+            created.StringParm03 = data["StringParm03"];
+            created.UserID = Current.UserName;
+
+            _db.RPTRunnings.AddObject(created);
+            _db.SaveChanges();
+
+
+
+            #region --Insert RptParm0 RPTRunningParm0 parm0;
+            int i = 0;
+            if (data["list0"] != null)
+                foreach (var ID in data["list0"].PassNull().TrimEnd(',').Split(','))
+                {
+                    if (ID.PassNull() != "")
+                    {
+                        i++;
+                        var parm0 = new RPTRunningParm0();
+                        parm0.ReportNbr = created.ReportNbr;
+                        parm0.ReportID = created.ReportID;
+                        parm0.MachineName = "Web";
+                        parm0.LineRef = i.ToString();
+                        parm0.StringParm = ID;
+                        parm0.DateParm = DateTime.Now;
+                        parm0.NumericParm = 0;
+                        parm0.Crtd_DateTime = DateTime.Now;
+                        parm0.Crtd_Prog = created.ReportNbr;
+                        parm0.Crtd_User = Current.UserName;
+                        parm0.LUpd_DateTime = DateTime.Now;
+                        parm0.LUpd_Prog = created.ReportNbr;
+                        parm0.LUpd_User = Current.UserName;
+                        parm0.tstamp = new byte[1];
+                        _db.RPTRunningParm0.AddObject(parm0);
+                    }
+
+                }
+            #endregion
+            #region --Insert RptParm1 RPTRunningParm1 parm1;
+            i = 0;
+            if (data["list1"] != null)
+                foreach (var ID in data["list1"].PassNull().TrimEnd(',').Split(','))
+                {
+                    if (ID.PassNull() != "")
+                    {
+                        i++;
+                        var parm1 = new RPTRunningParm1();
+                        parm1.ReportNbr = created.ReportNbr;
+                        parm1.ReportID = created.ReportID;
+                        parm1.MachineName = "Web";
+                        parm1.LineRef = i.ToString();
+                        parm1.StringParm = ID;
+                        parm1.DateParm = DateTime.Now;
+                        parm1.NumericParm = 0;
+                        parm1.Crtd_DateTime = DateTime.Now;
+                        parm1.Crtd_Prog = created.ReportNbr;
+                        parm1.Crtd_User = Current.UserName;
+                        parm1.LUpd_DateTime = DateTime.Now;
+                        parm1.LUpd_Prog = created.ReportNbr;
+                        parm1.LUpd_User = Current.UserName;
+                        parm1.tstamp = new byte[1];
+                        _db.RPTRunningParm1.AddObject(parm1);
+                    }
+                }
+            #endregion
+            #region -- Insert RptParm2 RPTRunningParm2 parm2;
+            i = 0;
+            if (data["list2"] != null)
+                foreach (var ID in data["list2"].PassNull().TrimEnd(',').Split(','))
+                {
+                    if (ID.PassNull() != "")
+                    {
+                        i++;
+                        var parm2 = new RPTRunningParm2();
+                        parm2.ReportNbr = created.ReportNbr;
+                        parm2.ReportID = created.ReportID;
+                        parm2.MachineName = "Web";
+                        parm2.LineRef = i.ToString();
+                        parm2.StringParm = ID;
+                        parm2.DateParm = DateTime.Now;
+                        parm2.NumericParm = 0;
+                        parm2.Crtd_DateTime = DateTime.Now;
+                        parm2.Crtd_Prog = created.ReportNbr;
+                        parm2.Crtd_User = Current.UserName;
+                        parm2.LUpd_DateTime = DateTime.Now;
+                        parm2.LUpd_Prog = created.ReportNbr;
+                        parm2.LUpd_User = Current.UserName;
+                        parm2.tstamp = new byte[2];
+                        _db.RPTRunningParm2.AddObject(parm2);
+                    }
+                }
+            #endregion
+            #region--Insert RptParm3 RPTRunningParm3 parm3;
+            i = 0;
+            if (data["list3"] != null)
+                foreach (var ID in data["list3"].PassNull().TrimEnd(',').Split(','))
+                {
+                    if (ID.PassNull() != "")
+                    {
+                        i++;
+                        var parm3 = new RPTRunningParm3();
+                        parm3.ReportNbr = created.ReportNbr;
+                        parm3.ReportID = created.ReportID;
+                        parm3.MachineName = "Web";
+                        parm3.LineRef = i.ToString();
+                        parm3.StringParm = ID;
+                        parm3.DateParm = DateTime.Now;
+                        parm3.NumericParm = 0;
+                        parm3.Crtd_DateTime = DateTime.Now;
+                        parm3.Crtd_Prog = created.ReportNbr;
+                        parm3.Crtd_User = Current.UserName;
+                        parm3.LUpd_DateTime = DateTime.Now;
+                        parm3.LUpd_Prog = created.ReportNbr;
+                        parm3.LUpd_User = Current.UserName;
+                        parm3.tstamp = new byte[3];
+                        _db.RPTRunningParm3.AddObject(parm3);
+                    }
+                }
+            #endregion
+            _db.SaveChanges();
+            return created;
         }
        
         #region other
