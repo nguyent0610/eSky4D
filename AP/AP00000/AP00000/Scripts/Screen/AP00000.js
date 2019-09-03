@@ -166,4 +166,3 @@ function refresh(item) {
         App.stoAP00000Header.reload();
     }
 };
-///////////////////////////////////

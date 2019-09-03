@@ -16,9 +16,17 @@
  <!--Không thay đổi phần head Đổi mã màn hình AP00000.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    @*<script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/AP00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AP00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>*@
+
+    @Scripts.Render("~/language" + Current.LangID)
+    @Styles.Render("~/extcss")
+    @Scripts.Render("~/extjs")
+    @Scripts.Render("~/AP00000JS") 
+
+
+
 
     <style>
         .x-grid-row-over .x-grid-cell-inner {
@@ -38,35 +46,11 @@
     <title>@ViewBag.Title</title>
 </head>
     <body>
-        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+       @* @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))*@
 
         @*Make the store - the binding data of the form*@
-        @(
-            X.Store().ID("stoAP00000Header")
-            .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(AP_Setup), "mdlAP_Setup", "BrandID"))
-            .Proxy(
-                X.AjaxProxy()
-                .Url(Url.Action("GetAP00000Header", "AP00000"))
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            )
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("branchId", "HQ.cpnyID", ParameterMode.Raw));
-                ps.Add(new StoreParameter("setupID", "AP", ParameterMode.Value));
-            })
-            .Listeners(l =>
-                {
-                    l.BeforeLoad.Fn = "stoBeforeLoad";
-                    l.Load.Fn = "stoLoad";                   
-                }
-            )
-        )
+       
         <!-- Gọi hàm Body trong AP00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
-        @{ Html.RenderAction("Body", new { lang = Current.LangID });}   
+       @* @{ Html.RenderAction("Body", new { lang = Current.LangID });}*@   
     </body>
 </html>
