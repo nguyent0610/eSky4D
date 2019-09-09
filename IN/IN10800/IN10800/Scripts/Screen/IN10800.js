@@ -121,9 +121,10 @@ var Process = {
     },
 
     saveData: function () {
+        debugger
         if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
             if (HQ.form.checkRequirePass(App.frmMain)) {
-                if (HQ.store.checkRequirePass(App.stoStockOutletDet, ["InvtID", "ExpDate"], ["InvtID", "ExpDate"], ["InvtID", "ExpDate"])) {
+                if (HQ.store.checkRequirePass(App.stoStockOutletDet, ["InvtID", "ExpDate", "ReasonID"], ["InvtID", "ExpDate", "ReasonID"], ["InvtID", "ExpDate", "ReasonID"])) {
                     var i = 0;
                     var errorMessage = '';
                     var store = App.stoStockOutletDet;
@@ -174,6 +175,7 @@ var Process = {
             }
         }
         else {
+            debugger
             HQ.message.show(4, '', '');
         }
     },
@@ -344,6 +346,7 @@ var Event = {
                     App.stoPOSM.reload();
                     break;
                 case "save":
+                    debugger
                     Process.saveData();
                     break;
                 case "delete":

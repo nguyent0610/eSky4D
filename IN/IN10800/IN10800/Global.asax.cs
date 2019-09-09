@@ -29,8 +29,8 @@ namespace IN10800
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";
-            Current.DBSys = "VPMilk_eSky4DSys";
+            Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys =  ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
@@ -38,7 +38,7 @@ namespace IN10800
             Current.FormatDate = "dd.MM.yyyy";
             Current.FormatTime = "HH:mm";
             Session["IN10800"] = acc;
-            Session["DBApp"] = Current.DBApp = "VPMilk_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
