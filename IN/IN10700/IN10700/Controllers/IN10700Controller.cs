@@ -448,6 +448,7 @@ namespace IN10700.Controllers
                     string invtTypeNull = string.Empty;
                     string stockTypeNull = string.Empty;
                     string stkDateNull = string.Empty;
+                    string stkDateDinhDang = string.Empty;
                     string stkExpDateNull = string.Empty;
                     string stkExpDateError = string.Empty;
                     string invtNull = string.Empty;
@@ -516,9 +517,34 @@ namespace IN10700.Controllers
                         {
                             if (workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue.Length > 0)
                             {
-                                stkDate = DateTime.ParseExact(workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue, "dd/MM/yyyy",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-                                    //workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].DateTimeValue;
+                                string dateWorkSheet = workSheet.Cells[i, colTexts.IndexOf("IN10700StkDate")].StringValue;
+                                string[] val = dateWorkSheet.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (val.Length == 3)
+                                {
+                                    string val0 = val[0];
+                                    string val1 = val[1];
+
+                                    if (val[0].Length == 1)
+                                    {
+                                        val0 = "0" + val[0];
+                                    }
+                                    if (val[1].Length == 1)
+                                    {
+                                        val1 = "0" + val[1];
+                                    }
+                                    dateWorkSheet = val0 + "/" + val1 + "/" + val[2];
+                                }  
+                                
+                                if (int.Parse(val[0]) > 31 || int.Parse(val[1]) > 12)
+                                {
+                                    stkDate = "1990/1/1".ToDateTime();
+                                    stkDateDinhDang += (i + 1) + ", ";
+                                    flagCheck = true;
+                                }
+                                else
+                                {
+                                    stkDate = DateTime.ParseExact(dateWorkSheet, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                }
                             }
                             else
                             {
@@ -538,7 +564,6 @@ namespace IN10700.Controllers
                             stkExpDateNull += (i + 1) + ", ";
                             flagCheck = true;
                         }
-
 
                         if (workSheet.Cells[i, colTexts.IndexOf("IN10700OutDate")].StringValue.Trim().Length > 0 && !flagCheck)
                         {
@@ -684,6 +709,7 @@ namespace IN10700.Controllers
                     message = branchNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("BranchID"), branchNull.TrimEnd(','));
                     message += slsperNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("SlsperID"), slsperNull.TrimEnd(','));
                     message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StkDate"), stkDateNull.TrimEnd(','));
+                    message += stkDateDinhDang == "" ? "" : string.Format(Message.GetString("2019022562", null), Util.GetLang("IN10700StkDate"), stkDateDinhDang.TrimEnd(','));
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));
@@ -696,7 +722,6 @@ namespace IN10700.Controllers
                     message += custErr == "" ? "" : string.Format(Message.GetString("2019040851", null), custErr.TrimEnd(','), Util.GetLang("IN10700CustID"));
                     message += invtErr == "" ? "" : string.Format(Message.GetString("2019040851", null), invtErr.TrimEnd(','), Util.GetLang("InvtID"));
                     message += stkExpDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700OutDate"), stkExpDateNull.TrimEnd(','));
-
 
                     if (string.IsNullOrEmpty(message))
                     {

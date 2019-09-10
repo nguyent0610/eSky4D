@@ -44,6 +44,23 @@ namespace IN10700
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 
+            //Current.Authorize = false;
+            //Current.Server = "PHUQUOCD";
+            //Current.DBSys = "NamDuong_eSky4DSys";
+            //AccessRight acc = new AccessRight();
+            //acc.Delete = true;
+            //acc.Insert = true;
+            //acc.Update = true;
+            //Current.FormatDate = "dd.MM.yyyy";
+            //Current.FormatTime = "HH:mm";
+
+            //Session["IN10700"] = acc;
+            //Session["DBApp"] = Current.DBApp = "NamDuong_eSky4DApp";
+            //Session["UserName"] = Current.UserName = "admin";
+            //Session["CpnyID"] = Current.CpnyID = "040100001";
+            //Session["Language"] = Current.Language = "vi";
+            //Session["LangID"] = 1;
+
         }
     }
 }

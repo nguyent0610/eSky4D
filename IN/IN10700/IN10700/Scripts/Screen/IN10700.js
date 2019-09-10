@@ -698,3 +698,14 @@ var btnImport_Click = function () {
         }
     });
 }
+
+var refresh = function (value) {
+    if (value == "yes") {
+        if (App.dtpStkOutDate.getValue() != null) {
+            App.stoStockOutlet.reload();
+        }
+        
+    }
+}
+
+   
