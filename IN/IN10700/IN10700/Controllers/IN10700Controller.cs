@@ -449,6 +449,7 @@ namespace IN10700.Controllers
                     string stockTypeNull = string.Empty;
                     string stkDateNull = string.Empty;
                     string stkDateDinhDang = string.Empty;
+                    string stkDateSoSanhDateNow = string.Empty;
                     string stkExpDateNull = string.Empty;
                     string stkExpDateError = string.Empty;
                     string invtNull = string.Empty;
@@ -543,7 +544,16 @@ namespace IN10700.Controllers
                                 }
                                 else
                                 {
-                                    stkDate = DateTime.ParseExact(dateWorkSheet, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    if (DateTime.Now.Month <= int.Parse(val[1]) && DateTime.Now.Year <= int.Parse(val[2]))
+                                    {
+                                        stkDate = DateTime.ParseExact(dateWorkSheet, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture); 
+                                    }
+                                    else
+                                    {
+                                        stkDate = "1990/1/1".ToDateTime();
+                                        stkDateSoSanhDateNow += (i + 1) + ", ";
+                                        flagCheck = true;
+                                    }
                                 }
                             }
                             else
@@ -710,6 +720,7 @@ namespace IN10700.Controllers
                     message += slsperNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("SlsperID"), slsperNull.TrimEnd(','));
                     message += stkDateNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StkDate"), stkDateNull.TrimEnd(','));
                     message += stkDateDinhDang == "" ? "" : string.Format(Message.GetString("2019022562", null), Util.GetLang("IN10700StkDate"), stkDateDinhDang.TrimEnd(','));
+                    message += stkDateSoSanhDateNow == "" ? "" : string.Format(Message.GetString("2019091002", null), Util.GetLang("IN10700StkDate"), stkDateSoSanhDateNow.TrimEnd(','));
                     message += custNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700CustID"), custNull.TrimEnd(','));
                     message += invtTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700InvtType"), invtTypeNull.TrimEnd(','));
                     message += stockTypeNull == "" ? "" : string.Format(Message.GetString("2019022560", null), Util.GetLang("IN10700StockType"), stockTypeNull.TrimEnd(','));
