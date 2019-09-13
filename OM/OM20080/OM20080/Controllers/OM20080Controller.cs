@@ -111,7 +111,7 @@ namespace OM20080.Controllers
                 t.Crtd_User = _userName;
             }
             t.CompInvtName = s.CompInvtName;
-
+            t.CompID = s.CompID;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

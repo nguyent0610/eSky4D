@@ -15,7 +15,7 @@ var checkLoad = function (sto) {
     if (_Source == _maxSource) {
         _isLoadMaster = true;
         _Source = 0;
-        App.stoOM_CompetitorInvt.reload();
+       // App.stoOM_CompetitorInvt.reload();
         HQ.common.showBusy(false);
     }
 };
@@ -65,9 +65,27 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoOM_CompetitorInvt, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                //if (HQ.store.checkRequirePass(App.stoOM_CompetitorInvt, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                var isBreak = false;
+                for (var i = 0; i < App.stoOM_CompetitorInvt.data.length; i++) {
+                    var objH = App.stoOM_CompetitorInvt.data.items[i].data;
+                    if (!Ext.isEmpty(objH.CompInvtID)) {
+                        if (Ext.isEmpty(objH.CompInvtName)) {
+                            HQ.message.show(2019091368, [i + 1, App.grdOM_CompetitorInvt.columns[2].text], '', true);
+                            isBreak = true;
+                            break;
+                        }
+                        if (Ext.isEmpty(objH.CompID)) {
+                            HQ.message.show(2019091368, [i + 1, App.grdOM_CompetitorInvt.columns[3].text], '', true);
+                            isBreak = true;
+                            break;
+                        }
+                    }
+                }
+                if (isBreak == false) {
                     save();
                 }
+                //}
             }
             break;
         case "print":
@@ -82,7 +100,11 @@ var firstLoad = function () {
     HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
-    checkLoad(); // Mới
+    App.cboCompeID.getStore().addListener('load', checkLoad);
+    App.cboCompeID.store.reload();
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.stoOM_CompetitorInvt.reload();
+   // checkLoad(); // Mới
 };
 
 var frmChange = function () {
@@ -170,7 +192,13 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-
+var renderCompID = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboCompeID.store, ['CompID'], [record.data.CompID])
+    if (Ext.isEmpty(r)) {
+        return value;
+    }
+    return r.data.CompName;
+};
 
 
 

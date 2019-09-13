@@ -391,6 +391,30 @@ namespace OM20080
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CompID
+        {
+            get
+            {
+                return _CompID;
+            }
+            set
+            {
+                OnCompIDChanging(value);
+                ReportPropertyChanging("CompID");
+                _CompID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CompID");
+                OnCompIDChanged();
+            }
+        }
+        private global::System.String _CompID;
+        partial void OnCompIDChanging(global::System.String value);
+        partial void OnCompIDChanged();
 
         #endregion
 
@@ -643,6 +667,30 @@ namespace OM20080
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CompID
+        {
+            get
+            {
+                return _CompID;
+            }
+            set
+            {
+                OnCompIDChanging(value);
+                ReportPropertyChanging("CompID");
+                _CompID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CompID");
+                OnCompIDChanged();
+            }
+        }
+        private global::System.String _CompID;
+        partial void OnCompIDChanging(global::System.String value);
+        partial void OnCompIDChanged();
 
         #endregion
 

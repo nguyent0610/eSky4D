@@ -18,6 +18,7 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="CompID" Type="varchar" MaxLength="30" />
         </EntityType>
         <Function Name="OM20080_pgLoadCompetitorInvt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -52,6 +53,7 @@
           <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CompID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="OM20080_pgLoadCompetitorInvt_Result">
           <Property Type="String" Name="CompInvtID" Nullable="false" MaxLength="30" />
@@ -63,6 +65,7 @@
           <Property Type="String" Name="Crtd_Prog" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="Crtd_User" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CompID" Nullable="true" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -73,6 +76,7 @@
           <EntitySetMapping Name="OM_CompetitorInvt">
             <EntityTypeMapping TypeName="OM20080Model.OM_CompetitorInvt">
               <MappingFragment StoreEntitySet="OM_CompetitorInvt">
+                <ScalarProperty Name="CompID" ColumnName="CompID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
@@ -97,6 +101,7 @@
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="CompID" ColumnName="CompID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
