@@ -68,7 +68,7 @@
                     ),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
             
-            HQ.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
+            HQ.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150).Format(Current.FormatDate)
                 .Editor(HQ.DateField()),
             
             //X.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
