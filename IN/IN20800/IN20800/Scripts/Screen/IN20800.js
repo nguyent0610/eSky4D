@@ -362,17 +362,18 @@ var grdIN_Component_Edit = function (item, e) {
     if (e.field == 'ComponentID')
     {
         e.record.set('ComponentQty', 1);
+        var record = App.cboInvtID.findRecord("InvtID", e.record.data.ComponentID);
+        if (record) {
+            e.record.set("Descr", record.data.Descr);
+            e.record.set("Unit", record.data.StkUnit);
+        }
+        else {
+            e.record.set("Descr", '');
+            e.record.set("ComponentQty", 0);
+            e.record.set("Unit", '');
+        }
     }
-    var record = App.cboInvtID.findRecord("InvtID", e.record.data.ComponentID);
-    if (record){
-        e.record.set("Descr", record.data.Descr);
-        e.record.set("Unit", record.data.StkUnit);
-    }
-    else {
-        e.record.set("Descr", '');
-        e.record.set("ComponentQty", 0);
-        e.record.set("Unit", '');
-    }
+    
     if (e.field == "DiscCode") {
         if (e.value != null && e.value != "") {
             e.record.set("Price", 0);
