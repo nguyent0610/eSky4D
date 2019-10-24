@@ -1295,7 +1295,7 @@ namespace IN10200.Controllers
         }
         public ActionResult GetPrice(string invtID, string uom, DateTime effDate, string siteID, string valMthd)
         {
-            var lstPrice = _app.IN10200_pdPrice("", invtID, uom, DateTime.Now, valMthd, siteID).ToList();
+            var lstPrice = _app.IN10200_pdPrice("", invtID, uom, effDate, valMthd, siteID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetItemSite(string invtID, string siteID, string whseLoc,int showWhseLoc)
