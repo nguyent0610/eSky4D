@@ -8,7 +8,22 @@
     var X = Html.X();
     var HQ = Html.HQ();
 }
-
+@(
+ X.Store()
+    .ID("stoExpireDate")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10800_pcExpDate_Result), "mdlExpDate", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetExpDate", "IN10800"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("invtID", "invtID", ParameterMode.Raw));
+        })
+)
 @(
  Html.X().Viewport().Layout(LayoutType.Fit)
     .Items(
@@ -195,10 +210,49 @@
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                 .Renderer("Process.renderDescr")
                 
+                //, HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
+                //.Hidden(true).Hideable(false)
+                //.Editor(HQ.DateField())
                 , HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
-                .Hidden(true).Hideable(false)
-                .Editor(HQ.DateField())
-                
+                .Width(150).Hidden(true).Hideable(false)
+                .Editor(
+                        X.ComboBox().ID("cboExpDate").DataIndex("ExpDate")
+                        .ValueField("ExpireDate").DisplayField("ExpireDate")
+                        .SubmitValue(false)
+                        .MinChars(1).TypeAhead(false).ForceSelection(true)
+                        .TriggerAction(TriggerAction.All)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(l =>
+                        {
+                            l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .QueryMode(DataLoadMode.Local)
+                        .MatchFieldWidth(false)
+                        .ListConfig(X.BoundList()
+                            .Height(500)
+                            .ItemSelector(".x-boundlist-item").LoadingText(Util.GetLang("Loading"))
+                            .Tpl(
+                                X.XTemplate()
+                                .Html(@"<tpl for='.'>
+                                    <tpl if='[xindex] == 1'>
+                                        <table style='width:300px !important'>
+                                            <tr>
+                                                <th>" + Util.GetLang("ExpireDate") + @"</th>
+                                            </tr>
+                                    </tpl>
+                                    <tr class='x-boundlist-item'>
+                                            
+                                        <td>{ExpireDate:date(""" + Current.FormatDateJS + @""")}</td>
+                                    </tr>
+                                    <tpl if='[xcount-xindex] == 0'>
+                                        </table>
+                                    </tpl>
+                                </tpl>"
+                                                )
+                            )
+                        )
+                        .StoreID("stoExpireDate")
+                )
                 , X.Column().Text(Util.GetLang("Reason")).DataIndex("ReasonID")
                 .Width(150).Renderer("Process.renderDescr")
                 .Editor(
@@ -218,19 +272,19 @@
                     X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0).Listeners(l=>l.Change.Fn="Event.Grid.txtQty_Change")
                 )
                 , Html.X().ImageCommandColumn().Text(Util.GetLang(""))
-                                                    .Width(30)
-                                                    .Commands(
-                                                        Html.X().ImageCommand()
-                                                            .Icon(Icon.TabEdit)
-                                                            .ToolTip(t =>
-                                                            {
-                                                                t.Text = Util.GetLang("ShowPOSM");
-                                                            })                                                        
-                                                            .CommandName("Update")
-                                                    )
-                                                    .Listeners(l => {
-                                                        l.Command.Handler = "Event.Grid.showPOSM(record);";
-                                                    })
+                .Width(30)
+                .Commands(
+                    Html.X().ImageCommand()
+                        .Icon(Icon.TabEdit)
+                        .ToolTip(t =>
+                        {
+                            t.Text = Util.GetLang("ShowPOSM");
+                        })                                                        
+                        .CommandName("Update")
+                )
+                .Listeners(l => {
+                    l.Command.Handler = "Event.Grid.showPOSM(record);";
+                })
                 
                 //, X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
                 //    .Editor(

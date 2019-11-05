@@ -59,6 +59,10 @@ namespace IN10800.Controllers
         {
             return this.Store(_db.IN10800_pgStockOutletDetPOSM(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr).ToList());
         }
+        public ActionResult GetExpDate(string invtID)
+        {
+            return this.Store(_db.IN10800_pcExpDate(Current.CpnyID, Current.UserName, Current.LangID, invtID).ToList());
+        }
         public ActionResult SaveData(FormCollection data, bool isNew)
         {
             try

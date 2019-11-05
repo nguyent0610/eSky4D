@@ -1,6 +1,6 @@
 var _LOT = "LOT";
 var _allowUpdate = false;
-
+var invtID = '';
 var Process = {
     isAllValidKey: function (items, keys) {
         if (items != undefined) {
@@ -397,6 +397,12 @@ var Event = {
                             return false;
                         }
                     }
+                    else {
+                        if (e.field == "ExpDate" && e.record.data.InvtID == "") {
+                            invtID = '';
+                            App.stoExpireDate.reload();
+                        }
+                    }
                     return Process.checkInput(e, keys);
                 }
                 else {
@@ -410,11 +416,16 @@ var Event = {
 
         grdStockOutletDet_edit: function (editor, e) {
             if (e.field == 'InvtID') {
+                invtID = e.value;
                 var objInvt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [e.record.data.InvtID]);
                 if (objInvt) {
                     e.record.set('ClassID', objInvt.ClassID);
-                    if ((!e.record.data.ExpDate && objInvt.ClassID == "POSM") || (App.cboStockType.getValue() != 'LOT'))
+                    if ((!e.record.data.ExpDate && objInvt.ClassID == "POSM") || (App.cboStockType.getValue() != 'LOT')) {
                         e.record.set('ExpDate', new Date(1900, 0, 1));
+                    }
+                    else {
+                        App.stoExpireDate.reload();
+                    }
                 }
 
             }
