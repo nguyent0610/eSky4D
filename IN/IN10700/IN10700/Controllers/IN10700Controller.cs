@@ -40,7 +40,7 @@ namespace IN10700.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -59,6 +59,10 @@ namespace IN10700.Controllers
         public ActionResult GetStockOutletPOSM(string branchID, string slsperID, string stkOutNbr)
         {
             return this.Store(_db.IN10700_pgStockOutletDetPOSM(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr).ToList());
+        }
+        public ActionResult GetExpDate(string invtID)
+        {
+            return this.Store(_db.IN10700_pcExpDate(Current.CpnyID, Current.UserName, Current.LangID, invtID).ToList());
         }
 
         public ActionResult SaveData(FormCollection data, bool isNew)

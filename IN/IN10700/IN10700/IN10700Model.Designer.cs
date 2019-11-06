@@ -798,6 +798,58 @@ namespace IN10700
     
             return base.ExecuteFunction<IN10700_pcInvtDateExcel_Result>("IN10700_pcInvtDateExcel", userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10700_pcExpDate_Result> IN10700_pcExpDate(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String invtID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10700_pcExpDate_Result>("IN10700_pcExpDate", cpnyIDParameter, userNameParameter, langIDParameter, invtIDParameter);
+        }
 
         #endregion
 
@@ -2798,6 +2850,85 @@ namespace IN10700
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10700Model", Name="IN10700_pcExpDate_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10700_pcExpDate_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10700_pcExpDate_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="expireDate">Initial value of the ExpireDate property.</param>
+        public static IN10700_pcExpDate_Result CreateIN10700_pcExpDate_Result(global::System.String invtID, global::System.DateTime expireDate)
+        {
+            IN10700_pcExpDate_Result iN10700_pcExpDate_Result = new IN10700_pcExpDate_Result();
+            iN10700_pcExpDate_Result.InvtID = invtID;
+            iN10700_pcExpDate_Result.ExpireDate = expireDate;
+            return iN10700_pcExpDate_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime ExpireDate
+        {
+            get
+            {
+                return _ExpireDate;
+            }
+            set
+            {
+                OnExpireDateChanging(value);
+                ReportPropertyChanging("ExpireDate");
+                _ExpireDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExpireDate");
+                OnExpireDateChanged();
+            }
+        }
+        private global::System.DateTime _ExpireDate;
+        partial void OnExpireDateChanging(global::System.DateTime value);
+        partial void OnExpireDateChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

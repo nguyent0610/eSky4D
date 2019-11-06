@@ -45,10 +45,10 @@
           <Property Name="StkOutNbr" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="CustID" Type="varchar" MaxLength="50" />
           <Property Name="StkOutDate" Type="datetime" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -72,10 +72,10 @@
           <Property Name="StkQty" Type="float" />
           <Property Name="CS" Type="float" />
           <Property Name="PC" Type="float" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -102,14 +102,20 @@
           <Property Name="StkQty" Type="float" />
           <Property Name="CS" Type="float" />
           <Property Name="PC" Type="float" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="IN10700_pcExpDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN10700_pcInvtDateExcel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -265,6 +271,12 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="IN10700_pcExpDate" ReturnType="Collection(IN10700Model.IN10700_pcExpDate_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN10700_phStockOutlet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -341,10 +353,10 @@
           <Property Type="Double" Name="StkQty" />
           <Property Type="Double" Name="CS" />
           <Property Type="Double" Name="PC" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
@@ -371,11 +383,11 @@
           <Property Type="Double" Name="StkQty" />
           <Property Type="Double" Name="CS" />
           <Property Type="Double" Name="PC" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -401,10 +413,10 @@
           <Property Name="StkOutNbr" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StkOutDate" Type="DateTime" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
@@ -429,6 +441,10 @@
         <ComplexType Name="IN10700_pcInvtDateExcel_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN10700_pcExpDate_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="ExpireDate" Nullable="false" Precision="23" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -626,6 +642,14 @@
               <ComplexTypeMapping TypeName="IN10700Model.IN10700_pcInvtDateExcel_Result">
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10700_pcExpDate" FunctionName="eBiz4DWebAppModel.Store.IN10700_pcExpDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10700Model.IN10700_pcExpDate_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

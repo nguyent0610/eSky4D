@@ -36,6 +36,7 @@ namespace IN10700
             acc.Insert = true;
             acc.Update = true;
             Current.FormatDate = "dd.MM.yyyy";
+            Current.FormatDateJS = "d-m-y";
             Current.FormatTime = "HH:mm";
             Session["IN10700"] = acc;
             Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
