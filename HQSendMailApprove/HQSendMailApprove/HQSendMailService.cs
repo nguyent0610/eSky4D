@@ -224,7 +224,7 @@ namespace HQSendMailApprove
                         continue; 
                     } 
                     lstMail.Add(new GetMailResult() { 
-                        ID = (int)item["ID"]
+                        ID = item["ID"].ToInt()
                         , To = to
                         , CC = item.Table.Columns.Contains("CC") ? (string)item["CC"] : string.Empty
                         , BranchID = item.Table.Columns.Contains("BranchID")  ? (string)item["BranchID"]: string.Empty
