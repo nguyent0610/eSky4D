@@ -84,22 +84,6 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Inventory> IN_Inventory
-        {
-            get
-            {
-                if ((_IN_Inventory == null))
-                {
-                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
-                }
-                return _IN_Inventory;
-            }
-        }
-        private ObjectSet<IN_Inventory> _IN_Inventory;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<vs_User> vs_User
         {
             get
@@ -144,6 +128,22 @@ namespace AR21100
             }
         }
         private ObjectSet<AR_Channel> _AR_Channel;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Inventory> IN_Inventory
+        {
+            get
+            {
+                if ((_IN_Inventory == null))
+                {
+                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
+                }
+                return _IN_Inventory;
+            }
+        }
+        private ObjectSet<IN_Inventory> _IN_Inventory;
 
         #endregion
 
@@ -155,14 +155,6 @@ namespace AR21100
         public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
         {
             base.AddObject("AR_Salesperson", aR_Salesperson);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
-        {
-            base.AddObject("IN_Inventory", iN_Inventory);
         }
     
         /// <summary>
@@ -187,6 +179,14 @@ namespace AR21100
         public void AddToAR_Channel(AR_Channel aR_Channel)
         {
             base.AddObject("AR_Channel", aR_Channel);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
+        {
+            base.AddObject("IN_Inventory", iN_Inventory);
         }
 
         #endregion
@@ -3568,12 +3568,11 @@ namespace AR21100
         /// <param name="isFirstLogin">Initial value of the IsFirstLogin property.</param>
         /// <param name="lastTimeUpdatePassword">Initial value of the LastTimeUpdatePassword property.</param>
         /// <param name="oUnit">Initial value of the OUnit property.</param>
-        /// <param name="type">Initial value of the Type property.</param>
         /// <param name="lat">Initial value of the Lat property.</param>
         /// <param name="lng">Initial value of the Lng property.</param>
         /// <param name="gender">Initial value of the Gender property.</param>
         /// <param name="contractType">Initial value of the ContractType property.</param>
-        public static AR_Salesperson CreateAR_Salesperson(global::System.String slsperId, global::System.String branchID, global::System.String status, global::System.Boolean pPCAdmin, global::System.Boolean isFirstLogin, global::System.DateTime lastTimeUpdatePassword, global::System.String oUnit, global::System.String type, global::System.Double lat, global::System.Double lng, global::System.String gender, global::System.String contractType)
+        public static AR_Salesperson CreateAR_Salesperson(global::System.String slsperId, global::System.String branchID, global::System.String status, global::System.Boolean pPCAdmin, global::System.Boolean isFirstLogin, global::System.DateTime lastTimeUpdatePassword, global::System.String oUnit, global::System.Double lat, global::System.Double lng, global::System.String gender, global::System.String contractType)
         {
             AR_Salesperson aR_Salesperson = new AR_Salesperson();
             aR_Salesperson.SlsperId = slsperId;
@@ -3583,7 +3582,6 @@ namespace AR21100
             aR_Salesperson.IsFirstLogin = isFirstLogin;
             aR_Salesperson.LastTimeUpdatePassword = lastTimeUpdatePassword;
             aR_Salesperson.OUnit = oUnit;
-            aR_Salesperson.Type = type;
             aR_Salesperson.Lat = lat;
             aR_Salesperson.Lng = lng;
             aR_Salesperson.Gender = gender;
@@ -4540,7 +4538,7 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Type
         {
@@ -4552,7 +4550,7 @@ namespace AR21100
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, false);
+                _Type = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
@@ -4736,8 +4734,7 @@ namespace AR21100
         /// <param name="giftPoint">Initial value of the GiftPoint property.</param>
         /// <param name="productSpecial">Initial value of the ProductSpecial property.</param>
         /// <param name="allowSale">Initial value of the AllowSale property.</param>
-        /// <param name="receiptGift">Initial value of the ReceiptGift property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Boolean kitType, global::System.Double giftPoint, global::System.Boolean productSpecial, global::System.Boolean allowSale, global::System.Boolean receiptGift)
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Boolean kitType, global::System.Double giftPoint, global::System.Boolean productSpecial, global::System.Boolean allowSale)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -4777,7 +4774,6 @@ namespace AR21100
             iN_Inventory.GiftPoint = giftPoint;
             iN_Inventory.ProductSpecial = productSpecial;
             iN_Inventory.AllowSale = allowSale;
-            iN_Inventory.ReceiptGift = receiptGift;
             return iN_Inventory;
         }
 
@@ -6639,26 +6635,26 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Boolean ReceiptGift
+        public Nullable<global::System.DateTime> EffectDate
         {
             get
             {
-                return _ReceiptGift;
+                return _EffectDate;
             }
             set
             {
-                OnReceiptGiftChanging(value);
-                ReportPropertyChanging("ReceiptGift");
-                _ReceiptGift = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ReceiptGift");
-                OnReceiptGiftChanged();
+                OnEffectDateChanging(value);
+                ReportPropertyChanging("EffectDate");
+                _EffectDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EffectDate");
+                OnEffectDateChanged();
             }
         }
-        private global::System.Boolean _ReceiptGift;
-        partial void OnReceiptGiftChanging(global::System.Boolean value);
-        partial void OnReceiptGiftChanged();
+        private Nullable<global::System.DateTime> _EffectDate;
+        partial void OnEffectDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnEffectDateChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6683,30 +6679,6 @@ namespace AR21100
         private global::System.String _Channel;
         partial void OnChannelChanging(global::System.String value);
         partial void OnChannelChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> EffectDate
-        {
-            get
-            {
-                return _EffectDate;
-            }
-            set
-            {
-                OnEffectDateChanging(value);
-                ReportPropertyChanging("EffectDate");
-                _EffectDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EffectDate");
-                OnEffectDateChanged();
-            }
-        }
-        private Nullable<global::System.DateTime> _EffectDate;
-        partial void OnEffectDateChanging(Nullable<global::System.DateTime> value);
-        partial void OnEffectDateChanged();
 
         #endregion
 
@@ -7470,6 +7442,54 @@ namespace AR21100
         private global::System.String _UnitDelivery;
         partial void OnUnitDeliveryChanging(global::System.String value);
         partial void OnUnitDeliveryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StateDelivery
+        {
+            get
+            {
+                return _StateDelivery;
+            }
+            set
+            {
+                OnStateDeliveryChanging(value);
+                ReportPropertyChanging("StateDelivery");
+                _StateDelivery = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StateDelivery");
+                OnStateDeliveryChanged();
+            }
+        }
+        private global::System.String _StateDelivery;
+        partial void OnStateDeliveryChanging(global::System.String value);
+        partial void OnStateDeliveryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CustDelivery
+        {
+            get
+            {
+                return _CustDelivery;
+            }
+            set
+            {
+                OnCustDeliveryChanging(value);
+                ReportPropertyChanging("CustDelivery");
+                _CustDelivery = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CustDelivery");
+                OnCustDeliveryChanged();
+            }
+        }
+        private global::System.String _CustDelivery;
+        partial void OnCustDeliveryChanging(global::System.String value);
+        partial void OnCustDeliveryChanged();
 
         #endregion
 

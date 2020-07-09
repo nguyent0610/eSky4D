@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Channel">
           <Key>
             <PropertyRef Name="Code" />
@@ -133,7 +133,7 @@
           <Property Name="NewProfilePic" Type="bit" Nullable="false" />
           <Property Name="BillMarket" Type="varchar" MaxLength="30" />
           <Property Name="BillDistrict" Type="varchar" MaxLength="30" />
-          <Property Name="BillWard" Type="varchar" MaxLength="10" />
+          <Property Name="BillWard" Type="varchar" MaxLength="50" />
           <Property Name="GeneralCustID" Type="varchar" MaxLength="50" />
           <Property Name="OriCustID" Type="varchar" MaxLength="50" />
           <Property Name="PhotoCode" Type="varchar" MaxLength="2000" />
@@ -185,7 +185,7 @@
           <Property Name="IsFirstLogin" Type="bit" Nullable="false" />
           <Property Name="LastTimeUpdatePassword" Type="datetime" Nullable="false" />
           <Property Name="OUnit" Type="varchar(max)" Nullable="false" />
-          <Property Name="Type" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="1" />
           <Property Name="SlsDeliveryAddr" Type="nvarchar" MaxLength="200" />
           <Property Name="Lat" Type="float" Nullable="false" />
           <Property Name="Lng" Type="float" Nullable="false" />
@@ -273,7 +273,6 @@
           <Property Name="GiftPoint" Type="float" Nullable="false" />
           <Property Name="ProductSpecial" Type="bit" Nullable="false" />
           <Property Name="AllowSale" Type="bit" Nullable="false" />
-          <Property Name="ReceiptGift" Type="bit" Nullable="false" />
           <Property Name="EffectDate" Type="datetime" />
           <Property Name="Channel" Type="varchar" MaxLength="200" />
         </EntityType>
@@ -315,6 +314,8 @@ warning 6002: The table/view 'ECO_eSky4DApp.dbo.vs_User' does not have a primary
           <Property Name="SlsPersonPosition" Type="varchar" MaxLength="10" />
           <Property Name="SlsPersons" Type="varchar(max)" />
           <Property Name="UnitDelivery" Type="varchar" MaxLength="8000" />
+          <Property Name="StateDelivery" Type="varchar(max)" />
+          <Property Name="CustDelivery" Type="varchar(max)" />
         </EntityType>
         <Function Name="AR21100_pcChannelType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -373,7 +374,9 @@ warning 6002: The table/view 'ECO_eSky4DApp.dbo.vs_User' does not have a primary
 [vs_User].[Channel] AS [Channel], 
 [vs_User].[SlsPersonPosition] AS [SlsPersonPosition], 
 [vs_User].[SlsPersons] AS [SlsPersons], 
-[vs_User].[UnitDelivery] AS [UnitDelivery]
+[vs_User].[UnitDelivery] AS [UnitDelivery], 
+[vs_User].[StateDelivery] AS [StateDelivery], 
+[vs_User].[CustDelivery] AS [CustDelivery]
 FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
@@ -408,10 +411,10 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
             <Parameter Name="Code" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_Salesperson" EntityType="AR21100Model.AR_Salesperson" />
-          <EntitySet Name="IN_Inventory" EntityType="AR21100Model.IN_Inventory" />
           <EntitySet Name="vs_User" EntityType="AR21100Model.vs_User" />
           <EntitySet Name="AR_Customer" EntityType="AR21100Model.AR_Customer" />
           <EntitySet Name="AR_Channel" EntityType="AR21100Model.AR_Channel" />
+          <EntitySet Name="IN_Inventory" EntityType="AR21100Model.IN_Inventory" />
         </EntityContainer>
         <ComplexType Name="AR21100_pgLoadChannel_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -473,97 +476,12 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
           <Property Name="IsFirstLogin" Type="Boolean" Nullable="false" />
           <Property Name="LastTimeUpdatePassword" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="OUnit" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="Lat" Type="Double" Nullable="false" />
           <Property Name="Lng" Type="Double" Nullable="false" />
           <Property Name="Gender" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="ContractType" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="SlsDeliveryAddr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="IN_Inventory">
-          <Key>
-            <PropertyRef Name="InvtID" />
-          </Key>
-          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BarCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Buyer" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Descr" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Descr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DfltPOUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="DfltSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DfltSOUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Exported" Type="Int16" Nullable="false" />
-          <Property Name="InvtType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="IRSftyStkDays" Type="Double" Nullable="false" />
-          <Property Name="IRSftyStkPct" Type="Double" Nullable="false" />
-          <Property Name="IRSftyStkQty" Type="Double" Nullable="false" />
-          <Property Name="IROverStkQty" Type="Double" Nullable="false" />
-          <Property Name="LastCost" Type="Double" Nullable="false" />
-          <Property Name="LossRate00" Type="Double" Nullable="false" />
-          <Property Name="LossRate01" Type="Double" Nullable="false" />
-          <Property Name="LossRate02" Type="Double" Nullable="false" />
-          <Property Name="LossRate03" Type="Double" Nullable="false" />
-          <Property Name="LotSerFxdLen" Type="Int16" Nullable="false" />
-          <Property Name="LotSerFxdTyp" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerFxdVal" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerIssMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerNumLen" Type="Int16" Nullable="false" />
-          <Property Name="LotSerNumVal" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerTrack" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="MaterialType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="NodeID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="NodeLevel" Type="Int16" Nullable="false" />
-          <Property Name="ParentRecordID" Type="Int32" Nullable="false" />
-          <Property Name="Picture" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="POFee" Type="Double" Nullable="false" />
-          <Property Name="POPrice" Type="Double" Nullable="false" />
-          <Property Name="PrePayPct" Type="Double" Nullable="false" />
-          <Property Name="PriceClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="SerAssign" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ShelfLife" Type="Int16" Nullable="false" />
-          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SOFee" Type="Double" Nullable="false" />
-          <Property Name="SOPrice" Type="Double" Nullable="false" />
-          <Property Name="Source" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="StkItem" Type="Int16" Nullable="false" />
-          <Property Name="StkUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="StkVol" Type="Double" Nullable="false" />
-          <Property Name="StkWt" Type="Double" Nullable="false" />
-          <Property Name="StkWtUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Style" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="TaxCat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ValMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="VendID1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="VendID2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="WarrantyDays" Type="Int16" Nullable="false" />
-          <Property Name="Public" Type="Boolean" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="ApproveStatus" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Media" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="LotSerRcptAuto" Type="Boolean" />
-          <Property Name="Category" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ProGroup" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="KitType" Type="Boolean" Nullable="false" />
-          <Property Name="CnvFact" Type="Double" />
-          <Property Name="GiftPoint" Type="Double" Nullable="false" />
-          <Property Name="ProductSpecial" Type="Boolean" Nullable="false" />
-          <Property Name="AllowSale" Type="Boolean" Nullable="false" />
-          <Property Name="ReceiptGift" Type="Boolean" Nullable="false" />
-          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="EffectDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="vs_User">
           <Key>
@@ -601,6 +519,8 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
           <Property Name="SlsPersonPosition" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SlsPersons" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UnitDelivery" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="StateDelivery" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CustDelivery" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -704,7 +624,7 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
           <Property Name="LocationCheckType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="VendorID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="BuyerID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="BillWard" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BillWard" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="BillDistrict" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="BillMarket" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="GeneralCustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -737,6 +657,90 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="PrefixCustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="IN_Inventory">
+          <Key>
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BarCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Buyer" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Descr" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DfltPOUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="DfltSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DfltSOUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Exported" Type="Int16" Nullable="false" />
+          <Property Name="InvtType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="IRSftyStkDays" Type="Double" Nullable="false" />
+          <Property Name="IRSftyStkPct" Type="Double" Nullable="false" />
+          <Property Name="IRSftyStkQty" Type="Double" Nullable="false" />
+          <Property Name="IROverStkQty" Type="Double" Nullable="false" />
+          <Property Name="LastCost" Type="Double" Nullable="false" />
+          <Property Name="LossRate00" Type="Double" Nullable="false" />
+          <Property Name="LossRate01" Type="Double" Nullable="false" />
+          <Property Name="LossRate02" Type="Double" Nullable="false" />
+          <Property Name="LossRate03" Type="Double" Nullable="false" />
+          <Property Name="LotSerFxdLen" Type="Int16" Nullable="false" />
+          <Property Name="LotSerFxdTyp" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LotSerFxdVal" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="LotSerIssMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LotSerNumLen" Type="Int16" Nullable="false" />
+          <Property Name="LotSerNumVal" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="LotSerTrack" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="MaterialType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="NodeID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NodeLevel" Type="Int16" Nullable="false" />
+          <Property Name="ParentRecordID" Type="Int32" Nullable="false" />
+          <Property Name="Picture" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="POFee" Type="Double" Nullable="false" />
+          <Property Name="POPrice" Type="Double" Nullable="false" />
+          <Property Name="PrePayPct" Type="Double" Nullable="false" />
+          <Property Name="PriceClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SerAssign" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ShelfLife" Type="Int16" Nullable="false" />
+          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SOFee" Type="Double" Nullable="false" />
+          <Property Name="SOPrice" Type="Double" Nullable="false" />
+          <Property Name="Source" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="StkItem" Type="Int16" Nullable="false" />
+          <Property Name="StkUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="StkVol" Type="Double" Nullable="false" />
+          <Property Name="StkWt" Type="Double" Nullable="false" />
+          <Property Name="StkWtUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Style" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TaxCat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ValMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="VendID1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="VendID2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="WarrantyDays" Type="Int16" Nullable="false" />
+          <Property Name="Public" Type="Boolean" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ApproveStatus" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Media" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LotSerRcptAuto" Type="Boolean" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ProGroup" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
+          <Property Name="CnvFact" Type="Double" />
+          <Property Name="GiftPoint" Type="Double" Nullable="false" />
+          <Property Name="ProductSpecial" Type="Boolean" Nullable="false" />
+          <Property Name="AllowSale" Type="Boolean" Nullable="false" />
+          <Property Name="EffectDate" Type="DateTime" Precision="3" />
+          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -827,95 +831,11 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IN_Inventory">
-            <EntityTypeMapping TypeName="AR21100Model.IN_Inventory">
-              <MappingFragment StoreEntitySet="IN_Inventory">
-                <ScalarProperty Name="EffectDate" ColumnName="EffectDate" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="ReceiptGift" ColumnName="ReceiptGift" />
-                <ScalarProperty Name="AllowSale" ColumnName="AllowSale" />
-                <ScalarProperty Name="ProductSpecial" ColumnName="ProductSpecial" />
-                <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
-                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
-                <ScalarProperty Name="KitType" ColumnName="KitType" />
-                <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
-                <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
-                <ScalarProperty Name="ProType" ColumnName="ProType" />
-                <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
-                <ScalarProperty Name="Brand" ColumnName="Brand" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="LotSerRcptAuto" ColumnName="LotSerRcptAuto" />
-                <ScalarProperty Name="Media" ColumnName="Media" />
-                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Public" ColumnName="Public" />
-                <ScalarProperty Name="WarrantyDays" ColumnName="WarrantyDays" />
-                <ScalarProperty Name="VendID2" ColumnName="VendID2" />
-                <ScalarProperty Name="VendID1" ColumnName="VendID1" />
-                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
-                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="StkWtUnit" ColumnName="StkWtUnit" />
-                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
-                <ScalarProperty Name="StkVol" ColumnName="StkVol" />
-                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
-                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
-                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="ShelfLife" ColumnName="ShelfLife" />
-                <ScalarProperty Name="SerAssign" ColumnName="SerAssign" />
-                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
-                <ScalarProperty Name="PrePayPct" ColumnName="PrePayPct" />
-                <ScalarProperty Name="POPrice" ColumnName="POPrice" />
-                <ScalarProperty Name="POFee" ColumnName="POFee" />
-                <ScalarProperty Name="Picture" ColumnName="Picture" />
-                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
-                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
-                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
-                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
-                <ScalarProperty Name="LotSerTrack" ColumnName="LotSerTrack" />
-                <ScalarProperty Name="LotSerNumVal" ColumnName="LotSerNumVal" />
-                <ScalarProperty Name="LotSerNumLen" ColumnName="LotSerNumLen" />
-                <ScalarProperty Name="LotSerIssMthd" ColumnName="LotSerIssMthd" />
-                <ScalarProperty Name="LotSerFxdVal" ColumnName="LotSerFxdVal" />
-                <ScalarProperty Name="LotSerFxdTyp" ColumnName="LotSerFxdTyp" />
-                <ScalarProperty Name="LotSerFxdLen" ColumnName="LotSerFxdLen" />
-                <ScalarProperty Name="LossRate03" ColumnName="LossRate03" />
-                <ScalarProperty Name="LossRate02" ColumnName="LossRate02" />
-                <ScalarProperty Name="LossRate01" ColumnName="LossRate01" />
-                <ScalarProperty Name="LossRate00" ColumnName="LossRate00" />
-                <ScalarProperty Name="LastCost" ColumnName="LastCost" />
-                <ScalarProperty Name="IROverStkQty" ColumnName="IROverStkQty" />
-                <ScalarProperty Name="IRSftyStkQty" ColumnName="IRSftyStkQty" />
-                <ScalarProperty Name="IRSftyStkPct" ColumnName="IRSftyStkPct" />
-                <ScalarProperty Name="IRSftyStkDays" ColumnName="IRSftyStkDays" />
-                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
-                <ScalarProperty Name="Exported" ColumnName="Exported" />
-                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
-                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
-                <ScalarProperty Name="DfltPOUnit" ColumnName="DfltPOUnit" />
-                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
-                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="vs_User">
             <EntityTypeMapping TypeName="AR21100Model.vs_User">
               <MappingFragment StoreEntitySet="vs_User">
+                <ScalarProperty Name="CustDelivery" ColumnName="CustDelivery" />
+                <ScalarProperty Name="StateDelivery" ColumnName="StateDelivery" />
                 <ScalarProperty Name="UnitDelivery" ColumnName="UnitDelivery" />
                 <ScalarProperty Name="SlsPersons" ColumnName="SlsPersons" />
                 <ScalarProperty Name="SlsPersonPosition" ColumnName="SlsPersonPosition" />
@@ -1086,6 +1006,91 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="IN_Inventory">
+            <EntityTypeMapping TypeName="AR21100Model.IN_Inventory">
+              <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="EffectDate" ColumnName="EffectDate" />
+                <ScalarProperty Name="AllowSale" ColumnName="AllowSale" />
+                <ScalarProperty Name="ProductSpecial" ColumnName="ProductSpecial" />
+                <ScalarProperty Name="GiftPoint" ColumnName="GiftPoint" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="KitType" ColumnName="KitType" />
+                <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
+                <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
+                <ScalarProperty Name="ProType" ColumnName="ProType" />
+                <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="LotSerRcptAuto" ColumnName="LotSerRcptAuto" />
+                <ScalarProperty Name="Media" ColumnName="Media" />
+                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="WarrantyDays" ColumnName="WarrantyDays" />
+                <ScalarProperty Name="VendID2" ColumnName="VendID2" />
+                <ScalarProperty Name="VendID1" ColumnName="VendID1" />
+                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="StkWtUnit" ColumnName="StkWtUnit" />
+                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
+                <ScalarProperty Name="StkVol" ColumnName="StkVol" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ShelfLife" ColumnName="ShelfLife" />
+                <ScalarProperty Name="SerAssign" ColumnName="SerAssign" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="PrePayPct" ColumnName="PrePayPct" />
+                <ScalarProperty Name="POPrice" ColumnName="POPrice" />
+                <ScalarProperty Name="POFee" ColumnName="POFee" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
+                <ScalarProperty Name="LotSerTrack" ColumnName="LotSerTrack" />
+                <ScalarProperty Name="LotSerNumVal" ColumnName="LotSerNumVal" />
+                <ScalarProperty Name="LotSerNumLen" ColumnName="LotSerNumLen" />
+                <ScalarProperty Name="LotSerIssMthd" ColumnName="LotSerIssMthd" />
+                <ScalarProperty Name="LotSerFxdVal" ColumnName="LotSerFxdVal" />
+                <ScalarProperty Name="LotSerFxdTyp" ColumnName="LotSerFxdTyp" />
+                <ScalarProperty Name="LotSerFxdLen" ColumnName="LotSerFxdLen" />
+                <ScalarProperty Name="LossRate03" ColumnName="LossRate03" />
+                <ScalarProperty Name="LossRate02" ColumnName="LossRate02" />
+                <ScalarProperty Name="LossRate01" ColumnName="LossRate01" />
+                <ScalarProperty Name="LossRate00" ColumnName="LossRate00" />
+                <ScalarProperty Name="LastCost" ColumnName="LastCost" />
+                <ScalarProperty Name="IROverStkQty" ColumnName="IROverStkQty" />
+                <ScalarProperty Name="IRSftyStkQty" ColumnName="IRSftyStkQty" />
+                <ScalarProperty Name="IRSftyStkPct" ColumnName="IRSftyStkPct" />
+                <ScalarProperty Name="IRSftyStkDays" ColumnName="IRSftyStkDays" />
+                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
+                <ScalarProperty Name="Exported" ColumnName="Exported" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltPOUnit" ColumnName="DfltPOUnit" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1109,10 +1114,10 @@ FROM [dbo].[vs_User] AS [vs_User]</DefiningQuery>
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
         <EntityTypeShape EntityType="AR21100Model.AR_Salesperson" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR21100Model.IN_Inventory" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="AR21100Model.vs_User" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR21100Model.AR_Customer" Width="1.5" PointX="8.375" PointY="0.75" />
         <EntityTypeShape EntityType="AR21100Model.AR_Channel" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR21100Model.IN_Inventory" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </Diagrams>
   </Designer>
