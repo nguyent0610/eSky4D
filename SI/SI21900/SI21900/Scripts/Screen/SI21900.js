@@ -2,7 +2,7 @@
 var keys = ['Territory', "Zone"];
 var key = ['Territory'];
 var fieldsCheckRequire = ["Territory", "Descr","Zone"];
-var fieldsLangCheckRequire = ["Territory", "Descr","Zone"];
+var fieldsLangCheckRequire = ["SI21900_Territory", "SI21900_Descr", "SI21900_Zone"];
 
 var _Source = 0;
 var _maxSource = 1;
