@@ -96,14 +96,14 @@ var firstLoad = function () {
    {
        keys = ['State', "Territory"];
        fieldsCheckRequire = ["State", "Descr", "Territory"];
-       fieldsLangCheckRequire = [ "State", "Descr","Territory"];
+       fieldsLangCheckRequire = ["SI20700_State", "SI20700_Descr", "SI20700_Territory"];
        App.Country.hide();
    }
    else
    {
        keys = ['Country', 'State', "Territory"];
        fieldsCheckRequire = ["Country", "State", "Descr","Territory"];
-       fieldsLangCheckRequire = ["Country", "State", "Descr","Territory"];
+       fieldsLangCheckRequire = ["SI20700_Country", "SI20700_State", "SI20700_Descr", "SI20700_Territory"];
        App.Country.show();
    }
     checkLoad();
