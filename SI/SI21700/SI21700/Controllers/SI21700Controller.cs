@@ -41,7 +41,7 @@ namespace SI21700.Controllers
             ViewBag.CountryView = country;
             return View();
         }
-      //  [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -226,6 +226,15 @@ namespace SI21700.Controllers
                         if(workbook.Worksheets.Count > 0)
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
+                            if (workSheet.Cells[2, 0].StringValue.Trim() != Util.GetLang("SI21700_State")
+                            || workSheet.Cells[2, 1].StringValue.Trim() != Util.GetLang("SI21700_DescrState")
+                            || workSheet.Cells[2, 2].StringValue.Trim() != Util.GetLang("SI21700_District")
+                            || workSheet.Cells[2, 3].StringValue.Trim() != Util.GetLang("SI21700_Name")
+                            )
+                            {
+                                throw new MessageException(MessageType.Message, "148");
+                            }
+
 
                             string Country = string.Empty;
                             string CountryName = string.Empty;
@@ -426,7 +435,7 @@ namespace SI21700.Controllers
                 {
                     country = obj.Country.Value && obj.Country.HasValue;
                 }
-if (country == false)
+                if (country == false)
                 {
                     SetCellValueGridTitle(SheetData.Cells["B1"], Util.GetLang("SI21700Exp"), TextAlignmentType.Center, TextAlignmentType.Left);
                     SetCellValueGrid(SheetData.Cells["A3"], Util.GetLang("SI21700_State"), TextAlignmentType.Center, TextAlignmentType.Left);
@@ -541,7 +550,7 @@ if (country == false)
 
 
                 }
-else
+                else
                 {
 
                     SetCellValueGridTitle(SheetData.Cells["C1"], Util.GetLang("SI20700NameSheet"), TextAlignmentType.Center, TextAlignmentType.Left);
