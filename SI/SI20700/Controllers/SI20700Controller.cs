@@ -290,7 +290,7 @@ namespace SI20700.Controllers
 
 
                 }
-else
+                else
                 {
 
                     SetCellValueGridTitle(SheetData.Cells["C1"], Util.GetLang("SI20700NameSheet"), TextAlignmentType.Center, TextAlignmentType.Left);
@@ -603,7 +603,7 @@ else
                 string errorStateDescr          = string.Empty;
                 string errorData                = string.Empty; // data not null
                 string errorCountryduplicate    = string.Empty;
-                string errorTerritoryduplicate  = string.Empty;
+                string errorTerritoryNotEx  = string.Empty;
                 string errorStateduplicate      = string.Empty;
                 string errorLeghtTer            = string.Empty;
                 string errorLeghtDescrT         = string.Empty;
@@ -634,16 +634,34 @@ else
                             var ColTexts = new List<string>();
                             if (country == false)
                             {
+                                if (workSheet.Cells[1, 0].StringValue.Trim() != Util.GetLang("SI20700_Territory")
+                                || workSheet.Cells[1, 1].StringValue.Trim() != Util.GetLang("DescrTerritory")
+                                || workSheet.Cells[1, 2].StringValue.Trim() != Util.GetLang("SI20700_State")
+                                || workSheet.Cells[1, 3].StringValue.Trim() != Util.GetLang("SI20700_Descr")
+                                )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
                                 ColTexts = new List<string>(){ 
                                      "Territory", "DescrTerritory", "State", "StateDescr"
                                     };
                             }
                             else
                             {
+                                if (workSheet.Cells[1, 0].StringValue.Trim() != Util.GetLang("SI20700_NameCountry")
+                                || workSheet.Cells[1, 1].StringValue.Trim() != Util.GetLang("SI20700_Territory")
+                                || workSheet.Cells[1, 2].StringValue.Trim() != Util.GetLang("DescrTerritory")
+                                || workSheet.Cells[1, 3].StringValue.Trim() != Util.GetLang("SI20700_State")
+                                || workSheet.Cells[1, 4].StringValue.Trim() != Util.GetLang("SI20700_Descr")
+                                )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
                                 ColTexts = new List<string>(){ 
                                     "Country","CountryName", "Territory", "DescrTerritory", "State", "StateDescr"
                                     };
                             }
+                            List<string> lstStateDupdate = new List<string>();
                             for (int i = 2; i <= workSheet.Cells.MaxDataRow; i++)  //workSheet.Cells.MaxDataRow -> đếm từ  0 , 1 , 2 , .... còn i đếm từ  1 , 2 , 3 , ....
                             {
 
@@ -734,21 +752,12 @@ else
                                 ////////////////////////////////////////////////////////////////////////// Không tồn tại trong csdl
                                 if (Territory != "")
                                 { 
-                                    if (_db.SI_Territory.FirstOrDefault(p => p.Territory == Territory && p.Descr == DescrTerritory) == null)
+                                    if (_db.SI_Territory.FirstOrDefault(p => p.Territory.ToLower() == Territory.ToLower()) == null)
                                     {
-                                        errorTerritoryduplicate += (i + 1).ToString() + ",";
+                                        errorTerritoryNotEx += (i + 1).ToString() + ",";
                                         flagCheck = true;
                                     }
                                 }
-
-                                
-                                if (_db.SI_State.FirstOrDefault(p => p.State == State && p.Territory == Territory) != null)
-                                    {
-                                        errorStateduplicate += (i + 1).ToString() + ",";
-                                        flagCheck = true;
-                                    }
-                              
-                                
                                 
                                 if (flagCheck == true)
                                 {
@@ -756,52 +765,83 @@ else
                                 }
 
                             #region save SI_State              
+                                if (country == true)
+                                {
 
-                                var record =  new SI_State();
-                                if(country == true)
-                                {
-                                     record = lstSI_State.Where(p => p.State == State && p.Country == Country).FirstOrDefault();
-                                }
-                                else
-                                {
-                                    record = lstSI_State.Where(p => p.State == State && p.Territory == Territory).FirstOrDefault();
-                                }
-                                if (record == null)
-                                {
-                                    record = new SI_State();
-                                    record.ResetET();
-                                    record.State = State;
-                                    if(country == true)
+                                    if (!lstStateDupdate.Contains(State) && !lstStateDupdate.Contains(Country))
                                     {
-                                        record.Country = Country;
+                                        var record = _db.SI_State.FirstOrDefault(p => p.State == State && p.Country == Country);
+                                        if (record == null)
+                                        {
+                                            record = new SI_State();
+                                            record.ResetET();
+                                            record.State = State;
+                                            record.Country = Country;
+                                            record.Crtd_Datetime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = _userName;
+                                            _db.SI_State.AddObject(record);
+                                        }
+                                        record.Territory = Territory;
+                                        record.Descr = StateDescr;
+                                        record.LUpd_Datetime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = _userName;
+                                        lstSI_State.Add(record);
+                                        lstStateDupdate.Add(State);
+                                        lstStateDupdate.Add(Country);
                                     }
                                     else
                                     {
-                                        record.Country = "VN";
+                                        errorStateduplicate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
                                     }
-                                    record.Crtd_Datetime = DateTime.Now;
-                                    record.Crtd_Prog = _screenNbr;
-                                    record.Crtd_User = _userName;
-                                    _db.SI_State.AddObject(record);
+
                                 }
-                                record.Territory = Territory;
-                                record.Descr = StateDescr;
-                                record.LUpd_Datetime = DateTime.Now;
-                                record.LUpd_Prog = _screenNbr;
-                                record.LUpd_User = _userName;
-                                lstSI_State.Add(record);
- #endregion
+                                else
+                                {
+
+                                    if (!lstStateDupdate.Contains(State) && !lstStateDupdate.Contains(Country))
+                                    {
+                                        var record = _db.SI_State.FirstOrDefault(p => p.State == State && p.Country == "VN");
+                                        if (record == null)
+                                        {
+                                            record = new SI_State();
+                                            record.ResetET();
+                                            record.State = State;
+                                            record.Country = "VN";
+                                            record.Crtd_Datetime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = _userName;
+                                            _db.SI_State.AddObject(record);
+                                        }
+                                        record.Territory = Territory;
+                                        record.Descr = StateDescr;
+                                        record.LUpd_Datetime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = _userName;
+                                        lstSI_State.Add(record);
+                                        lstStateDupdate.Add(State);
+                                        lstStateDupdate.Add(Country);
+                                    }
+                                    else
+                                    {
+                                        errorStateduplicate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                }
+                                #endregion
                             }
-                            message = errorCountry == "" ? "" : string.Format(Message.GetString("2018121151", null), Util.GetLang("SI20700_Country"), errorCountry);
-                            message += errorTerritory == "" ? "" : string.Format(Message.GetString("2018121151", null), Util.GetLang("SI20700_Territory"), errorTerritory);
-                            message += errorDescrTerritory == "" ? "" : string.Format(Message.GetString("2018121151", null), Util.GetLang("DescrTerritory"), errorDescrTerritory);  //không được nhập ký tự đặc biệt
-                            message += errorState == "" ? "" : string.Format(Message.GetString("2018121151", null), Util.GetLang("SI20700_State"), errorState);
-                            message += errorStateRegex == "" ? "" : string.Format(Message.GetString("2018121152", null), Util.GetLang("SI20700_State"), errorStateRegex);
-                            message += errorStateDescr == "" ? "" : string.Format(Message.GetString("2018121151", null), Util.GetLang("SI20700_Descr"), errorStateDescr);
-                            message += errorData == "" ? "" : string.Format(Message.GetString("2018121153", null), Util.GetLang("SI20700_data"), errorData);
-                            message += errorCountryduplicate == "" ? "" : string.Format(Message.GetString("2018121154", null), Util.GetLang("SI20700_Country"), errorCountryduplicate);
-                            message += errorTerritoryduplicate == "" ? "" : string.Format(Message.GetString("2018121156", null), Util.GetLang("SI20700_Territory"), errorTerritoryduplicate);
-                            message += errorStateduplicate == "" ? "" : string.Format(Message.GetString("2018121155", null), Util.GetLang("SI20700_State"), errorStateduplicate);
+                            message = errorCountry == "" ? "" : string.Format(Message.GetString("2019011868", null), errorCountry, Util.GetLang("SI20700_Country"));
+                            message += errorTerritory == "" ? "" : string.Format(Message.GetString("2019011868", null), errorTerritory, Util.GetLang("SI20700_Territory"));
+                            message += errorDescrTerritory == "" ? "" : string.Format(Message.GetString("2019011868", null), errorDescrTerritory, Util.GetLang("DescrTerritory"));  //không được nhập ký tự đặc biệt
+                            message += errorState == "" ? "" : string.Format(Message.GetString("2019011868", null), errorState, Util.GetLang("SI20700_State"));
+                            message += errorStateRegex == "" ? "" : string.Format(Message.GetString("2019011870", null), errorStateRegex, Util.GetLang("SI20700_State"));
+                            message += errorStateDescr == "" ? "" : string.Format(Message.GetString("2019011868", null), errorStateDescr, Util.GetLang("SI20700_Descr"));
+                            message += errorCountryduplicate == "" ? "" : string.Format(Message.GetString("2019011869", null), errorCountryduplicate, Util.GetLang("SI20700_Country"));
+                            message += errorTerritoryNotEx == "" ? "" : string.Format(Message.GetString("2019053107", null), errorTerritoryNotEx, Util.GetLang("SI20700_Territory"));
+                            message += errorStateduplicate == "" ? "" : string.Format(Message.GetString("2019011869", null), errorStateduplicate, Util.GetLang("SI20700_State"));
                             message += errorLeghtTer == "" ? "" : string.Format(Message.GetString("2018121157", null), Util.GetLang("SI20700_State"), errorLeghtTer);
                             message += errorLeghtDescrT == "" ? "" : string.Format(Message.GetString("2018121158", null), Util.GetLang("SI20700_Descr"), errorLeghtDescrT);
                             
