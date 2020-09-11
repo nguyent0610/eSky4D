@@ -801,7 +801,7 @@ namespace SI20700.Controllers
                                 else
                                 {
 
-                                    if (!lstStateDupdate.Contains(State) && !lstStateDupdate.Contains(Country))
+                                    if (!lstStateDupdate.Contains(State))
                                     {
                                         var record = _db.SI_State.FirstOrDefault(p => p.State == State && p.Country == "VN");
                                         if (record == null)
@@ -822,7 +822,6 @@ namespace SI20700.Controllers
                                         record.LUpd_User = _userName;
                                         lstSI_State.Add(record);
                                         lstStateDupdate.Add(State);
-                                        lstStateDupdate.Add(Country);
                                     }
                                     else
                                     {
