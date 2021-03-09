@@ -96,7 +96,8 @@ namespace OM24100.Controllers
         public ActionResult LoadMCP(string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit)
-        {            
+        {
+            _db.CommandTimeout = int.MaxValue;
             var planVisit = _db.OM24100_pgMCP(Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit).ToList();
