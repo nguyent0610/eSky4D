@@ -73,7 +73,7 @@
 
                     , HQ.Combo().ID("cboType").Name("Type").HQLangCode("Type")
                         .HQProcedure("OM42700_pcType").HQColumnShow("Descr")
-                        .DisplayField("Descr").ValueField("Code")
+                        .DisplayField("Descr").ValueField("Code") 
                         .LabelWidth(130).Width(300).HQHeightWidth(400, 300)
                         .AllowBlank(false).ForceSelection(true)
                         .HQParam(new StoreParameterCollection(){
@@ -87,6 +87,14 @@
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "cboType_Change";
+                        })
+
+                        , HQ.DateField().ID("dteDateProcess").Name("dteDateProcess").HQLangCode("Date").Tag("X")
+                        .LabelWidth(130).Width(300)
+
+                        , HQ.Button().ID("btnProcess").HQLangCode("Handle").MarginSpec("0 0 0 20").Tag("X")
+                        .Listeners(lst => {
+                            lst.Click.Fn = "btnProcess_Click";
                         })
                 )
                 , X.FieldContainer().MarginSpec("5 0 5 0")
@@ -116,7 +124,7 @@
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
-        
+
 
 
                 )
@@ -156,7 +164,7 @@
                 )
                 .ColumnModel(
                     X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
-                    //Colum Check
+        //Colum Check
                     X.CheckColumn().DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
                         .HeaderItems(
                             HQ.Checkbox()
@@ -257,8 +265,8 @@
                             X.DateFilter().DataIndex("UpdateDate")
                         )
                 )
-                
-            ,X.GridPanel().ID("grdOrder")
+
+            , X.GridPanel().ID("grdOrder")
                 .RowLines(true)
                 .ColumnLines(true)
                 .Border(true)

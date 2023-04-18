@@ -47,10 +47,16 @@ var cboType_Change = function (item, newValue, oldValue) {
 var ColCheck_Header_Change = function (value) {
     if (value) {
         if (App.cboType.getValue() == '1') {
-            App.stoPDA.suspendEvents();
+            App.stoPDA.suspendEvents(); 
             var allData = App.stoPDA.snapshot || App.stoPDA.allData || App.stoPDA.data;
             allData.each(function (item) {
                 item.set("Selected", value.checked);
+                if (value.checked == true) {
+                    item.set("UpdateDate", HQ.bussinessDate);
+                }
+                else {
+                    item.set("UpdateDate", "");
+                }
             });
             App.stoPDA.resumeEvents();
             App.grdPDA.view.refresh();
@@ -66,6 +72,21 @@ var ColCheck_Header_Change = function (value) {
         }
     }
 };
+function btnProcess_Click() {
+    if (App.cboType.getValue() == "1") {
+        App.stoPDA.suspendEvents();
+        var allData = App.stoPDA.snapshot || App.stoPDA.allData || App.stoPDA.data;
+        allData.each(function (item) {
+            if (item.data.Selected == true) {
+                item.set("UpdateDate", App.dteDateProcess.getValue());
+            }
+        });
+        App.stoPDA.resumeEvents();
+        App.grdPDA.view.refresh();
+    }
+}
+
+
 var ColAddShop_Header_Change = function (value) {
     if (value) {
         App.stoOrder.suspendEvents();
@@ -82,6 +103,14 @@ var grdPDA_BeforeEdit = function (editor, e) {
 
 };
 var grdPDA_Edit = function (item, e) {
+    if (e.field == "Selected") {
+        if (e.value == true) {
+            e.record.set("UpdateDate", HQ.bussinessDate);
+        }
+        else {
+            e.record.set("UpdateDate", "");
+        }
+    }
  
 };
 var grdPDA_ValidateEdit = function (item, e) {
